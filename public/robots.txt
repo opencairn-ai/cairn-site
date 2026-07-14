@@ -1,0 +1,3 @@
+# Pre-launch: remove before going public
+User-agent: *
+Disallow: /

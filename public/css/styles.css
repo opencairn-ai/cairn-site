@@ -169,6 +169,7 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-height: 36px;
   padding: 7.5px 16px;
   background: var(--color-accent);
