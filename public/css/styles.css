@@ -221,16 +221,8 @@ main {
 }
 
 .footer__logo--mila {
-  width: 210px;
+  width: 300px;
   height: auto;
-}
-
-.footer__divider {
-  display: block;
-  width: 1px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.4);
-  flex-shrink: 0;
 }
 
 .footer__links {
@@ -327,16 +319,11 @@ main {
     gap: 32px;
   }
 
-  .footer__divider {
-    width: 80px;
-    height: 1px;
-  }
-
   .footer__logo--mozilla {
     width: 220px;
   }
 
   .footer__logo--mila {
-    width: 160px;
+    width: 220px;
   }
 }
