@@ -44,4 +44,4 @@ Dark theme: purple-to-green gradient background (`#1d0d26` → `#283f33`), white
 
 ## Pre-launch state
 
-The site is unlisted until launch: `noindex` meta tag and `robots.txt` disallow (both marked with `Pre-launch` comments), plus a Cloudflare Access gate configured in the dashboard, not in this repo. At launch: remove the two markers, delete the Access application, redeploy. Also before going public: add legal notice content (see README).
+The site is unlisted until launch: `noindex` meta tag and `robots.txt` disallow (both marked with `Pre-launch` comments), plus a Cloudflare Access gate configured in the dashboard, not in this repo. At launch: remove the two markers, delete the Access application, redeploy.
