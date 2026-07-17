@@ -42,10 +42,39 @@ The site is intentionally unlisted until launch:
 - `public/robots.txt` disallows all crawlers, and both `index.html` and `fr/index.html` carry a `noindex` meta tag. All three spots are marked with a `Pre-launch` comment.
 - The domain is gated by Cloudflare Access (Zero Trust); visitors authenticate with an emailed one-time PIN. This is configured in the Cloudflare dashboard, not in this repo.
 
-At launch: delete the Access application, remove the three `Pre-launch` markers, and redeploy.
+See the **Launch checklist** below for the exact go-live steps.
 
-## Before going public
+## Launch checklist
 
-The social share cards (`public/assets/images/og-cover-en.png` and `og-cover-fr.png`, 1200×630)
-are in place and wired to the `og:image` / `twitter:image` tags. After launch, validate them with
-the Slack / X / LinkedIn link debuggers — scrapers can't reach the image while the site is gated.
+Steps 1–3 are safe to stage in advance — the Cloudflare Access gate keeps the site private until
+step 4, which is the actual go-live switch. Do them in order.
+
+1. Remove the indexing blocks (each marked with a `Pre-launch` comment):
+   - [ ] `public/index.html` — delete the comment and the `<meta name="robots" content="noindex, nofollow">` line
+   - [ ] `public/fr/index.html` — same two lines
+   - [ ] `public/robots.txt` — replace the `Disallow: /` block with the launch version (below)
+2. [ ] Redeploy with the markers gone: `npx wrangler deploy` (the site stays gated by Access)
+3. [ ] Confirm the gate still holds — an unauthenticated request should redirect to Cloudflare Access, not serve the page. `curl -sI https://opencairn.ai/ | grep -i location` should return a `cloudflareaccess.com` login URL. If you get `200` and page HTML, stop and re-check Access before continuing.
+4. [ ] Delete the Cloudflare Access application in the Zero Trust dashboard — this is the go-live switch that makes the site public. Nothing in this repo changes.
+5. [ ] Verify it's live — in a fresh incognito window, `https://opencairn.ai/` and `/fr/` load without a login, and `https://opencairn.ai/robots.txt` shows `Allow: /`.
+
+Launch version of `public/robots.txt`:
+
+```
+User-agent: *
+Allow: /
+
+Sitemap: https://opencairn.ai/sitemap.xml
+```
+
+After launch:
+
+- [ ] Validate the social cards with the Slack / X / LinkedIn link debuggers — scrapers could not reach `og-cover-*.png` while the site was gated.
+- [ ] Optionally submit `https://opencairn.ai/sitemap.xml` in Google Search Console.
+
+### Copy awaiting sign-off
+
+Two edits were flagged during review but held for partner approval — decide on these before or at launch:
+
+- [ ] `public/index.html` — "your data centre" → "your data center" (US spelling, per the style guide)
+- [ ] The "eight layers" sentence in both pages uses em-dashes, which the style guide disallows; reword if the rule still holds.
