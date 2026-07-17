@@ -15,7 +15,8 @@ Then visit `http://localhost:8787`. No build step; any static file server pointe
 ```
 cairn-landing/
 ├── public/               # Everything that gets served
-│   ├── index.html
+│   ├── index.html        # English page
+│   ├── fr/index.html     # French page (EN/FR toggle links the two)
 │   ├── robots.txt        # Pre-launch: blocks all crawlers
 │   ├── .assetsignore     # Files wrangler should not upload
 │   ├── css/styles.css
@@ -38,10 +39,10 @@ Uploads `public/` and serves it at `opencairn.ai` via the custom domain route in
 
 The site is intentionally unlisted until launch:
 
-- `public/robots.txt` disallows all crawlers, and `index.html` carries a `noindex` meta tag. Both spots are marked with a `Pre-launch` comment.
+- `public/robots.txt` disallows all crawlers, and both `index.html` and `fr/index.html` carry a `noindex` meta tag. All three spots are marked with a `Pre-launch` comment.
 - The domain is gated by Cloudflare Access (Zero Trust); visitors authenticate with an emailed one-time PIN. This is configured in the Cloudflare dashboard, not in this repo.
 
-At launch: delete the Access application, remove the two `Pre-launch` markers, and redeploy.
+At launch: delete the Access application, remove the three `Pre-launch` markers, and redeploy.
 
 ## Before going public
 
