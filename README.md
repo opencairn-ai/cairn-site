@@ -46,16 +46,6 @@ At launch: delete the Access application, remove the three `Pre-launch` markers,
 
 ## Before going public
 
-Export the social share cards to PNG so the `og:image` / `twitter:image` URLs resolve. The
-source art lives in `public/assets/images/og-cover-en.svg` and `og-cover-fr.svg`; render each to
-a 1200×630 PNG at the same path (the `<meta>` tags point at `og-cover-en.png` / `og-cover-fr.png`):
-
-```bash
-npx svgexport public/assets/images/og-cover-en.svg public/assets/images/og-cover-en.png 1200:630
-npx svgexport public/assets/images/og-cover-fr.svg public/assets/images/og-cover-fr.png 1200:630
-```
-
-That renderer falls back to Arial (no Space Grotesk installed); for the exact typeface, open each
-SVG in a browser that has Space Grotesk and export at 1200×630 instead. After launch, validate the
-cards with the Slack / X / LinkedIn link debuggers — scrapers can't reach the image while the site
-is gated.
+The social share cards (`public/assets/images/og-cover-en.png` and `og-cover-fr.png`, 1200×630)
+are in place and wired to the `og:image` / `twitter:image` tags. After launch, validate them with
+the Slack / X / LinkedIn link debuggers — scrapers can't reach the image while the site is gated.
