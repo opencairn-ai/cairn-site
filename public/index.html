@@ -1,127 +1,604 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cairn — The opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <!-- Pre-launch: remove before going public -->
-  <meta name="robots" content="noindex, nofollow">
-  <title>Cairn — The opinionated, sovereign, open source AI stack</title>
-  <link rel="canonical" href="https://opencairn.ai/">
-  <link rel="alternate" hreflang="en" href="https://opencairn.ai/">
-  <link rel="alternate" hreflang="fr" href="https://opencairn.ai/fr/">
-  <link rel="alternate" hreflang="x-default" href="https://opencairn.ai/">
-
-  <!-- Open Graph / social sharing -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Cairn">
-  <meta property="og:title" content="Cairn — The opinionated, sovereign, open source AI stack">
-  <meta property="og:description" content="Cairn is a research collaboration between Mozilla and Mila to design and prove out an opinionated, sovereign, open source AI stack.">
-  <meta property="og:url" content="https://opencairn.ai/">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:locale:alternate" content="fr_CA">
-  <meta property="og:image" content="https://opencairn.ai/assets/images/og-cover-en.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Cairn — the opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cairn — The opinionated, sovereign, open source AI stack">
-  <meta name="twitter:description" content="Cairn is a research collaboration between Mozilla and Mila to design and prove out an opinionated, sovereign, open source AI stack.">
-  <meta name="twitter:image" content="https://opencairn.ai/assets/images/og-cover-en.png">
-  <meta name="twitter:image:alt" content="Cairn — the opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <link rel="icon" href="/favicon.ico" sizes="48x48">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#1d0d26">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAIRN — The sovereign, open source AI inference stack (Alpha)</title>
+<meta name="description" content="Cairn (codename) is a sovereign, open source AI inference stack you install and run on your own infrastructure. One OpenAI-compatible API, contract-defined layers, Apache-2.0. A Mozilla x Mila research collaboration. Alpha out now on GitHub.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CAIRN — The sovereign, open source AI inference stack">
+<meta property="og:description" content="Install and run your own AI inference stack on infrastructure you control. Open source, contract-defined, Apache-2.0. Alpha on GitHub.">
+<meta property="og:url" content="https://opencairn.ai/">
+<meta property="og:image" content="https://opencairn.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://opencairn.ai/assets/og-cover.png">
+<link rel="canonical" href="https://opencairn.ai/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__video-wrap" aria-hidden="true">
-      <video class="hero__video" autoplay muted loop playsinline>
-        <source src="assets/video/cairn-header.webm" type="video/webm">
-        <source src="assets/video/cairn-header.mp4" type="video/mp4">
-      </video>
-    </div>
+<a class="skip-link" href="#top">Skip to content</a>
 
-    <nav class="lang-toggle" aria-label="Language">
-      <a href="/" lang="en" hreflang="en" aria-current="page">EN</a>
-      <span aria-hidden="true">/</span>
-      <a href="/fr/" lang="fr" hreflang="fr">FR</a>
+<header class="masthead">
+  <div class="wrap mast-row">
+    <a class="wordmark" href="#top">CAIRN <span class="note">/ project codename</span></a>
+    <nav class="top" aria-label="Sections">
+      <a href="#why">01 Why</a>
+      <a href="#problem">02 Problem</a>
+      <a href="#stack">03 Cairn</a>
+      <a href="#differs">04 Differs</a>
+      <a href="#architecture">05 Architecture</a>
+      <a href="#alpha">06 Alpha</a>
+      <a href="#roadmap">07 Roadmap</a>
+      <a href="#join">08 Collaborate</a>
+      <a href="#statement">09 Statement</a>
+      <a href="#fingerprint">10 Fingerprint</a>
     </nav>
+  </div>
+</header>
 
-    <div class="hero__content">
-      <img class="hero__logo" src="assets/images/logo.svg" alt="Cairn" width="845" height="283">
+<main id="top" tabindex="-1">
 
-      <p class="hero__tagline">
-        The opinionated, sovereign,<br>
-        open source AI stack.
-      </p>
+<!-- ============================ HERO ================================= -->
+<section class="hero" aria-label="Introduction">
+  <div class="wrap">
+    <p class="kicker">A research collaboration between Mozilla &times; Mila</p>
+    <h1>The sovereign, open source AI&nbsp;inference stack.</h1>
+    <p class="lead">Cairn (codename) is a sovereign, open source AI inference stack
+    your organization installs and operates on infrastructure it controls. Your teams
+    keep the coding agents and chat assistants they already use and connect them to a
+    single OpenAI-compatible API. Behind that API sits a tested stack of open source
+    components — model access, security, observability — every one swappable by
+    published contract. Your compute. Your keys. Your stack.</p>
 
-      <a class="hero__arrow-link" href="#content" aria-label="Scroll to content">
-        <img class="hero__arrow" src="assets/images/arrow.svg" alt="" width="32" height="32">
-      </a>
+    <p class="statusline"><span class="vh">Release status:</span>STATUS: <b>ALPHA</b> | v0.1.0 | 2026-10-15 | SINGLE-NODE | LICENSE: <b>Apache-2.0</b> | REPO: <b>opencairn-ai/cairn-hoodoo</b></p>
+
+    <p class="actions">
+      <a class="btn btn-primary" href="https://github.com/opencairn-ai/cairn-hoodoo">[ GET THE ALPHA ON GITHUB ]</a>
+      <a class="btn btn-ghost" href="https://github.com/opencairn-ai/cairn-hoodoo/releases">[ READ RELEASE NOTES ]</a>
+      <a class="btn btn-ghost" href="#roadmap">[ SEE THE ROADMAP ]</a>
+    </p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ============================ 01 WHY =============================== -->
+<section id="why">
+  <div class="wrap">
+    <h2><span class="secnum">[01]</span>Why it matters — and why now</h2>
+    <p class="thesis">Intelligence is becoming a utility. Economies will depend on
+    inference the way they depend on electricity.</p>
+
+    <p>Every utility followed the same shape: generation, distribution, consumption.
+    Nobody runs a factory off a neighbor's extension cord — the middle layer is what
+    makes the power usable at scale. Intelligence is arriving in that same shape, and
+    its middle layer is the inference stack.</p>
+
+    <div class="tscroll" tabindex="0"><table>
+<caption class="vh">Utility analogy: power, telecom, intelligence</caption>
+<thead>
+<tr><th scope="col"></th><th scope="col">Generation</th><th scope="col">Distribution</th><th scope="col">Consumption</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row">Power</th><td>Power plants — a local dam, wind farms, imports</td><td>The grid — towers, cables, substations</td><td>Appliances — a fridge, laptops, a heat pump</td></tr>
+<tr><th scope="row">Telecom</th><td>Carriers — a local ISP, a subsea cable</td><td>The internet — an exchange point</td><td>Devices — a phone, a router, a TV</td></tr>
+<tr><th scope="row">Intelligence</th><td>Model providers — local GPUs, national cloud, hosted APIs</td><td><b>The inference stack</b> — gateway, access control, monitoring</td><td>Applications — Claude Code, Cursor, OpenCode, Hermes</td></tr>
+</tbody>
+</table></div>
+
+    <div class="stat">
+      <div class="num">140–720 million</div>
+      <p class="lbl">full-time-employee equivalents in frontier-model agents — 33 to
+      171 million agents working around the clock — could run on the AI chips shipped
+      through 2027.</p>
+      <p class="src">Source: Epoch AI, &ldquo;How many AI agents could run on the AI chips
+      shipped through 2027?&rdquo;, October 2026. Assumes hardware is fully deployed and
+      dedicated to agentic workloads.</p>
     </div>
-  </header>
 
-  <main id="content">
-    <section class="content">
-      <h1 class="content__headline">
-        Model capability isn't the bottleneck.<br>
-        Deployment&nbsp;is.
-      </h1>
+    <p>The capacity for agents is arriving fast. <b>Who gets to use it is an open
+    question.</b> Businesses of every size will draw on that capacity to power their
+    agentic workers — and owning the middle layer is what keeps their supply
+    resilient. That is where sovereignty is decided: not in the model, but in how
+    inference is served, governed and observed.</p>
 
-      <div class="content__body">
-        <p>The last two years produced the models. Next we produce the stacks people can actually run them on. Cairn is Mozilla and Mila's foundational research on the architecture of one of those stacks: the specific layers, the contracts between them, and which open source components fit each layer. <span class="text-gold text-bold">Opinionated, sovereign, open source.</span></p>
+    <p>It matters most to the organizations no one is building this for. Small and
+    medium businesses are 99.7% of enterprises and 60% of employment in the OECD
+    non-financial business sector (OECD, <i>Small, Medium, Strong</i> — 2013 data,
+    published 2017). They should be able to adopt AI on their own terms — safely,
+    easily, cost-effectively — and most will reach it through partners. Broad,
+    sovereign adoption of open source AI will be won or lost there.</p>
+  </div>
+</section>
 
-        <p>The starting frame is eight layers — application, orchestration, retrieval and memory, evaluation and observability, model serving, models, data, infrastructure — with cross-cutting concerns like authentication, governance, cost, and security spanning all of them. Which of those are really distinct layers, which merge, and where the set needs to split further is part of the research.</p>
+<hr class="sep">
 
-	<p>For each layer, the work is either selecting a component with rationale, or specifying the interface an adequate component would need to satisfy. Architecture is complete either way.</p>
+<!-- ========================== 02 PROBLEM ============================= -->
+<section id="problem">
+  <div class="wrap">
+    <h2><span class="secnum">[02]</span>The problem</h2>
+    <p class="thesis">The models are not the problem. Deploying and running them is.</p>
 
-        <p class="text-accent text-bold">Cairn is trying to be for open source AI what Ubuntu was for Linux: a curated, opinionated distribution.</p>
+    <p>Open-weight models are now excellent, free and one download away. The gap
+    between &ldquo;we have the weights&rdquo; and &ldquo;our teams ship on them every
+    day&rdquo; is an entire platform — and most organizations are being asked to build
+    that platform themselves. Six challenges keep showing up:</p>
 
-        <p>The picture we're designing against: your own frontier AI, running on your own machines. Your laptop, your data centre, your sovereign compute. One command to install, your data under your control, with governance and access control built in from the start, not bolted on after the demo.</p>
+    <ol class="challenges">
+      <li><b>No stack, only stitching.</b> Inference-stack work today is bespoke: every team re-derives gateway, serving, observability and security from scratch, and every integration is one-of-one.</li>
+      <li><b>Borrowed infrastructure.</b> A hosted API routes your prompts, your data and your dependency through someone else's computer. Their pricing, their terms, their availability window.</li>
+      <li><b>Borrowed software can be revoked.</b> Recent relicensing of Terraform, Redis and Elasticsearch showed that &ldquo;open&rdquo; is not a promise. Only software under an OSI-approved license keeps your right to run, study, modify and fork it — a right no single party can withdraw.</li>
+      <li><b>Fragmentation.</b> Models &times; serving engines &times; hardware is a matrix. The right engine depends on all three, and getting it wrong means hand-tuning you'll pay for in production.</li>
+      <li><b>Flying blind.</b> There is no standard way to see what inference costs, how fast it is, or how much of it your hardware can take. Security defaults are DIY, deployment by deployment.</li>
+      <li><b>Skill and scale.</b> Assembling and maintaining a stack is platform-team work — and by the OECD numbers above, almost no organization has one.</li>
+    </ol>
 
-        <p>Cairn is a collaboration between Mila, one of the world's leading AI research institutes, and Mozilla, the mission-driven organization behind Firefox and the broader open web. Mozilla is convening and investing. Mila is leading the research behind the technical direction. Designing the architecture and the contracts between the layers of an opinionated open source AI stack is exactly the kind of foundational question a research institute is positioned to answer.</p>
+    <p>So the demand side keeps asking for the same three things:</p>
+    <div class="grid cols-3">
+      <div class="card"><h4>Independence</h4><p>Your data, your policies, your choices. Everything runs on infrastructure you control, with components you can inspect and replace.</p></div>
+      <div class="card"><h4>Turnkey</h4><p>Open source without the assembly. A tested stack built to install, upgrade and run from its documentation.</p></div>
+      <div class="card"><h4>Resilient</h4><p>Own your capacity. Inference on infrastructure you own or share, with predictable costs and no single-vendor lock-in.</p></div>
+    </div>
+  </div>
+</section>
 
-        <p class="text-accent text-bold">Get notified when the code lands.</p>
-      </div>
+<hr class="sep">
 
-      <div class="content__cta">
-        <a class="cta" href="https://github.com/opencairn-ai" target="_blank" rel="noopener noreferrer">
-          <svg class="cta__icon" viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          Follow us on GitHub
-        </a>
-        <p class="content__subtext">
-	This page will update as the work does. Come back.
-        </p>
-      </div>
-    </section>
-  </main>
+<!-- =========================== 03 CAIRN ============================== -->
+<section id="stack">
+  <div class="wrap">
+    <h2><span class="secnum">[03]</span>What Cairn is</h2>
+    <p class="thesis">An open source AI inference stack that your organization
+    installs and operates on infrastructure it controls.</p>
 
-  <footer class="footer">
-    <p class="footer__label">A collaboration between</p>
+    <p>Your teams connect the tools they already use to one inference API. Behind
+    it, Cairn integrates existing open source components into a cohesive stack —
+    from model access to observability and security — on compute you own. It is a
+    research collaboration between <a href="https://mozilla.org">Mozilla</a> and
+    <a href="https://mila.quebec">Mila</a>, released under Apache&nbsp;2.0.</p>
 
-    <div class="footer__logos">
-      <a href="https://mozilla.org" target="_blank" rel="noopener noreferrer">
-        <img class="footer__logo footer__logo--mozilla" src="assets/images/mozilla-logo.svg" alt="Mozilla" width="300" height="72">
-      </a>
-      <a href="https://mila.quebec" target="_blank" rel="noopener noreferrer">
-        <img class="footer__logo footer__logo--mila" src="assets/images/mila-logo.png" alt="Mila" width="210" height="116">
-      </a>
+    <p>To be explicit: Cairn does not train or sell models, and it is not a hosted
+    service. It is the stack you run.</p>
+
+    <p>The method behind the stack:</p>
+
+    <div class="grid cols-2">
+      <div class="card"><h4>Specify, test, select, integrate</h4><p>We specify what each layer must do, test existing open source components against that specification, then select and integrate the best fit.</p></div>
+      <div class="card"><h4>Swappable by contract</h4><p>We publish the interface contracts each component must satisfy, so one conforming component can replace another without reworking the rest.</p></div>
+      <div class="card"><h4>Composition, not creation</h4><p>We write the glue between components rather than new ones — and publish specifications where no suitable open source component exists yet.</p></div>
+      <div class="card"><h4>Bring your own harness</h4><p>Teams keep the chat assistants and coding agents they already use, and point them at one OpenAI-compatible API on the organization's own compute.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ========================== 04 DIFFERS ============================= -->
+<section id="differs">
+  <div class="wrap">
+    <h2><span class="secnum">[04]</span>How it differs</h2>
+    <p class="thesis">Many organizations are building inference stacks. No one has
+    defined what a stack should contain. Cairn starts with the definition.</p>
+
+    <div class="tscroll" tabindex="0"><table>
+<caption class="vh">How Cairn differs from other inference stack initiatives</caption>
+<thead>
+<tr><th scope="col"></th><th scope="col">Typical initiative</th><th scope="col">Cairn</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row">What the stack is</th><td>A bundle of scripts and configs, or a proprietary platform</td><td>A published specification: layers, components and interface contracts, with selections tested per layer</td></tr>
+<tr><th scope="row">Replacing a component</th><td>Rework the integration, or wait for the vendor</td><td>Swap any conforming component; the published contract guarantees compatibility</td></tr>
+<tr><th scope="row">License posture</th><td>Open-core or source-available; terms can change</td><td>Apache-2.0 glue and specs; every selected component open source under OSI-approved terms</td></tr>
+<tr><th scope="row">Sovereignty</th><td>Sovereign while the vendor's interests align with yours</td><td>Runs on infrastructure you control; you can inspect, modify, fork and keep running every piece</td></tr>
+<tr><th scope="row">Who defines the standard</th><td>One vendor's roadmap</td><td>Contracts are public: anyone can build a conforming layer or component and interoperate</td></tr>
+</tbody>
+</table></div>
+
+    <p>Open standards enable portability. Open source ensures the portability lasts.
+    Its incentive structure is the only one compatible with true sovereignty: no
+    single party can withdraw access, change the terms or end support.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ======================== 05 ARCHITECTURE ========================== -->
+<section id="architecture">
+  <div class="wrap">
+    <h2><span class="secnum">[05]</span>Architecture</h2>
+    <p class="thesis">Contract-defined layers, integrated open source components.
+    The stack is defined by its seams — and the seams belong to no vendor.</p>
+
+    <p>Cairn is the server side of an agentic setup. Your tools stay yours and sit
+    above the demarcation line: one OpenAI-compatible API, one issued key. Below
+    it, on infrastructure you control, the stack is organized into layers — with
+    security, observability and the control plane cutting across all of them.</p>
+
+<pre role="img" tabindex="0" aria-label="ASCII diagram of the stack architecture. Your tools: chat assistants, coding agents, knowledge work. Demarcation: one OpenAI-compatible API, one issued key per team. Cairn on infrastructure you control, by layer: Model Access, alpha; Tool Access, next; Registries, next; Further out: agent runtime, persistence, later; Cross-cutting: security, observability, control plane, partial. GPU metrics are NVIDIA only; consoles, policy and tenancy come later.">
+
+  YOUR TOOLS (bring your own harness)
+  +--------------------------------------------------------------+
+  |  harness      chat assistants | coding agents | knowledge    |
+  +--------------------------------------------------------------+
+                 |
+                 |   D E M A R C -- one OpenAI-compatible API,
+                 v                   one issued key per team
+  CAIRN -- ON INFRASTRUCTURE YOU CONTROL
+  +--------------------------------------------------------------+
+  |  MODEL ACCESS    model gateway -> model server + recipes     |  <span class="ok">[ALPHA]</span>
+  +--------------------------------------------------------------+
+  |  TOOL ACCESS     tool gateway -> tool servers                |  <span class="plan">[NEXT]</span>
+  +--------------------------------------------------------------+
+  |  REGISTRIES      model | skill | MCP tool registries         |  <span class="plan">[NEXT]</span>
+  +--------------------------------------------------------------+
+  |  FURTHER OUT     agent runtime | persistence (memory, search)|  <span class="plan">[LATER]</span>
+  +--------------------------------------------------------------+
+  |  CROSS-CUTTING   security | observability | control plane    |  <span class="ok">[PARTIAL]</span>
+  +--------------------------------------------------------------+
+     Alpha ships security defaults, inference observability (GPU
+     metrics: NVIDIA only) and the recipe catalog; consoles,
+     policy and tenancy come later.
+</pre>
+    <p class="cap hint">Reference: Ecosystem Roadmap deck, &ldquo;The Stack&rdquo;
+    (<a href="/assets/cairn-ecosystem-roadmap-v3.pptx">download, PPTX</a>).</p>
+
+    <h3>The contracts — Model Access</h3>
+    <p>Read left to right: a harness calls the model gateway over the
+    OpenAI-compatible API with a team key; the gateway calls the model server over
+    the same API on the internal network; a recipe pins what runs, on which
+    hardware, with which settings. Everything streams telemetry out.</p>
+
+<pre role="img" tabindex="0" aria-label="ASCII diagram of the Model Access contracts. Contract 1, harness to model gateway: OpenAI chat completions and models endpoints with a team key, lets the harness change. Contract 2, gateway to model server: OpenAI-compatible API with a server key, lets the gateway change. Contract 3, recipe to model server: pinned images and config, lets hardware and model change. Contract 4: all components stream metrics, logs and traces to observability over OTLP.">
+
+ harness                (1)               (2)                (3)
+ (your tools)  ---------------->  model gateway  ------>  model server  + recipe
+ chat, coding,                   (Otari)                 (vLLM | SGLang)  (pinned config)
+ knowledge work
+
+ 1  harness -> gateway    POST /v1/chat/completions, GET /v1/models
+                          Bearer &lt;team key&gt;              lets the harness change
+ 2  gateway -> server     OpenAI-compatible API at model-server:8000/v1
+                          Bearer &lt;server key&gt;            lets the gateway change
+ 3  recipe -> server      recipes/&lt;hardware&gt;/&lt;model&gt;/&lt;publisher&gt;/&lt;server&gt;/
+                          images pinned by tag           lets hardware/model change
+ 4  all components -> observability: metrics, logs, traces -> OTLP
+</pre>
+
+    <h3>Swappable by contract, in practice</h3>
+    <p>The contracts are easiest to see in what does <b>not</b> move when a
+    component changes. Replacing the serving engine is one line:</p>
+
+<pre role="img" tabindex="0" aria-label="ASCII diff of a .env file: minus MODEL_SERVER equals vllm, plus MODEL_SERVER equals sglang. Stays the same: model, v1 endpoint, server key, port. The recipe absorbs: gpu-memory-utilization becomes mem-fraction-static.">
+ # .env -- swap the serving engine
+ <span class="del">- MODEL_SERVER=vllm</span>
+ <span class="ok">+ MODEL_SERVER=sglang</span>
+
+ stays the same    model · /v1 endpoint · server key · port
+ recipe absorbs    gpu-memory-utilization  ->  mem-fraction-static
+</pre>
+
+    <p>Same story across the seams: switch <code>cpu</code> to
+    <code>nvidia</code> and only the recipe's image and runtime change. Swapping
+    the gateway (LiteLLM &rarr; Otari — still a prototype) leaves the edge proxy,
+    model server and base URL in place; the harness takes a new key and model
+    name. One setting, one contract.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- =========================== 06 ALPHA =============================== -->
+<section id="alpha">
+  <div class="wrap">
+    <h2><span class="secnum">[06]</span>The Alpha release</h2>
+    <p class="thesis">Today: the Model Access layer end to end, security defaults
+    and first-class observability, running on one Linux host.</p>
+
+    <div class="grid cols-2">
+      <div class="card"><h4>One secure entry point</h4><p>A single published port served by Caddy. Every request is authenticated with gateway-issued keys; nothing else in the stack publishes a port.</p></div>
+      <div class="card"><h4>Model gateway</h4><p>Otari issues and revokes API keys per team, inspects usage and ships a built-in playground. Works with any tool that speaks an OpenAI-compatible or Anthropic-compatible API: base URL, key, model ID. That is the entire integration.</p></div>
+      <div class="card"><h4>Model serving with recipes</h4><p>A recipe serves one model, with one engine, on one hardware target — images and settings pinned by tag. vLLM and SGLang included. No GPU? CPU recipes let you try the whole stack before spending any hardware budget.</p></div>
+      <div class="card"><h4>Observability &amp; security out of the box</h4><p>A Grafana LGTM bundle (Loki, Grafana, Tempo, Mimir, OTel Collector) with inference dashboards: throughput, TTFT/ITL/TPOT/E2E, KV-cache, traces from proxy to model server, logs, host metrics — and GPU metrics (NVIDIA only). Core services run <code>no-new-privileges</code> on isolated networks; PostgreSQL requires SCRAM-SHA-256.</p></div>
     </div>
 
-    <nav class="footer__links" aria-label="Footer">
-      <a href="mailto:bonjourhi@opencairn.ai">Contact</a>
+    <h3>Quick start</h3>
+<pre tabindex="0">
+ git clone https://github.com/opencairn-ai/cairn-hoodoo.git &amp;&amp; cd cairn-hoodoo
+ ./env-setup.sh          # generates .env with fresh secrets, picks a recipe
+ ./model-selection.sh    # or pick interactively, any time
+ docker compose up -d    # ready when model-server reports healthy
+</pre>
+    <p>Four commands to a private inference API with keys, budgets and dashboards
+    on your own metal. Full instructions in the
+    <a href="https://github.com/opencairn-ai/cairn-hoodoo/blob/main/README.md">README</a>.</p>
+
+    <h3>Software bill of materials — v0.1.0</h3>
+    <p>Every component selected by testing against its layer specification, pinned
+    by tag. In the order a request meets it:</p>
+
+    <div class="tscroll" tabindex="0"><table>
+<caption class="vh">Software bill of materials, v0.1.0</caption>
+<thead>
+<tr><th scope="col">Layer</th><th scope="col">Component</th><th scope="col">Version</th><th scope="col">Role</th><th scope="col">License</th></tr>
+</thead>
+<tbody>
+<tr><td>Edge</td><th scope="row">Caddy</th><td>2.11.4</td><td>Reverse proxy; the only published port</td><td>Apache-2.0</td></tr>
+<tr><td>Model Access</td><th scope="row">Otari</th><td>0.19.0</td><td>Model gateway: keys, budgets, usage, playground</td><td>Apache-2.0</td></tr>
+<tr><td>Model Access</td><th scope="row">vLLM</th><td>v0.30.0</td><td>Model server (chosen per recipe)</td><td>Apache-2.0</td></tr>
+<tr><td>Model Access</td><th scope="row">SGLang</th><td>v0.5.21</td><td>Model server (chosen per recipe)</td><td>Apache-2.0</td></tr>
+<tr><td>Model Access</td><th scope="row">PostgreSQL</th><td>17.8</td><td>Gateway state: keys, aliases, usage records</td><td>PostgreSQL</td></tr>
+<tr><td>Observability</td><th scope="row">Grafana LGTM bundle</th><td>0.35.0</td><td>Metrics, logs and traces + OTel Collector</td><td>AGPL-3.0 / Apache-2.0</td></tr>
+<tr><td>Observability</td><th scope="row">Prometheus node-exporter</th><td>v1.12.1</td><td>Host metrics (optional exporter)</td><td>Apache-2.0</td></tr>
+<tr><td>Observability</td><th scope="row">NVIDIA DCGM exporter</th><td>4.6.1-4.8.4</td><td>GPU metrics, NVIDIA (optional exporter)</td><td>Apache-2.0</td></tr>
+<tr><td>Control Plane</td><th scope="row">Recipe catalog</th><td>in-tree</td><td>Serving settings matched to hardware, model, engine</td><td>Apache-2.0</td></tr>
+<tr><td>Deployment</td><th scope="row">Docker Compose</th><td>5.0.2 (tested)</td><td>Single-host install and operation</td><td>Apache-2.0</td></tr>
+</tbody>
+</table></div>
+    <p class="cap">Source of truth: <a href="https://github.com/opencairn-ai/cairn-hoodoo/blob/main/RELEASE_NOTES.md">release notes</a> and
+    compose files; overview in the Ecosystem Roadmap deck, &ldquo;Software Bill of
+    Materials&rdquo; (<a href="/assets/cairn-ecosystem-roadmap-v3.pptx">download, PPTX</a>).
+    Two reconciliations, on the record: the deck's SBOM slide also lists cAdvisor,
+    which the v0.1.0 compose files do not ship; and a few recipes pin engine images
+    from the engine's development channel rather than a release tag — each recipe
+    pins exactly which build you get. The stack pulls third-party container images
+    and model weights but does not distribute them; their own licenses apply.</p>
+
+    <h3>Tested recipes</h3>
+    <div class="tscroll" tabindex="0"><table>
+<caption class="vh">Tested model recipes in v0.1.0</caption>
+<thead>
+<tr><th scope="col">Hardware target</th><th scope="col">Model</th><th scope="col">Publisher</th><th scope="col">Server</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row"><code>cpu-any</code></th><td>MiniCPM5-1B</td><td>openbmb</td><td>vLLM</td></tr>
+<tr><th scope="row"><code>nvidia-any</code></th><td>MiniCPM5-1B</td><td>openbmb</td><td>vLLM</td></tr>
+<tr><th scope="row"><code>nvidia-any</code></th><td>MiniCPM5-1B</td><td>openbmb</td><td>SGLang</td></tr>
+<tr><th scope="row"><code>nvidia-dgxa100</code></th><td>Qwen3.8-Flash-Next-FP8</td><td>Qwen</td><td>vLLM</td></tr>
+<tr><th scope="row"><code>nvidia-gb10</code></th><td>Qwen3.6-35B-A3B-NVFP4</td><td>nvidia</td><td>vLLM</td></tr>
+<tr><th scope="row"><code>nvidia-gb10</code></th><td>Qwen3.8-27B-NVFP4</td><td>RadixArk</td><td>SGLang</td></tr>
+<tr><th scope="row"><code>nvidia-rtx6000</code></th><td>Qwen3.8-Flash-Next-NVFP4</td><td>nvidia</td><td>SGLang</td></tr>
+</tbody>
+</table></div>
+
+    <h3>Known limitations — said plainly</h3>
+    <ul class="plain">
+      <li><b>Single-node only.</b> Multi-node serving is out of scope for Alpha.</li>
+      <li><b>A few model recipes.</b> Seven tested today: CPU, any NVIDIA GPU, and specific RTX 6000, GB10 and DGX A100 setups.</li>
+      <li><b>Breaking changes expected</b> between Alpha releases: config files, the gateway and the recipe layout may change.</li>
+      <li><b>Linux host required</b> with Docker Engine and Compose; NVIDIA GPUs need the driver and Container Toolkit.</li>
+      <li><b>Heavy first launch.</b> The first <code>docker compose up</code> downloads images and model weights — give yourself disk headroom and an <code>HF_TOKEN</code>.</li>
+      <li><b>Optional exporters widen the surface.</b> If you enable them, the node and DCGM exporters run on the host network (ports 9100 and 9400 by default) and the DCGM exporter needs elevated privileges. Decline them, or firewall them, if you don't need those dashboards; GPU metrics are NVIDIA-only either way.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ========================== 07 ROADMAP ============================= -->
+<section id="roadmap">
+  <div class="wrap">
+    <h2><span class="secnum">[07]</span>Roadmap</h2>
+    <p class="thesis">Five milestones in six months, from a self-hosted API to an
+    agent-ready stack run by operators on their own.</p>
+
+<pre role="img" tabindex="0" aria-label="ASCII timeline: October 2026, alpha release; November to December 2026, ready for a partner; January 2027, beta release; February to March 2027, ready for agents; April 2027, release candidate.">
+
+  2026                          2027
+  OCT            NOV-DEC        JAN          FEB-MAR       APR
+  |--------------|--------------|------------|-------------|
+  *              *              *            *             *
+  ALPHA          PARTNER-READY  BETA         AGENT-READY   RELEASE
+                                                           CANDIDATE
+
+     (months schematic, not to scale)
+</pre>
+
+    <div class="tscroll" tabindex="0"><table>
+<caption class="vh">Roadmap milestones, October 2026 to April 2027</caption>
+<thead>
+<tr><th scope="col">Milestone</th><th scope="col">When</th><th scope="col">What it means</th><th scope="col">Status</th></tr>
+</thead>
+<tbody>
+<tr><th scope="row">Alpha release</th><td>Oct 2026</td><td>One OpenAI-compatible API to self-hosted models, with access control built in.</td><td><span class="tag">Shipped 10-15</span></td></tr>
+<tr><th scope="row">Ready for a partner</th><td>Nov&ndash;Dec 2026</td><td>Multi-node serving, automated install, model registry and guardrails.</td><td><span class="tag plan">Planned</span></td></tr>
+<tr><th scope="row">Beta release</th><td>Jan 2027</td><td>Agentic coding running in a partner's own environment.</td><td><span class="tag plan">Planned</span></td></tr>
+<tr><th scope="row">Ready for agents</th><td>Feb&ndash;Mar 2027</td><td>Control plane, shared registries, agent runtime, tool access and persistence.</td><td><span class="tag plan">Planned</span></td></tr>
+<tr><th scope="row">Release candidate</th><td>Apr 2027</td><td>The agent-ready stack, installed and run by operators on their own.</td><td><span class="tag plan">Planned</span></td></tr>
+</tbody>
+</table></div>
+    <p class="cap">Dates follow the Ecosystem Roadmap deck
+    (<a href="/assets/cairn-ecosystem-roadmap-v3.pptx">download, PPTX</a>) and may move
+    as the work progresses. Hardening and simplification run throughout, driven by
+    what early adopters break and report.</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- =========================== 08 JOIN =============================== -->
+<section id="join">
+  <div class="wrap">
+    <h2><span class="secnum">[08]</span>Collaborate</h2>
+    <p class="thesis">Four ways in — pick the one that matches what you do. The
+    conversation happens in the open, on GitHub.</p>
+
+    <h3>For whom</h3>
+    <div class="grid cols-3">
+      <div class="card"><h4>SMBs</h4><p>Adopt AI on your own terms, in-house or through a trusted partner.</p></div>
+      <div class="card"><h4>Large enterprises</h4><p>Standardize AI usage and access across teams, and keep it simple to maintain.</p></div>
+      <div class="card"><h4>Government entities</h4><p>Keep AI capacity and data within your control and easy to inspect.</p></div>
+      <div class="card"><h4>Nonprofits</h4><p>Use AI safely and more predictably without an engineering team.</p></div>
+      <div class="card"><h4>Integrators &amp; advisors</h4><p>Deploy open source AI solutions your customers own.</p></div>
+      <div class="card"><h4>Compute providers</h4><p>Offer capacity on an open stack configured to your hardware.</p></div>
+      <div class="card"><h4>Open source projects</h4><p>Build components against each layer's published contract.</p></div>
+    </div>
+
+    <h3>Four ways to participate</h3>
+    <div class="grid cols-2">
+      <div class="card">
+        <h4>Build <span class="tag">From Oct</span></h4>
+        <p>Deliver or help co-define a layer component against the interface contracts.</p>
+        <p class="for">Suited to organizations already building parts of such a stack, and to open source projects.</p>
+      </div>
+      <div class="card">
+        <h4>Deploy <span class="tag plan">From Nov–Dec</span></h4>
+        <p>Run the reference implementation as a beta deployment partner: onboarding in November, deployed by January, in production by July 2027.</p>
+        <p class="for">Suited to institutions and public bodies with strong IT teams, mandated to offer sovereign, safe inference to their staff.</p>
+      </div>
+      <div class="card">
+        <h4>Host <span class="tag plan">From Feb–Mar</span></h4>
+        <p>Provide a reference or test environment for multi-node validation across a growing set of tested configurations.</p>
+        <p class="for">Suited to compute providers.</p>
+      </div>
+      <div class="card">
+        <h4>Distribute <span class="tag plan">From Apr</span></h4>
+        <p>Offer the stack to the organizations you serve — a shared service you operate, or a configuration with your own models and policy defaults.</p>
+        <p class="for">Suited to development agencies, integrators, and nonprofits supporting networks of organizations.</p>
+      </div>
+    </div>
+
+    <h3>Start today</h3>
+    <ul class="plain">
+      <li><b>Install the Alpha</b> and break it —
+      <a href="https://github.com/opencairn-ai/cairn-hoodoo">opencairn-ai/cairn-hoodoo</a>.
+      The Alpha lives or dies by what early adopters report.</li>
+      <li><b>Open an issue</b> with logs (minus secrets) at
+      <a href="https://github.com/opencairn-ai/cairn-hoodoo/issues">the issue tracker</a>.</li>
+      <li><b>Talk to us</b> about a component, a deployment or a contract:
+      <a href="mailto:bonjourhi@opencairn.ai">bonjourhi@opencairn.ai</a>.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ========================= 09 STATEMENT ============================ -->
+<section id="statement">
+  <div class="wrap">
+    <h2><span class="secnum">[09]</span>Public statement</h2>
+    <p class="thesis">The full public statement from the Mozilla &times; Mila
+    collaboration will live here.</p>
+
+    <div class="placeholder">
+      <p class="tag-soon">[ NOT YET PUBLISHED — EXPECTED ALONGSIDE THE BETA, JAN 2027 ]</p>
+      <p>The press release announcing the Alpha — why this collaboration exists and
+      what it is setting out to change — will be published in this slot. Until then,
+      the primary sources are the <a href="https://github.com/opencairn-ai/cairn-hoodoo">repository</a>
+      and its <a href="https://github.com/opencairn-ai/cairn-hoodoo/releases">release
+      notes</a>; field notes from early deployments will follow here.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ======================= 10 FINGERPRINT ============================ -->
+<section id="fingerprint">
+  <div class="wrap">
+    <h2><span class="secnum">[10]</span>Model fingerprint</h2>
+    <p class="thesis">This website was drafted, critiqued and revised by an AI
+    agent. Full transparency, on the record — the same disclosure standard used in
+    the <a href="https://github.com/opencairn-ai/cairn-hoodoo/blob/main/RELEASE_NOTES.md">release notes</a>.</p>
+
+    <dl class="finger" id="fingerprint-data">
+      <dt>Initial prompt</dt>
+      <dd>
+        <details>
+          <summary>view the verbatim brief that produced this site (reproduced as written, including its own typos)</summary>
+          <blockquote>Build a website about Cairn stack's Alpha release.
+- Refer to Cairn only as the codename for the project. The primary focus should be on the open source AI inference stack, what is means and its architecture. That's where we want the conversation to happen.
+  - Don't build a theme around the concept of Cairn, leave it generic.
+- The main audience is early adopters and executives interested in open source and sovereign AI
+- This website will act as the main entry point to learn about the sovereign, open source AI inference stack and access its Alpha version on GitHub
+- It should leave a placeholder for a public statement/press release. Additional blog posts will be published later on.
+- It should tell a compelling story about why a sovereign, open source AI inference stack matters, to whom and why now. Refer to the presentation deck.
+- It should speaks to the challenges that organization are facing today in their adoption of open source AI
+- It should clearly state what Cairn is about and how different it is from other inference stack initiatives
+- It should clearly introduce the stack architecture as well as the software bill of materials for the Alpha release (use link to Cairn's presentation deck for reference)
+- It should present a clear roadmap for the next 6 months (use link to Cairn's presentation deck for reference).
+- It should invite people to collaborate and how to do so.
+- In terms of design, adopt a clean, sleek, old-school Web 1.0 "read-only" design with an ASCII feel and color palette taken from the design system (https://github.com/opencairn-ai/design-system)
+- Make all sections MECE in content and cohesive in design principles.
+- Make sure it's easy to read, crisp and to the point for a first-time visitor
+- Use the necessary library that you see fit for this scope of work
+- The content hierarchy should be clear, easy to understand and memorable.
+- Once you're satisfied with the state of the website, add a "Model Fingerprint" section where users can go and inspect everything that was used to create the website, such as, but not limited to:
+  - Initial prompt
+  - Harness used
+  - Model used
+  - Hardware (GPU) metrics
+  - Total token count
+- Adopt an iterative approach where you critique every new versions of the website until it meets a high-level of quality.</blockquote>
+        </details>
+      </dd>
+
+      <dt>Harness used</dt>
+      <dd id="fp-harness"><b>OpenCode</b> &mdash; an open-source coding agent &mdash;
+      running this model over an OpenAI-compatible endpoint. The site passed through
+      four critique rounds before this state: content, design, accessibility,
+      release-gate. Client side: a MacBook Pro (Apple M5, 32&nbsp;GB). The artifact:
+      static HTML and CSS &mdash; zero JavaScript, zero cookies, zero trackers.</dd>
+
+      <dt>Model used</dt>
+      <dd id="fp-model"><code>Qwen/Qwen3.8-Flash-Next-FP8</code>, served by
+      <code>vLLM</code> behind a <code>LiteLLM</code> gateway with a <code>Caddy</code>
+      edge proxy &mdash; the gateway-swap configuration of the stack shown in
+      <a href="#architecture">&sect;05</a>, not the shipped default gateway. The
+      inference that wrote this page ran on the infrastructure this page documents.</dd>
+
+      <dt>Hardware (GPU)</dt>
+      <dd id="fp-hw">Model ran on <b>8&times; NVIDIA A100-SXM4-80GB</b> (one
+      inference node, tensor-parallel). Snapshot from the DCGM exporter at the moment
+      this page's request was in flight:
+
+      <pre class="fp-metrics">
+ gpu         8 &times; NVIDIA A100-SXM4-80GB
+ util        89&ndash;97&nbsp;% across the eight
+ memory      78,921 MiB used of 81,920 (96&nbsp;%)
+ temp        40&ndash;56&nbsp;&deg;C
+ power       118&ndash;207&nbsp;W per GPU
+ source      DCGM exporter :9400 &middot; 2026-10-19 16:04 EDT</pre>
+
+      Memory reads high by design: the server pre-allocates the frame buffer as
+      KV cache. Client hardware (where the editor ran): Apple M5, 32&nbsp;GB
+      unified memory.</dd>
+
+      <dt>Total token count</dt>
+      <dd id="fp-tokens"><b>13,029,123</b> tokens for this session &mdash;
+      12,921,877 input &middot; 54,409 output &middot; 52,837 reasoning &mdash; counted
+      by the harness as the final pass closed. A 237:1 input-to-output ratio: the cost
+      is in re-reading context, not in generating prose. The count, naturally, does not
+      include the tokens spent writing it down. Same disclosure format as the
+      <a href="https://github.com/opencairn-ai/cairn-hoodoo/blob/main/RELEASE_NOTES.md">release
+      notes</a>&rsquo; fingerprint.</dd>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p><b>CAIRN</b> is a project codename. The stack, its specifications and its
+    contracts are the project. &copy; 2026 — a research collaboration between
+    <a href="https://mozilla.org">Mozilla</a> and <a href="https://mila.quebec">Mila</a>.
+    Code and specs under <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</a>.</p>
+    <nav aria-label="Footer">
+      <a href="https://github.com/opencairn-ai/cairn-hoodoo">GitHub</a>
+      <a href="https://github.com/opencairn-ai/cairn-hoodoo/releases">Release notes</a>
+      <a href="/assets/cairn-ecosystem-roadmap-v3.pptx">Ecosystem Roadmap deck</a>
+      <a href="#statement">Statement</a>
+      <a href="mailto:bonjourhi@opencairn.ai">Email</a>
+      <a href="#fingerprint">Model fingerprint</a>
+      <a href="#top">Back to top</a>
     </nav>
+    <p>This page ships zero JavaScript, zero cookies, zero trackers. Read-only by design.</p>
+    <p class="eof">[ EOF ]</p>
+  </div>
+</footer>
 
-  </footer>
 </body>
 </html>

@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://opencairn.ai/</loc>
-    <lastmod>2026-07-17</lastmod>
-    <xhtml:link rel="alternate" hreflang="en" href="https://opencairn.ai/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://opencairn.ai/fr/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://opencairn.ai/"/>
-  </url>
-  <url>
-    <loc>https://opencairn.ai/fr/</loc>
-    <lastmod>2026-07-17</lastmod>
-    <xhtml:link rel="alternate" hreflang="en" href="https://opencairn.ai/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://opencairn.ai/fr/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://opencairn.ai/"/>
+    <lastmod>2026-10-19</lastmod>
   </url>
 </urlset>
