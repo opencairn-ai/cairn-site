@@ -34,18 +34,18 @@ window.CAIRN_COPY.en = {
   intro: {
     eyebrow: "Technical Teaser",
     title: "Introducing the open source AI inference stack",
-    goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that:",
+    goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
       {
-        title: "All components work together",
+        title: "Make all components work together",
         text: "Components that follow the same contracts need no custom integration code.",
       },
       {
-        title: "You can replace any component",
+        title: "Replace any component",
         text: "Anything that follows the same contract can replace it. The rest of the stack does not change.",
       },
       {
-        title: "You can use the best of open source",
+        title: "Use the best of open source",
         text: "We test open source projects against each contract. Our reference implementation uses the best one for each layer.",
       },
     ],

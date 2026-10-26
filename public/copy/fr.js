@@ -37,18 +37,18 @@ window.CAIRN_COPY.fr = {
   intro: {
     eyebrow: "Avant-goût technique",
     title: "Découvrez la pile d’inférence d’IA à code source ouvert",
-    goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que :",
+    goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
       {
-        title: "Tous les composants fonctionnent ensemble",
+        title: "Faire fonctionner tous les composants ensemble",
         text: "Les composants qui respectent les mêmes contrats ne demandent aucun code d’intégration sur mesure.",
       },
       {
-        title: "Vous puissiez remplacer n’importe quel composant",
+        title: "Remplacer n’importe quel composant",
         text: "Tout ce qui respecte le même contrat peut le remplacer. Le reste de la pile ne change pas.",
       },
       {
-        title: "Vous puissiez utiliser le meilleur du code source ouvert",
+        title: "Utiliser le meilleur du code source ouvert",
         text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
       },
     ],
