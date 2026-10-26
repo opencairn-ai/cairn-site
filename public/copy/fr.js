@@ -48,7 +48,7 @@ window.CAIRN_COPY.fr = {
         text: "Un nouveau composant qui respecte le même contrat peut remplacer l’ancien. Le reste de la pile ne change pas.",
       },
       {
-        title: "Vous pouvez utiliser les meilleurs composants à code source ouvert",
+        title: "Vous pouvez utiliser les meilleurs composants ouverts",
         text: "Nous testons des composants à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
       },
     ],
