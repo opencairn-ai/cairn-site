@@ -29,7 +29,7 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "Technical Preview",
+    eyebrow: "Technical Teaser",
     title: "Introducing the open source AI inference stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that:",
     points: [

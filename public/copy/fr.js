@@ -31,7 +31,7 @@ window.CAIRN_COPY.fr = {
   },
 
   intro: {
-    eyebrow: "Aperçu technique",
+    eyebrow: "Avant-goût technique",
     title: "Découvrez la pile d’inférence d’IA à code source ouvert",
     goal: "Notre objectif : définir des contrats d’interface clairs entre chaque couche et chaque composant de la pile, pour que :",
     points: [
