@@ -266,14 +266,15 @@
   // Clones the diagram into a fixed-size, off-screen sheet with a title and
   // credits, so every download looks the same whatever the screen size.
   async function renderImage() {
-    const logo = document.querySelector(".brand img").cloneNode();
     const clone = diagram.cloneNode(true);
     clone.removeAttribute("id");
     for (const node of clone.querySelectorAll(".is-active")) node.classList.remove("is-active");
 
     const sheet = el("div", "export-sheet", [
-      el("div", "export-sheet__head", [logo, el("span", "export-sheet__site", t("image.site"))]),
-      el("p", "export-sheet__title", t("intro.title")),
+      el("div", "export-sheet__head", [
+        el("p", "export-sheet__title", t("intro.title")),
+        el("span", "export-sheet__site", t("image.site")),
+      ]),
       clone,
       el("p", "export-sheet__foot", footerText()),
     ]);
@@ -283,12 +284,11 @@
 
     try {
       await document.fonts.ready;
-      await logo.decode().catch(() => {});
       const options = {
         pixelRatio: 2,
         backgroundColor: getComputedStyle(document.body).backgroundColor,
       };
-      // WebKit can leave images out of the first render; a warm-up pass fixes it.
+      // WebKit can leave fonts out of the first render; a warm-up pass fixes it.
       if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         await window.htmlToImage.toBlob(sheet, options);
       }

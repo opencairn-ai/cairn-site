@@ -31,6 +31,7 @@
   --color-tip-muted: #bcb8b2;
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --gutter: max(16px, 2.25rem);
   --radius: 0.55em;
 }
@@ -97,8 +98,18 @@ a { color: inherit; }
   padding: 0.95rem 0 0.35rem;
 }
 
-.brand { display: block; line-height: 0; }
-.brand img { display: block; width: auto; height: 1.55rem; }
+.codename {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline. */
+.codename img { display: block; width: auto; height: 1.2em; }
 
 .header-actions {
   display: flex;
@@ -341,28 +352,6 @@ h1 {
 
 .layer--stack .layer__items { flex-direction: column; }
 
-[data-copy="modelAccess"] [data-copy="modelAccess.modelGateway"] { flex-grow: 0.8; }
-
-.comp--group {
-  flex-grow: 1.25;
-  justify-content: flex-start;
-  padding: 0.5em;
-}
-
-.comp__items {
-  display: flex;
-  flex: 1;
-  gap: 0.4em;
-}
-
-.comp--sub {
-  padding: 0.4em 0.2em;
-  border-radius: calc(var(--radius) * 0.8);
-  font-size: 0.82em;
-  overflow-wrap: anywhere;
-  hyphens: auto;
-}
-
 .layer--registry > .label {
   flex-direction: row;
   flex-wrap: wrap;
@@ -384,9 +373,7 @@ h1 {
 }
 
 .layer--cross .comp {
-  justify-content: flex-start;
   padding: 0.5em 0.55em;
-  text-align: left;
   overflow-wrap: break-word;
 }
 
@@ -439,8 +426,6 @@ h1 {
   .layer--row > .label { flex: none; }
   .layer__items { flex-wrap: wrap; }
   .layer:not(.layer--stack) > .layer__items > .comp { flex-basis: 9em; }
-  .layer:not(.layer--stack) > .layer__items > .comp--group { flex-basis: 100%; }
-  [data-copy="modelAccess"] [data-copy="modelAccess.modelGateway"] { flex-grow: 1; }
   .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
   .layer--cross .layer__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -542,11 +527,10 @@ h1 {
 
 .export-sheet__head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
+  gap: 24px;
 }
-
-.export-sheet__head img { display: block; width: auto; height: 30px; }
 
 .export-sheet__site { color: var(--color-text-muted); font-size: 17px; font-weight: 500; }
 

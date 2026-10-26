@@ -23,7 +23,7 @@
 <div class="page">
 
   <header class="site-header">
-    <a class="brand" href="./"><img src="assets/cairn-logo.svg" alt="Cairn" width="1829" height="611"></a>
+    <p class="codename"><span data-text="header.codename"></span><img src="assets/cairn-logo.svg" alt="Cairn" width="1829" height="611"></p>
     <div class="header-actions">
       <nav class="lang" data-aria-label="header.languageLabel">
         <a href="?lang=en" hreflang="en" lang="en">EN</a>
@@ -54,7 +54,7 @@
       <figcaption class="hint" data-text="diagram.hint"></figcaption>
 
       <!-- The architecture. Each data-copy value points to an entry under `stack`
-           in the copy files, which provides its name, detail line and pop-up text. -->
+           in the copy files, which provides its name and pop-up text. -->
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
         <div class="layer layer--row" data-copy="application">
@@ -95,13 +95,7 @@
           <div class="layer" data-copy="modelAccess">
             <div class="layer__items">
               <div class="comp" data-copy="modelAccess.modelGateway"></div>
-              <div class="comp comp--group" data-copy="modelAccess.modelServer">
-                <div class="comp__items">
-                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.apiServing"></div>
-                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.modelLifecycle"></div>
-                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.inferenceEngine"></div>
-                </div>
-              </div>
+              <div class="comp" data-copy="modelAccess.modelServer"></div>
             </div>
           </div>
 

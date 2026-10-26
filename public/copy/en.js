@@ -19,6 +19,7 @@ window.CAIRN_COPY.en = {
   },
 
   header: {
+    codename: "codename:",
     languageLabel: "Language",
     download: "Download image",
     downloadBusy: "Preparing image…",
@@ -28,7 +29,7 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "The architecture",
+    eyebrow: "Technical Preview",
     title: "Introducing the open source AI inference stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that:",
     points: [
@@ -61,7 +62,7 @@ window.CAIRN_COPY.en = {
 
   // The architecture diagram, in reading order: top to bottom, left to right.
   //   name:    the label shown in the box
-  //   detail:  the smaller line under the name (optional)
+  //   detail:  the smaller line under the name (optional; only the Registry has one)
   //   tooltip: the short description that pops up on hover, tap or keyboard focus
   stack: {
     local: {
@@ -108,12 +109,10 @@ window.CAIRN_COPY.en = {
       tooltip: "Where knowledge outlives a single request: your organization’s searchable documents and the long-term memory of its agents.",
       semanticSearch: {
         name: "Semantic Search System",
-        detail: "ingestion, index, hybrid retrieval",
         tooltip: "Turns your documents into searchable knowledge: ingests and indexes them, then retrieves by both meaning and keywords to ground answers.",
       },
       agentMemory: {
         name: "Agent Memory System",
-        detail: "long-term, cross-session individual/team knowledge",
         tooltip: "Lets agents remember across sessions what a person or a team has learned, decided or prefers, so work never starts from zero.",
       },
     },
@@ -123,12 +122,10 @@ window.CAIRN_COPY.en = {
       tooltip: "Where agents take action: the environments that run agent code and tools, isolated from everything else.",
       localToolServer: {
         name: "Local Tool Server",
-        detail: "local engine, browser",
         tooltip: "Hosts the tools an agent uses right next to it in the runtime, such as a local execution engine and a web browser.",
       },
       sandbox: {
         name: "Sandbox",
-        detail: "isolated agent code, shell, task harness",
         tooltip: "An isolated environment where agents run code and shell commands to complete tasks, without reaching anything they shouldn’t.",
       },
     },
@@ -138,24 +135,11 @@ window.CAIRN_COPY.en = {
       tooltip: "How every request reaches a model: one entry point in front of the servers that run your models.",
       modelGateway: {
         name: "Model Gateway",
-        detail: "routing - cache - quotas - key custody",
         tooltip: "The single front door to every model. It routes each request, caches answers, enforces quotas and keeps provider keys out of users’ hands.",
       },
       modelServer: {
         name: "Model Server",
         tooltip: "Runs models on your hardware and serves them through a standard API. It combines API serving, model lifecycle and an inference engine.",
-        apiServing: {
-          name: "API Serving",
-          tooltip: "Exposes the model through a standard, OpenAI-compatible API, so anything upstream can call it.",
-        },
-        modelLifecycle: {
-          name: "Model Lifecycle",
-          tooltip: "Fetches, loads, updates and retires models on the server, and keeps track of their health.",
-        },
-        inferenceEngine: {
-          name: "Inference Engine",
-          tooltip: "Runs the model on the hardware and generates tokens as fast and efficiently as that hardware allows.",
-        },
       },
     },
 
@@ -164,12 +148,10 @@ window.CAIRN_COPY.en = {
       tooltip: "How agents reach tools and data: one governed entry point in front of the servers that provide them.",
       toolGateway: {
         name: "Tool Gateway",
-        detail: "aggregation, access policy, credential injection, server lifecycle",
         tooltip: "The single front door to every tool. It gathers tool servers in one place, decides who may use what, injects credentials so agents never hold them, and starts or stops servers as needed.",
       },
       toolServer: {
         name: "Tool Server",
-        detail: "remote MCP, web search",
         tooltip: "Hosts the tools agents call remotely, such as MCP servers connected to your APIs and data, or web search.",
       },
     },
@@ -201,17 +183,14 @@ window.CAIRN_COPY.en = {
       tooltip: "Cuts across every layer: who can access what, what goes in and out of models, and whether what you install can be trusted.",
       iam: {
         name: "IAM",
-        detail: "authentication, authorization, access control",
         tooltip: "Identity and access management: verifies who people and agents are, and controls what each of them can reach.",
       },
       guardrails: {
         name: "Guardrails",
-        detail: "input/output policy",
         tooltip: "Checks what goes into and comes out of models and agents against your policies, and blocks, redacts or flags what shouldn’t pass.",
       },
       registryScanners: {
         name: "Registry Scanners",
-        detail: "supply-chain checks",
         tooltip: "Scan models, skills, prompts and tools before they enter the registries, to catch tampered or vulnerable artifacts.",
       },
     },
@@ -221,17 +200,14 @@ window.CAIRN_COPY.en = {
       tooltip: "Cuts across every layer: what the stack is doing, what it costs and how agents reach their results.",
       telemetry: {
         name: "Telemetry Collection",
-        detail: "OTel, logs, metrics, traces",
         tooltip: "Gathers logs, metrics and traces from every component into one place, using the OpenTelemetry (OTel) open standard.",
       },
       costUsage: {
         name: "Cost & Usage Analytics",
-        detail: "spend, tokens",
         tooltip: "Shows who uses what: tokens and spend by team, model and application, to plan capacity and budgets.",
       },
       agentTracing: {
         name: "Agent Tracing",
-        detail: "step-level traces",
         tooltip: "Follows an agent’s run step by step, through every model call, tool call and decision, to debug and audit its behavior.",
       },
     },
@@ -241,22 +217,18 @@ window.CAIRN_COPY.en = {
       tooltip: "Cuts across every layer: how operators install, configure, govern and tune the whole stack.",
       adminConsole: {
         name: "Admin Console",
-        detail: "operate the stack",
         tooltip: "One place for operators to run the stack day to day: users, models, tools and settings.",
       },
       deployment: {
         name: "Deployment & Lifecycle",
-        detail: "install, upgrade, config",
         tooltip: "Installs the stack, upgrades it safely and manages its configuration over time.",
       },
       policyTenancy: {
         name: "Policy & Tenancy",
-        detail: "org-wide defaults",
         tooltip: "Sets organization-wide defaults and keeps teams or tenants apart, each with the right models, tools, limits and data boundaries.",
       },
       magicModel: {
         name: "MagicModel",
-        detail: "auto-selector & optimisation",
         tooltip: "Automatically matches models to your hardware and to each request, and tunes how they are served for speed and cost.",
       },
     },

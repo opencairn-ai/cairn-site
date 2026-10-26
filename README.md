@@ -21,11 +21,11 @@ wrangler.jsonc                            Cloudflare Workers static assets -> op
 
 ## Editing the copy
 
-Every word on the page, including each layer and component name, the small
-detail line under it and the text of its pop-up, lives in `public/copy/en.js`
-(English) and `public/copy/fr.js` (French). Both files share the same structure
-and list the diagram in reading order. Edit the text between the quotes. Each file
-explains the few rules at its top.
+Every word on the page, including each layer and component name and the text
+of its pop-up, lives in `public/copy/en.js` (English) and `public/copy/fr.js`
+(French). Both files share the same structure and list the diagram in reading
+order. Edit the text between the quotes. Each file explains the few rules at its
+top.
 
 - French is served at `/?lang=fr`. Without `?lang=`, visitors get their last
   choice or their browser's language.
