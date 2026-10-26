@@ -45,7 +45,7 @@ window.CAIRN_COPY.en = {
         text: "A new component that follows the same contract replaces the old one. The rest of the stack does not change.",
       },
       {
-        title: "You can use the best open source components",
+        title: "You can use the best of open source",
         text: "We test open source components against each contract. Our reference implementation uses the best one for each layer.",
       },
     ],
