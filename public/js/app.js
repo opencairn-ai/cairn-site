@@ -85,7 +85,7 @@
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.href = new URL(lang === DEFAULT_LANGUAGE ? "/" : `/?lang=${lang}`, canonical.href).href;
 
-    for (const node of document.querySelectorAll("[data-text]")) node.textContent = t(node.dataset.text);
+    for (const node of document.querySelectorAll("[data-text]")) setText(node, t(node.dataset.text));
     for (const node of document.querySelectorAll("[data-href]")) node.href = t(node.dataset.href);
     for (const node of document.querySelectorAll("[data-aria-label]")) {
       node.setAttribute("aria-label", t(node.dataset.ariaLabel));
@@ -116,6 +116,11 @@
         return link;
       })
     );
+  }
+
+  // Words wrapped in *asterisks* in the copy become a pink highlight.
+  function setText(node, text) {
+    node.replaceChildren(...text.split(/\*([^*]+)\*/).map((part, i) => (i % 2 ? el("mark", "hl", part) : part)));
   }
 
   function setContent(selector, value) {

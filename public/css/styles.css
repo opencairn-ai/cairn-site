@@ -10,30 +10,63 @@
   font-display: swap;
 }
 
-/* Placeholder neutral palette. Every color on the page and in the downloaded
-   image comes from these tokens, so the Cairn palette can replace them here. */
+/* Colors. Light follows a warm ramp from Cairn Cream with Deep purple #291435 as
+   the ink; dark follows the visitor's system setting, on a plum near-black with
+   the wordmark's Cream as text. Magenta #FD70F5 marks the label, the key phrase,
+   the active box and the pop-up label. Every color on the page and in the
+   downloaded image comes from these tokens. */
 :root {
-  --color-bg: #f6f5f2;
-  --color-text: #1d1b1a;
-  --color-text-muted: #5d5a56;
-  --color-layer: #ebe9e5;
-  --color-cross: #e1dfdb;
-  --color-control: #e7e1d7;
+  color-scheme: light dark;
+
+  --color-bg: #f9f6f1;
+  --color-text: #291435;
+  --color-text-muted: #6f5e73;       /* 5.5:1 on bg */
+  --color-layer: #eae2db;
+  --color-cross: #e1d8d3;
+  --color-control: #ddd2c9;
   --color-component: #ffffff;
-  --color-component-border: #a19d97;
-  --color-core-outline: #1d1b1a;
-  --color-boundary: #1d1b1a;
-  --color-focus: #1d1b1a;
-  --color-button: #1d1b1a;
+  --color-component-border: #b0a4aa;
+  --color-core-outline: #291435;
+  --color-boundary: #291435;
+  --color-focus: #291435;
+  --color-button: #291435;
   --color-button-text: #ffffff;
-  --color-tip-bg: #1d1b1a;
-  --color-tip-text: #ffffff;
-  --color-tip-muted: #bcb8b2;
+  --color-button-hover: #eae2db;
+  --color-tip-bg: #291435;
+  --color-tip-text: #faf7f3;
+  --color-tip-border: transparent;
+  --color-tip-shadow: rgb(0 0 0 / 0.18);
+  --color-pink: #fd70f5;             /* As text on light: 2.0:1, below WCAG AA, by choice */
+  --color-pink-tint: #fff5ff;        /* Fill of the active box */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --gutter: max(16px, 2.25rem);
   --radius: 0.55em;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1d1224;
+    --color-text: #f2eae1;           /* Cream, as the wordmark: 15.1:1 on bg */
+    --color-text-muted: #a79d9f;     /* 6.8:1 on bg, 5.1:1 on boxes */
+    --color-layer: #281c2f;
+    --color-cross: #2f2437;
+    --color-control: #332c32;
+    --color-component: #362b3e;
+    --color-component-border: #564a5e;
+    --color-core-outline: #cdb8dc;
+    --color-boundary: #cdb8dc;
+    --color-focus: #f2eae1;
+    --color-button: #f2eae1;
+    --color-button-text: #291435;
+    --color-button-hover: #362b3e;
+    --color-tip-bg: #3a2f42;         /* Raised panel: text 10.6:1, Magenta 5.3:1 */
+    --color-tip-text: #f2eae1;
+    --color-tip-border: #564a5e;
+    --color-tip-shadow: rgb(0 0 0 / 0.35);
+    --color-pink-tint: #533758;      /* Text on it: 8.6:1 */
+  }
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -109,7 +142,9 @@ a { color: inherit; }
   letter-spacing: -0.01em;
 }
 
-/* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline. */
+/* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline.
+   The <picture> around it only picks the light or dark file. */
+.codename picture { display: contents; }
 .codename img { display: block; width: auto; height: 1.2em; }
 
 .header-actions {
@@ -161,7 +196,7 @@ a { color: inherit; }
 }
 
 .btn svg { flex: none; width: 1.1em; height: 1.1em; }
-.btn:hover { background: var(--color-layer); }
+.btn:hover { background: var(--color-button-hover); }
 .btn[aria-busy="true"] { cursor: progress; opacity: 0.7; }
 
 .btn--primary { background: var(--color-button); color: var(--color-button-text); }
@@ -185,7 +220,7 @@ main {
 
 .eyebrow {
   margin-bottom: 0.35rem;
-  color: var(--color-text-muted);
+  color: var(--color-pink);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.09em;
@@ -209,6 +244,10 @@ h1 {
 }
 
 .goal__lead { font-weight: 500; }
+
+/* Words wrapped in *asterisks* in the copy files (none at the moment). Semibold so
+   the pink reads the same as the label next to the ink text. */
+.hl { background: none; color: var(--color-pink); font-weight: 600; }
 
 .goal__points {
   display: grid;
@@ -384,11 +423,11 @@ h1 {
 [data-copy] { cursor: default; }
 [data-copy]:focus { outline: none; }
 
-[data-copy].is-active,
-[data-copy]:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 1px;
-}
+/* The active box turns pink; keyboard focus keeps the ink outline, which meets
+   contrast on both grounds. */
+[data-copy].is-active { outline: 2px solid var(--color-pink); outline-offset: 1px; }
+.comp.is-active { border-color: var(--color-pink); background: var(--color-pink-tint); }
+[data-copy]:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
 
 .layer.is-active,
 .layer:focus-visible { outline-offset: 2px; }
@@ -442,7 +481,7 @@ h1 {
   padding: 0.7rem 0.9rem 0.8rem;
   border-radius: 0.6rem;
   background: var(--color-tip-bg);
-  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.18);
+  box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 0.5rem 1.5rem var(--color-tip-shadow);
   color: var(--color-tip-text);
   font-size: 0.85rem;
   line-height: 1.4;
@@ -460,7 +499,7 @@ h1 {
 
 .tip__kind {
   margin-bottom: 0.2rem;
-  color: var(--color-tip-muted);
+  color: var(--color-pink);
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -478,7 +517,7 @@ h1 {
   max-width: none;
   padding: 1rem var(--gutter) 1.25rem;
   border-radius: 1rem 1rem 0 0;
-  box-shadow: 0 -0.5rem 1.5rem rgb(0 0 0 / 0.18);
+  box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 -0.5rem 1.5rem var(--color-tip-shadow);
   font-size: 0.95rem;
   opacity: 1;
   pointer-events: auto;

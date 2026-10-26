@@ -6,6 +6,7 @@
  *   - Leave the keys (the words before each colon), the quotes and the commas as they are.
  *   - Inside the text, use typographic quotes (“ ” ’) rather than a straight double quote ("),
  *     which would end the text early.
+ *   - Wrap words in *asterisks* to highlight them in pink (none are highlighted now).
  *   - {mozilla} and {mila} in the footer line are where the two links go; move them freely.
  *   - Preview by opening public/index.html in a browser, or with `npx wrangler dev`.
  *

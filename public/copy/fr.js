@@ -9,6 +9,7 @@
  *     guillemet droit ("), qui terminerait le texte trop tôt.
  *   - Les espaces avant « : » sont des espaces insécables, pour éviter qu’un deux-points se
  *     retrouve seul en début de ligne.
+ *   - Entourez des mots d’*astérisques* pour les surligner en rose (aucun ne l’est pour l’instant).
  *   - {mozilla} et {mila}, dans la ligne du pied de page, indiquent l’emplacement des deux liens.
  *   - Pour prévisualiser, ouvrez public/index.html?lang=fr dans un navigateur, ou lancez `npx wrangler dev`.
  *

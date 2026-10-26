@@ -9,11 +9,11 @@ AI inference stack. A static site: everything under `public/` is served as-is.
 public/
   index.html                              Page structure and the architecture diagram (no copy)
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
-  css/styles.css                          Styles; the color tokens at the top are placeholders
+  css/styles.css                          Styles; light and dark color tokens at the top
   js/app.js                               Fills in the copy, pop-ups, PNG download
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
-  assets/cairn-logo.svg                   Wordmark, from the design system
+  assets/cairn-logo*.svg                  Wordmark (deep purple and cream), from the design system
   assets/cairn-ecosystem-roadmap-v3.pptx  Ecosystem Roadmap deck
   site.webmanifest, robots.txt, sitemap.xml
 wrangler.jsonc                            Cloudflare Workers static assets -> opencairn.ai
@@ -29,6 +29,7 @@ top.
 
 - French (Canada) is served at `/?lang=fr` and follows OQLF recommendations.
   Without `?lang=`, visitors get their last choice or their browser's language.
+- Words wrapped in `*asterisks*` show in pink; none are highlighted now.
 - A key missing from `fr.js` falls back to the English text and logs a warning
   in the browser console.
 - Adding or removing a box in the diagram is a structure change: add the element
