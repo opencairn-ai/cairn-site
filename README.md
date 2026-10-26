@@ -27,8 +27,8 @@ of its pop-up, lives in `public/copy/en.js` (English) and `public/copy/fr.js`
 order. Edit the text between the quotes. Each file explains the few rules at its
 top.
 
-- French is served at `/?lang=fr`. Without `?lang=`, visitors get their last
-  choice or their browser's language.
+- French (Canada) is served at `/?lang=fr` and follows OQLF recommendations.
+  Without `?lang=`, visitors get their last choice or their browser's language.
 - A key missing from `fr.js` falls back to the English text and logs a warning
   in the browser console.
 - Adding or removing a box in the diagram is a structure change: add the element

@@ -7,6 +7,8 @@
 
   const ALL_COPY = window.CAIRN_COPY || {};
   const LANGUAGES = ["en", "fr"];
+  // The language tag the page declares for each ?lang= value.
+  const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
   const STORAGE_KEY = "cairn-language";
 
@@ -74,7 +76,7 @@
   // --- Page ----------------------------------------------------------------
 
   function renderPage() {
-    document.documentElement.lang = lang;
+    document.documentElement.lang = LOCALES[lang];
     document.title = t("meta.title");
     setContent('meta[name="description"]', t("meta.description"));
     setContent('meta[property="og:title"]', t("meta.title"));
@@ -90,7 +92,7 @@
     }
 
     for (const link of document.querySelectorAll(".lang a")) {
-      if (link.hreflang === lang) link.setAttribute("aria-current", "true");
+      if (link.hreflang === LOCALES[lang]) link.setAttribute("aria-current", "true");
     }
 
     const points = t("intro.points") || [];

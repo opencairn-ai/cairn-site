@@ -1,5 +1,6 @@
 /*
- * Textes français d’opencairn.ai.
+ * Textes français (Canada) d’opencairn.ai, selon les recommandations de l’Office québécois
+ * de la langue française (OQLF).
  *
  * Pour modifier :
  *   - Changez uniquement le texte entre les guillemets droits.
@@ -16,8 +17,8 @@
 window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.fr = {
   meta: {
-    title: "Cairn — L’architecture de la pile d’inférence d’IA à code source ouvert",
-    description: "Une architecture ouverte pour la pile d’inférence d’IA : des contrats d’interface clairs entre chaque couche et chaque composant, des composants interchangeables et une implémentation de référence bâtie avec les meilleurs composants à code source ouvert. Une collaboration de recherche Mozilla × Mila.",
+    title: "Cairn : l’architecture de la pile d’inférence d’IA à code source ouvert",
+    description: "Une architecture ouverte pour la pile d’inférence d’IA. Des contrats d’interface clairs relient toutes les couches et tous les composants, pour que vous puissiez remplacer n’importe quel composant. L’implémentation de référence utilise les meilleurs composants à code source ouvert. Une collaboration de recherche Mozilla × Mila.",
   },
 
   header: {
@@ -25,7 +26,7 @@ window.CAIRN_COPY.fr = {
     languageLabel: "Langue",
     download: "Télécharger l’image",
     downloadBusy: "Préparation de l’image…",
-    downloadFailed: "Échec du téléchargement, réessayez",
+    downloadFailed: "Échec du téléchargement. Réessayez.",
     github: "Suivez-nous sur GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },
@@ -33,19 +34,19 @@ window.CAIRN_COPY.fr = {
   intro: {
     eyebrow: "Avant-goût technique",
     title: "Découvrez la pile d’inférence d’IA à code source ouvert",
-    goal: "Notre objectif : définir des contrats d’interface clairs entre chaque couche et chaque composant de la pile, pour que :",
+    goal: "Notre objectif : définir des contrats d’interface clairs entre chaque couche et chaque composant de la pile. Ainsi :",
     points: [
       {
-        title: "Tout fonctionne ensemble",
-        text: "Les composants conçus selon les mêmes contrats s’assemblent, sans développement sur mesure.",
+        title: "Tous les composants fonctionnent ensemble",
+        text: "Les composants qui respectent les mêmes contrats ne demandent aucun code d’intégration sur mesure.",
       },
       {
-        title: "Chaque composant est interchangeable",
-        text: "Tout composant conforme à un contrat peut en remplacer un autre, sans retoucher le reste.",
+        title: "Vous pouvez remplacer n’importe quel composant",
+        text: "Un nouveau composant qui respecte le même contrat remplace l’ancien. Le reste de la pile ne change pas.",
       },
       {
-        title: "Le meilleur du code source ouvert",
-        text: "Notre implémentation de référence réunit les meilleurs composants à code source ouvert disponibles aujourd’hui.",
+        title: "Vous pouvez utiliser les meilleurs composants à code source ouvert",
+        text: "Nous testons des composants à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
       },
     ],
   },
@@ -69,169 +70,169 @@ window.CAIRN_COPY.fr = {
   stack: {
     local: {
       name: "Local",
-      tooltip: "Au-dessus de la ligne : les applications que les gens utilisent et les SDK avec lesquels elles sont conçues, sur leurs propres appareils. Elles accèdent à la pile par une seule API.",
+      tooltip: "Au-dessus de la ligne : les applications et les SDK. Ils s’exécutent sur les appareils des utilisateurs ou dans vos produits, et se connectent à la pile par son API.",
     },
     server: {
       name: "Serveur",
-      tooltip: "Sous la ligne : la pile elle-même, sur une infrastructure que votre organisation contrôle, en interne, chez un partenaire ou chez un fournisseur de calcul.",
+      tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
     },
 
     application: {
       name: "Application",
-      tooltip: "Les outils avec lesquels les gens travaillent au quotidien. Les équipes conservent leurs assistants et leurs agents, et les connectent à la pile.",
+      tooltip: "Les outils de travail quotidien des utilisateurs. Les équipes conservent leurs assistants et leurs agents actuels, et les connectent à la pile.",
       chatUi: {
         name: "Interface conversationnelle",
-        tooltip: "Une interface de conversation pour les questions, la rédaction et l’analyse du quotidien, propulsée par les modèles de votre organisation.",
+        tooltip: "Une interface de conversation pour les questions, la rédaction et l’analyse, avec les réponses des modèles de votre organisation.",
       },
       codingHarness: {
         name: "Harnais de programmation",
-        tooltip: "Un agent de programmation qui lit, écrit et exécute du code aux côtés des développeurs, grâce aux modèles et aux outils de la pile.",
+        tooltip: "Un agent de programmation qui lit, écrit et exécute du code avec les développeurs. Il utilise les modèles et les outils de la pile.",
       },
       knowledgeWorkHarness: {
         name: "Harnais de travail intellectuel",
-        tooltip: "Des agents de recherche, de rédaction et d’analyse qui s’appuient sur les documents, les connaissances et les outils de votre organisation.",
+        tooltip: "Des agents de recherche, de rédaction et d’analyse. Ils utilisent les documents et les outils de votre organisation.",
       },
     },
 
     sdk: {
       name: "SDK",
-      tooltip: "Les bibliothèques avec lesquelles les développeurs créent leurs propres applications et agents sur la pile.",
+      tooltip: "Des trousses de développement logiciel (SDK) pour créer vos propres applications et agents sur la pile.",
       llmSdk: {
-        name: "SDK pour LLM",
-        tooltip: "Une bibliothèque cliente pour appeler les modèles par l’API de la pile, quels que soient le moteur ou le matériel qui les servent.",
+        name: "SDK pour grands modèles de langage",
+        tooltip: "Une bibliothèque cliente qui appelle les modèles par l’API de la pile. Votre code ne change pas quand le moteur ou le matériel change.",
       },
       agentSdk: {
         name: "SDK pour agents",
-        tooltip: "Un cadre de développement pour créer des agents qui planifient, appellent des outils, se souviennent et mènent des tâches en plusieurs étapes sur la pile.",
+        tooltip: "Un cadriciel pour créer des agents qui planifient, appellent des outils, utilisent la mémoire et réalisent des tâches en plusieurs étapes sur la pile.",
       },
     },
 
     persistence: {
       name: "Persistance",
-      tooltip: "Là où les connaissances survivent à une simple requête : les documents consultables de votre organisation et la mémoire à long terme de ses agents.",
+      tooltip: "Stocke les documents de votre organisation pour la recherche, et la mémoire à long terme de vos agents.",
       semanticSearch: {
         name: "Système de recherche sémantique",
-        tooltip: "Transforme vos documents en connaissances consultables : il les ingère et les indexe, puis les retrouve par le sens comme par les mots-clés pour étayer les réponses.",
+        tooltip: "Ingère et indexe vos documents. Il trouve le contenu pertinent par le sens et par mot-clé, pour que les modèles répondent à partir de vos documents.",
       },
       agentMemory: {
         name: "Système de mémoire des agents",
-        tooltip: "Permet aux agents de retenir d’une session à l’autre ce qu’une personne ou une équipe a appris, décidé ou préfère, pour ne jamais repartir de zéro.",
+        tooltip: "Une mémoire centrale pour les agents. Elle conserve ce qu’un utilisateur ou une équipe a appris, décidé ou préfère, d’une session et d’un appareil à l’autre.",
       },
     },
 
     agentRuntime: {
       name: "Exécution des agents",
-      tooltip: "Là où les agents passent à l’action : les environnements qui exécutent leur code et leurs outils, isolés de tout le reste.",
+      tooltip: "Des environnements isolés qui exécutent le code et les outils des agents.",
       localToolServer: {
         name: "Serveur d’outils local",
-        tooltip: "Héberge les outils dont l’agent se sert directement dans son environnement d’exécution, comme un moteur d’exécution local et un navigateur web.",
+        tooltip: "Exécute des outils à côté de l’agent, dans l’environnement d’exécution : par exemple un moteur d’exécution local ou un navigateur Web.",
       },
       sandbox: {
         name: "Bac à sable",
-        tooltip: "Un environnement isolé où les agents exécutent du code et des commandes pour accomplir leurs tâches, sans atteindre ce qui ne les concerne pas.",
+        tooltip: "Un environnement isolé où les agents exécutent du code et des commandes système pour accomplir leurs tâches.",
       },
     },
 
     modelAccess: {
       name: "Accès aux modèles",
-      tooltip: "Comment chaque requête atteint un modèle : un point d’entrée unique devant les serveurs qui exécutent vos modèles.",
+      tooltip: "Relie les applications et les agents aux modèles : une passerelle devant les serveurs de modèles.",
       modelGateway: {
         name: "Passerelle de modèles",
-        tooltip: "La porte d’entrée unique vers tous les modèles. Elle oriente chaque requête, met les réponses en cache, applique les quotas et garde les clés des fournisseurs hors de portée des utilisateurs.",
+        tooltip: "Le point d’entrée unique vers tous les modèles. Il oriente les requêtes, met les réponses en cache, applique les quotas et offre une seule API pour tous les fournisseurs de modèles.",
       },
       modelServer: {
         name: "Serveur de modèles",
-        tooltip: "Exécute les modèles sur votre matériel et les sert par une API standard. Il réunit le service d’API, le cycle de vie des modèles et un moteur d’inférence.",
+        tooltip: "Exécute les modèles sur votre matériel avec un moteur d’inférence, et les sert par une API standard.",
       },
     },
 
     toolAccess: {
       name: "Accès aux outils",
-      tooltip: "Comment les agents atteignent les outils et les données : un point d’entrée unique et encadré devant les serveurs qui les fournissent.",
+      tooltip: "Relie les agents aux outils : une passerelle devant les serveurs d’outils.",
       toolGateway: {
         name: "Passerelle d’outils",
-        tooltip: "La porte d’entrée unique vers tous les outils. Elle regroupe les serveurs d’outils, décide qui peut utiliser quoi, injecte les identifiants pour que les agents ne les détiennent jamais, et démarre ou arrête les serveurs au besoin.",
+        tooltip: "Le point d’entrée unique vers tous les outils. Il regroupe les serveurs d’outils dans un seul catalogue, contrôle qui peut utiliser chaque outil, injecte les identifiants, et démarre ou arrête les serveurs d’outils au besoin.",
       },
       toolServer: {
         name: "Serveur d’outils",
-        tooltip: "Héberge les outils que les agents appellent à distance, comme des serveurs MCP reliés à vos API et à vos données, ou la recherche web.",
+        tooltip: "Héberge les outils que les agents appellent à distance : par exemple des connecteurs vers vos API et vos données, ou la recherche Web.",
       },
     },
 
     registry: {
       name: "Registre",
-      detail: "Approvisionnement en artefacts : consommés au déploiement ou à l’ouverture d’une session",
-      tooltip: "Le catalogue des briques approuvées (compétences, invites, modèles et outils) où la pile puise lors de son déploiement ou à l’ouverture d’une session.",
+      detail: "Approvisionnement en artefacts, utilisés au déploiement et à l’ouverture de session",
+      tooltip: "Le catalogue des compétences, invites, modèles et outils approuvés. La pile l’utilise au déploiement et au début de chaque session.",
       skillRegistry: {
         name: "Registre de compétences",
-        tooltip: "Des compétences versionnées : instructions et ressources regroupées qui apprennent aux agents à mener des tâches précises.",
+        tooltip: "Des compétences versionnées : des ensembles d’instructions et de ressources qui indiquent aux agents comment réaliser des tâches précises.",
       },
       promptRegistry: {
         name: "Registre d’invites",
-        tooltip: "Des invites et des instructions système versionnées et révisées, partagées entre les équipes plutôt que copiées de l’une à l’autre.",
+        tooltip: "Des invites et des instructions système versionnées et approuvées, partagées entre les équipes.",
       },
       modelRegistry: {
         name: "Registre de modèles",
-        tooltip: "Les modèles approuvés pour la pile, avec leurs versions, leurs sources et les réglages pour les servir sur votre matériel.",
+        tooltip: "Les modèles approuvés, avec leurs versions, leurs sources et leurs réglages de service pour votre matériel.",
       },
       toolRegistry: {
-        name: "Registre d’outils (MCP)",
-        tooltip: "Le répertoire des serveurs d’outils MCP approuvés que les agents ont le droit de découvrir et d’utiliser.",
+        name: "Registre d’outils",
+        tooltip: "Les serveurs d’outils approuvés que les agents peuvent trouver et utiliser.",
       },
     },
 
     security: {
       name: "Sécurité",
-      tooltip: "Traverse toutes les couches : qui accède à quoi, ce qui entre dans les modèles et en sort, et si ce que vous installez est digne de confiance.",
+      tooltip: "S’applique à toutes les couches. Elle contrôle les accès, vérifie les données qui entrent dans les composants et en sortent, et s’assure que les artefacts des registres sont sûrs.",
       iam: {
-        name: "IAM",
-        tooltip: "Gestion des identités et des accès : vérifie qui sont les personnes et les agents, et contrôle ce à quoi chacun peut accéder.",
+        name: "Gestion des identités et des accès",
+        tooltip: "Vérifie l’identité des utilisateurs et des agents, et contrôle ce à quoi chacun peut accéder.",
       },
       guardrails: {
         name: "Garde-fous",
-        tooltip: "Vérifie ce qui entre dans les modèles et les agents et ce qui en sort selon vos politiques, et bloque, masque ou signale ce qui ne doit pas passer.",
+        tooltip: "Vérifient les entrées et les sorties des modèles et des agents selon vos politiques. Ils bloquent, caviardent ou signalent le contenu qui enfreint une politique.",
       },
       registryScanners: {
         name: "Analyseurs de registres",
-        tooltip: "Analysent les modèles, compétences, invites et outils avant leur entrée dans les registres, pour repérer les artefacts altérés ou vulnérables.",
+        tooltip: "Analysent les modèles, compétences, invites et outils avant leur entrée dans un registre, pour trouver les artefacts altérés ou vulnérables.",
       },
     },
 
     observability: {
       name: "Observabilité",
-      tooltip: "Traverse toutes les couches : ce que fait la pile, ce qu’elle coûte et comment les agents arrivent à leurs résultats.",
+      tooltip: "S’applique à toutes les couches. Elle montre ce que fait la pile, ce qu’elle coûte et comment les agents obtiennent leurs résultats.",
       telemetry: {
         name: "Collecte de télémétrie",
-        tooltip: "Rassemble en un seul endroit les journaux, les métriques et les traces de chaque composant, selon la norme ouverte OpenTelemetry (OTel).",
+        tooltip: "Collecte en un seul endroit les journaux, les mesures et les traces de tous les composants.",
       },
       costUsage: {
-        name: "Analyse des coûts et de l’usage",
-        tooltip: "Montre qui utilise quoi : jetons et dépenses par équipe, par modèle et par application, pour planifier la capacité et les budgets.",
+        name: "Analyse des coûts et de l’utilisation",
+        tooltip: "Montre l’utilisation des jetons et les coûts par équipe, par modèle et par application, pour planifier la capacité et les budgets.",
       },
       agentTracing: {
         name: "Traçage des agents",
-        tooltip: "Suit l’exécution d’un agent étape par étape, à chaque appel de modèle, appel d’outil et décision, pour déboguer et auditer son comportement.",
+        tooltip: "Enregistre chaque étape de l’exécution d’un agent : chaque appel de modèle, chaque appel d’outil et chaque décision.",
       },
     },
 
     controlPlane: {
       name: "Plan de contrôle",
-      tooltip: "Traverse toutes les couches : comment les opérateurs installent, configurent, encadrent et optimisent l’ensemble de la pile.",
+      tooltip: "S’applique à toutes les couches. Les opérateurs l’utilisent pour installer, configurer, encadrer et maintenir la pile.",
       adminConsole: {
         name: "Console d’administration",
-        tooltip: "Un seul endroit pour exploiter la pile au quotidien : utilisateurs, modèles, outils et réglages.",
+        tooltip: "L’interface que les opérateurs utilisent pour exploiter la pile chaque jour.",
       },
       deployment: {
         name: "Déploiement et cycle de vie",
-        tooltip: "Installe la pile, la met à niveau en toute sécurité et gère sa configuration dans la durée.",
+        tooltip: "Installe et met à niveau la pile, et gère sa configuration et le cycle de vie des modèles.",
       },
       policyTenancy: {
         name: "Politiques et locataires",
-        tooltip: "Fixe les paramètres par défaut de toute l’organisation et cloisonne les équipes ou les locataires, chacun avec ses modèles, ses outils, ses limites et ses frontières de données.",
+        tooltip: "Fixe les paramètres par défaut de toute l’organisation et isole les équipes ou les locataires. Chacun obtient ses propres modèles, outils, limites et frontières de données.",
       },
       magicModel: {
-        name: "MagicModel",
-        tooltip: "Associe automatiquement les modèles à votre matériel et à chaque requête, et ajuste leur service pour la vitesse et le coût.",
+        name: "Sélecteur matériel-modèle",
+        tooltip: "Sélectionne automatiquement le meilleur modèle pour votre matériel, vos cas d’utilisation et vos charges de travail, et ajuste la configuration de service pour la vitesse.",
       },
     },
   },
