@@ -44,12 +44,12 @@ window.CAIRN_COPY.fr = {
         text: "Les composants qui respectent les mêmes contrats ne demandent aucun code d’intégration sur mesure.",
       },
       {
-        title: "Vous pouvez remplacer n’importe quel composant",
-        text: "Un nouveau composant qui respecte le même contrat peut remplacer l’ancien. Le reste de la pile ne change pas.",
+        title: "Vous puissiez remplacer n’importe quel composant",
+        text: "Tout ce qui respecte le même contrat peut le remplacer. Le reste de la pile ne change pas.",
       },
       {
-        title: "Vous pouvez utiliser les meilleurs composants ouverts",
-        text: "Nous testons des composants à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
+        title: "Vous puissiez utiliser le meilleur du code source ouvert",
+        text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
       },
     ],
   },
