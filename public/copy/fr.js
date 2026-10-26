@@ -65,7 +65,7 @@ window.CAIRN_COPY.fr = {
 
   // Le diagramme d’architecture, dans l’ordre de lecture : de haut en bas, de gauche à droite.
   //   name :    le libellé affiché dans la case
-  //   detail :  la petite ligne sous le libellé (facultative ; seul le Registre en a une)
+  //   detail :  une petite ligne facultative sous le libellé (aucune n’est utilisée)
   //   tooltip : la courte description qui s’affiche au survol, au toucher ou au clavier
   stack: {
     local: {
@@ -161,7 +161,6 @@ window.CAIRN_COPY.fr = {
 
     registry: {
       name: "Registre",
-      detail: "Approvisionnement en artefacts, utilisés au déploiement et à l’ouverture de session",
       tooltip: "Le catalogue des compétences, invites, modèles et outils approuvés. La pile l’utilise au déploiement et au début de chaque session.",
       skillRegistry: {
         name: "Registre de compétences",

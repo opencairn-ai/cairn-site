@@ -62,7 +62,7 @@ window.CAIRN_COPY.en = {
 
   // The architecture diagram, in reading order: top to bottom, left to right.
   //   name:    the label shown in the box
-  //   detail:  the smaller line under the name (optional; only the Registry has one)
+  //   detail:  an optional smaller line under the name (none in use)
   //   tooltip: the short description that pops up on hover, tap or keyboard focus
   stack: {
     local: {
@@ -158,7 +158,6 @@ window.CAIRN_COPY.en = {
 
     registry: {
       name: "Registry",
-      detail: "Artifact supply, used at deployment and at session start",
       tooltip: "The catalog of approved skills, prompts, models and tools. The stack uses it at deployment and at the start of each session.",
       skillRegistry: {
         name: "Skill Registry",
