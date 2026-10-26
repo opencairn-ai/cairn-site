@@ -14,7 +14,7 @@
 window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {
   meta: {
-    title: "Cairn — The open source AI inference stack architecture",
+    title: "Cairn: The open source AI inference stack architecture",
     description: "An open architecture for the AI inference stack: clear interface contracts between every layer and component, swappable parts, and a reference implementation built from the best open source components. A Mozilla × Mila research collaboration.",
   },
 
@@ -42,7 +42,7 @@ window.CAIRN_COPY.en = {
         text: "Anything built against a contract can replace another, without reworking the rest.",
       },
       {
-        title: "The best of open source",
+        title: "The best of open source can plug in",
         text: "Our reference implementation brings together the best open source components available today.",
       },
     ],
@@ -67,7 +67,7 @@ window.CAIRN_COPY.en = {
   stack: {
     local: {
       name: "Local",
-      tooltip: "Above the line: the applications people use and the SDKs they are built with, running on their own devices. They reach the stack through a single API.",
+      tooltip: "Above the line: the applications and the SDKs people, running locally on their own devices or in their product. Reach the stack through an API.",
     },
     server: {
       name: "Server",
@@ -106,36 +106,36 @@ window.CAIRN_COPY.en = {
 
     persistence: {
       name: "Persistence",
-      tooltip: "Where knowledge outlives a single request: your organization’s searchable documents and the long-term memory of its agents.",
+      tooltip: "Your organization’s searchable documents and the long-term memory of its agents.",
       semanticSearch: {
         name: "Semantic Search System",
         tooltip: "Turns your documents into searchable knowledge: ingests and indexes them, then retrieves by both meaning and keywords to ground answers.",
       },
       agentMemory: {
         name: "Agent Memory System",
-        tooltip: "Lets agents remember across sessions what a person or a team has learned, decided or prefers, so work never starts from zero.",
+        tooltip: "Centralized memory that lets agents remember across sessions and devices what a person or a team has learned, decided or prefers.",
       },
     },
 
     agentRuntime: {
       name: "Agent Runtime",
-      tooltip: "Where agents take action: the environments that run agent code and tools, isolated from everything else.",
+      tooltip: "The environments that run agent code and tools, isolated from everything else.",
       localToolServer: {
         name: "Local Tool Server",
         tooltip: "Hosts the tools an agent uses right next to it in the runtime, such as a local execution engine and a web browser.",
       },
       sandbox: {
         name: "Sandbox",
-        tooltip: "An isolated environment where agents run code and shell commands to complete tasks, without reaching anything they shouldn’t.",
+        tooltip: "An isolated environment where agents run code and shell commands to complete tasks.",
       },
     },
 
     modelAccess: {
       name: "Model Access",
-      tooltip: "How every request reaches a model: one entry point in front of the servers that run your models.",
+      tooltip: "One entry point in front of the servers that run your models.",
       modelGateway: {
         name: "Model Gateway",
-        tooltip: "The single front door to every model. It routes each request, caches answers, enforces quotas and keeps provider keys out of users’ hands.",
+        tooltip: "The single point of entry to every model. It routes each request, caches answers, enforces quotas and unify access to model providers.",
       },
       modelServer: {
         name: "Model Server",
@@ -145,14 +145,14 @@ window.CAIRN_COPY.en = {
 
     toolAccess: {
       name: "Tool Access",
-      tooltip: "How agents reach tools and data: one governed entry point in front of the servers that provide them.",
+      tooltip: "One governed entry point in front of the servers that run your tools.",
       toolGateway: {
         name: "Tool Gateway",
-        tooltip: "The single front door to every tool. It gathers tool servers in one place, decides who may use what, injects credentials so agents never hold them, and starts or stops servers as needed.",
+        tooltip: "The single point of entry to every tool. It gathers tool servers in one place, decides who may use what, injects credentials, and starts or stops servers as needed.",
       },
       toolServer: {
         name: "Tool Server",
-        tooltip: "Hosts the tools agents call remotely, such as MCP servers connected to your APIs and data, or web search.",
+        tooltip: "Hosts the tools agents call remotely, such as tool servers connected to your APIs and data, or web search.",
       },
     },
 
@@ -166,24 +166,24 @@ window.CAIRN_COPY.en = {
       },
       promptRegistry: {
         name: "Prompt Registry",
-        tooltip: "Versioned, reviewed prompts and system instructions, shared across teams instead of copied around.",
+        tooltip: "Versioned, reviewed prompts and system instructions, shared across teams.",
       },
       modelRegistry: {
         name: "Model Registry",
         tooltip: "The models approved to run on the stack, with their versions, sources and the settings to serve them on your hardware.",
       },
       toolRegistry: {
-        name: "Tool Registry (MCP)",
-        tooltip: "The directory of approved MCP tool servers that agents are allowed to discover and use.",
+        name: "Tool Registry",
+        tooltip: "The directory of approved tool servers that agents are allowed to discover and use.",
       },
     },
 
     security: {
       name: "Security",
-      tooltip: "Cuts across every layer: who can access what, what goes in and out of models, and whether what you install can be trusted.",
+      tooltip: "Cuts across every layer. Who can access what, what goes in and out of any component, and whether vetted registry elements can be trusted.",
       iam: {
-        name: "IAM",
-        tooltip: "Identity and access management: verifies who people and agents are, and controls what each of them can reach.",
+        name: "Identity Access Management",
+        tooltip: "Verifies who people and agents are, and controls what each of them can reach.",
       },
       guardrails: {
         name: "Guardrails",
@@ -197,39 +197,39 @@ window.CAIRN_COPY.en = {
 
     observability: {
       name: "Observability",
-      tooltip: "Cuts across every layer: what the stack is doing, what it costs and how agents reach their results.",
+      tooltip: "Cuts across every layer. What the stack is doing, what it costs and how agents reach their results.",
       telemetry: {
         name: "Telemetry Collection",
-        tooltip: "Gathers logs, metrics and traces from every component into one place, using the OpenTelemetry (OTel) open standard.",
+        tooltip: "Gathers logs, metrics and traces from every component into one place.",
       },
       costUsage: {
         name: "Cost & Usage Analytics",
-        tooltip: "Shows who uses what: tokens and spend by team, model and application, to plan capacity and budgets.",
+        tooltip: "Shows tokens and spend by team, model and application, to plan capacity and budgets.",
       },
       agentTracing: {
         name: "Agent Tracing",
-        tooltip: "Follows an agent’s run step by step, through every model call, tool call and decision, to debug and audit its behavior.",
+        tooltip: "Follows an agent’s run step by step, through every model call, tool call and decision.",
       },
     },
 
     controlPlane: {
       name: "Control Plane",
-      tooltip: "Cuts across every layer: how operators install, configure, govern and tune the whole stack.",
+      tooltip: "Cuts across every layer. How operators install, configure, govern and maintain the whole stack.",
       adminConsole: {
         name: "Admin Console",
-        tooltip: "One place for operators to run the stack day to day: users, models, tools and settings.",
+        tooltip: "One place for operators to run the stack day to day.",
       },
       deployment: {
         name: "Deployment & Lifecycle",
-        tooltip: "Installs the stack, upgrades it safely and manages its configuration over time.",
+        tooltip: "Installs the stack, upgrades it safely and manages its configuration. This includes model lifecyle.",
       },
       policyTenancy: {
         name: "Policy & Tenancy",
         tooltip: "Sets organization-wide defaults and keeps teams or tenants apart, each with the right models, tools, limits and data boundaries.",
       },
       magicModel: {
-        name: "MagicModel",
-        tooltip: "Automatically matches models to your hardware and to each request, and tunes how they are served for speed and cost.",
+        name: "Hardware-to-Model Selector",
+        tooltip: "Automatically matches models to your hardware, use cases and workloads, and optimize the configuration for speed.",
       },
     },
   },
