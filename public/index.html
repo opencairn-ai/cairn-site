@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
+     the English values here serve link previews and crawlers that do not run scripts. -->
+<title>Cairn — The open source AI inference stack architecture</title>
+<meta name="description" content="An open architecture for the AI inference stack: clear interface contracts between every layer and component, swappable parts, and a reference implementation built from the best open source components. A Mozilla × Mila research collaboration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cairn — The open source AI inference stack architecture">
+<meta property="og:description" content="An open architecture for the AI inference stack: clear interface contracts between every layer and component, swappable parts, and a reference implementation built from the best open source components.">
+<meta property="og:url" content="https://opencairn.ai/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://opencairn.ai/">
+<link rel="alternate" hreflang="en" href="https://opencairn.ai/?lang=en">
+<link rel="alternate" hreflang="fr" href="https://opencairn.ai/?lang=fr">
+<link rel="alternate" hreflang="x-default" href="https://opencairn.ai/">
+<link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="site-header">
+    <a class="brand" href="./"><img src="assets/cairn-logo.svg" alt="Cairn" width="1829" height="611"></a>
+    <div class="header-actions">
+      <nav class="lang" data-aria-label="header.languageLabel">
+        <a href="?lang=en" hreflang="en" lang="en">EN</a>
+        <a href="?lang=fr" hreflang="fr" lang="fr">FR</a>
+      </nav>
+      <button type="button" class="btn" id="download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span data-text="header.download"></span>
+      </button>
+      <a class="btn btn--primary" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+        <span data-text="header.github"></span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow" data-text="intro.eyebrow"></p>
+      <h1 data-text="intro.title"></h1>
+      <div class="goal">
+        <p class="goal__lead" data-text="intro.goal"></p>
+        <ul class="goal__points" id="goal-points"></ul>
+      </div>
+    </section>
+
+    <figure class="arch-figure">
+      <figcaption class="hint" data-text="diagram.hint"></figcaption>
+
+      <!-- The architecture. Each data-copy value points to an entry under `stack`
+           in the copy files, which provides its name, detail line and pop-up text. -->
+      <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
+
+        <div class="layer layer--row" data-copy="application">
+          <div class="layer__items">
+            <div class="comp" data-copy="application.chatUi"></div>
+            <div class="comp" data-copy="application.codingHarness"></div>
+            <div class="comp" data-copy="application.knowledgeWorkHarness"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--row" data-copy="sdk">
+          <div class="layer__items">
+            <div class="comp" data-copy="sdk.llmSdk"></div>
+            <div class="comp" data-copy="sdk.agentSdk"></div>
+          </div>
+        </div>
+
+        <div class="boundary">
+          <span class="boundary__label" data-copy="local"></span>
+          <span class="boundary__label" data-copy="server"></span>
+        </div>
+
+        <div class="core">
+          <div class="layer layer--stack" data-copy="persistence">
+            <div class="layer__items">
+              <div class="comp" data-copy="persistence.semanticSearch"></div>
+              <div class="comp" data-copy="persistence.agentMemory"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--stack" data-copy="agentRuntime">
+            <div class="layer__items">
+              <div class="comp" data-copy="agentRuntime.localToolServer"></div>
+              <div class="comp" data-copy="agentRuntime.sandbox"></div>
+            </div>
+          </div>
+
+          <div class="layer" data-copy="modelAccess">
+            <div class="layer__items">
+              <div class="comp" data-copy="modelAccess.modelGateway"></div>
+              <div class="comp comp--group" data-copy="modelAccess.modelServer">
+                <div class="comp__items">
+                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.apiServing"></div>
+                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.modelLifecycle"></div>
+                  <div class="comp comp--sub" data-copy="modelAccess.modelServer.inferenceEngine"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="layer" data-copy="toolAccess">
+            <div class="layer__items">
+              <div class="comp" data-copy="toolAccess.toolGateway"></div>
+              <div class="comp" data-copy="toolAccess.toolServer"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--registry" data-copy="registry">
+            <div class="layer__items">
+              <div class="comp" data-copy="registry.skillRegistry"></div>
+              <div class="comp" data-copy="registry.promptRegistry"></div>
+              <div class="comp" data-copy="registry.modelRegistry"></div>
+              <div class="comp" data-copy="registry.toolRegistry"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross" data-copy="security">
+          <div class="layer__items">
+            <div class="comp" data-copy="security.iam"></div>
+            <div class="comp" data-copy="security.guardrails"></div>
+            <div class="comp" data-copy="security.registryScanners"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross" data-copy="observability">
+          <div class="layer__items">
+            <div class="comp" data-copy="observability.telemetry"></div>
+            <div class="comp" data-copy="observability.costUsage"></div>
+            <div class="comp" data-copy="observability.agentTracing"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross layer--control" data-copy="controlPlane">
+          <div class="layer__items">
+            <div class="comp" data-copy="controlPlane.adminConsole"></div>
+            <div class="comp" data-copy="controlPlane.deployment"></div>
+            <div class="comp" data-copy="controlPlane.policyTenancy"></div>
+            <div class="comp" data-copy="controlPlane.magicModel"></div>
+          </div>
+        </div>
+
+      </div>
+    </figure>
+  </main>
+
+  <footer class="site-footer">
+    <p id="collaboration"></p>
+  </footer>
+
+</div>
+
+<div class="tip" id="tip" aria-hidden="true">
+  <p class="tip__kind"></p>
+  <p class="tip__name"></p>
+  <p class="tip__text"></p>
+</div>
+
+<noscript><p class="noscript">This page needs JavaScript to display the architecture. · Cette page nécessite JavaScript pour afficher l’architecture.</p></noscript>
+
+<script src="copy/en.js"></script>
+<script src="copy/fr.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

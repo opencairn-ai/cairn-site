@@ -1,0 +1,555 @@
+/* ==========================================================================
+   opencairn.ai — the architecture page
+   ========================================================================== */
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Placeholder neutral palette. Every color on the page and in the downloaded
+   image comes from these tokens, so the Cairn palette can replace them here. */
+:root {
+  --color-bg: #f6f5f2;
+  --color-text: #1d1b1a;
+  --color-text-muted: #5d5a56;
+  --color-layer: #ebe9e5;
+  --color-cross: #e1dfdb;
+  --color-control: #e7e1d7;
+  --color-component: #ffffff;
+  --color-component-border: #a19d97;
+  --color-core-outline: #1d1b1a;
+  --color-boundary: #1d1b1a;
+  --color-focus: #1d1b1a;
+  --color-button: #1d1b1a;
+  --color-button-text: #ffffff;
+  --color-tip-bg: #1d1b1a;
+  --color-tip-text: #ffffff;
+  --color-tip-muted: #bcb8b2;
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gutter: max(16px, 2.25rem);
+  --radius: 0.55em;
+}
+
+/* The page scales like a slide: everything is sized in rem, and the root size
+   follows the smaller of the viewport's width and height so the whole page
+   fits on one landscape screen. */
+html {
+  font-size: clamp(11px, min(1.02vw, 1.8vh), 19px);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Portrait and small screens scroll instead, at a comfortable reading size. */
+@media (max-width: 760px), (max-aspect-ratio: 1/1) {
+  html { font-size: 15px; }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.35;
+}
+
+p { margin: 0; }
+
+a { color: inherit; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Page frame ---------------------------------------------------------- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding: 0.95rem 0 0.35rem;
+}
+
+.brand { display: block; line-height: 0; }
+.brand img { display: block; width: auto; height: 1.55rem; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.lang {
+  display: flex;
+  gap: 0.1rem;
+  margin-right: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.lang a {
+  padding: 0.35em 0.45em;
+  border-radius: 0.3em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.lang a:hover { color: var(--color-text); }
+
+.lang a[aria-current] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline 2px;
+  text-underline-offset: 0.3em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1em;
+  border: 1.5px solid var(--color-button);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-button);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn svg { flex: none; width: 1.1em; height: 1.1em; }
+.btn:hover { background: var(--color-layer); }
+.btn[aria-busy="true"] { cursor: progress; opacity: 0.7; }
+
+.btn--primary { background: var(--color-button); color: var(--color-button-text); }
+.btn--primary:hover { background: var(--color-button); opacity: 0.88; }
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-top: 0.8rem;
+}
+
+/* --- Intro --------------------------------------------------------------- */
+
+.intro { margin-bottom: 0.95rem; }
+
+.eyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 0.85rem;
+  font-size: 2.35rem;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.goal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.goal__lead { font-weight: 500; }
+
+.goal__points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.goal__point {
+  padding-top: 0.45rem;
+  border-top: 1.5px solid var(--color-text);
+}
+
+.goal__point-title { display: block; font-weight: 600; }
+.goal__point-text { display: block; color: var(--color-text-muted); }
+
+/* --- Architecture diagram -----------------------------------------------
+   Sized in em so the downloaded image can render it at a fixed size.       */
+
+.arch-figure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  container: arch / inline-size;
+}
+
+.hint {
+  margin-bottom: 0.4rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.arch {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 4.4fr) repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-areas:
+    "application   application   application   ."
+    "sdk           sdk           sdk           ."
+    "boundary      boundary      boundary      boundary"
+    "core          security      observability control";
+  gap: 0.5em 0.7em;
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+.arch > [data-copy="application"]   { grid-area: application; }
+.arch > [data-copy="sdk"]           { grid-area: sdk; }
+.arch > .boundary                   { grid-area: boundary; }
+.arch > .core                       { grid-area: core; }
+.arch > [data-copy="security"]      { grid-area: security; }
+.arch > [data-copy="observability"] { grid-area: observability; }
+.arch > [data-copy="controlPlane"]  { grid-area: control; }
+
+.label { display: flex; flex-direction: column; gap: 0.15em; }
+.label__name { font-weight: 600; }
+.label__detail { color: var(--color-text-muted); font-size: 0.84em; line-height: 1.2; }
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  padding: 0.55em 0.65em 0.65em;
+  border-radius: var(--radius);
+  background: var(--color-layer);
+}
+
+.layer > .label .label__name { font-size: 1.1em; }
+
+.layer__items {
+  display: flex;
+  flex: 1;
+  gap: 0.55em;
+}
+
+.comp {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4em;
+  min-width: 0;
+  padding: 0.5em 0.65em;
+  border: 1px solid var(--color-component-border);
+  border-radius: var(--radius);
+  background: var(--color-component);
+  text-align: center;
+}
+
+/* Application and SDK: one row each, name on the left. */
+.layer--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0.4em 0.65em;
+}
+
+.layer--row > .label { flex: 0 0 8.5em; }
+.layer--row .comp { padding: 0.35em 0.5em; }
+
+/* Local / Server line. */
+.boundary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55em;
+  margin: 0.1em 0;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.boundary::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  border-top: 2px dashed var(--color-boundary);
+  transform: translateY(-50%);
+}
+
+.boundary__label { padding: 0 0.2em; line-height: 1.1; }
+
+/* The server-side core: the four layers and the registry. */
+.core {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 1fr 1fr auto;
+  gap: 0.6em;
+  padding: 0.6em;
+  border: 2.5px solid var(--color-core-outline);
+  border-radius: calc(var(--radius) * 1.6);
+}
+
+.core > [data-copy="registry"] { grid-column: 1 / -1; }
+
+.layer--stack .layer__items { flex-direction: column; }
+
+[data-copy="modelAccess"] [data-copy="modelAccess.modelGateway"] { flex-grow: 0.8; }
+
+.comp--group {
+  flex-grow: 1.25;
+  justify-content: flex-start;
+  padding: 0.5em;
+}
+
+.comp__items {
+  display: flex;
+  flex: 1;
+  gap: 0.4em;
+}
+
+.comp--sub {
+  padding: 0.4em 0.2em;
+  border-radius: calc(var(--radius) * 0.8);
+  font-size: 0.82em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.layer--registry > .label {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2em 0.7em;
+}
+
+/* Security, Observability, Control Plane: tall columns beside the core. */
+.layer--cross {
+  gap: 0.75em;
+  padding: 0.65em 0.55em;
+  background: var(--color-cross);
+}
+
+.layer--cross .layer__items {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 0.55em;
+}
+
+.layer--cross .comp {
+  justify-content: flex-start;
+  padding: 0.5em 0.55em;
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.layer--control { background: var(--color-control); }
+
+/* Hover, tap and keyboard focus. */
+[data-copy] { cursor: default; }
+[data-copy]:focus { outline: none; }
+
+[data-copy].is-active,
+[data-copy]:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+
+.layer.is-active,
+.layer:focus-visible { outline-offset: 2px; }
+
+/* Narrower screens: the cross-cutting layers move below the core. */
+@container arch (max-width: 860px) {
+  .arch {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-template-areas:
+      "application   application   application"
+      "sdk           sdk           sdk"
+      "boundary      boundary      boundary"
+      "core          core          core"
+      "security      observability control";
+  }
+
+  .layer--cross .layer__items { grid-template-rows: none; }
+}
+
+/* Phones: everything in a single column. */
+@container arch (max-width: 640px) {
+  .arch {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "application"
+      "sdk"
+      "boundary"
+      "core"
+      "security"
+      "observability"
+      "control";
+  }
+
+  .layer--row { flex-direction: column; align-items: stretch; }
+  .layer--row > .label { flex: none; }
+  .layer__items { flex-wrap: wrap; }
+  .layer:not(.layer--stack) > .layer__items > .comp { flex-basis: 9em; }
+  .layer:not(.layer--stack) > .layer__items > .comp--group { flex-basis: 100%; }
+  [data-copy="modelAccess"] [data-copy="modelAccess.modelGateway"] { flex-grow: 1; }
+  .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .layer--cross .layer__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* --- Pop-up -------------------------------------------------------------- */
+
+.tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  max-width: min(23rem, calc(100vw - 32px));
+  padding: 0.7rem 0.9rem 0.8rem;
+  border-radius: 0.6rem;
+  background: var(--color-tip-bg);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.18);
+  color: var(--color-tip-text);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.12s ease, visibility 0s linear 0.12s;
+}
+
+.tip.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.12s ease;
+}
+
+.tip__kind {
+  margin-bottom: 0.2rem;
+  color: var(--color-tip-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tip,
+  .tip.is-visible { transition: none; }
+}
+
+/* --- Footer -------------------------------------------------------------- */
+
+.site-footer {
+  padding: 0.7rem 0 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.site-footer a {
+  color: var(--color-text);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.noscript { padding: 1rem var(--gutter); }
+
+/* Intro on narrower screens. */
+@media (max-width: 1000px), (max-aspect-ratio: 1/1) {
+  .goal { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+}
+
+@media (max-width: 640px) {
+  .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+}
+
+/* --- Downloaded image ----------------------------------------------------
+   The diagram is cloned into this off-screen sheet and rendered to a PNG at
+   a fixed size, whatever the size of the visitor's screen.                 */
+
+.export-stage {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
+.export-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 1600px;
+  padding: 44px 48px 36px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  container: arch / inline-size;
+}
+
+.export-sheet .arch { flex: none; font-size: 15px; }
+
+.export-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.export-sheet__head img { display: block; width: auto; height: 30px; }
+
+.export-sheet__site { color: var(--color-text-muted); font-size: 17px; font-weight: 500; }
+
+.export-sheet__title { font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+
+.export-sheet__foot { color: var(--color-text-muted); font-size: 14px; }
