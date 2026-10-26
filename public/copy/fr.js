@@ -37,7 +37,7 @@ window.CAIRN_COPY.fr = {
   intro: {
     eyebrow: "Avant-goût technique",
     title: "Découvrez la pile d’inférence d’IA à code source ouvert",
-    goal: "Notre objectif : définir des contrats d’interface clairs entre chaque couche et chaque composant de la pile. Ainsi :",
+    goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que :",
     points: [
       {
         title: "Tous les composants fonctionnent ensemble",
@@ -45,7 +45,7 @@ window.CAIRN_COPY.fr = {
       },
       {
         title: "Vous pouvez remplacer n’importe quel composant",
-        text: "Un nouveau composant qui respecte le même contrat remplace l’ancien. Le reste de la pile ne change pas.",
+        text: "Un nouveau composant qui respecte le même contrat peut remplacer l’ancien. Le reste de la pile ne change pas.",
       },
       {
         title: "Vous pouvez utiliser les meilleurs composants à code source ouvert",
@@ -92,7 +92,7 @@ window.CAIRN_COPY.fr = {
         tooltip: "Un agent de programmation qui lit, écrit et exécute du code avec les développeurs. Il utilise les modèles et les outils de la pile.",
       },
       knowledgeWorkHarness: {
-        name: "Harnais de travail intellectuel",
+        name: "Harnais de travail",
         tooltip: "Des agents de recherche, de rédaction et d’analyse. Ils utilisent les documents et les outils de votre organisation.",
       },
     },
@@ -106,13 +106,13 @@ window.CAIRN_COPY.fr = {
       },
       agentSdk: {
         name: "SDK pour agents",
-        tooltip: "Un cadriciel pour créer des agents qui planifient, appellent des outils, utilisent la mémoire et réalisent des tâches en plusieurs étapes sur la pile.",
+        tooltip: "Un cadre d'applications pour créer des agents qui planifient, appellent des outils, utilisent la mémoire et réalisent des tâches en plusieurs étapes sur la pile.",
       },
     },
 
     persistence: {
       name: "Persistance",
-      tooltip: "Stocke les documents de votre organisation pour la recherche, et la mémoire à long terme de vos agents.",
+      tooltip: "Enregistre les documents de votre organisation pour la recherche, et la mémoire à long terme de vos agents.",
       semanticSearch: {
         name: "Système de recherche sémantique",
         tooltip: "Ingère et indexe vos documents. Il trouve le contenu pertinent par le sens et par mot-clé, pour que les modèles répondent à partir de vos documents.",
