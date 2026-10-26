@@ -166,6 +166,10 @@
     const tipText = tip.querySelector(".tip__text");
     let active = null;
 
+    // Phones show the pop-up as a panel along the bottom of the screen (.tip--sheet).
+    const sheetQuery = matchMedia("(max-width: 640px), (max-height: 500px)");
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
     const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
 
     function show(node) {
@@ -193,6 +197,13 @@
     // Layers anchor on their name, components on their whole box.
     function place(node) {
       const anchor = node.classList.contains("layer") ? node.querySelector(":scope > .label") : node;
+      if (sheetQuery.matches) {
+        tip.classList.add("tip--sheet");
+        tip.style.transform = "";
+        return;
+      }
+      tip.classList.remove("tip--sheet");
+
       const box = anchor.getBoundingClientRect();
       const viewportWidth = document.documentElement.clientWidth;
       const viewportHeight = document.documentElement.clientHeight;
@@ -212,6 +223,14 @@
       tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
     }
 
+    // Scrolls the tapped item up when the panel would cover it.
+    function revealAboveSheet(node) {
+      const anchor = node.classList.contains("layer") ? node.querySelector(":scope > .label") : node;
+      const panelTop = document.documentElement.clientHeight - tip.offsetHeight;
+      const covered = anchor.getBoundingClientRect().bottom - panelTop + 12;
+      if (covered > 0) window.scrollBy({ top: covered, behavior: reducedMotion.matches ? "auto" : "smooth" });
+    }
+
     diagram.addEventListener("pointerover", (event) => {
       if (event.pointerType !== "touch") show(targetOf(event));
     });
@@ -219,13 +238,28 @@
       if (event.pointerType !== "touch") hide();
     });
 
-    // Taps (and clicks) pin the pop-up until the next tap elsewhere.
-    diagram.addEventListener("click", (event) => show(targetOf(event)));
+    // Taps (and clicks) pin the pop-up until the next tap elsewhere. The panel
+    // scrolls the page only once the tap is over, so the click cannot land on
+    // whatever moved under the finger.
+    diagram.addEventListener("click", (event) => {
+      tapping = false;
+      const node = targetOf(event);
+      show(node);
+      if (node && sheetQuery.matches) setTimeout(() => revealAboveSheet(node), 0);
+    });
+
+    // A tap focuses the box before its click arrives. Leave the opening to the
+    // click, or the panel could slide in under the finger and catch the click.
+    let tapping = false;
+    diagram.addEventListener("pointerdown", (event) => { tapping = event.pointerType === "touch"; });
+    diagram.addEventListener("pointercancel", () => { tapping = false; });
     document.addEventListener("click", (event) => {
       if (!diagram.contains(event.target)) hide();
     });
 
-    diagram.addEventListener("focusin", (event) => show(targetOf(event)));
+    diagram.addEventListener("focusin", (event) => {
+      if (!tapping) show(targetOf(event));
+    });
     diagram.addEventListener("focusout", (event) => {
       if (!diagram.contains(event.relatedTarget)) hide();
     });
@@ -233,8 +267,11 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") hide();
     });
-    window.addEventListener("scroll", hide, { passive: true });
-    window.addEventListener("resize", hide);
+    // The bottom panel stays open while the page scrolls; mobile browsers also
+    // resize the page as their toolbars show and hide.
+    const hideUnlessSheet = () => { if (!sheetQuery.matches) hide(); };
+    window.addEventListener("scroll", hideUnlessSheet, { passive: true });
+    window.addEventListener("resize", hideUnlessSheet);
   }
 
   // --- Download ------------------------------------------------------------

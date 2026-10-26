@@ -44,8 +44,9 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Portrait and small screens scroll instead, at a comfortable reading size. */
-@media (max-width: 760px), (max-aspect-ratio: 1/1) {
+/* Portrait, small and short screens (phones held sideways) scroll instead,
+   at a comfortable reading size. */
+@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
   html { font-size: 15px; }
 }
 
@@ -92,9 +93,8 @@ a { color: inherit; }
 .site-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
+  gap: 0.75rem 0.6rem;
   padding: 0.95rem 0 0.35rem;
 }
 
@@ -102,6 +102,7 @@ a { color: inherit; }
   display: flex;
   align-items: baseline;
   gap: 0.45em;
+  margin-right: auto;
   font-family: var(--font-mono);
   font-size: 1.3rem;
   font-weight: 500;
@@ -468,9 +469,30 @@ h1 {
 
 .tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
 
+/* Phones: the pop-up is a panel along the bottom of the screen. */
+.tip.tip--sheet {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: none;
+  padding: 1rem var(--gutter) 1.25rem;
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: 0 -0.5rem 1.5rem rgb(0 0 0 / 0.18);
+  font-size: 0.95rem;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(100%);
+  transition: transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.tip.tip--sheet.is-visible { transform: none; transition: transform 0.18s ease; }
+
 @media (prefers-reduced-motion: reduce) {
   .tip,
-  .tip.is-visible { transition: none; }
+  .tip.is-visible,
+  .tip.tip--sheet,
+  .tip.tip--sheet.is-visible { transition: none; }
 }
 
 /* --- Footer -------------------------------------------------------------- */
@@ -488,6 +510,22 @@ h1 {
 }
 
 .noscript { padding: 1rem var(--gutter); }
+
+/* Phones: two header rows, the codename and language switch, then both buttons. */
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+
+  .site-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "codename lang" "actions actions";
+  }
+
+  .codename { grid-area: codename; margin-right: 0; }
+  .lang { grid-area: lang; margin-right: 0; }
+  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; }
+  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
+}
 
 /* Intro on narrower screens. */
 @media (max-width: 1000px), (max-aspect-ratio: 1/1) {
