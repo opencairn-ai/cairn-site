@@ -10,7 +10,9 @@
   // The language tag the page declares for each ?lang= value.
   const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
-  const STORAGE_KEY = "cairn-language";
+  const LANGUAGE_KEY = "cairn-language";
+  // Also read by the script in the page head, which sets the theme before the first paint.
+  const THEME_KEY = "cairn-theme";
 
   const lang = pickLanguage();
   const copy = ALL_COPY[lang] || ALL_COPY[DEFAULT_LANGUAGE];
@@ -24,6 +26,7 @@
 
   renderPage();
   renderDiagram();
+  setUpTheme();
   setUpTooltips();
   setUpDownload();
 
@@ -34,10 +37,10 @@
   function pickLanguage() {
     const requested = new URLSearchParams(location.search).get("lang");
     if (LANGUAGES.includes(requested) && ALL_COPY[requested]) {
-      remember(requested);
+      remember(LANGUAGE_KEY, requested);
       return requested;
     }
-    const saved = recall();
+    const saved = recall(LANGUAGE_KEY);
     if (LANGUAGES.includes(saved) && ALL_COPY[saved]) return saved;
     const preferred = (navigator.languages || [navigator.language || ""])
       .map((tag) => tag.slice(0, 2).toLowerCase())
@@ -45,12 +48,12 @@
     return preferred || DEFAULT_LANGUAGE;
   }
 
-  function remember(value) {
-    try { localStorage.setItem(STORAGE_KEY, value); } catch { /* storage unavailable */ }
+  function remember(key, value) {
+    try { localStorage.setItem(key, value); } catch { /* storage unavailable */ }
   }
 
-  function recall() {
-    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+  function recall(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
   }
 
   // --- Copy lookup ---------------------------------------------------------
@@ -130,6 +133,34 @@
 
   function footerText() {
     return t("footer.collaboration").replace(/\{(\w+)\}/g, (_, key) => t(`footer.${key}.name`));
+  }
+
+  // --- Theme ---------------------------------------------------------------
+
+  // The header button switches theme and remembers the choice; until a visitor
+  // makes one, the page follows the system setting, even while open.
+  function setUpTheme() {
+    const button = document.getElementById("theme-toggle");
+    const system = matchMedia("(prefers-color-scheme: dark)");
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+
+    function apply(theme) {
+      document.documentElement.dataset.theme = theme;
+      const label = t(theme === "dark" ? "header.themeToLight" : "header.themeToDark");
+      button.setAttribute("aria-label", label);
+      button.title = label;
+      if (themeColor) themeColor.content = getComputedStyle(document.body).backgroundColor;
+    }
+
+    apply(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+    button.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      remember(THEME_KEY, next);
+      apply(next);
+    });
+    system.addEventListener("change", (event) => {
+      if (!recall(THEME_KEY)) apply(event.matches ? "dark" : "light");
+    });
   }
 
   // --- Diagram -------------------------------------------------------------

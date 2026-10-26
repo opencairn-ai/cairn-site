@@ -22,6 +22,8 @@ window.CAIRN_COPY.en = {
   header: {
     codename: "codename:",
     languageLabel: "Language",
+    themeToDark: "Switch to dark theme",
+    themeToLight: "Switch to light theme",
     download: "Download image",
     downloadBusy: "Preparing image…",
     downloadFailed: "Download failed. Try again.",

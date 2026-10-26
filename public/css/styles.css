@@ -16,7 +16,7 @@
    the active box and the pop-up label. Every color on the page and in the
    downloaded image comes from these tokens. */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   --color-bg: #f9f6f1;
   --color-text: #291435;
@@ -45,28 +45,27 @@
   --radius: 0.55em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #1d1224;
-    --color-text: #f2eae1;           /* Cream, as the wordmark: 15.1:1 on bg */
-    --color-text-muted: #a79d9f;     /* 6.8:1 on bg, 5.1:1 on boxes */
-    --color-layer: #281c2f;
-    --color-cross: #2f2437;
-    --color-control: #332c32;
-    --color-component: #362b3e;
-    --color-component-border: #564a5e;
-    --color-core-outline: #cdb8dc;
-    --color-boundary: #cdb8dc;
-    --color-focus: #f2eae1;
-    --color-button: #f2eae1;
-    --color-button-text: #291435;
-    --color-button-hover: #362b3e;
-    --color-tip-bg: #3a2f42;         /* Raised panel: text 10.6:1, Magenta 5.3:1 */
-    --color-tip-text: #f2eae1;
-    --color-tip-border: #564a5e;
-    --color-tip-shadow: rgb(0 0 0 / 0.35);
-    --color-pink-tint: #533758;      /* Text on it: 8.6:1 */
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #1d1224;
+  --color-text: #f2eae1;           /* Cream, as the wordmark: 15.1:1 on bg */
+  --color-text-muted: #a79d9f;     /* 6.8:1 on bg, 5.1:1 on boxes */
+  --color-layer: #281c2f;
+  --color-cross: #2f2437;
+  --color-control: #332c32;
+  --color-component: #362b3e;
+  --color-component-border: #564a5e;
+  --color-core-outline: #cdb8dc;
+  --color-boundary: #cdb8dc;
+  --color-focus: #f2eae1;
+  --color-button: #f2eae1;
+  --color-button-text: #291435;
+  --color-button-hover: #362b3e;
+  --color-tip-bg: #3a2f42;         /* Raised panel: text 10.6:1, Magenta 5.3:1 */
+  --color-tip-text: #f2eae1;
+  --color-tip-border: #564a5e;
+  --color-tip-shadow: rgb(0 0 0 / 0.35);
+  --color-pink-tint: #533758;      /* Text on it: 8.6:1 */
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -143,9 +142,11 @@ a { color: inherit; }
 }
 
 /* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline.
-   The <picture> around it only picks the light or dark file. */
-.codename picture { display: contents; }
+   The light or dark file shows with the theme. */
 .codename img { display: block; width: auto; height: 1.2em; }
+.codename .logo--dark,
+:root[data-theme="dark"] .codename .logo--light { display: none; }
+:root[data-theme="dark"] .codename .logo--dark { display: block; }
 
 .header-actions {
   display: flex;
@@ -154,10 +155,38 @@ a { color: inherit; }
   gap: 0.6rem;
 }
 
+/* Language and theme switches, side by side. */
+.prefs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.4rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.theme-toggle:hover { background: var(--color-button-hover); }
+.theme-toggle svg { width: 1.1rem; height: 1.1rem; }
+/* The icon shows the theme a click switches to. */
+.theme-toggle__sun,
+:root[data-theme="dark"] .theme-toggle__moon { display: none; }
+:root[data-theme="dark"] .theme-toggle__sun { display: block; }
+
 .lang {
   display: flex;
   gap: 0.1rem;
-  margin-right: 0.4rem;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -550,18 +579,19 @@ h1 {
 
 .noscript { padding: 1rem var(--gutter); }
 
-/* Phones: two header rows, the codename and language switch, then both buttons. */
+/* Phones: two header rows, the codename with the language and theme switches,
+   then both buttons. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
 
   .site-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "codename lang" "actions actions";
+    grid-template-areas: "codename prefs" "actions actions";
   }
 
   .codename { grid-area: codename; margin-right: 0; }
-  .lang { grid-area: lang; margin-right: 0; }
+  .prefs { grid-area: prefs; margin-right: 0; }
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; }
   .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
 }
