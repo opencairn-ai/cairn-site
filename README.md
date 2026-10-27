@@ -36,9 +36,10 @@ top.
   in `index.html` (its `data-copy` value is the key path under `stack`), then the
   matching entry in both copy files.
 
-The **Download image** button renders the diagram, with the title and credits,
-to a fixed-size 3200 px PNG in the current language, whatever the visitor's
-screen size.
+The **Download image** button saves a 16:9 slide (a 3840 × 2160 PNG) in the
+current language and theme: the title, the diagram, a legend that describes every
+layer and component with the pop-up text, and the credits. The slide shrinks its
+content to fit, so it keeps fitting after copy edits.
 
 ## Develop
 

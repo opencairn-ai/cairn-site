@@ -343,19 +343,23 @@
     });
   }
 
-  // Clones the diagram into a fixed-size, off-screen sheet with a title and
-  // credits, so every download looks the same whatever the screen size.
+  // Clones the diagram into an off-screen 16:9 slide with a title, a legend that
+  // describes every layer and component, and the credits, so every download looks
+  // the same whatever the screen size.
   async function renderImage() {
     const clone = diagram.cloneNode(true);
     clone.removeAttribute("id");
     for (const node of clone.querySelectorAll(".is-active")) node.classList.remove("is-active");
 
+    const groups = legendGroups();
+    const legend = el("div", "export-legend");
     const sheet = el("div", "export-sheet", [
       el("div", "export-sheet__head", [
         el("p", "export-sheet__title", t("intro.title")),
         el("span", "export-sheet__site", t("image.site")),
       ]),
       clone,
+      legend,
       el("p", "export-sheet__foot", footerText()),
     ]);
     const stage = el("div", "export-stage", sheet);
@@ -364,9 +368,15 @@
 
     try {
       await document.fonts.ready;
+      fitSlide(sheet, legend, groups);
       const options = {
         pixelRatio: 2,
         backgroundColor: getComputedStyle(document.body).backgroundColor,
+        // Copy every computed style except heights: text can wrap slightly differently
+        // in the image, and fixed heights would then leave gaps or clip it. The slide
+        // itself keeps its height.
+        includeStyleProperties: [...getComputedStyle(document.documentElement)].filter((name) => name !== "height" && name !== "block-size"),
+        style: { height: `${sheet.offsetHeight}px` },
       };
       // WebKit can leave fonts out of the first render; a warm-up pass fixes it.
       if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
@@ -378,6 +388,73 @@
     } finally {
       stage.remove();
     }
+  }
+
+  // One group per layer, in reading order: the layer, then each of its components,
+  // with the same text as the pop-ups. Local and Server follow the SDK row.
+  function legendGroups() {
+    const item = (node) => {
+      const entry = entries.get(node);
+      return el("p", "export-legend__item", [el("strong", null, entry.name), ` ${entry.tooltip}`]);
+    };
+    const groups = [];
+    for (const layer of diagram.querySelectorAll(".layer")) {
+      const entry = entries.get(layer);
+      groups.push(el("section", "export-legend__group", [
+        el("h3", null, entry.name),
+        el("p", "export-legend__about", entry.tooltip),
+        ...[...layer.querySelectorAll(".comp")].map(item),
+      ]));
+      if (layer.dataset.copy === "sdk") {
+        const sides = [...diagram.querySelectorAll(".boundary__label")];
+        groups.push(el("section", "export-legend__group", [
+          el("h3", null, sides.map((node) => entries.get(node).name).join(" / ")),
+          ...sides.map(item),
+        ]));
+      }
+    }
+    return groups;
+  }
+
+  // Shrinks the diagram and the legend together until the slide holds them, so it
+  // still fits after copy edits and in the longer French.
+  function fitSlide(sheet, legend, groups) {
+    for (let scale = 1; scale >= 0.6; scale -= 0.04) {
+      sheet.style.setProperty("--export-scale", scale.toFixed(2));
+      balanceColumns(legend, groups);
+      if (sheet.scrollHeight <= sheet.clientHeight) return;
+    }
+  }
+
+  // Measures each group at the column width, then splits them, in reading order,
+  // into columns of similar height. Plain columns render reliably in the image,
+  // where CSS multi-column layout does not.
+  function balanceColumns(legend, groups, count = 5) {
+    const probe = el("div", "export-legend__column", groups);
+    legend.replaceChildren(probe);
+    const heights = groups.map((group) => group.offsetHeight + parseFloat(getComputedStyle(group).marginBottom));
+    legend.replaceChildren(...splitInOrder(heights, count).map(([from, to]) => el("div", "export-legend__column", groups.slice(from, to))));
+  }
+
+  // Splits the heights, in order, into `count` runs whose tallest run is as short as
+  // possible. Returns [from, to) index pairs.
+  function splitInOrder(heights, count) {
+    const n = heights.length;
+    const prefix = heights.reduce((sums, h) => [...sums, sums[sums.length - 1] + h], [0]);
+    const best = Array.from({ length: count + 1 }, () => Array(n + 1).fill(Infinity));
+    const cut = Array.from({ length: count + 1 }, () => Array(n + 1).fill(0));
+    best[0][0] = 0;
+    for (let c = 1; c <= count; c++) {
+      for (let j = 0; j <= n; j++) {
+        for (let i = 0; i <= j; i++) {
+          const tallest = Math.max(best[c - 1][i], prefix[j] - prefix[i]);
+          if (tallest < best[c][j]) { best[c][j] = tallest; cut[c][j] = i; }
+        }
+      }
+    }
+    const runs = [];
+    for (let c = count, j = n; c > 0; c--) { runs.unshift([cut[c][j], j]); j = cut[c][j]; }
+    return runs;
   }
 
   function saveFile(blob, fileName) {
