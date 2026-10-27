@@ -64,7 +64,14 @@
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --gutter: max(16px, 2.25rem);
-  --radius: 0.55em;
+  /* Corner radii: the design system's sm 6px, md 9px and lg 14px as they measure on a
+     1440 × 900 screen, in em of the diagram's text (rem for the header and pop-up),
+     so the corners scale with the page. */
+  --radius-sm: 0.475em;              /* Boxes */
+  --radius-md: 0.71em;               /* Layer panels */
+  --radius-lg: 1.11em;               /* The server core */
+  --radius-ui-sm: 0.41rem;           /* Language tabs, pop-up */
+  --radius-ui-md: 0.61rem;           /* Buttons */
 }
 
 :root[data-theme="dark"] {
@@ -214,7 +221,7 @@ a { color: inherit; }
   height: 2.1rem;
   padding: 0;
   border: 0;
-  border-radius: 9px;
+  border-radius: var(--radius-ui-md);
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
@@ -237,7 +244,7 @@ a { color: inherit; }
 
 .lang a {
   padding: 0.35em 0.45em;
-  border-radius: 0.3em;
+  border-radius: var(--radius-ui-sm);
   color: var(--color-tab);
   text-decoration: none;
 }
@@ -258,7 +265,7 @@ a { color: inherit; }
   gap: 0.5em;
   padding: 0.6em 1em;
   border: 1.5px solid var(--color-button-outline);
-  border-radius: 9px;
+  border-radius: var(--radius-ui-md);
   background: transparent;
   color: var(--color-text);
   font: inherit;
@@ -401,7 +408,7 @@ h1 {
   gap: 0.5em;
   min-width: 0;
   padding: 0.55em 0.65em 0.65em;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   background: var(--color-layer);
 }
 
@@ -422,7 +429,7 @@ h1 {
   min-width: 0;
   padding: 0.5em 0.65em;
   border: 1px solid var(--color-component-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   background: var(--color-component);
   box-shadow: var(--color-component-shadow);
   text-align: center;
@@ -472,7 +479,7 @@ h1 {
   gap: 0.6em;
   padding: 0.6em;
   border: 2.5px solid var(--color-core-outline);
-  border-radius: calc(var(--radius) * 1.6);
+  border-radius: var(--radius-lg);
 }
 
 .core > [data-copy="registry"] { grid-column: 1 / -1; }
@@ -566,7 +573,7 @@ h1 {
   z-index: 10;
   max-width: min(23rem, calc(100vw - 32px));
   padding: 0.7rem 0.9rem 0.8rem;
-  border-radius: 0.6rem;
+  border-radius: var(--radius-ui-sm);
   background: var(--color-tip-bg);
   box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 8px 24px var(--color-tip-shadow);
   color: var(--color-tip-text);
