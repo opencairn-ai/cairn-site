@@ -54,6 +54,12 @@
   --color-sheet-shadow: rgb(0 0 0 / 0.26);
   --color-pink: #fd70f5;             /* As text on light: 2.0:1, the deck's documented eyebrow exception */
   --color-pink-tint: #dcbaf6;        /* Selected box: Pale purple */
+  --color-technical: #0d5054;        /* Technical reference: Teal, 7.7:1 */
+  --color-error: #b2364a;            /* Red, 5.0:1 */
+  --color-disabled-bg: #f4f5f6;
+  --color-disabled-ink: #aeb8be;
+  --color-disabled-line: #aeb8be;
+  --color-disabled-opacity: 1;
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -95,6 +101,12 @@
   --color-sheet-border: #a08f79;
   --color-sheet-shadow: rgb(84 75 64 / 0.2);
   --color-pink-tint: #734c90;        /* Selected box: Mid purple; Cream on it 5.6:1 */
+  --color-technical: #63bcc1;        /* River, 7.6:1 */
+  --color-error: #fe7a8b;            /* Rose, 6.7:1 */
+  --color-disabled-bg: #ffffff;
+  --color-disabled-ink: #291435;
+  --color-disabled-line: #63737d;
+  --color-disabled-opacity: 0.3;
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -176,6 +188,8 @@ a { color: inherit; }
 .codename .logo--dark,
 :root[data-theme="dark"] .codename .logo--light { display: none; }
 :root[data-theme="dark"] .codename .logo--dark { display: block; }
+/* The code-like label takes the technical-reference color. */
+.codename > span { color: var(--color-technical); }
 
 .header-actions {
   display: flex;
@@ -257,7 +271,17 @@ a { color: inherit; }
 
 .btn svg { flex: none; width: 1.1em; height: 1.1em; }
 .btn:hover { background: var(--color-button-hover); }
-.btn[aria-busy="true"] { cursor: progress; opacity: 0.7; }
+/* While the image is prepared the button takes the disabled colors; a failure shows in
+   the error color, with no hover fill so the red keeps its contrast. */
+.btn[aria-busy="true"] {
+  border-color: var(--color-disabled-line);
+  background: var(--color-disabled-bg);
+  color: var(--color-disabled-ink);
+  opacity: var(--color-disabled-opacity);
+  cursor: progress;
+}
+.btn.is-error,
+.btn.is-error:hover { border-color: var(--color-error); background: transparent; color: var(--color-error); }
 
 .btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }

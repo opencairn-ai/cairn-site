@@ -320,6 +320,7 @@
     button.addEventListener("click", async () => {
       if (button.getAttribute("aria-busy") === "true") return;
       clearTimeout(resetTimer);
+      button.classList.remove("is-error");
       button.setAttribute("aria-busy", "true");
       label.textContent = t("header.downloadBusy");
 
@@ -331,7 +332,11 @@
       } catch (error) {
         console.error("[download]", error);
         label.textContent = t("header.downloadFailed");
-        resetTimer = setTimeout(() => { label.textContent = t("header.download"); }, 4000);
+        button.classList.add("is-error");
+        resetTimer = setTimeout(() => {
+          label.textContent = t("header.download");
+          button.classList.remove("is-error");
+        }, 4000);
       } finally {
         button.removeAttribute("aria-busy");
       }
