@@ -10,37 +10,50 @@
   font-display: swap;
 }
 
-/* Colors. Light follows a warm ramp from Cairn Cream with Deep purple #291435 as
-   the ink; dark follows the visitor's system setting, on a plum near-black with
-   the wordmark's Cream as text. Magenta #FD70F5 marks the label, the key phrase,
-   the active box and the pop-up label. Every color on the page and in the
-   downloaded image comes from these tokens. */
+/* Colors, from the Cairn design system (cairn-color-palette.md, the deck rules in
+   cairn-deck-system.md §4 and §7, and the component tokens in cairn-components.css).
+   Light: Cream ground, Sand layer panels, Beige side columns, White boxes, with the
+   deck's text roles. Dark: Deep purple ground; each level is Marshmallow laid over
+   it, the way the components raise dark surfaces, a deliberate departure from the
+   deck's "no elevation on dark". Magenta #FD70F5 marks the label, the selected box
+   and the pop-up label. Every color on the page and in the downloaded image comes
+   from these tokens. */
 :root {
   color-scheme: light;
 
-  --color-bg: #f9f6f1;
-  --color-text: #291435;
-  --color-text-muted: #6f5e73;       /* 5.5:1 on bg */
-  --color-layer: #eae2db;
-  --color-cross: #e1d8d3;
-  --color-control: #ddd2c9;
+  --color-bg: #f2eae1;               /* Cream */
+  --color-title: #291435;            /* Deep purple, 14.2:1 on bg */
+  --color-header: #291435;           /* Layer names, goal headings */
+  --color-body: #544b40;             /* Dark brown, 7.2:1 */
+  --color-text: #291435;             /* Box names, codename, controls */
+  --color-text-muted: #505d65;       /* Captions: Slate, 5.7:1 (the deck's Cool grey is 4.1:1 on Cream) */
+  --color-layer: #e3d3bc;            /* Sand */
+  --color-cross: #d0c2b1;            /* Beige */
+  --color-control: #d0c2b1;
   --color-component: #ffffff;
-  --color-component-border: #b0a4aa;
+  --color-component-border: #d0c2b1;
+  --color-component-shadow: 0 1px 2px rgb(41 20 53 / 0.1);
   --color-core-outline: #291435;
   --color-boundary: #291435;
-  --color-focus: #291435;
+  --color-focus: #734c90;            /* Mid purple */
+  --color-tab: #505d65;              /* Inactive language */
+  --color-link: #734c90;             /* 5.6:1 */
+  --color-link-hover: #291435;
   --color-button: #291435;
   --color-button-text: #ffffff;
-  --color-button-hover: #eae2db;
-  --color-tip-bg: #291435;
-  --color-tip-text: #faf7f3;
+  --color-button-outline: #a08f79;   /* Stone */
+  --color-button-hover: #d0c2b1;     /* Beige */
+  --color-ghost-hover: #d0c2b1;
+  --color-tip-bg: #291435;           /* Tooltip: Deep purple, white text */
+  --color-tip-text: #ffffff;
   --color-tip-border: transparent;
-  --color-tip-shadow: rgb(0 0 0 / 0.18);
-  --color-sheet-bg: #ffffff;         /* Phone pop-up panel: light like the page */
+  --color-tip-shadow: rgb(0 0 0 / 0.22);
+  --color-sheet-bg: #ffffff;         /* Phone panel: the menu surface */
   --color-sheet-text: #291435;
-  --color-sheet-border: #b0a4aa;
-  --color-pink: #fd70f5;             /* As text on light: 2.0:1, below WCAG AA, by choice */
-  --color-pink-tint: #fff5ff;        /* Fill of the active box */
+  --color-sheet-border: #d0c2b1;
+  --color-sheet-shadow: rgb(0 0 0 / 0.26);
+  --color-pink: #fd70f5;             /* As text on light: 2.0:1, the deck's documented eyebrow exception */
+  --color-pink-tint: #dcbaf6;        /* Selected box: Pale purple */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -50,28 +63,38 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-bg: #1d1224;
-  --color-text: #f2eae1;           /* Cream, as the wordmark: 15.1:1 on bg */
-  --color-text-muted: #a79d9f;     /* 6.8:1 on bg, 5.1:1 on boxes */
-  --color-layer: #281c2f;
-  --color-cross: #2f2437;
-  --color-control: #332c32;
-  --color-component: #362b3e;
-  --color-component-border: #564a5e;
-  --color-core-outline: #cdb8dc;
-  --color-boundary: #cdb8dc;
-  --color-focus: #f2eae1;
+  --color-bg: #291435;               /* Deep purple */
+  --color-title: #ffffff;            /* 16.9:1 */
+  --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
+  --color-body: #f2eae1;             /* Cream, 14.2:1 */
+  --color-text: #f2eae1;
+  --color-text-muted: #a08f79;       /* Stone, 5.4:1 */
+  --color-layer: #321d3e;            /* Marshmallow 5% over Deep purple */
+  --color-cross: #372343;            /* 8% */
+  --color-control: #372343;
+  --color-component: #402c4c;        /* 13%; Cream on it 10.5:1 */
+  --color-component-border: #544161; /* 24% */
+  --color-component-shadow: none;
+  --color-core-outline: #dcbaf6;     /* Pale purple */
+  --color-boundary: #dcbaf6;
+  --color-focus: #fd70f5;
+  --color-tab: #aeb8be;              /* Grey, 8.3:1 */
+  --color-link: #dcbaf6;             /* 10:1 */
+  --color-link-hover: #ffffff;
   --color-button: #f2eae1;
   --color-button-text: #291435;
-  --color-button-hover: #362b3e;
-  --color-tip-bg: #3a2f42;         /* Raised panel: text 10.6:1, Magenta 5.3:1 */
-  --color-tip-text: #f2eae1;
-  --color-tip-border: #564a5e;
-  --color-tip-shadow: rgb(0 0 0 / 0.35);
-  --color-sheet-bg: #3a2f42;
+  --color-button-outline: #a08f79;
+  --color-button-hover: #544b40;
+  --color-ghost-hover: #7d705f;
+  --color-tip-bg: #f5e8ff;           /* Tooltip: Marshmallow, Deep purple text */
+  --color-tip-text: #291435;
+  --color-tip-border: transparent;
+  --color-tip-shadow: rgb(0 0 0 / 0.22);
+  --color-sheet-bg: #291435;         /* Phone panel: the menu surface */
   --color-sheet-text: #f2eae1;
-  --color-sheet-border: #564a5e;
-  --color-pink-tint: #533758;      /* Text on it: 8.6:1 */
+  --color-sheet-border: #a08f79;
+  --color-sheet-shadow: rgb(84 75 64 / 0.2);
+  --color-pink-tint: #734c90;        /* Selected box: Mid purple; Cream on it 5.6:1 */
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -177,13 +200,14 @@ a { color: inherit; }
   height: 2.1rem;
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: 9px;
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
 }
 
-.theme-toggle:hover { background: var(--color-button-hover); }
+/* Ghost icon button. */
+.theme-toggle:hover { background: var(--color-ghost-hover); }
 .theme-toggle svg { width: 1.1rem; height: 1.1rem; }
 /* The icon shows the theme a click switches to. */
 .theme-toggle__sun,
@@ -200,17 +224,18 @@ a { color: inherit; }
 .lang a {
   padding: 0.35em 0.45em;
   border-radius: 0.3em;
-  color: var(--color-text-muted);
+  color: var(--color-tab);
   text-decoration: none;
 }
 
 .lang a:hover { color: var(--color-text); }
 
+/* Nav tab: the active language bold, with a Magenta underline. */
 .lang a[aria-current] {
   color: var(--color-text);
   font-weight: 700;
-  text-decoration: underline 2px;
-  text-underline-offset: 0.3em;
+  text-decoration: underline 2px var(--color-pink);
+  text-underline-offset: 0.45em;
 }
 
 .btn {
@@ -218,13 +243,13 @@ a { color: inherit; }
   align-items: center;
   gap: 0.5em;
   padding: 0.6em 1em;
-  border: 1.5px solid var(--color-button);
-  border-radius: 999px;
+  border: 1.5px solid var(--color-button-outline);
+  border-radius: 9px;
   background: transparent;
-  color: var(--color-button);
+  color: var(--color-text);
   font: inherit;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
@@ -234,11 +259,11 @@ a { color: inherit; }
 .btn:hover { background: var(--color-button-hover); }
 .btn[aria-busy="true"] { cursor: progress; opacity: 0.7; }
 
-.btn--primary { background: var(--color-button); color: var(--color-button-text); }
+.btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }
 
 :focus-visible {
-  outline: 2px solid var(--color-focus);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -264,6 +289,7 @@ main {
 
 h1 {
   margin: 0 0 0.85rem;
+  color: var(--color-title);
   font-size: 2.35rem;
   font-weight: 600;
   line-height: 1.08;
@@ -278,7 +304,7 @@ h1 {
   font-size: 0.9rem;
 }
 
-.goal__lead { font-weight: 500; }
+.goal__lead { color: var(--color-body); font-weight: 500; }
 
 /* Words wrapped in *asterisks* in the copy files (none at the moment). Semibold so
    the pink reads the same as the label next to the ink text. */
@@ -295,11 +321,11 @@ h1 {
 
 .goal__point {
   padding-top: 0.45rem;
-  border-top: 1.5px solid var(--color-text);
+  border-top: 1.5px solid var(--color-header);
 }
 
-.goal__point-title { display: block; font-weight: 600; }
-.goal__point-text { display: block; color: var(--color-text-muted); }
+.goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
+.goal__point-text { display: block; color: var(--color-body); }
 
 /* --- Architecture diagram -----------------------------------------------
    Sized in em so the downloaded image can render it at a fixed size.       */
@@ -355,7 +381,7 @@ h1 {
   background: var(--color-layer);
 }
 
-.layer > .label .label__name { font-size: 1.1em; }
+.layer > .label .label__name { color: var(--color-header); font-size: 1.1em; }
 
 .layer__items {
   display: flex;
@@ -374,6 +400,7 @@ h1 {
   border: 1px solid var(--color-component-border);
   border-radius: var(--radius);
   background: var(--color-component);
+  box-shadow: var(--color-component-shadow);
   text-align: center;
 }
 
@@ -396,6 +423,7 @@ h1 {
   align-items: flex-end;
   gap: 0.55em;
   margin: 0.1em 0;
+  color: var(--color-text-muted);
   font-size: 0.85em;
   font-weight: 600;
 }
@@ -462,7 +490,7 @@ h1 {
    contrast on both grounds. */
 [data-copy].is-active { outline: 2px solid var(--color-pink); outline-offset: 1px; }
 .comp.is-active { border-color: var(--color-pink); background: var(--color-pink-tint); }
-[data-copy]:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+[data-copy]:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 
 .layer.is-active,
 .layer:focus-visible { outline-offset: 2px; }
@@ -516,7 +544,7 @@ h1 {
   padding: 0.7rem 0.9rem 0.8rem;
   border-radius: 0.6rem;
   background: var(--color-tip-bg);
-  box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 0.5rem 1.5rem var(--color-tip-shadow);
+  box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 8px 24px var(--color-tip-shadow);
   color: var(--color-tip-text);
   font-size: 0.85rem;
   line-height: 1.4;
@@ -551,9 +579,9 @@ h1 {
   left: 0;
   max-width: none;
   padding: 1rem var(--gutter) 1.25rem;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 14px 14px 0 0;
   background: var(--color-sheet-bg);
-  box-shadow: inset 0 1px 0 var(--color-sheet-border), 0 -0.5rem 1.5rem var(--color-tip-shadow);
+  box-shadow: inset 0 1px 0 var(--color-sheet-border), 0 -14px 18px var(--color-sheet-shadow);
   color: var(--color-sheet-text);
   font-size: 0.95rem;
   opacity: 1;
@@ -580,10 +608,12 @@ h1 {
 }
 
 .site-footer a {
-  color: var(--color-text);
-  font-weight: 600;
-  text-underline-offset: 0.2em;
+  color: var(--color-link);
+  font-weight: 500;
+  text-underline-offset: 3px;
 }
+
+.site-footer a:hover { color: var(--color-link-hover); }
 
 .noscript { padding: 1rem var(--gutter); }
 
@@ -649,6 +679,6 @@ h1 {
 
 .export-sheet__site { color: var(--color-text-muted); font-size: 17px; font-weight: 500; }
 
-.export-sheet__title { font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+.export-sheet__title { color: var(--color-title); font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
 
 .export-sheet__foot { color: var(--color-text-muted); font-size: 14px; }
