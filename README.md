@@ -14,8 +14,8 @@ public/
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   assets/cairn-logo*.svg                  Wordmark (deep purple and cream), from the design system
-  assets/cairn-ecosystem-roadmap-v3.pptx  Ecosystem Roadmap deck
   site.webmanifest, robots.txt, sitemap.xml
+reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
 wrangler.jsonc                            Cloudflare Workers static assets -> opencairn.ai
 ```
 
@@ -58,7 +58,7 @@ reliable.
 - Alpha facts (versions, recipes, limitations): the release notes shipped with
   [opencairn-ai/cairn-hoodoo](https://github.com/opencairn-ai/cairn-hoodoo).
 - Narrative, architecture, roadmap, audiences: the Ecosystem Roadmap deck
-  (`public/assets/`).
+  (`reference/`). It stays out of `public/` so it is never deployed.
 - Colors/tokens: [opencairn-ai/design-system](https://github.com/opencairn-ai/design-system)
   (`cairn-color-palette.md` is the source of truth).
 

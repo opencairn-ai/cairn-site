@@ -9,4 +9,4 @@ while preserving necessary meaning and depth.
 - [Cairn Alpha release](https://github.com/opencairn-ai/cairn-hoodoo)
 - [Cairn Design System](https://github.com/opencairn-ai/design-system)
 - [Cairn Release Notes](~/Downloads/RELEASE_NOTES.md)
-- [Cairn Pitch Deck](public/assets/cairn-ecosystem-roadmap-v3.pptx)
+- [Cairn Pitch Deck](reference/cairn-ecosystem-roadmap-v3.pptx)
