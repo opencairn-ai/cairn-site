@@ -24,8 +24,8 @@ window.CAIRN_COPY.en = {
     languageLabel: "Language",
     themeToDark: "Switch to dark theme",
     themeToLight: "Switch to light theme",
-    download: "Download image",
-    downloadBusy: "Preparing image…",
+    download: "Download schema",
+    downloadBusy: "Preparing schema…",
     downloadFailed: "Download failed. Try again.",
     github: "Follow us on GitHub",
     githubUrl: "https://github.com/opencairn-ai",
@@ -63,7 +63,7 @@ window.CAIRN_COPY.en = {
     },
   },
 
-  // The architecture diagram, in reading order: top to bottom, left to right.
+  // The architecture schema, in reading order: top to bottom, left to right.
   //   name:    the label shown in the box
   //   detail:  an optional smaller line under the name (none in use)
   //   tooltip: the short description that pops up on hover, tap or keyboard focus

@@ -27,8 +27,8 @@ window.CAIRN_COPY.fr = {
     languageLabel: "Langue",
     themeToDark: "Passer au thème sombre",
     themeToLight: "Passer au thème clair",
-    download: "Télécharger l’image",
-    downloadBusy: "Préparation de l’image…",
+    download: "Télécharger le schéma",
+    downloadBusy: "Préparation du schéma…",
     downloadFailed: "Échec du téléchargement. Réessayez.",
     github: "Suivez-nous sur GitHub",
     githubUrl: "https://github.com/opencairn-ai",
@@ -66,7 +66,7 @@ window.CAIRN_COPY.fr = {
     },
   },
 
-  // Le diagramme d’architecture, dans l’ordre de lecture : de haut en bas, de gauche à droite.
+  // Le schéma d’architecture, dans l’ordre de lecture : de haut en bas, de gauche à droite.
   //   name :    le libellé affiché dans la case
   //   detail :  une petite ligne facultative sous le libellé (aucune n’est utilisée)
   //   tooltip : la courte description qui s’affiche au survol, au toucher ou au clavier
