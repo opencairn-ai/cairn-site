@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+  Share card for opencairn.ai: the image link previews show (Open Graph, X, Slack…).
+  1200 × 630, rendered at twice that to public/assets/og-card.png.
+
+  To regenerate after editing, from the repository root:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
+      --allow-file-access-from-files --hide-scrollbars --force-device-scale-factor=2 \
+      --window-size=1200,630 --screenshot=public/assets/og-card.png \
+      "file://$PWD/reference/og-card/og-card.html"
+
+  The text is English only: crawlers do not run the page's script, so every link,
+  ?lang=fr included, shows this card. The diagram on the right shows only the server-side
+  layers, without labels or components; at thumbnail size only its shape reads.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>opencairn.ai share card</title>
+<style>
+  @font-face {
+    font-family: "Space Grotesk";
+    src: url("../../public/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+    font-weight: 300 700;
+  }
+
+  /* Design-system colors (dark ground, as the deck's cover slides). */
+  :root {
+    --bg: #291435;                 /* Deep purple */
+    --title: #ffffff;
+    --body: #f2eae1;               /* Cream */
+    --caption: #a08f79;            /* Stone */
+    --pink: #fd70f5;               /* Magenta */
+    --technical: #63bcc1;          /* River */
+    --core: #dcbaf6;               /* Pale purple */
+    --box: #402c4c;                /* Layers: Marshmallow 13% over Deep purple */
+    --selected: #734c90;           /* Mid purple */
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--body);
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  /* Two rows: the identity line across the top, then the text and the stack side
+     by side, so the stack starts level with the eyebrow and ends with the credits. */
+  .card {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 97px 52px;
+    height: 100%;
+    padding: 60px 64px 56px;
+  }
+
+  .codename { grid-column: 1 / -1; }
+
+  /* Left: eyebrow, title, credits. */
+  .text { display: flex; flex-direction: column; }
+
+  .codename {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    color: var(--technical);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 30px;
+  }
+
+  .codename img { display: block; height: 38px; }
+
+  .eyebrow {
+    color: var(--pink);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin-top: 14px;
+    color: var(--title);
+    font-size: 58px;
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+
+  .credit {
+    margin-top: auto;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .credit span { display: block; color: var(--caption); }
+
+  /* Right: the server side of the architecture as plain shapes, without labels or
+     components; at thumbnail size only the shape reads. One layer is selected, as on
+     the page. */
+  .stack {
+    display: grid;
+    grid-template-columns: 3.4fr repeat(3, 1fr);
+    gap: 10px;
+    align-self: stretch;
+  }
+
+  .shape { border-radius: 9px; background: var(--box); }
+
+  .core {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 44px;
+    gap: 10px;
+    padding: 10px;
+    border: 2.5px solid var(--core);
+    border-radius: 14px;
+  }
+
+  .core .wide { grid-column: 1 / -1; }
+
+  .shape.selected {
+    background: var(--selected);
+    box-shadow: 0 0 0 2.5px var(--pink);
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <p class="codename">codename:<img src="../../public/assets/cairn-logo-cream.svg" alt="Cairn"></p>
+
+    <div class="text">
+      <p class="eyebrow">Technical Teaser</p>
+      <h1>Introducing the open source AI inference stack</h1>
+      <p class="credit">A Mozilla × Mila research collaboration<span>opencairn.ai</span></p>
+    </div>
+
+    <div class="stack" aria-hidden="true">
+      <div class="core">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape selected"></div>
+        <div class="shape"></div>
+        <div class="shape wide"></div>
+      </div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+  </main>
+</body>
+</html>

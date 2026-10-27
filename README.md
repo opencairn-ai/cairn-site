@@ -14,8 +14,10 @@ public/
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   assets/cairn-logo*.svg                  Wordmark (deep purple and cream), from the design system
+  assets/og-card.png                      Share card for link previews (from reference/og-card/)
   site.webmanifest, robots.txt, sitemap.xml
 reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
+reference/og-card/og-card.html            Share card source; how to regenerate it is inside
 wrangler.jsonc                            Cloudflare Workers static assets -> opencairn.ai
 ```
 
