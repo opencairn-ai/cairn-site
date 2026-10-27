@@ -1,3 +1,4 @@
-# Pre-launch: remove before going public
 User-agent: *
-Disallow: /
+Disallow:
+
+Sitemap: https://opencairn.ai/sitemap.xml

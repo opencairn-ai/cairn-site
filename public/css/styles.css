@@ -1,373 +1,754 @@
-/* ── Reset & tokens ─────────────────────────────────────────── */
+/* ==========================================================================
+   opencairn.ai — the architecture page
+   ========================================================================== */
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Colors, from the Cairn design system (cairn-color-palette.md, the deck rules in
+   cairn-deck-system.md §4 and §7, and the component tokens in cairn-components.css).
+   Light: Cream ground, Sand layer panels, Beige side columns, White boxes, with the
+   deck's text roles. Dark: Deep purple ground; each level is Marshmallow laid over
+   it, the way the components raise dark surfaces, a deliberate departure from the
+   deck's "no elevation on dark". Magenta #FD70F5 marks the label, the selected box
+   and the pop-up label. Every color on the page and in the downloaded image comes
+   from these tokens. */
+:root {
+  color-scheme: light;
+
+  --color-bg: #f2eae1;               /* Cream */
+  --color-title: #291435;            /* Deep purple, 14.2:1 on bg */
+  --color-header: #291435;           /* Layer names, goal headings */
+  --color-body: #544b40;             /* Dark brown, 7.2:1 */
+  --color-text: #291435;             /* Box names, codename, controls */
+  --color-text-muted: #505d65;       /* Captions: Slate, 5.7:1 (the deck's Cool grey is 4.1:1 on Cream) */
+  --color-layer: #e3d3bc;            /* Sand */
+  --color-cross: #d0c2b1;            /* Beige */
+  --color-control: #d0c2b1;
+  --color-component: #ffffff;
+  --color-component-border: #d0c2b1;
+  --color-component-shadow: 0 1px 2px rgb(41 20 53 / 0.1);
+  --color-core-outline: #291435;
+  --color-boundary: #291435;
+  --color-focus: #734c90;            /* Mid purple */
+  --color-tab: #505d65;              /* Inactive language */
+  --color-link: #734c90;             /* 5.6:1 */
+  --color-link-hover: #291435;
+  --color-button: #291435;
+  --color-button-text: #ffffff;
+  --color-button-outline: #a08f79;   /* Stone */
+  --color-button-hover: #d0c2b1;     /* Beige */
+  --color-ghost-hover: #d0c2b1;
+  --color-tip-bg: #291435;           /* Tooltip: Deep purple, white text */
+  --color-tip-text: #ffffff;
+  --color-tip-border: transparent;
+  --color-tip-shadow: rgb(0 0 0 / 0.22);
+  --color-tip-close-hover: rgb(255 255 255 / 0.1);  /* Ghost button hover on the pop-up */
+  --color-pink: #fd70f5;             /* As text on light: 2.0:1, the deck's documented eyebrow exception */
+  --color-pink-tint: #dcbaf6;        /* Selected box: Pale purple */
+  --color-technical: #0d5054;        /* Technical reference: Teal, 7.7:1 */
+  --color-error: #b2364a;            /* Red, 5.0:1 */
+  --color-disabled-bg: #f4f5f6;
+  --color-disabled-ink: #aeb8be;
+  --color-disabled-line: #aeb8be;
+  --color-disabled-opacity: 1;
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --gutter: max(16px, 2.25rem);
+  /* Corner radii: the design system's sm 6px, md 9px and lg 14px as they measure on a
+     1440 × 900 screen, in em of the diagram's text (rem for the header and pop-up),
+     so the corners scale with the page. */
+  --radius-sm: 0.475em;              /* Boxes */
+  --radius-md: 0.71em;               /* Layer panels */
+  --radius-lg: 1.11em;               /* The server core */
+  --radius-ui-sm: 0.41rem;           /* Language tabs, pop-up */
+  --radius-ui-md: 0.61rem;           /* Buttons */
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #291435;               /* Deep purple */
+  --color-title: #ffffff;            /* 16.9:1 */
+  --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
+  --color-body: #f2eae1;             /* Cream, 14.2:1 */
+  --color-text: #f2eae1;
+  --color-text-muted: #a08f79;       /* Stone, 5.4:1 */
+  --color-layer: #321d3e;            /* Marshmallow 5% over Deep purple */
+  --color-cross: #372343;            /* 8% */
+  --color-control: #372343;
+  --color-component: #402c4c;        /* 13%; Cream on it 10.5:1 */
+  --color-component-border: #544161; /* 24% */
+  --color-component-shadow: none;
+  --color-core-outline: #dcbaf6;     /* Pale purple */
+  --color-boundary: #dcbaf6;
+  --color-focus: #fd70f5;
+  --color-tab: #aeb8be;              /* Grey, 8.3:1 */
+  --color-link: #dcbaf6;             /* 10:1 */
+  --color-link-hover: #ffffff;
+  --color-button: #f2eae1;
+  --color-button-text: #291435;
+  --color-button-outline: #a08f79;
+  --color-button-hover: #544b40;
+  --color-ghost-hover: #7d705f;
+  --color-tip-bg: #f5e8ff;           /* Tooltip: Marshmallow, Deep purple text */
+  --color-tip-text: #291435;
+  --color-tip-border: transparent;
+  --color-tip-shadow: rgb(0 0 0 / 0.22);
+  --color-tip-close-hover: rgb(41 20 53 / 0.06);
+  --color-pink-tint: #734c90;        /* Selected box: Mid purple; Cream on it 5.6:1 */
+  --color-technical: #63bcc1;        /* River, 7.6:1 */
+  --color-error: #fe7a8b;            /* Rose, 6.7:1 */
+  --color-disabled-bg: #ffffff;
+  --color-disabled-ink: #291435;
+  --color-disabled-line: #63737d;
+  --color-disabled-opacity: 0.3;
+}
+
+/* The page scales like a slide: everything is sized in rem, and the root size
+   follows the smaller of the viewport's width and height so the whole page
+   fits on one landscape screen. */
+html {
+  font-size: clamp(11px, min(1.02vw, 1.8vh), 19px);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Portrait, small and short screens (phones held sideways) scroll instead,
+   at a comfortable reading size. */
+@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
+  html { font-size: 15px; }
+}
 
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --color-bg-top: #1d0d26;
-  --color-bg-bottom: #283f33;
-  --color-accent: #fd70f5;
-  --color-gold: #b09273;
-  --color-text: #ffffff;
-  --color-btn-text: #1f1428;
-
-  --font-family: 'Space Grotesk', system-ui, sans-serif;
-  --content-width: 600px;
-  --page-padding: 24px;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+*::after { box-sizing: border-box; }
 
 body {
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 32px;
+  margin: 0;
+  background: var(--color-bg);
   color: var(--color-text);
-  background: linear-gradient(180deg, var(--color-bg-top) 66.125%, var(--color-bg-bottom) 100%);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-sans);
+  line-height: 1.35;
 }
 
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
+p { margin: 0; }
 
-a {
-  color: inherit;
-}
+a { color: inherit; }
 
-/* ── Utility classes ────────────────────────────────────────── */
-
-.text-accent {
-  color: var(--color-accent);
-}
-
-.text-gold {
-  color: var(--color-gold);
-}
-
-.text-bold {
-  font-weight: 700;
-}
-
-.text-medium {
-  font-weight: 500;
-}
-
-/* ── Hero ───────────────────────────────────────────────────── */
-
-.hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 820px;
-  padding: 0 var(--page-padding) 80px;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
   overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.hero__video-wrap {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 0;
-}
+/* --- Page frame ---------------------------------------------------------- */
 
-.hero__video {
-  width: 100%;
-  max-width: 1584px;
-  height: 792px;
-  object-fit: cover;
-  opacity: 0.4;
-}
-
-.hero__content {
-  position: relative;
-  z-index: 1;
+.page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 48px;
-  width: 100%;
-  max-width: 900px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
 }
 
-.hero__logo {
-  width: min(845px, 90vw);
-  height: auto;
-}
-
-.hero__tagline {
-  font-weight: 500;
-  font-size: 54px;
-  line-height: 60px;
-  letter-spacing: -1.08px;
-  color: var(--color-accent);
-  white-space: nowrap;
-}
-
-.hero__arrow-link {
-  display: inline-flex;
-  margin-top: 16px;
-  border-radius: 8px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.hero__arrow-link:hover {
-  opacity: 0.7;
-  transform: translateY(3px);
-}
-
-.hero__arrow-link:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 4px;
-}
-
-.hero__arrow {
-  width: 32px;
-  height: 32px;
-}
-
-/* ── Language toggle ────────────────────────────────────────── */
-
-.lang-toggle {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 2;
+.site-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 16px;
+  flex-wrap: wrap;
+  gap: 0.75rem 0.6rem;
+  padding: 0.95rem 0 0.35rem;
+}
+
+.codename {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45em;
+  margin-right: auto;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.01em;
 }
 
-.lang-toggle a {
+/* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline.
+   The light or dark file shows with the theme. */
+.codename img { display: block; width: auto; height: 1.2em; }
+.codename .logo--dark,
+:root[data-theme="dark"] .codename .logo--light { display: none; }
+:root[data-theme="dark"] .codename .logo--dark { display: block; }
+/* The code-like label takes the technical-reference color. */
+.codename > span { color: var(--color-technical); }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Language and theme switches, side by side. */
+.prefs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.4rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* Ghost icon button. */
+.theme-toggle:hover { background: var(--color-ghost-hover); }
+.theme-toggle svg { width: 1.1rem; height: 1.1rem; }
+/* The icon shows the theme a click switches to. */
+.theme-toggle__sun,
+:root[data-theme="dark"] .theme-toggle__moon { display: none; }
+:root[data-theme="dark"] .theme-toggle__sun { display: block; }
+
+.lang {
+  display: flex;
+  gap: 0.1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.lang a {
+  padding: 0.35em 0.45em;
+  border-radius: var(--radius-ui-sm);
+  color: var(--color-tab);
   text-decoration: none;
-  opacity: 0.55;
-  transition: opacity 0.2s ease;
 }
 
-.lang-toggle a:hover,
-.lang-toggle a:focus-visible {
-  opacity: 1;
+.lang a:hover { color: var(--color-text); }
+
+/* Nav tab: the active language bold, with a Magenta underline. */
+.lang a[aria-current] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline 2px var(--color-pink);
+  text-underline-offset: 0.45em;
 }
 
-.lang-toggle a[aria-current="page"] {
-  opacity: 1;
-  color: var(--color-accent);
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1em;
+  border: 1.5px solid var(--color-button-outline);
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.lang-toggle span {
-  opacity: 0.4;
+.btn svg { flex: none; width: 1.1em; height: 1.1em; }
+.btn:hover { background: var(--color-button-hover); }
+/* While the image is prepared the button takes the disabled colors; a failure shows in
+   the error color, with no hover fill so the red keeps its contrast. */
+.btn[aria-busy="true"] {
+  border-color: var(--color-disabled-line);
+  background: var(--color-disabled-bg);
+  color: var(--color-disabled-ink);
+  opacity: var(--color-disabled-opacity);
+  cursor: progress;
 }
+.btn.is-error,
+.btn.is-error:hover { border-color: var(--color-error); background: transparent; color: var(--color-error); }
 
-/* ── Main content ───────────────────────────────────────────── */
+.btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
+.btn--primary:hover { background: var(--color-button); opacity: 0.88; }
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
 
 main {
-  padding: 0 var(--page-padding) 80px;
-  scroll-margin-top: 24px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-top: 0.8rem;
 }
 
-.content {
-  max-width: var(--content-width);
-  margin: 0 auto;
+/* --- Intro --------------------------------------------------------------- */
+
+.intro { margin-bottom: 0.95rem; }
+
+.eyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--color-pink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.content__headline {
-  font-weight: 500;
-  font-size: 32px;
-  line-height: normal;
-  text-align: center;
-  margin-bottom: 91px;
+h1 {
+  margin: 0 0 0.85rem;
+  color: var(--color-title);
+  font-size: 2.35rem;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.content__body p {
-  margin-bottom: 32px;
+.goal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  font-size: 0.9rem;
 }
 
-.content__body p:last-child {
-  margin-bottom: 0;
+.goal__lead { color: var(--color-body); font-weight: 500; }
+
+/* Words wrapped in *asterisks* in the copy files (none at the moment). Semibold so
+   the pink reads the same as the label next to the ink text. */
+.hl { background: none; color: var(--color-pink); font-weight: 600; }
+
+.goal__points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.content__cta {
-  margin-top: 20px;
+.goal__point {
+  padding-top: 0.45rem;
+  border-top: 1.5px solid var(--color-header);
 }
 
-.content__subtext {
-  margin-top: 36px;
-  font-size: 24px;
-  line-height: 32px;
+.goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
+.goal__point-text { display: block; color: var(--color-body); }
+
+/* --- Architecture diagram -----------------------------------------------
+   Sized in em so the downloaded image can render it at a fixed size.       */
+
+.arch-figure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  container: arch / inline-size;
 }
 
-/* ── CTA button ─────────────────────────────────────────────── */
+.hint {
+  margin-bottom: 0.4rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
 
-.cta {
-  display: inline-flex;
-  align-items: center;
+.arch {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 4.4fr) repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-areas:
+    "application   application   application   ."
+    "sdk           sdk           sdk           ."
+    "boundary      boundary      boundary      boundary"
+    "core          security      observability control";
+  gap: 0.5em 0.7em;
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+.arch > [data-copy="application"]   { grid-area: application; }
+.arch > [data-copy="sdk"]           { grid-area: sdk; }
+.arch > .boundary                   { grid-area: boundary; }
+.arch > .core                       { grid-area: core; }
+.arch > [data-copy="security"]      { grid-area: security; }
+.arch > [data-copy="observability"] { grid-area: observability; }
+.arch > [data-copy="controlPlane"]  { grid-area: control; }
+
+.label { display: flex; flex-direction: column; gap: 0.15em; }
+.label__name { font-weight: 600; }
+.label__detail { color: var(--color-text-muted); font-size: 0.84em; line-height: 1.2; }
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  padding: 0.55em 0.65em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--color-layer);
+}
+
+.layer > .label .label__name { color: var(--color-header); font-size: 1.1em; }
+
+.layer__items {
+  display: flex;
+  flex: 1;
+  gap: 0.55em;
+}
+
+.comp {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
   justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 12px 24px;
-  background: var(--color-accent);
-  color: var(--color-btn-text);
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 1.5;
-  letter-spacing: 0.07px;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: opacity 0.2s ease;
+  gap: 0.4em;
+  min-width: 0;
+  padding: 0.5em 0.65em;
+  border: 1px solid var(--color-component-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-component);
+  box-shadow: var(--color-component-shadow);
+  text-align: center;
 }
 
-.cta:hover {
-  opacity: 0.85;
-}
-
-.cta:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-/* ── Footer ─────────────────────────────────────────────────── */
-
-.footer {
-  padding: 80px var(--page-padding) 60px;
-  max-width: calc(var(--content-width) + 2 * var(--page-padding));
-  margin: 0 auto;
-}
-
-.footer__label {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  margin-bottom: 47px;
-}
-
-.footer__logos {
-  display: flex;
+/* Application and SDK: one row each, name on the left. */
+.layer--row {
+  flex-direction: row;
   align-items: center;
-  gap: 40px;
-  margin-bottom: 80px;
+  gap: 0.65em;
+  padding: 0.4em 0.65em;
 }
 
-.footer__logo--mozilla {
-  width: 300px;
-  height: auto;
-}
+.layer--row > .label { flex: 0 0 8.5em; }
+.layer--row .comp { padding: 0.35em 0.5em; }
 
-.footer__logo--mila {
-  width: 300px;
-  height: auto;
-}
-
-.footer__links {
+/* Local / Server line. */
+.boundary {
+  position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55em;
+  margin: 0.1em 0;
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.boundary::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  border-top: 2px dashed var(--color-boundary);
+  transform: translateY(-50%);
+}
+
+.boundary__label { padding: 0 0.2em; line-height: 1.1; }
+
+/* The server-side core: the four layers and the registry. */
+.core {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 1fr 1fr auto;
+  gap: 0.6em;
+  padding: 0.6em;
+  border: 2.5px solid var(--color-core-outline);
+  border-radius: var(--radius-lg);
+}
+
+.core > [data-copy="registry"] { grid-column: 1 / -1; }
+
+.layer--stack .layer__items { flex-direction: column; }
+
+.layer--registry > .label {
+  flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  font-size: 14px;
-  line-height: 24px;
+  align-items: baseline;
+  gap: 0.2em 0.7em;
 }
 
-.footer__links a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
+/* Security, Observability, Control Plane: tall columns beside the core. */
+.layer--cross {
+  gap: 0.75em;
+  padding: 0.65em 0.55em;
+  background: var(--color-cross);
 }
 
-.footer__links a:hover {
-  opacity: 0.8;
+.layer--cross .layer__items {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 0.55em;
 }
 
-/* ── Reduced motion ─────────────────────────────────────────── */
+.layer--cross .comp {
+  padding: 0.5em 0.55em;
+  overflow-wrap: break-word;
+}
+
+.layer--control { background: var(--color-control); }
+
+/* Hover, tap and keyboard focus. */
+[data-copy] { cursor: default; }
+[data-copy]:focus { outline: none; }
+
+/* The active box turns pink; keyboard focus keeps the ink outline, which meets
+   contrast on both grounds. */
+[data-copy].is-active { outline: 2px solid var(--color-pink); outline-offset: 1px; }
+.comp.is-active { border-color: var(--color-pink); background: var(--color-pink-tint); }
+[data-copy]:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+
+.layer.is-active,
+.layer:focus-visible { outline-offset: 2px; }
+
+/* Narrower screens: the cross-cutting layers move below the core. */
+@container arch (max-width: 860px) {
+  .arch {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-template-areas:
+      "application   application   application"
+      "sdk           sdk           sdk"
+      "boundary      boundary      boundary"
+      "core          core          core"
+      "security      observability control";
+  }
+
+  .layer--cross .layer__items { grid-template-rows: none; }
+}
+
+/* Phones: everything in a single column. */
+@container arch (max-width: 640px) {
+  .arch {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "application"
+      "sdk"
+      "boundary"
+      "core"
+      "security"
+      "observability"
+      "control";
+  }
+
+  .layer--row { flex-direction: column; align-items: stretch; }
+  .layer--row > .label { flex: none; }
+  .layer__items { flex-wrap: wrap; }
+  .layer:not(.layer--stack) > .layer__items > .comp { flex-basis: 9em; }
+  .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .layer--cross .layer__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* --- Pop-up -------------------------------------------------------------- */
+
+.tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  max-width: min(23rem, calc(100vw - 32px));
+  padding: 0.7rem 0.9rem 0.8rem;
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-tip-bg);
+  box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 8px 24px var(--color-tip-shadow);
+  color: var(--color-tip-text);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.12s ease, visibility 0s linear 0.12s;
+}
+
+.tip.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.12s ease;
+}
+
+.tip__kind {
+  margin-bottom: 0.2rem;
+  color: var(--color-pink);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
+
+/* Phones: the pop-up is a panel along the bottom of the screen, in the same
+   colors as the tooltip: the inverse of the page. */
+.tip.tip--sheet {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: none;
+  padding: 1rem var(--gutter) 1.25rem;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -8px 24px var(--color-tip-shadow);
+  font-size: 0.95rem;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(100%);
+  transition: transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.tip.tip--sheet.is-visible { transform: none; transition: transform 0.18s ease; }
+
+/* Close button, phone panel only: the design system's small ghost icon button. The
+   kind and name lines keep clear of it. */
+.tip__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tip__close svg { width: 20px; height: 20px; }
+.tip__close:hover { background: var(--color-tip-close-hover); }
+.tip--sheet .tip__close { display: grid; }
+.tip--sheet .tip__kind,
+.tip--sheet .tip__name { padding-right: 2.5rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .hero__video-wrap {
-    display: none;
-  }
-
-  .hero__video {
-    display: none;
-  }
-
-  .hero__arrow-link {
-    transition: opacity 0.2s ease;
-  }
-
-  .hero__arrow-link:hover {
-    transform: none;
-  }
+  .tip,
+  .tip.is-visible,
+  .tip.tip--sheet,
+  .tip.tip--sheet.is-visible { transition: none; }
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
+/* --- Footer -------------------------------------------------------------- */
 
-@media (max-width: 768px) {
-  body {
-    font-size: 18px;
-    line-height: 28px;
-  }
-
-  .hero {
-    min-height: 600px;
-    padding-top: 0;
-  }
-
-  .hero__video {
-    height: 500px;
-  }
-
-  .hero__tagline {
-    font-size: 36px;
-    line-height: 42px;
-    letter-spacing: -0.72px;
-    white-space: normal;
-  }
-
-  .hero__content {
-    gap: 32px;
-  }
-
-  .content__headline {
-    font-size: 24px;
-    margin-bottom: 48px;
-  }
-
-  .content__subtext {
-    font-size: 18px;
-    line-height: 28px;
-  }
-
-  .footer__logos {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 32px;
-  }
-
-  .footer__logo--mozilla {
-    width: 220px;
-  }
-
-  .footer__logo--mila {
-    width: 220px;
-  }
+.site-footer {
+  padding: 0.7rem 0 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
 }
+
+.site-footer a {
+  color: var(--color-link);
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+
+.site-footer a:hover { color: var(--color-link-hover); }
+
+.noscript { padding: 1rem var(--gutter); }
+
+/* Phones: two header rows, the codename with the language and theme switches,
+   then both buttons. */
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+
+  .site-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "codename prefs" "actions actions";
+  }
+
+  .codename { grid-area: codename; margin-right: 0; }
+  .prefs { grid-area: prefs; margin-right: 0; }
+  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; }
+  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
+}
+
+/* Intro on narrower screens. */
+@media (max-width: 1000px), (max-aspect-ratio: 1/1) {
+  .goal { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+}
+
+@media (max-width: 640px) {
+  .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+}
+
+/* --- Downloaded image ----------------------------------------------------
+   The diagram is cloned into this off-screen 16:9 slide (1920 × 1080, saved at
+   twice that) with a legend, whatever the size of the visitor's screen. The
+   script lowers --export-scale until everything fits.                       */
+
+.export-stage {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
+.export-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  padding: 40px 48px 32px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.35;
+  container: arch / inline-size;
+  --export-scale: 1;
+}
+
+.export-sheet .arch { flex: none; font-size: calc(14px * var(--export-scale)); }
+
+/* Legend: one group per layer, split by the script into five balanced columns.
+   It keeps its natural height so the fit check sees any overflow. */
+.export-legend {
+  display: flex;
+  flex: none;
+  gap: 32px;
+  color: var(--color-body);
+  font-size: calc(12px * var(--export-scale));
+  line-height: 1.35;
+}
+
+.export-legend__column { flex: none; width: calc((100% - 4 * 32px) / 5); }
+.export-legend__group { margin-bottom: 0.9em; }
+.export-legend__group h3 { margin: 0 0 0.2em; color: var(--color-header); font-size: 1.15em; font-weight: 600; }
+.export-legend__about { margin-bottom: 0.45em; color: var(--color-text-muted); }
+.export-legend__item { margin-bottom: 0.35em; }
+.export-legend__item strong { color: var(--color-text); font-weight: 600; }
+
+.export-sheet__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.export-sheet__site { color: var(--color-text-muted); font-size: 17px; font-weight: 500; }
+
+.export-sheet__title { color: var(--color-title); font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+
+.export-sheet__foot { margin-top: auto; color: var(--color-text-muted); font-size: 14px; }

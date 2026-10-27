@@ -1,127 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cairn — The opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <!-- Pre-launch: remove before going public -->
-  <meta name="robots" content="noindex, nofollow">
-  <title>Cairn — The opinionated, sovereign, open source AI stack</title>
-  <link rel="canonical" href="https://opencairn.ai/">
-  <link rel="alternate" hreflang="en" href="https://opencairn.ai/">
-  <link rel="alternate" hreflang="fr" href="https://opencairn.ai/fr/">
-  <link rel="alternate" hreflang="x-default" href="https://opencairn.ai/">
-
-  <!-- Open Graph / social sharing -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Cairn">
-  <meta property="og:title" content="Cairn — The opinionated, sovereign, open source AI stack">
-  <meta property="og:description" content="Cairn is a research collaboration between Mozilla and Mila to design and prove out an opinionated, sovereign, open source AI stack.">
-  <meta property="og:url" content="https://opencairn.ai/">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:locale:alternate" content="fr_CA">
-  <meta property="og:image" content="https://opencairn.ai/assets/images/og-cover-en.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Cairn — the opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cairn — The opinionated, sovereign, open source AI stack">
-  <meta name="twitter:description" content="Cairn is a research collaboration between Mozilla and Mila to design and prove out an opinionated, sovereign, open source AI stack.">
-  <meta name="twitter:image" content="https://opencairn.ai/assets/images/og-cover-en.png">
-  <meta name="twitter:image:alt" content="Cairn — the opinionated, sovereign, open source AI stack. A collaboration between Mila and Mozilla.">
-  <link rel="icon" href="/favicon.ico" sizes="48x48">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#1d0d26">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f6f1">
+<script>
+  // Sets the theme before the first paint: the visitor's last choice, else the system setting.
+  (function () {
+    var theme;
+    try { theme = localStorage.getItem("cairn-theme"); } catch (e) {}
+    if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+  })();
+</script>
+<!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
+     the English values here serve link previews and crawlers that do not run scripts. -->
+<title>Cairn: The open source AI inference stack architecture</title>
+<meta name="description" content="An open architecture for the AI inference stack. Clear interface contracts connect all layers and components, so you can replace any component. The reference implementation uses the best open source components. A Mozilla × Mila research collaboration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cairn: The open source AI inference stack architecture">
+<meta property="og:description" content="An open architecture for the AI inference stack. Clear interface contracts connect all layers and components, so you can replace any component. The reference implementation uses the best open source components. A Mozilla × Mila research collaboration.">
+<meta property="og:url" content="https://opencairn.ai/">
+<!-- Share card: rendered from reference/og-card/og-card.html (see the comment there). -->
+<meta property="og:image" content="https://opencairn.ai/assets/og-card.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="Introducing the open source AI inference stack: a layered architecture diagram. A Mozilla × Mila research collaboration.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://opencairn.ai/assets/og-card.png">
+<link rel="canonical" href="https://opencairn.ai/">
+<link rel="alternate" hreflang="en" href="https://opencairn.ai/?lang=en">
+<link rel="alternate" hreflang="fr-CA" href="https://opencairn.ai/?lang=fr">
+<link rel="alternate" hreflang="x-default" href="https://opencairn.ai/">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__video-wrap" aria-hidden="true">
-      <video class="hero__video" autoplay muted loop playsinline>
-        <source src="assets/video/cairn-header.webm" type="video/webm">
-        <source src="assets/video/cairn-header.mp4" type="video/mp4">
-      </video>
+<div class="page">
+
+  <header class="site-header">
+    <p class="codename"><span data-text="header.codename"></span><img class="logo--light" src="assets/cairn-logo.svg" alt="Cairn" width="1829" height="611"><img class="logo--dark" src="assets/cairn-logo-cream.svg" alt="Cairn" width="1829" height="611"></p>
+    <div class="prefs">
+      <nav class="lang" data-aria-label="header.languageLabel">
+        <a href="?lang=en" hreflang="en" lang="en">EN</a>
+        <a href="?lang=fr" hreflang="fr-CA" lang="fr-CA">FR</a>
+      </nav>
+      <button type="button" class="theme-toggle" id="theme-toggle">
+        <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
     </div>
-
-    <nav class="lang-toggle" aria-label="Language">
-      <a href="/" lang="en" hreflang="en" aria-current="page">EN</a>
-      <span aria-hidden="true">/</span>
-      <a href="/fr/" lang="fr" hreflang="fr">FR</a>
-    </nav>
-
-    <div class="hero__content">
-      <img class="hero__logo" src="assets/images/logo.svg" alt="Cairn" width="845" height="283">
-
-      <p class="hero__tagline">
-        The opinionated, sovereign,<br>
-        open source AI stack.
-      </p>
-
-      <a class="hero__arrow-link" href="#content" aria-label="Scroll to content">
-        <img class="hero__arrow" src="assets/images/arrow.svg" alt="" width="32" height="32">
+    <div class="header-actions">
+      <button type="button" class="btn" id="download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span data-text="header.download"></span>
+      </button>
+      <a class="btn btn--primary" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+        <span data-text="header.github"></span>
       </a>
     </div>
   </header>
 
-  <main id="content">
-    <section class="content">
-      <h1 class="content__headline">
-        Model capability isn't the bottleneck.<br>
-        Deployment&nbsp;is.
-      </h1>
-
-      <div class="content__body">
-        <p>The last two years produced the models. Next we produce the stacks people can actually run them on. Cairn is Mozilla and Mila's foundational research on the architecture of one of those stacks: the specific layers, the contracts between them, and which open source components fit each layer. <span class="text-gold text-bold">Opinionated, sovereign, open source.</span></p>
-
-        <p>The starting frame is eight layers — application, orchestration, retrieval and memory, evaluation and observability, model serving, models, data, infrastructure — with cross-cutting concerns like authentication, governance, cost, and security spanning all of them. Which of those are really distinct layers, which merge, and where the set needs to split further is part of the research.</p>
-
-	<p>For each layer, the work is either selecting a component with rationale, or specifying the interface an adequate component would need to satisfy. Architecture is complete either way.</p>
-
-        <p class="text-accent text-bold">Cairn is trying to be for open source AI what Ubuntu was for Linux: a curated, opinionated distribution.</p>
-
-        <p>The picture we're designing against: your own frontier AI, running on your own machines. Your laptop, your data centre, your sovereign compute. One command to install, your data under your control, with governance and access control built in from the start, not bolted on after the demo.</p>
-
-        <p>Cairn is a collaboration between Mila, one of the world's leading AI research institutes, and Mozilla, the mission-driven organization behind Firefox and the broader open web. Mozilla is convening and investing. Mila is leading the research behind the technical direction. Designing the architecture and the contracts between the layers of an opinionated open source AI stack is exactly the kind of foundational question a research institute is positioned to answer.</p>
-
-        <p class="text-accent text-bold">Get notified when the code lands.</p>
-      </div>
-
-      <div class="content__cta">
-        <a class="cta" href="https://github.com/opencairn-ai" target="_blank" rel="noopener noreferrer">
-          <svg class="cta__icon" viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          Follow us on GitHub
-        </a>
-        <p class="content__subtext">
-	This page will update as the work does. Come back.
-        </p>
+  <main>
+    <section class="intro">
+      <p class="eyebrow" data-text="intro.eyebrow"></p>
+      <h1 data-text="intro.title"></h1>
+      <div class="goal">
+        <p class="goal__lead" data-text="intro.goal"></p>
+        <ul class="goal__points" id="goal-points"></ul>
       </div>
     </section>
+
+    <figure class="arch-figure">
+      <figcaption class="hint" data-text="diagram.hint"></figcaption>
+
+      <!-- The architecture. Each data-copy value points to an entry under `stack`
+           in the copy files, which provides its name and pop-up text. -->
+      <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
+
+        <div class="layer layer--row" data-copy="application">
+          <div class="layer__items">
+            <div class="comp" data-copy="application.chatUi"></div>
+            <div class="comp" data-copy="application.codingHarness"></div>
+            <div class="comp" data-copy="application.knowledgeWorkHarness"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--row" data-copy="sdk">
+          <div class="layer__items">
+            <div class="comp" data-copy="sdk.llmSdk"></div>
+            <div class="comp" data-copy="sdk.agentSdk"></div>
+          </div>
+        </div>
+
+        <div class="boundary">
+          <span class="boundary__label" data-copy="local"></span>
+          <span class="boundary__label" data-copy="server"></span>
+        </div>
+
+        <div class="core">
+          <div class="layer layer--stack" data-copy="persistence">
+            <div class="layer__items">
+              <div class="comp" data-copy="persistence.semanticSearch"></div>
+              <div class="comp" data-copy="persistence.agentMemory"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--stack" data-copy="agentRuntime">
+            <div class="layer__items">
+              <div class="comp" data-copy="agentRuntime.localToolServer"></div>
+              <div class="comp" data-copy="agentRuntime.sandbox"></div>
+            </div>
+          </div>
+
+          <div class="layer" data-copy="modelAccess">
+            <div class="layer__items">
+              <div class="comp" data-copy="modelAccess.modelGateway"></div>
+              <div class="comp" data-copy="modelAccess.modelServer"></div>
+            </div>
+          </div>
+
+          <div class="layer" data-copy="toolAccess">
+            <div class="layer__items">
+              <div class="comp" data-copy="toolAccess.toolGateway"></div>
+              <div class="comp" data-copy="toolAccess.toolServer"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--registry" data-copy="registry">
+            <div class="layer__items">
+              <div class="comp" data-copy="registry.skillRegistry"></div>
+              <div class="comp" data-copy="registry.promptRegistry"></div>
+              <div class="comp" data-copy="registry.modelRegistry"></div>
+              <div class="comp" data-copy="registry.toolRegistry"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross" data-copy="security">
+          <div class="layer__items">
+            <div class="comp" data-copy="security.iam"></div>
+            <div class="comp" data-copy="security.guardrails"></div>
+            <div class="comp" data-copy="security.registryScanners"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross" data-copy="observability">
+          <div class="layer__items">
+            <div class="comp" data-copy="observability.telemetry"></div>
+            <div class="comp" data-copy="observability.costUsage"></div>
+            <div class="comp" data-copy="observability.agentTracing"></div>
+          </div>
+        </div>
+
+        <div class="layer layer--cross layer--control" data-copy="controlPlane">
+          <div class="layer__items">
+            <div class="comp" data-copy="controlPlane.adminConsole"></div>
+            <div class="comp" data-copy="controlPlane.deployment"></div>
+            <div class="comp" data-copy="controlPlane.policyTenancy"></div>
+            <div class="comp" data-copy="controlPlane.magicModel"></div>
+          </div>
+        </div>
+
+      </div>
+    </figure>
   </main>
 
-  <footer class="footer">
-    <p class="footer__label">A collaboration between</p>
-
-    <div class="footer__logos">
-      <a href="https://mozilla.org" target="_blank" rel="noopener noreferrer">
-        <img class="footer__logo footer__logo--mozilla" src="assets/images/mozilla-logo.svg" alt="Mozilla" width="300" height="72">
-      </a>
-      <a href="https://mila.quebec" target="_blank" rel="noopener noreferrer">
-        <img class="footer__logo footer__logo--mila" src="assets/images/mila-logo.png" alt="Mila" width="210" height="116">
-      </a>
-    </div>
-
-    <nav class="footer__links" aria-label="Footer">
-      <a href="mailto:bonjourhi@opencairn.ai">Contact</a>
-    </nav>
-
+  <footer class="site-footer">
+    <p id="collaboration"></p>
   </footer>
+
+</div>
+
+<div class="tip" id="tip" aria-hidden="true">
+  <!-- Phone panel only. The pop-up is hidden from screen readers (they get each
+       description inline), so this button is a tap target, not a focus stop. -->
+  <button type="button" class="tip__close" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg></button>
+  <p class="tip__kind"></p>
+  <p class="tip__name"></p>
+  <p class="tip__text"></p>
+</div>
+
+<noscript><p class="noscript">This page needs JavaScript to display the architecture. · Cette page nécessite JavaScript pour afficher l’architecture.</p></noscript>
+
+<script src="copy/en.js"></script>
+<script src="copy/fr.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
