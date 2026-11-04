@@ -78,10 +78,15 @@
     </section>
 
     <figure class="arch-figure">
-      <figcaption class="hint" data-text="diagram.hint"></figcaption>
+      <figcaption class="hint">
+        <span data-text="diagram.hint"></span>
+        <ul class="legend" id="status-legend"></ul>
+      </figcaption>
 
       <!-- The architecture. Each data-copy value points to an entry under `stack`
-           in the copy files, which provides its name and pop-up text. -->
+           in the copy files, which provides its name and pop-up text.
+           data-status="alpha" marks the components in the Alpha release; layers
+           get the mark from their components. The label is in the copy files. -->
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
         <div class="layer layer--row" data-copy="application">
@@ -121,8 +126,8 @@
 
           <div class="layer" data-copy="modelAccess">
             <div class="layer__items">
-              <div class="comp" data-copy="modelAccess.modelGateway"></div>
-              <div class="comp" data-copy="modelAccess.modelServer"></div>
+              <div class="comp" data-copy="modelAccess.modelGateway" data-status="alpha"></div>
+              <div class="comp" data-copy="modelAccess.modelServer" data-status="alpha"></div>
             </div>
           </div>
 
@@ -145,7 +150,7 @@
 
         <div class="layer layer--cross" data-copy="security">
           <div class="layer__items">
-            <div class="comp" data-copy="security.iam"></div>
+            <div class="comp" data-copy="security.iam" data-status="alpha"></div>
             <div class="comp" data-copy="security.guardrails"></div>
             <div class="comp" data-copy="security.registryScanners"></div>
           </div>
@@ -153,18 +158,18 @@
 
         <div class="layer layer--cross" data-copy="observability">
           <div class="layer__items">
-            <div class="comp" data-copy="observability.telemetry"></div>
-            <div class="comp" data-copy="observability.costUsage"></div>
+            <div class="comp" data-copy="observability.telemetry" data-status="alpha"></div>
+            <div class="comp" data-copy="observability.costUsage" data-status="alpha"></div>
             <div class="comp" data-copy="observability.agentTracing"></div>
           </div>
         </div>
 
         <div class="layer layer--cross layer--control" data-copy="controlPlane">
           <div class="layer__items">
-            <div class="comp" data-copy="controlPlane.adminConsole"></div>
-            <div class="comp" data-copy="controlPlane.deployment"></div>
+            <div class="comp" data-copy="controlPlane.adminConsole" data-status="alpha"></div>
+            <div class="comp" data-copy="controlPlane.deployment" data-status="alpha"></div>
             <div class="comp" data-copy="controlPlane.policyTenancy"></div>
-            <div class="comp" data-copy="controlPlane.magicModel"></div>
+            <div class="comp" data-copy="controlPlane.magicModel" data-status="alpha"></div>
           </div>
         </div>
 
@@ -184,6 +189,7 @@
   <button type="button" class="tip__close" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg></button>
   <p class="tip__kind"></p>
   <p class="tip__name"></p>
+  <p class="tip__status"><span class="pill"></span></p>
   <p class="tip__text"></p>
 </div>
 

@@ -166,6 +166,11 @@
   // --- Diagram -------------------------------------------------------------
 
   function renderDiagram() {
+    // A layer gets the Alpha mark when one of its components has it.
+    for (const layer of diagram.querySelectorAll(".layer")) {
+      if (layer.querySelector('.comp[data-status="alpha"]')) layer.dataset.status = "alpha";
+    }
+
     for (const node of diagram.querySelectorAll("[data-copy]")) {
       const key = `stack.${node.dataset.copy}`;
       const entry = {
@@ -173,17 +178,41 @@
         name: t(`${key}.name`),
         detail: t(`${key}.detail`, { optional: true }),
         tooltip: t(`${key}.tooltip`),
+        status: node.dataset.status,
       };
 
-      // Screen readers get the pop-up text inline, right after the name.
-      const label = el("span", "label", [el("span", "label__name", entry.name)]);
+      // Screen readers get the status and the pop-up text inline, right after the name.
+      const name = entry.status ? nameWithMark(entry.name, entry.status) : entry.name;
+      const label = el("span", "label", [el("span", "label__name", name)]);
       if (entry.detail) label.append(el("span", "label__detail", entry.detail));
-      label.append(el("span", "sr-only", `. ${entry.tooltip}`));
+      const status = entry.status ? `. ${t(`diagram.status.${entry.status}`)}` : "";
+      label.append(el("span", "sr-only", `${status}. ${entry.tooltip}`));
 
       node.prepend(label);
       node.tabIndex = 0;
       entries.set(node, entry);
     }
+
+    document.getElementById("status-legend").replaceChildren(...statusLegend());
+  }
+
+  // One item per status: its mark and its label. Also used in the downloaded image.
+  function statusLegend() {
+    return ["alpha"].map((status) => el("li", null, [statusMark(status), t(`diagram.status.${status}`)]));
+  }
+
+  // Joins the mark to the last word of the name, so a line break cannot leave
+  // the mark alone on a line.
+  function nameWithMark(name, status) {
+    const at = name.lastIndexOf(" ") + 1;
+    return [name.slice(0, at), el("span", "label__tail", [name.slice(at), statusMark(status)])];
+  }
+
+  function statusMark(status) {
+    const mark = el("span", "status-mark");
+    mark.dataset.status = status;
+    mark.setAttribute("aria-hidden", "true");
+    return mark;
   }
 
   function kindOf(node) {
@@ -200,6 +229,8 @@
     const tipKind = tip.querySelector(".tip__kind");
     const tipName = tip.querySelector(".tip__name");
     const tipText = tip.querySelector(".tip__text");
+    const tipStatus = tip.querySelector(".tip__status");
+    const tipBadge = tipStatus.querySelector(".pill");
     let active = null;
 
     // Phones show the pop-up as a panel along the bottom of the screen (.tip--sheet).
@@ -219,6 +250,11 @@
       tipKind.textContent = t(`diagram.kinds.${entry.kind}`);
       tipName.textContent = entry.name;
       tipText.textContent = entry.tooltip;
+      tipStatus.hidden = !entry.status;
+      if (entry.status) {
+        tipBadge.dataset.status = entry.status;
+        tipBadge.textContent = t(`diagram.status.${entry.status}`);
+      }
       place(node);
       tip.classList.add("is-visible");
     }
@@ -360,7 +396,10 @@
       ]),
       clone,
       legend,
-      el("p", "export-sheet__foot", footerText()),
+      el("div", "export-sheet__foot", [
+        el("ul", "legend", statusLegend()),
+        el("p", null, footerText()),
+      ]),
     ]);
     const stage = el("div", "export-stage", sheet);
     stage.setAttribute("aria-hidden", "true");
