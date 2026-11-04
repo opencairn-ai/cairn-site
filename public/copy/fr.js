@@ -57,6 +57,12 @@ window.CAIRN_COPY.fr = {
   diagram: {
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
+    // Marque les composants et les couches de la version alpha, sur les cases, dans la
+    // légende et dans les infobulles. Une couche reçoit la marque quand un de ses
+    // composants l’a.
+    status: {
+      alpha: "Version alpha",
+    },
     // Petite étiquette affichée en haut de chaque infobulle.
     kinds: {
       boundary: "Frontière",

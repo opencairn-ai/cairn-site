@@ -57,6 +57,8 @@
   --color-disabled-ink: #aeb8be;
   --color-disabled-line: #aeb8be;
   --color-disabled-opacity: 1;
+  --color-status-alpha: #5c7065;     /* Alpha marks on boxes: Moss 5.3:1 */
+  --color-badge-alpha: #283f33;      /* Pop-up badges, white text: Forest green 11.4:1 */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -108,6 +110,8 @@
   --color-disabled-ink: #291435;
   --color-disabled-line: #63737d;
   --color-disabled-opacity: 0.3;
+  --color-status-alpha: #bdcbc3;     /* Light Moss 7.4:1 on boxes */
+  --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -363,11 +367,51 @@ h1 {
   container: arch / inline-size;
 }
 
+/* The hint, with the legend on the right (below it when space runs out). */
 .hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem 1.5rem;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
   font-size: 0.78rem;
 }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend li { display: inline-flex; align-items: center; gap: 0.4em; }
+
+/* Alpha mark: a filled dot on the components and layers in the Alpha release.
+   Layers show it after their name. Components show it in their top-right corner,
+   or after their name on narrow screens (see the arch container queries). */
+.status-mark,
+.comp[data-status]::after {
+  flex: none;
+  width: 0.62em;
+  height: 0.62em;
+  border: 1.5px solid var(--status-color);
+  border-radius: 50%;
+  background: var(--status-fill);
+}
+
+[data-status="alpha"] { --status-color: var(--color-status-alpha); --status-fill: var(--color-status-alpha); }
+
+.comp[data-status] { position: relative; }
+.comp[data-status]::after { content: ""; position: absolute; top: 0.5em; right: 0.5em; }
+
+/* In a name, the mark stays joined to the last word (.label__tail). */
+.label__tail { white-space: nowrap; }
+.label .status-mark { display: inline-block; margin-left: 0.4em; vertical-align: 0.05em; }
+.comp .label .status-mark { display: none; }
 
 .arch {
   display: grid;
@@ -534,6 +578,11 @@ h1 {
   }
 
   .layer--cross .layer__items { grid-template-rows: none; }
+
+  /* Boxes get short here, often one line: the Alpha mark follows the name, as
+     on layers, so it cannot touch the text. */
+  .comp[data-status]::after { content: none; }
+  .comp .label .status-mark { display: inline-block; }
 }
 
 /* Phones: everything in a single column. */
@@ -595,6 +644,21 @@ h1 {
 }
 
 .tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
+.tip__status { margin-bottom: 0.4rem; }
+.tip__status[hidden] { display: none; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.65em;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pill[data-status="alpha"] { background: var(--color-badge-alpha); }
 
 /* Phones: the pop-up is a panel along the bottom of the screen, in the same
    colors as the tooltip: the inverse of the page. */
@@ -751,4 +815,14 @@ h1 {
 
 .export-sheet__title { color: var(--color-title); font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
 
-.export-sheet__foot { margin-top: auto; color: var(--color-text-muted); font-size: 14px; }
+.export-sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: auto;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.export-sheet__foot .legend { gap: 18px; }

@@ -54,6 +54,11 @@ window.CAIRN_COPY.en = {
   diagram: {
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",
+    // Marks the components and layers in the Alpha release, on the boxes, in the
+    // legend and in the pop-ups. A layer gets the mark when one of its components has it.
+    status: {
+      alpha: "Alpha release",
+    },
     // Small label shown at the top of each pop-up.
     kinds: {
       boundary: "Boundary",
