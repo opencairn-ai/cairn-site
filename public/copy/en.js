@@ -15,7 +15,7 @@
 window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {
   meta: {
-    title: "Cairn: The open source AI inference stack architecture",
+    title: "Cairn: The sovereign, open source AI stack architecture",
     description: "An open architecture for the AI inference stack. Clear interface contracts connect all layers and components, so you can replace any component. The reference implementation uses the best open source components. A Mozilla × Mila research collaboration.",
   },
 
@@ -33,7 +33,7 @@ window.CAIRN_COPY.en = {
 
   intro: {
     eyebrow: "Technical Teaser",
-    title: "Introducing the open source AI inference stack",
+    title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
       {
