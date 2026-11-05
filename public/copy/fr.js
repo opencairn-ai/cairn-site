@@ -40,16 +40,16 @@ window.CAIRN_COPY.fr = {
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
       {
-        title: "Faire fonctionner tous les composants ensemble",
-        text: "Les composants qui respectent les mêmes contrats ne demandent aucun code d’intégration sur mesure.",
+        title: "Connecter les composants d’une couche à l’autre",
+        text: "Un composant qui respecte les contrats se connecte au reste de la pile avec un minimum de code d’intégration sur mesure.",
       },
       {
-        title: "Remplacer n’importe quel composant",
-        text: "Tout ce qui respecte le même contrat peut le remplacer. Le reste de la pile ne change pas.",
+        title: "Remplacer un composant",
+        text: "Utilisez un autre composant qui réussit les mêmes tests de contrat. Vous ne dépendez d’aucun projet ni d’aucun fournisseur.",
       },
       {
-        title: "Utiliser le meilleur du code source ouvert",
-        text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
+        title: "Partir de composants par défaut testés",
+        text: "Dans chaque couche, notre implémentation de référence utilise les composants à code source ouvert qui obtiennent les meilleurs résultats aux tests de contrat.",
       },
     ],
   },

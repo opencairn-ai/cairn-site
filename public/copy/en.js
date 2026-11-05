@@ -37,16 +37,16 @@ window.CAIRN_COPY.en = {
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
       {
-        title: "Make all components work together",
-        text: "Components that follow the same contracts need no custom integration code.",
+        title: "Connect components across layers",
+        text: "A component that follows the contracts connects to the rest of the stack with minimal custom integration code.",
       },
       {
-        title: "Replace any component",
-        text: "Anything that follows the same contract can replace it. The rest of the stack does not change.",
+        title: "Replace a component",
+        text: "Use another component that passes the same contract tests. You do not depend on one project or vendor.",
       },
       {
-        title: "Use the best of open source",
-        text: "We test open source projects against each contract. Our reference implementation uses the best one for each layer.",
+        title: "Start from tested defaults",
+        text: "In each layer, our reference implementation uses the open source components with the best contract test results.",
       },
     ],
   },
