@@ -16,7 +16,7 @@ window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {
   meta: {
     title: "Cairn: The sovereign, open source AI stack architecture",
-    description: "An open architecture for the AI inference stack. Clear interface contracts connect all layers and components, so you can replace any component. The reference implementation uses the best open source components. A Mozilla × Mila research collaboration.",
+    description: "An open architecture to run AI models and agents on infrastructure that your organization controls. Components follow clear interface contracts, so you do not depend on one project or vendor. A Mozilla × Mila research collaboration.",
   },
 
   header: {

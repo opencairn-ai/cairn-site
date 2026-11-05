@@ -19,7 +19,7 @@ window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.fr = {
   meta: {
     title: "Cairn : l’architecture de la pile d’IA souveraine à code source ouvert",
-    description: "Une architecture ouverte pour la pile d’inférence d’IA. Des contrats d’interface clairs relient toutes les couches et tous les composants, pour que vous puissiez remplacer n’importe quel composant. L’implémentation de référence utilise les meilleurs composants à code source ouvert. Une collaboration de recherche Mozilla × Mila.",
+    description: "Une architecture ouverte pour exécuter des modèles et des agents d’IA sur une infrastructure que votre organisation contrôle. Les composants respectent des contrats d’interface clairs, si bien que vous ne dépendez d’aucun projet ni d’aucun fournisseur. Une collaboration de recherche Mozilla × Mila.",
   },
 
   header: {
