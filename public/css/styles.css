@@ -109,16 +109,12 @@
 
 /* The page scales like a slide: everything is sized in rem, and the root size
    follows the smaller of the viewport's width and height so the whole page
-   fits on one landscape screen. */
+   fits on one landscape screen. V2.B is taller (columns under the core), so
+   height scaling is stricter than width. */
 html {
-  font-size: clamp(11px, min(1.02vw, 1.8vh), 19px);
+  font-size: clamp(11px, min(1.02vw, 1.55vh), 19px);
+  height: 100%;
   -webkit-text-size-adjust: 100%;
-}
-
-/* Portrait, small and short screens (phones held sideways) scroll instead,
-   at a comfortable reading size. */
-@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
-  html { font-size: 15px; }
 }
 
 *,
@@ -127,6 +123,8 @@ html {
 
 body {
   margin: 0;
+  height: 100%;
+  overflow: hidden;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
@@ -154,11 +152,25 @@ a { color: inherit; }
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   max-width: 120rem;
   margin: 0 auto;
   padding: 0 var(--gutter);
+  overflow: hidden;
+}
+
+/* Portrait, small and short screens (phones held sideways) scroll instead,
+   at a comfortable reading size. */
+@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
+  html { font-size: 15px; height: auto; }
+  body { height: auto; overflow: auto; }
+  .page {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+  }
 }
 
 .site-header {
@@ -285,6 +297,7 @@ main {
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
   padding-top: 0.8rem;
 }
 
@@ -320,7 +333,8 @@ h1 {
   font-size: 0.9rem;
 }
 
-.goal__lead { color: var(--color-body); font-weight: 500; }
+/* Same ink as the page title (h1), light and dark. */
+.goal__lead { color: var(--color-title); font-weight: 500; }
 
 /* Words wrapped in *asterisks* in the copy files (none at the moment). Semibold so
    the pink reads the same as the label next to the ink text. */
@@ -341,6 +355,8 @@ h1 {
 }
 
 .goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
+/* Dark: the three goal titles match the page title. */
+:root[data-theme="dark"] .goal__point-title { color: var(--color-title); }
 .goal__point-text { display: block; color: var(--color-body); }
 
 /* --- Architecture diagram -----------------------------------------------
@@ -350,6 +366,7 @@ h1 {
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
   margin: 0;
   container: arch / inline-size;
 }
@@ -363,6 +380,7 @@ h1 {
 .arch {
   display: grid;
   flex: 1;
+  min-height: 0;
   /* V2.B: the three columns sit under the core, not beside it. */
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-areas:
@@ -371,11 +389,13 @@ h1 {
     "boundary      boundary      boundary"
     "core          core          core"
     "security      observability control";
-  /* The core takes the leftover screen height. The columns keep their own height. */
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  /* Leftover height is shared so Persistence / Model Access / Security
+     internal boxes land at the same height (2-stack vs 3-stack). */
+  grid-template-rows: auto auto auto minmax(0, 1.45fr) minmax(0, 0.72fr);
   gap: 0.5em 0.7em;
   align-content: start;
-  font-size: 0.86rem;
+  /* A touch larger so names inside the boxes stay readable. */
+  font-size: 0.94rem;
   line-height: 1.25;
 }
 
@@ -396,7 +416,9 @@ h1 {
   flex-direction: column;
   gap: 0.5em;
   min-width: 0;
-  padding: 0.55em 0.65em 0.65em;
+  /* Padding absorbs the 2px border so the active stroke never shifts the box. */
+  padding: calc(0.55em - 2px) calc(0.65em - 2px) calc(0.65em - 2px);
+  border: 2px solid transparent;
   border-radius: var(--radius-md);
   background: var(--color-layer);
 }
@@ -421,7 +443,7 @@ h1 {
   gap: 0.4em;
   min-width: 0;
   padding: 0.5em 0.65em;
-  border: 1px solid var(--color-component-border);
+  border: 2px solid var(--color-component-border);
   border-radius: var(--radius-sm);
   background: var(--color-component);
   box-shadow: var(--color-component-shadow);
@@ -433,7 +455,7 @@ h1 {
   flex-direction: row;
   align-items: center;
   gap: 0.65em;
-  padding: 0.4em 0.65em;
+  padding: calc(0.4em - 2px) calc(0.65em - 2px);
 }
 
 .layer--row > .label { flex: 0 0 8.5em; }
@@ -444,7 +466,7 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 0;
   /* Pulls the line closer to the rows above and below. */
   margin: -0.2em 0;
@@ -486,6 +508,8 @@ h1 {
   position: relative;
   z-index: 1;
   padding: 0 0.2em;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
   line-height: 1.1;
   color: #a08f79;
   font-style: italic;
@@ -512,26 +536,20 @@ h1 {
   border-color: #c5ced3;
   box-shadow: none;
 }
-.is-out-of-scope.is-active { outline-color: #aeb8be; }
-.is-out-of-scope .comp.is-active {
-  border-color: #aeb8be;
-  background: #eef0f2;
-}
 .boundary__label.is-out-of-scope { color: #8b939a; background: none; }
 
-/* A hairline, a step darker than the gray ground, so the row reads as a shape. */
-.layer.is-out-of-scope { box-shadow: inset 0 0 0 0.5px #c5c9ce; }
+/* At rest the 2px border matches the gray ground, so it stays invisible until hover. */
+.layer.is-out-of-scope { border-color: #e6e8ea; }
 
 :root[data-theme="dark"] .is-out-of-scope { background: #3a3840; }
-:root[data-theme="dark"] .is-out-of-scope > .label .label__name,
-:root[data-theme="dark"] .is-out-of-scope .comp { color: #b7b3ae; }
+:root[data-theme="dark"] .is-out-of-scope > .label .label__name { color: #b7b3ae; }
 :root[data-theme="dark"] .is-out-of-scope .comp {
+  color: #b7b3ae;
   background: #4a4750;
   border-color: #6a6570;
 }
-:root[data-theme="dark"] .is-out-of-scope .comp.is-active { background: #54515a; }
 :root[data-theme="dark"] .boundary__label.is-out-of-scope { color: #b7b3ae; background: none; }
-:root[data-theme="dark"] .layer.is-out-of-scope { box-shadow: inset 0 0 0 0.5px #2c2a30; }
+:root[data-theme="dark"] .layer.is-out-of-scope { border-color: #3a3840; }
 
 /* The point on the dashed line. The dot stays at the middle; the name sits beside it. */
 .local-api {
@@ -542,12 +560,14 @@ h1 {
   display: flex;
   align-items: center;
   gap: 0.4em;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
   color: var(--color-boundary);
   /* Boundary type is 0.85em. Undo that so this name matches the Application label (1.1em). */
   font-size: calc(1.1em / 0.85);
   font-weight: 600;
-  /* Half the dot, so the dot (not the whole label) lands on the middle of the line. */
-  transform: translate(calc(-0.275em), -50%);
+  /* Half the dot, plus the 2px left border, so the dot stays on the bridge center. */
+  transform: translate(calc(-0.275em - 2px), -50%);
 }
 .local-api .label {
   flex-direction: row;
@@ -619,8 +639,9 @@ h1 {
 .core {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: 1fr 1fr auto;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 0.6em;
+  min-height: 0;
   padding: 0.6em;
   border: 2.5px solid var(--color-core-outline);
   border-radius: var(--radius-lg);
@@ -637,19 +658,28 @@ h1 {
   gap: 0.2em 0.7em;
 }
 
+/* Registry boxes sit a little taller than content alone, so they read closer
+   to the stacked boxes above. */
+.layer--registry .comp { height: 50px; }
+
 /* Security, Observability, Control Plane: a row under the core.
    A darker brown, kept translucent so the cream ground still lightens it. */
 .layer--cross {
   gap: 0.75em;
+  min-height: 0;
   /* 15px between the core and this row. The grid gap already covers part of it. */
   margin-top: calc(15px - 0.5em);
-  padding: 0.65em 0.55em;
+  padding: calc(0.65em - 2px) calc(0.55em - 2px);
   background: rgb(92 74 56 / 0.18);
 }
 
 .layer--cross .layer__items {
   display: grid;
+  flex: 1;
+  min-height: 0;
   gap: 0.55em;
+  /* Stretch each box so the three columns use the shared row height. */
+  grid-auto-rows: 1fr;
 }
 
 .layer--cross .comp {
@@ -669,10 +699,8 @@ h1 {
   opacity: 0.85;
 }
 
-.layer--control { background: rgb(92 74 56 / 0.18); }
 /* #1c0e28 at 70%, so more of the page purple shows through. */
-:root[data-theme="dark"] .layer--cross,
-:root[data-theme="dark"] .layer--control { background: rgb(28 14 40 / 0.7); }
+:root[data-theme="dark"] .layer--cross { background: rgb(28 14 40 / 0.7); }
 /* Pale purple, kept translucent so the deep purple page still shows through. */
 :root[data-theme="dark"] .core .layer { background: rgb(220 186 246 / 0.22); }
 /* Boxes inside those layers sit darker, on the page purple, so they read against the mauve. */
@@ -680,29 +708,48 @@ h1 {
 
 /* Hover, tap and keyboard focus. */
 [data-copy] { cursor: default; }
-[data-copy]:focus { outline: none; }
+/* Kill the page-wide focus ring on diagram nodes: the highlight is the box border. */
+[data-copy]:focus,
+[data-copy]:focus-visible { outline: none; }
 
-/* The active box turns pink; keyboard focus keeps the ink outline, which meets
-   contrast on both grounds. */
-[data-copy].is-active { outline: 2px solid var(--color-pink); outline-offset: 1px; }
-.comp.is-active { border-color: var(--color-pink); background: var(--color-pink-tint); }
-[data-copy]:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+/* One stroke only: recolor the box's own 2px border. No outer outline (that
+   sat on top of the border and shifted the highlight). Pink is for in-scope only. */
+.comp.is-active,
+.comp:focus-visible {
+  border-color: var(--color-pink);
+  background: var(--color-pink-tint);
+}
+.layer:not(.is-out-of-scope).is-active,
+.layer:not(.is-out-of-scope):focus-visible,
+.local-api.is-active,
+.local-api:focus-visible,
+.boundary__label:not(.is-out-of-scope).is-active,
+.boundary__label:not(.is-out-of-scope):focus-visible {
+  border-color: var(--color-pink);
+}
 
-.layer.is-active,
-.layer:focus-visible { outline-offset: 2px; }
-
-/* Narrower screens: the cross-cutting layers move below the core. */
-@container arch (max-width: 860px) {
-  .arch {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      "application   application   application"
-      "sdk           sdk           sdk"
-      "boundary      boundary      boundary"
-      "core          core          core"
-      "security      observability control";
-  }
+/* Upper gray stack (Application / SDK): same 2px border stroke, in gray, not pink. */
+.is-out-of-scope .comp.is-active,
+.is-out-of-scope .comp:focus-visible {
+  border-color: #8b939a;
+  background: #eef0f2;
+}
+.layer.is-out-of-scope.is-active,
+.layer.is-out-of-scope:focus-visible,
+.boundary__label.is-out-of-scope.is-active,
+.boundary__label.is-out-of-scope:focus-visible {
+  border-color: #8b939a;
+}
+:root[data-theme="dark"] .is-out-of-scope .comp.is-active,
+:root[data-theme="dark"] .is-out-of-scope .comp:focus-visible {
+  border-color: #c5c9ce;
+  background: #54515a;
+}
+:root[data-theme="dark"] .layer.is-out-of-scope.is-active,
+:root[data-theme="dark"] .layer.is-out-of-scope:focus-visible,
+:root[data-theme="dark"] .boundary__label.is-out-of-scope.is-active,
+:root[data-theme="dark"] .boundary__label.is-out-of-scope:focus-visible {
+  border-color: #c5c9ce;
 }
 
 /* Phones: everything in a single column. */
@@ -730,7 +777,7 @@ h1 {
   /* One box per line, so the long French names are not crushed into three columns. */
   .layer--row .layer__items { flex-direction: column; }
   .layer--row:not(.layer--stack) > .layer__items > .comp { flex: 1 1 auto; width: 100%; }
-  /* The French name is long. Cap it so it wraps before the Local label. */
+  /* The French name is long. Cap it so it wraps beside the Local label. */
   .local-api .label { max-width: 8.5em; }
   /* 5px more above and below the API than on desktop. */
   .boundary__line { min-height: calc(1em + 30px); }

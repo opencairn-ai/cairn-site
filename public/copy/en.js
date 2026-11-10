@@ -31,7 +31,7 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "Technical Teaser",
+    eyebrow: "Spec Sheet",
     title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
@@ -70,16 +70,16 @@ window.CAIRN_COPY.en = {
   //   tooltip: the short description that pops up on hover, tap or keyboard focus
   stack: {
     local: {
-      name: "Local",
+      name: "Local environment",
       tooltip: "Above the line: applications and SDKs. They run on user devices or inside your products, and connect to the stack through the stack API.",
     },
     server: {
-      name: "Server",
+      name: "Server side",
       tooltip: "Below the line: the stack. It runs on infrastructure that your organization controls: in-house, at a partner or at a compute provider.",
     },
     localApi: {
       name: "API Endpoint",
-      tooltip: "The point on the line where Local connects to the server.",
+      tooltip: "The point on the line where the local environment connects to the server side.",
     },
 
     application: {
