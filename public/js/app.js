@@ -114,8 +114,11 @@
       ...parts.map((part) => {
         const key = (part.match(/^\{(\w+)\}$/) || [])[1];
         if (!key) return document.createTextNode(part);
-        const link = el("a", null, t(`footer.${key}.name`));
+        const link = el("a", "ext-link", t(`footer.${key}.name`));
         link.href = t(`footer.${key}.url`);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.append(externalIcon());
         return link;
       })
     );
@@ -187,6 +190,7 @@
   }
 
   function kindOf(node) {
+    if (node.classList.contains("local-api")) return "endpoint";
     if (node.classList.contains("comp")) return "component";
     if (node.classList.contains("layer--cross")) return "crossCutting";
     if (node.classList.contains("layer")) return "layer";
@@ -406,6 +410,11 @@
         ...[...layer.querySelectorAll(".comp")].map(item),
       ]));
       if (layer.dataset.copy === "sdk") {
+        const api = diagram.querySelector(".local-api");
+        if (api) groups.push(el("section", "export-legend__group", [
+          el("h3", null, entries.get(api).name),
+          el("p", "export-legend__about", entries.get(api).tooltip),
+        ]));
         const sides = [...diagram.querySelectorAll(".boundary__label")];
         groups.push(el("section", "export-legend__group", [
           el("h3", null, sides.map((node) => entries.get(node).name).join(" / ")),
@@ -492,5 +501,25 @@
     if (className) node.className = className;
     if (children != null) node.append(...[].concat(children));
     return node;
+  }
+
+  // Small arrow-out mark shown after external links.
+  function externalIcon() {
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("class", "ext-link__icon");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.setAttribute("aria-hidden", "true");
+    for (const d of ["M7 17 17 7", "M7 7h10v10"]) {
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", d);
+      svg.append(path);
+    }
+    return svg;
   }
 })();

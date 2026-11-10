@@ -20,7 +20,6 @@ window.CAIRN_COPY.en = {
   },
 
   header: {
-    codename: "codename:",
     languageLabel: "Language",
     themeToDark: "Switch to dark theme",
     themeToLight: "Switch to light theme",
@@ -33,7 +32,7 @@ window.CAIRN_COPY.en = {
 
   intro: {
     eyebrow: "Technical Teaser",
-    title: "Introducing the open source AI inference stack",
+    title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
       {
@@ -52,6 +51,7 @@ window.CAIRN_COPY.en = {
   },
 
   diagram: {
+    eyebrow: "explore the stack",
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",
     // Small label shown at the top of each pop-up.
@@ -60,6 +60,7 @@ window.CAIRN_COPY.en = {
       layer: "Layer",
       crossCutting: "Cross-cutting layer",
       component: "Component",
+      endpoint: "Endpoint",
     },
   },
 
@@ -75,6 +76,10 @@ window.CAIRN_COPY.en = {
     server: {
       name: "Server",
       tooltip: "Below the line: the stack. It runs on infrastructure that your organization controls: in-house, at a partner or at a compute provider.",
+    },
+    localApi: {
+      name: "API Endpoint",
+      tooltip: "The point on the line where Local connects to the server.",
     },
 
     application: {

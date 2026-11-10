@@ -21,11 +21,11 @@
 <meta property="og:title" content="Cairn: The open source AI inference stack architecture">
 <meta property="og:description" content="An open architecture for the AI inference stack. Clear interface contracts connect all layers and components, so you can replace any component. The reference implementation uses the best open source components. A Mozilla × Mila research collaboration.">
 <meta property="og:url" content="https://opencairn.ai/">
-<!-- Share card: rendered from reference/og-card/og-card.html (see the comment there). -->
+<!-- Share card: supplied image at public/assets/og-card.png. The HTML in reference/og-card/ is the previous card. -->
 <meta property="og:image" content="https://opencairn.ai/assets/og-card.png">
-<meta property="og:image:width" content="2400">
-<meta property="og:image:height" content="1260">
-<meta property="og:image:alt" content="Introducing the open source AI inference stack: a layered architecture schema. A Mozilla × Mila research collaboration.">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="537">
+<meta property="og:image:alt" content="The sovereign, open source AI stack. A Mozilla × Mila research collaboration.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://opencairn.ai/assets/og-card.png">
 <link rel="canonical" href="https://opencairn.ai/">
@@ -44,7 +44,7 @@
 <div class="page">
 
   <header class="site-header">
-    <p class="codename"><span data-text="header.codename"></span><img class="logo--light" src="assets/cairn-logo.svg" alt="Cairn" width="1829" height="611"><img class="logo--dark" src="assets/cairn-logo-cream.svg" alt="Cairn" width="1829" height="611"></p>
+    <p class="codename"><img class="logo--light" src="assets/cairn-logo-light.png" alt="Codename: Cairn" width="846" height="104"><img class="logo--dark" src="assets/cairn-logo-dark.png" alt="Codename: Cairn" width="846" height="104"></p>
     <div class="prefs">
       <nav class="lang" data-aria-label="header.languageLabel">
         <a href="?lang=en" hreflang="en" lang="en">EN</a>
@@ -78,13 +78,16 @@
     </section>
 
     <figure class="arch-figure">
-      <figcaption class="hint" data-text="diagram.hint"></figcaption>
+      <figcaption class="arch-caption">
+        <p class="eyebrow" data-text="diagram.eyebrow"></p>
+        <p class="hint" data-text="diagram.hint"></p>
+      </figcaption>
 
       <!-- The architecture. Each data-copy value points to an entry under `stack`
            in the copy files, which provides its name and pop-up text. -->
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
-        <div class="layer layer--row" data-copy="application">
+        <div class="layer layer--row is-out-of-scope" data-copy="application">
           <div class="layer__items">
             <div class="comp" data-copy="application.chatUi"></div>
             <div class="comp" data-copy="application.codingHarness"></div>
@@ -92,7 +95,7 @@
           </div>
         </div>
 
-        <div class="layer layer--row" data-copy="sdk">
+        <div class="layer layer--row is-out-of-scope" data-copy="sdk">
           <div class="layer__items">
             <div class="comp" data-copy="sdk.llmSdk"></div>
             <div class="comp" data-copy="sdk.agentSdk"></div>
@@ -100,8 +103,17 @@
         </div>
 
         <div class="boundary">
-          <span class="boundary__label" data-copy="local"></span>
+          <span class="boundary__label is-out-of-scope" data-copy="local"></span>
+          <div class="boundary__line">
+            <div class="local-api" data-copy="localApi">
+              <span class="local-api__dot" aria-hidden="true"></span>
+            </div>
+          </div>
           <span class="boundary__label" data-copy="server"></span>
+          <span class="api-bridge" aria-hidden="true">
+            <span class="api-bridge__dots"></span>
+            <span class="api-bridge__pulse"></span>
+          </span>
         </div>
 
         <div class="core">

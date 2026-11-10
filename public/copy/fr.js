@@ -23,7 +23,6 @@ window.CAIRN_COPY.fr = {
   },
 
   header: {
-    codename: "codename:",
     languageLabel: "Langue",
     themeToDark: "Passer au thème sombre",
     themeToLight: "Passer au thème clair",
@@ -36,7 +35,7 @@ window.CAIRN_COPY.fr = {
 
   intro: {
     eyebrow: "Avant-goût technique",
-    title: "Découvrez la pile d’inférence d’IA à code source ouvert",
+    title: "Découvrez la pile d’IA souveraine à code source ouvert",
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
       {
@@ -55,6 +54,7 @@ window.CAIRN_COPY.fr = {
   },
 
   diagram: {
+    eyebrow: "Explorer la pile",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
     // Petite étiquette affichée en haut de chaque infobulle.
@@ -63,6 +63,7 @@ window.CAIRN_COPY.fr = {
       layer: "Couche",
       crossCutting: "Couche transversale",
       component: "Composant",
+      endpoint: "Point de terminaison",
     },
   },
 
@@ -78,6 +79,10 @@ window.CAIRN_COPY.fr = {
     server: {
       name: "Serveur",
       tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
+    },
+    localApi: {
+      name: "Point de terminaison d’API",
+      tooltip: "Le point sur la ligne où Local se connecte au serveur.",
     },
 
     application: {
