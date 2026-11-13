@@ -72,9 +72,20 @@
     </div>
   </header>
 
-  <!-- Content to come. For now the page shows its name only. -->
+  <!-- The list and the sheet are filled by js/recipes.js from js/recipes-data.js. -->
   <main>
-    <h1 data-text="nav.recipes"></h1>
+    <section class="recipe-intro">
+      <h1 data-text="recipes.title"></h1>
+      <p class="recipe-intro__lead" data-text="recipes.lead"></p>
+    </section>
+
+    <div class="recipe-body">
+      <section class="recipe-finder" data-aria-label="recipes.listLabel">
+        <div class="recipe-filters" id="recipe-filters"></div>
+        <div class="recipe-results" id="recipe-results"></div>
+      </section>
+      <article class="recipe-sheet" id="recipe-sheet" data-aria-label="recipes.sheet.label" aria-live="polite"></article>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -86,5 +97,8 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
+<!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
+<script src="js/recipes-data.js"></script>
+<script src="js/recipes.js"></script>
 </body>
 </html>

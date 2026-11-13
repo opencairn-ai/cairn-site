@@ -1,7 +1,8 @@
 /*
  * Fills each page with the copy from copy/en.js or copy/fr.js and marks the
  * current tab. On the stack page, it also shows the architecture pop-ups and
- * downloads the diagram as a PNG.
+ * downloads the diagram as a PNG. The Recipes page has its own script
+ * (js/recipes.js), which uses the copy lookup that this script shares.
  */
 (() => {
   "use strict";
@@ -27,6 +28,10 @@
   // Only the stack page has the diagram.
   const diagram = document.getElementById("architecture");
   const entries = new Map();
+
+  // For the script of a single page (js/recipes.js): the copy lookup, the
+  // language tag of the page, and the mark of an external link.
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon };
 
   renderPage();
   setUpTheme();

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   opencairn.ai — the architecture page
+   opencairn.ai — all pages: the header, the architecture page, the Recipes page
    ========================================================================== */
 
 @font-face {
@@ -60,6 +60,7 @@
   --color-badge-alpha: #283f33;      /* Pop-up badges, white text: Forest green 11.4:1 */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;   /* Recipe files, as in the design system's meta chip */
   --gutter: max(16px, 2.25rem);
   /* Corner radii: the design system's sm 6px, md 9px and lg 14px as they measure on a
      1440 × 900 screen, in em of the diagram's text (rem for the header and pop-up),
@@ -1027,6 +1028,209 @@ h1 {
   .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   /* The goals stack on a phone, so the stack label needs room above it. */
   .intro { margin-bottom: 2rem; }
+}
+
+/* --- Recipes page ---------------------------------------------------------
+   A list of recipes with filters, and a sheet with the files of the selected
+   recipe. The script (js/recipes.js) fills both from js/recipes-data.js.     */
+
+/* On a landscape screen the page is one screen high: the list scrolls inside
+   its panel, and the file preview scrolls inside the sheet. */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
+  body[data-page="recipes"] .page { height: 100vh; height: 100dvh; }
+  body[data-page="recipes"] main { min-height: 0; }
+  .recipe-body { flex: 1; min-height: 0; }
+  .recipe-finder, .recipe-sheet { overflow: auto; }
+  /* The sheet does not scroll. A short file shows in full; a long file takes the
+     height that is left and scrolls inside its box. The sheet scrolls only when
+     the screen is too short for the box's minimum height. */
+  .recipe-sheet { display: flex; flex-direction: column; }
+  .recipe-sheet > * { flex: none; }
+  .recipe-sheet > .recipe-code--file { display: flex; flex: 0 1 auto; min-height: 3.4rem; }
+  .recipe-code--file pre { flex: 1; min-width: 0; }
+}
+
+/* The same as the stack page: the page title, then one line under it in the title's ink. */
+.recipe-intro { margin-bottom: 0.9rem; }
+.recipe-intro__lead { color: var(--color-title); font-size: 0.9rem; font-weight: 500; }
+
+/* The two panels: the list with its filters, and the sheet of the selected recipe. */
+
+.recipe-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 0.9rem;
+  padding-bottom: 0.4rem;
+}
+
+.recipe-finder,
+.recipe-sheet {
+  padding: 1rem;
+  border-radius: 0.7rem;
+  font-size: 0.9rem;
+}
+.recipe-finder { background: var(--color-layer); }
+.recipe-sheet {
+  border: 1px solid var(--color-component-border);
+  background: var(--color-component);
+  box-shadow: var(--color-component-shadow);
+}
+
+.recipe-label { color: var(--color-header); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.recipe-empty { color: var(--color-body); }
+
+/* Tags: the design system's chip. */
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.recipe-tag {
+  padding: 0.28em 0.6em;
+  border: 1px solid var(--color-component-border);
+  border-radius: 0.4rem;
+  color: var(--color-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.recipe-tag--accent { border-color: var(--color-pink-tint); background: var(--color-pink-tint); color: var(--color-text); }
+
+/* --- Filters and results --- */
+
+.recipe-filters { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-bottom: 1rem; }
+.recipe-filter { display: flex; flex-direction: column; gap: 0.35rem; }
+.recipe-filter--search { flex: 1 1 10rem; }
+.recipe-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+.recipe-chip {
+  padding: 0.42em 0.75em;
+  border: 1px solid var(--color-component-border);
+  border-radius: 0.4rem;
+  background: var(--color-component);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.recipe-chip:hover { border-color: var(--color-button-outline); }
+.recipe-chip[aria-pressed="true"] { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
+
+.recipe-input {
+  width: 100%;
+  padding: 0.42em 0.7em;
+  border: 1px solid var(--color-component-border);
+  border-radius: 0.4rem;
+  background: var(--color-component);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.82rem;
+}
+.recipe-input::placeholder { color: var(--color-text-muted); }
+
+.recipe-results { display: flex; flex-direction: column; gap: 0.4rem; }
+.recipe-group { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 0.1rem; color: var(--color-header); font-size: 0.85rem; font-weight: 600; line-height: inherit; }
+.recipe-group:first-child { margin-top: 0; }
+.recipe-group__count { color: var(--color-text-muted); font-weight: 500; }
+.recipe-group__note { color: var(--color-body); font-weight: 400; }
+
+.recipe-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 0.3rem 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-component-border);
+  border-radius: 0.5rem;
+  background: var(--color-component);
+  box-shadow: var(--color-component-shadow);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.recipe-row:hover { border-color: var(--color-button-outline); }
+.recipe-row[aria-pressed="true"] { border-color: var(--color-pink-tint); background: var(--color-pink-tint); }
+.recipe-row__name { display: flex; flex-direction: column; font-weight: 600; overflow-wrap: anywhere; }
+.recipe-row__publisher { color: var(--color-text-muted); font-size: 0.78rem; font-weight: 400; }
+.recipe-row__where { color: var(--color-body); font-size: 0.85rem; }
+[aria-pressed="true"] .recipe-row__publisher,
+[aria-pressed="true"] .recipe-row__where,
+[aria-pressed="true"] .recipe-tag { color: var(--color-text); }
+[aria-pressed="true"] .recipe-tag { border-color: currentColor; }
+
+/* --- The recipe sheet --- */
+
+.recipe-sheet__title { margin: 0 0 0.1rem; color: var(--color-title); font-size: 1.45rem; font-weight: 600; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
+.recipe-sheet__where { margin-bottom: 0.6rem; color: var(--color-text); font-weight: 500; }
+.recipe-sheet__heading { margin: 1.1rem 0 0.5rem; color: var(--color-header); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.recipe-sheet__image { margin-top: 0.5rem; color: var(--color-body); font-size: 0.82rem; }
+.recipe-sheet code { font-family: var(--font-mono); font-size: 0.92em; }
+
+.recipe-use { display: flex; flex-direction: column; gap: 0.6rem; margin: 0; padding-left: 1.3em; color: var(--color-body); }
+.recipe-use .recipe-code { margin-top: 0.35rem; }
+
+.recipe-code {
+  position: relative;
+  border: 1px solid var(--color-component-border);
+  border-radius: 0.5rem;
+  background: var(--color-bg);
+}
+.recipe-code pre {
+  margin: 0;
+  padding: 0.6rem 4.6rem 0.6rem 0.8rem;
+  overflow: auto;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.recipe-copy {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--color-button-outline);
+  border-radius: 0.4rem;
+  background: var(--color-component);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.recipe-copy:hover { background: var(--color-button-hover); }
+
+/* The file names: the design system's nav tab. */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0.1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--color-component-border); }
+.recipe-tab {
+  margin-bottom: -1px;
+  padding: 0.5em 0.7em;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-tab);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.recipe-tab:hover { color: var(--color-text); }
+.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); font-weight: 700; }
+
+.recipe-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; margin-top: 1rem; font-size: 0.85rem; }
+.recipe-link { color: var(--color-link); font-weight: 500; text-underline-offset: 3px; }
+.recipe-link:hover { color: var(--color-link-hover); }
+
+/* Narrow screens: the sheet goes under the list. */
+
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-sheet { scroll-margin-top: 0.5rem; }
+  /* The sheet is under the list here: the file preview keeps a fixed maximum height. */
+  .recipe-code--file pre { max-height: 26rem; }
+}
+
+@media (max-width: 640px) {
+  .recipe-row { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* --- Downloaded image ----------------------------------------------------

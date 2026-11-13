@@ -233,6 +233,64 @@ window.CAIRN_COPY.en = {
     },
   },
 
+  // The Recipes page. The recipes come from the stack repository
+  // (js/recipes-data.js); only the words around them are here.
+  //   {hardware} and {server} are names from the recipe, for example "GB10" and "vLLM".
+  //   {count} is a number from the recipe, written in the format of the language.
+  recipes: {
+    title: "Find a recipe for your hardware",
+    lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
+    // The name of the list for screen readers.
+    listLabel: "Recipes",
+    filters: {
+      hardware: "Hardware",
+      server: "Model server",
+      model: "Model",
+      modelPlaceholder: "Model name",
+      all: "All",
+    },
+    // The model server and the hardware of a recipe, for example "vLLM on GB10".
+    where: "{server} on {hardware}",
+    // The headings of the list when a hardware type is selected. The second group
+    // holds the recipes for any hardware of the same vendor, for example "any NVIDIA GPU".
+    groups: {
+      specific: "Recipes for {hardware}",
+      generic: "Recipes for any {hardware}",
+      genericNote: "These recipes are not tuned for {hardware}.",
+    },
+    empty: "No recipe matches these filters. Remove a filter to see more recipes.",
+    noSelection: "Select a recipe to see its configuration.",
+    tags: {
+      example: "Example recipe",
+      context: "Context: {count} tokens",
+      // In the list, where space is short.
+      contextShort: "{count} tokens",
+      tools: "Tool calling",
+      reasoning: "Reasoning",
+      speculative: "Speculative decoding",
+      parallel: "{count} parallel requests",
+      gpus: "{count} GPUs",
+    },
+    sheet: {
+      // The name of the sheet for screen readers.
+      label: "Selected recipe",
+      files: "Recipe files",
+      image: "Model server image:",
+      copy: "Copy",
+      copied: "Copied",
+      copyFailed: "Copy failed",
+      modelCard: "Model card",
+      source: "Source of the recipe",
+      // The next texts show only when the stack repository is public (STACK_IS_PUBLIC in js/recipes.js).
+      github: "Open the recipe on GitHub",
+      use: {
+        title: "Use this recipe",
+        select: "Set these values in the file .env, or run ./model-selection.sh and select them.",
+        start: "Start the stack.",
+      },
+    },
+  },
+
   footer: {
     collaboration: "A research collaboration between {mozilla} and {mila}",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/en-US/" },
