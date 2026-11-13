@@ -31,7 +31,7 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "Spec Sheet",
+    eyebrow: "The Stack",
     title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
@@ -51,7 +51,7 @@ window.CAIRN_COPY.en = {
   },
 
   diagram: {
-    eyebrow: "explore the stack",
+    eyebrow: "Explore the architecture",
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",
     // Marks the components and layers in the Alpha release, on the boxes, in the

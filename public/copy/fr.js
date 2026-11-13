@@ -34,7 +34,7 @@ window.CAIRN_COPY.fr = {
   },
 
   intro: {
-    eyebrow: "Fiche technique",
+    eyebrow: "La pile",
     title: "Découvrez la pile d’IA souveraine à code source ouvert",
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
@@ -54,7 +54,7 @@ window.CAIRN_COPY.fr = {
   },
 
   diagram: {
-    eyebrow: "Explorer la pile",
+    eyebrow: "Explorer l’architecture",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
     // Marque les composants et les couches de la version alpha, sur les cases, dans la
