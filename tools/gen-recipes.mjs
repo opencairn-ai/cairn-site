@@ -5,7 +5,7 @@
 // The site holds no recipe content of its own. Every value in the data file
 // comes from the stack repository:
 //   - the recipe path:            hardware, model, publisher, model server
-//   - README.md:                  the names to show, the example mark, the source
+//   - README.md:                  the names to show, the source
 //   - model-server-config.yaml:   the facts that become tags
 //   - compose.yaml:               the model server image (or the default image
 //                                 in docker/compose-<server>.yaml)
@@ -97,7 +97,6 @@ for (const hardware of dirs(recipesRoot)) {
           hardware, model, publisher, server,
           hardwareLabel: heading[3] || hardware,
           serverLabel: heading[2] || server,
-          example: /example recipe/i.test(readme),
           source: (/^Source:\s*(\S+)/m.exec(readme) || [])[1] || null,
           image: modelServerImage(text("compose.yaml")) || (existsSync(defaultCompose) ? modelServerImage(read(defaultCompose)) : null),
           facts: {
@@ -149,5 +148,5 @@ writeFileSync(outFile, [
 console.log(`${recipes.length} recipes from cairn-stack@${data.commit} (${data.commitDate}) -> ${outFile}`);
 for (const recipe of recipes) {
   const facts = Object.entries(recipe.facts).filter(([, value]) => value).map(([key, value]) => (value === true ? key : `${key}=${value}`));
-  console.log(`  ${recipe.id}  [${recipe.serverLabel} on ${recipe.hardwareLabel}]  ${recipe.image}  ${facts.join(", ")}${recipe.example ? "  (example)" : ""}`);
+  console.log(`  ${recipe.id}  [${recipe.serverLabel} on ${recipe.hardwareLabel}]  ${recipe.image}  ${facts.join(", ")}`);
 }

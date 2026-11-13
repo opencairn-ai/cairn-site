@@ -262,7 +262,6 @@ window.CAIRN_COPY.en = {
     empty: "No recipe matches these filters. Remove a filter to see more recipes.",
     noSelection: "Select a recipe to see its configuration.",
     tags: {
-      example: "Example recipe",
       context: "Context: {count} tokens",
       // In the list, where space is short.
       contextShort: "{count} tokens",

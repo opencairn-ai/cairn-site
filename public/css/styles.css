@@ -1040,8 +1040,7 @@ h1 {
    - The object in focus has the outline of the core. Here it is the sheet.
    - Magenta marks what is active: the border of the box changes color, and a
      selected box also gets the Pale purple fill. Nothing else is pink.
-   - Gray is the color of the client side. Here it is the filters, and the tag
-     of an example recipe.
+   - Gray is the color of the client side. Here it is the filters.
    Sized in em of the schema's text size, so the corners match the schema.   */
 
 /* The colors of the schema, with the schema's values. The list and the files use
@@ -1058,7 +1057,6 @@ h1 {
   --recipe-gray-line: #c5ced3;       /* The border of that box */
   --recipe-gray-hover: #eef0f2;      /* That box on hover and focus */
   --recipe-gray-hover-line: #8b939a;
-  --recipe-gray-tag: #e6e8ea;        /* The "Example recipe" tag */
   --recipe-menu-line: #d0c2b1;       /* The border of an open menu: Beige, as in the design system */
 }
 
@@ -1073,7 +1071,6 @@ h1 {
   --recipe-gray-line: #6a6570;
   --recipe-gray-hover: #54515a;
   --recipe-gray-hover-line: #c5c9ce;
-  --recipe-gray-tag: #4a4750;
   --recipe-menu-line: #a08f79;       /* Stone */
 }
 
@@ -1297,9 +1294,7 @@ h1 {
   line-height: 1.1;
   white-space: nowrap;
 }
-[aria-pressed="true"] .recipe-tag:not(.recipe-tag--example) { border-color: currentColor; color: var(--color-text); }
-/* An example recipe is not tuned for a hardware type: gray, as the client side of the schema. */
-.recipe-tag--example { border-color: transparent; background: var(--recipe-gray-tag); color: var(--recipe-gray-text); }
+[aria-pressed="true"] .recipe-tag { border-color: currentColor; color: var(--color-text); }
 
 /* --- The sheet: the object in focus, with the outline of the core --- */
 

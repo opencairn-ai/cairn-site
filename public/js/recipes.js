@@ -305,15 +305,14 @@
     const facts = r.facts;
     const count = (value) => value.toLocaleString(app.locale);
     const list = [];
-    if (r.example) list.push([text("tags.example"), "recipe-tag--example"]);
-    if (facts.context) list.push([text(short ? "tags.contextShort" : "tags.context", { count: count(facts.context) })]);
-    if (facts.tools) list.push([text("tags.tools")]);
-    if (facts.reasoning) list.push([text("tags.reasoning")]);
+    if (facts.context) list.push(text(short ? "tags.contextShort" : "tags.context", { count: count(facts.context) }));
+    if (facts.tools) list.push(text("tags.tools"));
+    if (facts.reasoning) list.push(text("tags.reasoning"));
     // The list shows the short set of tags. The sheet shows all of them.
-    if (!short && facts.speculative) list.push([text("tags.speculative")]);
-    if (!short && facts.parallel) list.push([text("tags.parallel", { count: count(facts.parallel) })]);
-    if (facts.gpus > 1) list.push([text("tags.gpus", { count: count(facts.gpus) })]);
-    return list.map(([label, modifier]) => el("span", `recipe-tag ${modifier || ""}`.trim(), [label]));
+    if (!short && facts.speculative) list.push(text("tags.speculative"));
+    if (!short && facts.parallel) list.push(text("tags.parallel", { count: count(facts.parallel) }));
+    if (facts.gpus > 1) list.push(text("tags.gpus", { count: count(facts.gpus) }));
+    return list.map((label) => el("span", "recipe-tag", [label]));
   }
 
   function codeBlock(content, modifier) {
