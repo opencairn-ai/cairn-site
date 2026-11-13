@@ -57,6 +57,8 @@ window.CAIRN_COPY.fr = {
     eyebrow: "Explorer l’architecture",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
+    // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
+    crossLabel: "S’applique à toutes les couches",
     // Marque les composants et les couches de la version alpha, sur les cases, dans la
     // légende et dans les infobulles. Une couche reçoit la marque quand un de ses
     // composants l’a.
@@ -80,7 +82,7 @@ window.CAIRN_COPY.fr = {
   stack: {
     local: {
       name: "Côté client",
-      tooltip: "Au-dessus de la ligne : les applications et les SDK. Ils ne font pas partie de la pile. Ils se connectent à la pile par son point de terminaison d’API. Ils peuvent s’exécuter sur les appareils des utilisateurs, dans vos produits ou dans le nuage.",
+      tooltip: "Au-dessus de la ligne : vos applications. Elles ne font pas partie de la pile. Elles se connectent à la pile par son point de terminaison d’API. Elles peuvent s’exécuter sur les appareils des utilisateurs, dans vos produits ou dans le nuage.",
     },
     server: {
       name: "Côté serveur (la pile)",
@@ -92,33 +94,8 @@ window.CAIRN_COPY.fr = {
     },
 
     application: {
-      name: "Application",
-      tooltip: "Les outils de travail quotidien des utilisateurs. Les équipes conservent leurs assistants et leurs agents actuels, et les connectent à la pile.",
-      chatUi: {
-        name: "Interface conversationnelle",
-        tooltip: "Une interface de conversation pour les questions, la rédaction et l’analyse, avec les réponses des modèles de votre organisation.",
-      },
-      codingHarness: {
-        name: "Harnais de programmation",
-        tooltip: "Un agent de programmation qui lit, écrit et exécute du code avec les développeurs. Il utilise les modèles et les outils de la pile.",
-      },
-      knowledgeWorkHarness: {
-        name: "Harnais de travail",
-        tooltip: "Des agents de recherche, de rédaction et d’analyse. Ils utilisent les documents et les outils de votre organisation.",
-      },
-    },
-
-    sdk: {
-      name: "SDK",
-      tooltip: "Des trousses de développement logiciel (SDK) pour créer vos propres applications et agents sur la pile.",
-      llmSdk: {
-        name: "SDK pour grands modèles de langage",
-        tooltip: "Une bibliothèque cliente qui appelle les modèles par l’API de la pile. Votre code ne change pas quand le moteur ou le matériel change.",
-      },
-      agentSdk: {
-        name: "SDK pour agents",
-        tooltip: "Un cadre d'applications pour créer des agents qui planifient, appellent des outils, utilisent la mémoire et réalisent des tâches en plusieurs étapes sur la pile.",
-      },
+      name: "Apportez votre application",
+      tooltip: "Les applications ne font pas partie de la pile. Les équipes conservent leurs assistants et leurs agents actuels, ou créent les leurs avec un SDK. Ils se connectent à la pile par son point de terminaison d’API.",
     },
 
     persistence: {

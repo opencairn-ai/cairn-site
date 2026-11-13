@@ -92,20 +92,8 @@
            files. -->
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
-        <div class="layer layer--row is-out-of-scope" data-copy="application">
-          <div class="layer__items">
-            <div class="comp" data-copy="application.chatUi"></div>
-            <div class="comp" data-copy="application.codingHarness"></div>
-            <div class="comp" data-copy="application.knowledgeWorkHarness"></div>
-          </div>
-        </div>
-
-        <div class="layer layer--row is-out-of-scope" data-copy="sdk">
-          <div class="layer__items">
-            <div class="comp" data-copy="sdk.llmSdk"></div>
-            <div class="comp" data-copy="sdk.agentSdk"></div>
-          </div>
-        </div>
+        <!-- The client side: one row, with no detail. Cairn does not cover it. -->
+        <div class="layer layer--client is-out-of-scope" data-copy="application"></div>
 
         <div class="boundary">
           <span class="boundary__label is-out-of-scope" data-copy="local"><svg class="boundary__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></span>
@@ -121,18 +109,19 @@
           </span>
         </div>
 
+        <!-- The core: four layers side by side, and the Registry row under all four. -->
         <div class="core">
-          <div class="layer layer--stack" data-copy="persistence">
-            <div class="layer__items">
-              <div class="comp" data-copy="persistence.semanticSearch"></div>
-              <div class="comp" data-copy="persistence.agentMemory"></div>
-            </div>
-          </div>
-
           <div class="layer layer--stack" data-copy="agentRuntime">
             <div class="layer__items">
               <div class="comp" data-copy="agentRuntime.localToolServer"></div>
               <div class="comp" data-copy="agentRuntime.sandbox"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--stack" data-copy="persistence">
+            <div class="layer__items">
+              <div class="comp" data-copy="persistence.semanticSearch"></div>
+              <div class="comp" data-copy="persistence.agentMemory"></div>
             </div>
           </div>
 
@@ -150,7 +139,7 @@
             </div>
           </div>
 
-          <div class="layer layer--registry" data-copy="registry">
+          <div class="layer layer--row layer--registry" data-copy="registry">
             <div class="layer__items">
               <div class="comp" data-copy="registry.skillRegistry"></div>
               <div class="comp" data-copy="registry.promptRegistry"></div>
@@ -160,28 +149,33 @@
           </div>
         </div>
 
-        <div class="layer layer--cross" data-copy="security">
-          <div class="layer__items">
-            <div class="comp" data-copy="security.iam" data-release="alpha"></div>
-            <div class="comp" data-copy="security.guardrails"></div>
-            <div class="comp" data-copy="security.registryScanners"></div>
-          </div>
-        </div>
+        <!-- The cross-cutting layers: one group with a name, each layer a full-width row. -->
+        <div class="cross">
+          <p class="cross-label" data-text="diagram.crossLabel"></p>
 
-        <div class="layer layer--cross" data-copy="observability">
-          <div class="layer__items">
-            <div class="comp" data-copy="observability.telemetry" data-release="alpha"></div>
-            <div class="comp" data-copy="observability.costUsage" data-release="alpha"></div>
-            <div class="comp" data-copy="observability.agentTracing"></div>
+          <div class="layer layer--row layer--cross" data-copy="security">
+            <div class="layer__items">
+              <div class="comp" data-copy="security.iam" data-release="alpha"></div>
+              <div class="comp" data-copy="security.guardrails"></div>
+              <div class="comp" data-copy="security.registryScanners"></div>
+            </div>
           </div>
-        </div>
 
-        <div class="layer layer--cross layer--control" data-copy="controlPlane">
-          <div class="layer__items">
-            <div class="comp" data-copy="controlPlane.adminConsole"></div>
-            <div class="comp" data-copy="controlPlane.deployment" data-release="alpha"></div>
-            <div class="comp" data-copy="controlPlane.policyTenancy"></div>
-            <div class="comp" data-copy="controlPlane.magicModel" data-release="alpha"></div>
+          <div class="layer layer--row layer--cross" data-copy="observability">
+            <div class="layer__items">
+              <div class="comp" data-copy="observability.telemetry" data-release="alpha"></div>
+              <div class="comp" data-copy="observability.costUsage" data-release="alpha"></div>
+              <div class="comp" data-copy="observability.agentTracing"></div>
+            </div>
+          </div>
+
+          <div class="layer layer--row layer--cross layer--control" data-copy="controlPlane">
+            <div class="layer__items">
+              <div class="comp" data-copy="controlPlane.adminConsole"></div>
+              <div class="comp" data-copy="controlPlane.deployment" data-release="alpha"></div>
+              <div class="comp" data-copy="controlPlane.policyTenancy"></div>
+              <div class="comp" data-copy="controlPlane.magicModel" data-release="alpha"></div>
+            </div>
           </div>
         </div>
 

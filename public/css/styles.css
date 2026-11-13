@@ -112,12 +112,11 @@
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
-   follows the smaller of the viewport's width and height so the whole page
-   fits on one landscape screen. V2.B is taller (columns under the core), so
-   height scaling is stricter than width. */
+   follows the smaller of the viewport's width and height, so the whole page
+   fits on one landscape screen. On a screen that is too short for it, the page
+   scrolls: no row of the schema shrinks below its content. */
 html {
-  font-size: clamp(11px, min(1.02vw, 1.55vh), 19px);
-  height: 100%;
+  font-size: clamp(11px, min(1.02vw, 1.75vh), 19px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -127,8 +126,8 @@ html {
 
 body {
   margin: 0;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
@@ -156,25 +155,17 @@ a { color: inherit; }
 .page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 120rem;
   margin: 0 auto;
   padding: 0 var(--gutter);
-  overflow: hidden;
 }
 
-/* Portrait, small and short screens (phones held sideways) scroll instead,
-   at a comfortable reading size. */
+/* Portrait, small and short screens (phones held sideways) do not try to fit
+   one screen. They use a comfortable reading size. */
 @media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
-  html { font-size: 15px; height: auto; }
-  body { height: auto; overflow: auto; }
-  .page {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
-  }
+  html { font-size: 15px; }
 }
 
 .site-header {
@@ -301,7 +292,6 @@ main {
   display: flex;
   flex: 1;
   flex-direction: column;
-  min-height: 0;
   padding-top: 0.8rem;
 }
 
@@ -370,7 +360,6 @@ h1 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  min-height: 0;
   margin: 0;
   container: arch / inline-size;
 }
@@ -422,35 +411,18 @@ h1 {
 .label .status-mark { display: inline-block; margin-left: 0.4em; vertical-align: 0.05em; }
 .comp .label .status-mark { display: none; }
 
+/* The rule of the layout: a column is a layer, and a full-width row is shared by
+   all the columns. Client rows, the line, the core (four columns and the
+   Registry row), then the cross-cutting rows. */
 .arch {
-  display: grid;
+  display: flex;
   flex: 1;
-  min-height: 0;
-  /* V2.B: the three columns sit under the core, not beside it. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-areas:
-    "application   application   application"
-    "sdk           sdk           sdk"
-    "boundary      boundary      boundary"
-    "core          core          core"
-    "security      observability control";
-  /* Leftover height is shared so Persistence / Model Access / Security
-     internal boxes land at the same height (2-stack vs 3-stack). */
-  grid-template-rows: auto auto auto minmax(0, 1.45fr) minmax(0, 0.72fr);
-  gap: 0.5em 0.7em;
-  align-content: start;
+  flex-direction: column;
+  gap: 0.5em;
   /* A touch larger so names inside the boxes stay readable. */
   font-size: 0.94rem;
   line-height: 1.25;
 }
-
-.arch > [data-copy="application"]   { grid-area: application; }
-.arch > [data-copy="sdk"]           { grid-area: sdk; }
-.arch > .boundary                   { grid-area: boundary; }
-.arch > .core                       { grid-area: core; }
-.arch > [data-copy="security"]      { grid-area: security; }
-.arch > [data-copy="observability"] { grid-area: observability; }
-.arch > [data-copy="controlPlane"]  { grid-area: control; }
 
 .label { display: flex; flex-direction: column; gap: 0.15em; }
 .label__name { font-weight: 600; }
@@ -495,7 +467,14 @@ h1 {
   text-align: center;
 }
 
-/* Application and SDK: one row each, name on the left. */
+/* The client side: one row with its name in the center, above the API Endpoint. */
+.layer--client {
+  align-items: center;
+  padding: calc(0.55em - 2px) calc(0.65em - 2px);
+  text-align: center;
+}
+
+/* Registry and the cross-cutting layers: one row each, name on the left. */
 .layer--row {
   flex-direction: row;
   align-items: center;
@@ -691,13 +670,17 @@ h1 {
   100% { top: calc(100% - 5px); opacity: 0; }
 }
 
-/* The server-side core: the four layers and the registry. */
+/* The server-side core: four layers side by side, and the Registry row under all four. */
 .core {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: minmax(min-content, 1fr) auto;
   gap: 0.6em;
-  min-height: 0;
+  /* Spare height goes to the core, up to 16.5em: its boxes then stand about twice as
+     tall as the boxes in the rows. It never shrinks below its content. */
+  flex: 1 1 auto;
+  min-height: min-content;
+  max-height: 16.5em;
   padding: 0.6em;
   border: 2.5px solid var(--color-core-outline);
   border-radius: var(--radius-lg);
@@ -707,49 +690,38 @@ h1 {
 
 .layer--stack .layer__items { flex-direction: column; }
 
-.layer--registry > .label {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.2em 0.7em;
+/* The Registry is a shared row: its boxes do not belong to one column. Its name is
+   narrower by the core's padding and outline, so its boxes start on the same line
+   as the boxes of the rows outside the core. */
+.layer--registry > .label { flex-basis: calc(8.5em - 0.6em - 2.5px); }
+
+/* Security, Observability, Control Plane: one group with a name. Each layer is a
+   full-width row, so it runs under all four columns. */
+.cross {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  margin-top: 0.35em;
 }
 
-/* Registry boxes sit a little taller than content alone, so they read closer
-   to the stacked boxes above. */
-.layer--registry .comp { height: 50px; }
-
-/* Security, Observability, Control Plane: a row under the core.
-   A darker brown, kept translucent so the cream ground still lightens it. */
-.layer--cross {
-  gap: 0.75em;
-  min-height: 0;
-  /* 15px between the core and this row. The grid gap already covers part of it. */
-  margin-top: calc(15px - 0.5em);
-  padding: calc(0.65em - 2px) calc(0.55em - 2px);
-  background: rgb(92 74 56 / 0.18);
+/* The group name: the same type as the Client side / Server side labels, in the
+   color of the hint line above the schema (5.7:1 on Cream, 5.4:1 on Deep purple). */
+.cross-label {
+  padding: 0 0.2em;
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.1;
 }
 
-.layer--cross .layer__items {
-  display: grid;
-  flex: 1;
-  min-height: 0;
-  gap: 0.55em;
-  /* Stretch each box so the three columns use the shared row height. */
-  grid-auto-rows: 1fr;
-}
+/* A darker brown, kept translucent so the cream ground still lightens it. */
+.layer--cross { background: rgb(92 74 56 / 0.18); }
 
-.layer--cross .comp {
-  padding: 0.5em 0.55em;
-  overflow-wrap: break-word;
-}
+.layer--cross .comp { overflow-wrap: break-word; }
 
-/* Same outer height as Security and Observability. The four boxes share that height. */
-.layer--control .layer__items {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-}
-
-/* These two sit a little quieter than the other boxes in the column. */
+/* These two sit a little quieter than the other boxes in the row. */
 [data-copy="security.iam"]:not(.is-active),
 [data-copy="security.guardrails"]:not(.is-active) {
   opacity: 0.85;
@@ -784,7 +756,7 @@ h1 {
   border-color: var(--color-pink);
 }
 
-/* Upper gray stack (Application / SDK): same 2px border stroke, in gray, not pink. */
+/* The gray client row: same 2px border stroke, in gray, not pink. */
 .is-out-of-scope .comp.is-active,
 .is-out-of-scope .comp:focus-visible {
   border-color: #8b939a;
@@ -808,24 +780,31 @@ h1 {
   border-color: #c5c9ce;
 }
 
+/* Between desktop and phone: the core has two columns. Left, where agents run and
+   remember. Right, access to models and tools. Rows with four boxes need the full
+   width, so the Registry and the cross-cutting rows put their name above the boxes. */
+@container arch (min-width: 641px) and (max-width: 900px) {
+  .core { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto auto; }
+  .core > [data-copy="agentRuntime"] { grid-column: 1; grid-row: 1; }
+  .core > [data-copy="persistence"]  { grid-column: 1; grid-row: 2; }
+  .core > [data-copy="modelAccess"]  { grid-column: 2; grid-row: 1; }
+  .core > [data-copy="toolAccess"]   { grid-column: 2; grid-row: 2; }
+  .core > [data-copy="registry"]     { grid-column: 1 / -1; grid-row: 3; }
+
+  .core .layer--row,
+  .cross .layer--row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45em;
+    padding: calc(0.55em - 2px) calc(0.65em - 2px) calc(0.65em - 2px);
+  }
+  .core .layer--row > .label,
+  .cross .layer--row > .label { flex: none; }
+}
+
 /* Phones: everything in a single column. */
 @container arch (max-width: 640px) {
-  .arch {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    grid-template-areas:
-      "application"
-      "sdk"
-      "boundary"
-      "core"
-      "security"
-      "observability"
-      "control";
-  }
-
-  /* On a phone the three columns stack, so only the first one keeps the 15px. */
-  .arch > [data-copy="observability"],
-  .arch > [data-copy="controlPlane"] { margin-top: 0; }
+  .cross { margin-top: 0.6em; }
 
   .layer--row { flex-direction: column; align-items: stretch; }
   .layer--row > .label { flex: none; }
@@ -842,7 +821,8 @@ h1 {
   .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 11px)); }
   .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
   /* Four French names do not fit on one line. Two columns keep every word whole. */
-  .layer--registry .layer__items {
+  .layer--registry .layer__items,
+  .layer--control .layer__items {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
