@@ -16,7 +16,18 @@ window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {
   meta: {
     title: "Cairn: The sovereign, open source AI stack architecture",
+    // Browser tab title of the pages without their own title: {page} is the name of the tab.
+    pageTitle: "Cairn: {page}",
     description: "An open architecture to run AI models and agents on infrastructure that your organization controls. Components follow clear interface contracts, so you do not depend on one project or vendor. A Mozilla × Mila research collaboration.",
+  },
+
+  // The tabs under the header, in order. Each one is a page.
+  nav: {
+    label: "Pages",
+    hello: "Hello World",
+    stack: "The Stack",
+    recipes: "Recipes",
+    roadmap: "Roadmap",
   },
 
   header: {
@@ -31,7 +42,6 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "The Stack",
     title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [

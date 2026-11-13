@@ -7,10 +7,11 @@ AI inference stack. A static site: everything under `public/` is served as-is.
 
 ```
 public/
-  index.html                              Page structure and the architecture diagram (no copy)
+  index.html, stack.html,                 One page per tab: Hello World, The Stack, Recipes, Roadmap.
+  recipes.html, roadmap.html              Structure only, no copy. stack.html holds the architecture diagram
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
   css/styles.css                          Styles; light and dark color tokens at the top
-  js/app.js                               Fills in the copy; pop-ups, theme switch, PNG download
+  js/app.js                               Fills in the copy; current tab, pop-ups, theme switch, PNG download
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   assets/cairn-logo-light.png, cairn-logo-dark.png  Header lockup, one file per theme
@@ -22,6 +23,15 @@ reference/og-card/og-card.html            Previous share card. Do not regenerate
 .github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
 wrangler.jsonc                            Old Cloudflare Worker host, kept as the rollback during the move
 ```
+
+## Pages and tabs
+
+Each tab is one HTML file. All four files repeat the same header and the same
+`<nav class="site-nav">`; `<body data-page="…">` names the page, and the script
+marks its tab as the current one. The tab names are under `nav` in the copy files.
+To add a tab: copy `recipes.html`, give it a new `data-page` value, add the link
+to the nav of every page, and add the name under `nav` in both copy files.
+Hello World, Recipes and Roadmap show only their name for now.
 
 ## Editing the copy
 
