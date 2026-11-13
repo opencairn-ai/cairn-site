@@ -57,6 +57,8 @@ window.CAIRN_COPY.fr = {
     eyebrow: "Explorer l’architecture",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
+    // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
+    crossLabel: "S’applique à toutes les couches",
     // Marque les composants et les couches de la version alpha, sur les cases, dans la
     // légende et dans les infobulles. Une couche reçoit la marque quand un de ses
     // composants l’a.

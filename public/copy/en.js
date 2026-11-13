@@ -54,6 +54,8 @@ window.CAIRN_COPY.en = {
     eyebrow: "Explore the architecture",
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",
+    // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
+    crossLabel: "Applies to all layers",
     // Marks the components and layers in the Alpha release, on the boxes, in the
     // legend and in the pop-ups. A layer gets the mark when one of its components has it.
     status: {
