@@ -246,8 +246,14 @@ window.CAIRN_COPY.en = {
     // The name of the list panel.
     listLabel: "Recipes",
     filters: {
+      // The name of the row of filters for screen readers.
+      label: "Filters",
+      // The names of the two menus. A menu shows its name until the visitor selects a choice.
       hardware: "Hardware",
       server: "Model server",
+      // The first choice of each menu: it removes the filter.
+      all: "All",
+      // The search field: its name for screen readers, and the text it shows while empty.
       model: "Model",
       modelPlaceholder: "Model name",
     },
@@ -275,7 +281,7 @@ window.CAIRN_COPY.en = {
       copied: "Copied",
       copyFailed: "Copy failed",
       modelCard: "Model card",
-      source: "Source of the recipe",
+      source: "Recipe source",
       // The next texts show only when the stack repository is public (STACK_IS_PUBLIC in js/recipes.js).
       github: "Open the recipe on GitHub",
       use: {

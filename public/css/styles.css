@@ -1040,29 +1040,41 @@ h1 {
    - The object in focus has the outline of the core. Here it is the sheet.
    - Magenta marks what is active: the border of the box changes color, and a
      selected box also gets the Pale purple fill. Nothing else is pink.
-   - Gray marks what is outside the scope. Here it is an example recipe.
+   - Gray is the color of the client side. Here it is the filters, and the tag
+     of an example recipe.
    Sized in em of the schema's text size, so the corners match the schema.   */
 
-/* The colors of the schema's panels. A filter applies to the whole list, so the
-   filters use the panel of the rows that apply to all layers; the list and the
-   files use the panel of the core's layers. The values are the schema's. */
+/* The colors of the schema, with the schema's values. The list and the files use
+   the panel of the core's layers. The filters use the gray of the client side
+   (the Bring-Your-Own Application row); their boxes are painted as the boxes of
+   that row were in Design V2.B, with a gray stroke on hover. */
 .recipe-body {
   --recipe-panel: var(--color-layer);
-  --recipe-panel-shared: rgb(92 74 56 / 0.18);
   --recipe-panel-name: var(--color-header);
   --recipe-box: var(--color-component);
-  --recipe-gray: #e6e8ea;
-  --recipe-gray-text: #5c6770;
+  --recipe-gray: #e6e8ea;            /* The gray row */
+  --recipe-gray-text: #5c6770;       /* Its name and the text of its boxes */
+  --recipe-gray-box: #fafbfc;        /* A box in the gray row */
+  --recipe-gray-line: #c5ced3;       /* The border of that box */
+  --recipe-gray-hover: #eef0f2;      /* That box on hover and focus */
+  --recipe-gray-hover-line: #8b939a;
+  --recipe-gray-tag: #e6e8ea;        /* The "Example recipe" tag */
+  --recipe-menu-line: #d0c2b1;       /* The border of an open menu: Beige, as in the design system */
 }
 
 :root[data-theme="dark"] .recipe-body {
   --recipe-panel: rgb(220 186 246 / 0.22);
-  --recipe-panel-shared: rgb(28 14 40 / 0.7);
   --recipe-panel-name: var(--color-boundary);
   /* Boxes sit on the page purple, so they read against the mauve panel. */
   --recipe-box: var(--color-bg);
-  --recipe-gray: #4a4750;
+  --recipe-gray: #3a3840;
   --recipe-gray-text: #b7b3ae;
+  --recipe-gray-box: #4a4750;
+  --recipe-gray-line: #6a6570;
+  --recipe-gray-hover: #54515a;
+  --recipe-gray-hover-line: #c5c9ce;
+  --recipe-gray-tag: #4a4750;
+  --recipe-menu-line: #a08f79;       /* Stone */
 }
 
 /* On a landscape screen the page is one screen high: the recipes scroll inside
@@ -1127,9 +1139,7 @@ h1 {
   line-height: inherit;
 }
 
-/* A box: a filter choice, the search field, a recipe of the list, a file. */
-.recipe-chip,
-.recipe-input,
+/* A box: a recipe of the list, a file. */
 .recipe-row,
 .recipe-code {
   border: 2px solid var(--color-component-border);
@@ -1140,45 +1150,119 @@ h1 {
   font: inherit;
 }
 
-/* One stroke only, as on the schema: the box's own border turns Magenta on
-   hover and keyboard focus. The selected box also gets the fill. */
-.recipe-chip:hover,
-.recipe-chip:focus-visible,
+/* A box in the gray row: a menu, the search field. */
+.recipe-select,
+.recipe-input {
+  border: 2px solid var(--recipe-gray-line);
+  border-radius: var(--radius-sm);
+  background: var(--recipe-gray-box);
+  color: var(--recipe-gray-text);
+  font: inherit;
+}
+
+/* One stroke only, as on the schema: the box's own border changes color on hover
+   and keyboard focus. Magenta for a recipe, gray for a box in the gray row. */
 .recipe-row:hover,
-.recipe-row:focus-visible,
-.recipe-input:focus-visible {
+.recipe-row:focus-visible {
   border-color: var(--color-pink);
   outline: none;
 }
 
-.recipe-chip[aria-pressed="true"],
+.recipe-select:hover,
+.recipe-select:focus-visible,
+.recipe-select[aria-expanded="true"],
+.recipe-input:focus-visible {
+  border-color: var(--recipe-gray-hover-line);
+  background: var(--recipe-gray-hover);
+  outline: none;
+}
+
+/* The selected recipe, and a menu with a choice: the Magenta border and the Pale
+   purple fill. A filter that is on must read at once, so it leaves the gray. */
+.recipe-select[data-chosen="true"],
 .recipe-row[aria-pressed="true"] {
   border-color: var(--color-pink);
   background: var(--color-pink-tint);
+  color: var(--color-text);
 }
 
 .recipe-empty { padding: 0.3em 0.2em; color: var(--color-body); }
 
-/* --- Filters: one row each, with the name on the left --- */
+/* --- Filters: one gray row with two menus and the search field --- */
 
-.recipe-filters { display: flex; flex-direction: column; gap: 0.5em; }
+.recipe-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55em;
+  padding: 0.4em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--recipe-gray);
+}
 
-.recipe-filter {
+.recipe-dropdown { position: relative; display: flex; flex: 1 1 0; min-width: 0; }
+.recipe-search { display: flex; flex: 1.4 1 0; min-width: 0; }
+
+.recipe-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  width: 100%;
+  min-width: 0;
+  padding: 0.35em 0.5em 0.35em 0.65em;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.recipe-select__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
+
+.recipe-input { flex: 1; min-width: 0; padding: 0.35em 0.65em; font-weight: 500; }
+.recipe-input::placeholder { color: var(--recipe-gray-text); opacity: 0.75; }
+
+/* The open menu: the design system's dropdown menu. It lies over the list, and
+   scrolls when it has more choices than the screen can show. */
+.recipe-menu {
+  position: absolute;
+  top: calc(100% + 0.3em);
+  left: 0;
+  z-index: 5;
+  min-width: 100%;
+  max-height: min(21em, 55vh);
+  margin: 0;
+  padding: 0.4em;
+  overflow: auto;
+  border: 1px solid var(--recipe-menu-line);
+  border-radius: var(--radius-md);
+  background: var(--color-component);
+  box-shadow: 0 14px 18px var(--color-tip-shadow);
+  color: var(--color-text);
+  list-style: none;
+}
+.recipe-menu[hidden] { display: none; }
+
+.recipe-menu__label {
+  padding: 0.4em 0.65em 0.25em;
+  color: var(--color-text-muted);
+  font-size: 0.75em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.recipe-menu__item {
   display: flex;
   align-items: center;
   gap: 0.65em;
-  padding: 0.4em 0.65em;
-  border-radius: var(--radius-md);
-  background: var(--recipe-panel-shared);
-  /* On this darker panel the boxes keep the box color in both themes. */
-  --recipe-box: var(--color-component);
+  padding: 0.5em 0.65em;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
 }
-
-.recipe-filter > .recipe-name { flex: 0 0 8.5em; }
-.recipe-chips { display: flex; flex: 1; flex-wrap: wrap; gap: 0.55em; min-width: 0; }
-.recipe-chip { flex: 1 1 auto; padding: 0.35em 0.5em; font-weight: 600; text-align: center; cursor: pointer; }
-.recipe-input { flex: 1; min-width: 0; padding: 0.35em 0.65em; font-weight: 500; }
-.recipe-input::placeholder { color: var(--color-text-muted); opacity: 1; }
+/* The choice under the pointer or the arrow keys. */
+.recipe-menu__item.is-active { background: var(--color-ghost-hover); }
+/* The selected choice has a Magenta check. */
+.recipe-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
 
 /* --- The list --- */
 
@@ -1215,7 +1299,7 @@ h1 {
 }
 [aria-pressed="true"] .recipe-tag:not(.recipe-tag--example) { border-color: currentColor; color: var(--color-text); }
 /* An example recipe is not tuned for a hardware type: gray, as the client side of the schema. */
-.recipe-tag--example { border-color: transparent; background: var(--recipe-gray); color: var(--recipe-gray-text); }
+.recipe-tag--example { border-color: transparent; background: var(--recipe-gray-tag); color: var(--recipe-gray-text); }
 
 /* --- The sheet: the object in focus, with the outline of the core --- */
 
@@ -1230,7 +1314,18 @@ h1 {
 }
 
 .recipe-sheet__head { padding: 0.3em 0.45em 0.15em; }
-.recipe-sheet__title { margin: 0 0 0.15em; color: var(--color-title); font-size: 1.5em; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+/* The model name, with the link to its model card at the end of the line. The
+   link goes under the name when the line is too short for both. */
+.recipe-sheet__top,
+.recipe-panel__top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2em 1.2em;
+}
+.recipe-sheet__top { margin-bottom: 0.15em; }
+.recipe-sheet__title { margin: 0; color: var(--color-title); font-size: 1.5em; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; overflow-wrap: anywhere; }
 .recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
 .recipe-sheet__where { margin-bottom: 0.55em; color: var(--color-text); font-weight: 500; }
 .recipe-sheet__image { padding: 0 0.2em; color: var(--color-body); font-size: 0.88em; }
@@ -1285,8 +1380,8 @@ h1 {
 }
 .recipe-copy:hover { background: var(--color-button-hover); }
 
-.recipe-links { display: flex; flex-wrap: wrap; gap: 0.4em 1.3em; padding: 0 0.45em 0.3em; font-size: 0.92em; }
-.recipe-link { color: var(--color-link); font-weight: 500; text-underline-offset: 3px; }
+.recipe-links { display: flex; flex-wrap: wrap; gap: 0.2em 1.2em; }
+.recipe-link { flex: none; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
 .recipe-link:hover { color: var(--color-link-hover); }
 
 /* The steps to install a recipe (shown when the stack repository is public). */
@@ -1301,10 +1396,10 @@ h1 {
   .recipe-code--file pre { max-height: 26rem; }
 }
 
-/* Phones: the name of a filter goes above its boxes, and a recipe takes one column. */
+/* Phones: the two menus side by side, the search field under them, and a recipe in one column. */
 @media (max-width: 640px) {
-  .recipe-filter { flex-direction: column; align-items: stretch; gap: 0.45em; padding: 0.55em 0.65em 0.65em; }
-  .recipe-filter > .recipe-name { flex: none; }
+  .recipe-filters { padding: 0.55em 0.65em; }
+  .recipe-search { flex-basis: 100%; }
   .recipe-row { grid-template-columns: minmax(0, 1fr); }
 }
 
