@@ -20,10 +20,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": 65536,
         "tools": false,
-        "reasoning": false,
-        "speculative": false,
-        "parallel": null,
-        "gpus": null
+        "reasoning": false
       },
       "files": [
         {
@@ -57,10 +54,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": null,
         "tools": false,
-        "reasoning": false,
-        "speculative": false,
-        "parallel": null,
-        "gpus": null
+        "reasoning": false
       },
       "files": [
         {
@@ -90,10 +84,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": null,
         "tools": false,
-        "reasoning": false,
-        "speculative": false,
-        "parallel": null,
-        "gpus": null
+        "reasoning": false
       },
       "files": [
         {
@@ -123,10 +114,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": 262144,
         "tools": true,
-        "reasoning": true,
-        "speculative": true,
-        "parallel": 128,
-        "gpus": 8
+        "reasoning": true
       },
       "files": [
         {
@@ -156,10 +144,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": 262144,
         "tools": true,
-        "reasoning": true,
-        "speculative": true,
-        "parallel": 16,
-        "gpus": 1
+        "reasoning": true
       },
       "files": [
         {
@@ -189,10 +174,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": 262144,
         "tools": true,
-        "reasoning": true,
-        "speculative": true,
-        "parallel": 16,
-        "gpus": 1
+        "reasoning": true
       },
       "files": [
         {
@@ -222,10 +204,7 @@ window.CAIRN_RECIPES = {
       "facts": {
         "context": 131072,
         "tools": true,
-        "reasoning": true,
-        "speculative": true,
-        "parallel": 16,
-        "gpus": 1
+        "reasoning": true
       },
       "files": [
         {

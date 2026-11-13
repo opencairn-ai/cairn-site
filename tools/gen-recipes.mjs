@@ -36,9 +36,6 @@ const FACT_KEYS = {
   context: ["max-model-len", "context-length"],
   tools: ["tool-call-parser"],
   reasoning: ["reasoning-parser"],
-  speculative: ["speculative-config", "speculative-algorithm"],
-  parallel: ["max-num-seqs", "max-running-requests"],
-  gpus: ["tensor-parallel-size"],
 };
 
 const read = (path) => readFileSync(path, "utf8");
@@ -103,9 +100,6 @@ for (const hardware of dirs(recipesRoot)) {
             context: number(firstValue(config, FACT_KEYS.context)),
             tools: firstValue(config, FACT_KEYS.tools) !== undefined,
             reasoning: firstValue(config, FACT_KEYS.reasoning) !== undefined,
-            speculative: firstValue(config, FACT_KEYS.speculative) !== undefined,
-            parallel: number(firstValue(config, FACT_KEYS.parallel)),
-            gpus: number(firstValue(config, FACT_KEYS.gpus)),
           },
           files,
         });

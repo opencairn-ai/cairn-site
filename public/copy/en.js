@@ -267,9 +267,6 @@ window.CAIRN_COPY.en = {
       contextShort: "{count} tokens",
       tools: "Tool calling",
       reasoning: "Reasoning",
-      speculative: "Speculative decoding",
-      parallel: "{count} parallel requests",
-      gpus: "{count} GPUs",
     },
     sheet: {
       // The name of the sheet for screen readers.

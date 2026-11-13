@@ -308,10 +308,6 @@
     if (facts.context) list.push(text(short ? "tags.contextShort" : "tags.context", { count: count(facts.context) }));
     if (facts.tools) list.push(text("tags.tools"));
     if (facts.reasoning) list.push(text("tags.reasoning"));
-    // The list shows the short set of tags. The sheet shows all of them.
-    if (!short && facts.speculative) list.push(text("tags.speculative"));
-    if (!short && facts.parallel) list.push(text("tags.parallel", { count: count(facts.parallel) }));
-    if (facts.gpus > 1) list.push(text("tags.gpus", { count: count(facts.gpus) }));
     return list.map((label) => el("span", "recipe-tag", [label]));
   }
 
