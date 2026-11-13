@@ -75,16 +75,16 @@ window.CAIRN_COPY.en = {
   //   tooltip: the short description that pops up on hover, tap or keyboard focus
   stack: {
     local: {
-      name: "Local environment",
-      tooltip: "Above the line: applications and SDKs. They run on user devices or inside your products, and connect to the stack through the stack API.",
+      name: "Client side",
+      tooltip: "Above the line: applications and SDKs. They are not part of the stack. They connect to the stack through its API endpoint. They can run on user devices, in your products or in the cloud.",
     },
     server: {
-      name: "Server side",
+      name: "Server side (the stack)",
       tooltip: "Below the line: the stack. It runs on infrastructure that your organization controls: in-house, at a partner or at a compute provider.",
     },
     localApi: {
       name: "API Endpoint",
-      tooltip: "The point on the line where the local environment connects to the server side.",
+      tooltip: "The point where clients connect to the stack.",
     },
 
     application: {

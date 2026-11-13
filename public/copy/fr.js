@@ -79,16 +79,16 @@ window.CAIRN_COPY.fr = {
   //   tooltip : la courte description qui s’affiche au survol, au toucher ou au clavier
   stack: {
     local: {
-      name: "Environnement local",
-      tooltip: "Au-dessus de la ligne : les applications et les SDK. Ils s’exécutent sur les appareils des utilisateurs ou dans vos produits, et se connectent à la pile par son API.",
+      name: "Côté client",
+      tooltip: "Au-dessus de la ligne : les applications et les SDK. Ils ne font pas partie de la pile. Ils se connectent à la pile par son point de terminaison d’API. Ils peuvent s’exécuter sur les appareils des utilisateurs, dans vos produits ou dans le nuage.",
     },
     server: {
-      name: "Côté serveur",
+      name: "Côté serveur (la pile)",
       tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
     },
     localApi: {
       name: "Point de terminaison d’API",
-      tooltip: "Le point sur la ligne où l’environnement local se connecte au côté serveur.",
+      tooltip: "Le point où les clients se connectent à la pile.",
     },
 
     application: {
