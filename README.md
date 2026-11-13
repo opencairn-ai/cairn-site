@@ -19,7 +19,8 @@ public/
   site.webmanifest, robots.txt, sitemap.xml
 reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
 reference/og-card/og-card.html            Previous share card. Do not regenerate it over the PNG
-wrangler.jsonc                            Cloudflare Workers static assets -> opencairn.ai
+.github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
+wrangler.jsonc                            Old Cloudflare Worker host, kept as the rollback during the move
 ```
 
 ## Editing the copy
@@ -49,7 +50,7 @@ content to fit, so it keeps fitting after copy edits.
 No build step. Serve the folder and open it:
 
 ```sh
-npx wrangler dev          # or: python3 -m http.server -d public 8080
+python3 -m http.server -d public 8080     # then open http://localhost:8080
 ```
 
 Opening `public/index.html` directly from disk also works for checking copy
@@ -67,6 +68,15 @@ reliable.
 
 ## Deploy
 
-```sh
-npx wrangler deploy
-```
+Merging to `main` publishes the site. The **Deploy to GitHub Pages** workflow
+(`.github/workflows/pages.yml`) uploads `public/` and nothing else, so
+`reference/` stays private. To publish again without a new commit, run the
+workflow from the Actions tab. To undo a bad deploy, revert the commit on `main`.
+
+opencairn.ai goes through the Cloudflare proxy (for analytics) to GitHub Pages.
+Cloudflare and browsers can keep CSS, JS and images for up to 10 minutes, so a
+change can take that long to show for every visitor.
+
+**Move in progress:** until the opencairn.ai DNS records point to GitHub Pages,
+the Cloudflare Worker in `wrangler.jsonc` still serves the site
+(`npx wrangler deploy`). That file stays as the rollback until the move ends.
