@@ -199,9 +199,11 @@
     document.getElementById("status-legend").replaceChildren(...statusLegend());
   }
 
-  // One item per status: its mark and its label. Also used in the downloaded image.
+  // One item per status shown on the diagram: its mark and its label. Empty when
+  // no box has a status. Also used in the downloaded image.
   function statusLegend() {
-    return ["alpha"].map((status) => el("li", null, [statusMark(status), t(`diagram.status.${status}`)]));
+    const statuses = new Set([...entries.values()].map((entry) => entry.status).filter(Boolean));
+    return [...statuses].map((status) => el("li", null, [statusMark(status), t(`diagram.status.${status}`)]));
   }
 
   // Joins the mark to the last word of the name, so a line break cannot leave

@@ -396,6 +396,7 @@ h1 {
   list-style: none;
 }
 
+.legend:empty { display: none; }
 .legend li { display: inline-flex; align-items: center; gap: 0.4em; }
 
 /* Alpha mark: a filled dot on the components and layers in the Alpha release.
@@ -1073,3 +1074,4 @@ h1 {
 }
 
 .export-sheet__foot .legend { gap: 18px; }
+.export-sheet__foot p { margin-left: auto; }   /* Stays on the right when there is no legend. */
