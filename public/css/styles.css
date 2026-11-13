@@ -111,11 +111,12 @@
   --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
 }
 
-/* Everything is sized in rem, and the root size is the reader's own browser
-   setting (16px by default). The type does not scale with the window. The page
-   fills one screen when it fits, and scrolls when it does not. */
+/* The page scales like a slide: everything is sized in rem, and the root size
+   follows the smaller of the viewport's width and height, so the whole page
+   fits on one landscape screen. On a screen that is too short for it, the page
+   scrolls: no row of the schema shrinks below its content. */
 html {
-  font-size: 100%;
+  font-size: clamp(11px, min(1.02vw, 1.75vh), 19px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -161,10 +162,10 @@ a { color: inherit; }
   padding: 0 var(--gutter);
 }
 
-/* Portrait, small and short screens (phones held sideways): slightly smaller
-   type, 15px at the default setting. */
+/* Portrait, small and short screens (phones held sideways) do not try to fit
+   one screen. They use a comfortable reading size. */
 @media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
-  html { font-size: 93.75%; }
+  html { font-size: 15px; }
 }
 
 .site-header {
@@ -704,16 +705,16 @@ h1 {
   margin-top: 0.35em;
 }
 
-/* The group name: the same type as the Client side / Server side labels. */
+/* The group name: the same type as the Client side / Server side labels, in the
+   color of the hint line above the schema (5.7:1 on Cream, 5.4:1 on Deep purple). */
 .cross-label {
   padding: 0 0.2em;
-  color: #a08f79;
+  color: var(--color-text-muted);
   font-size: 0.85em;
   font-style: italic;
   font-weight: 600;
   line-height: 1.1;
 }
-:root[data-theme="dark"] .cross-label { color: #dcbaf6; }
 
 /* A darker brown, kept translucent so the cream ground still lightens it. */
 .layer--cross { background: rgb(92 74 56 / 0.18); }
