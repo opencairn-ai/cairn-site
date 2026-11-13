@@ -13,11 +13,12 @@ public/
   js/app.js                               Fills in the copy; pop-ups, theme switch, PNG download
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
-  assets/cairn-logo*.svg                  Wordmark (deep purple and cream), from the design system
-  assets/og-card.png                      Share card for link previews (from reference/og-card/)
+  assets/cairn-logo-light.png, cairn-logo-dark.png  Header lockup, one file per theme
+  assets/cairn-logo*.svg                  Wordmark used by the previous share card
+  assets/og-card.png                      Share card for link previews (supplied image)
   site.webmanifest, robots.txt, sitemap.xml
 reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
-reference/og-card/og-card.html            Share card source; how to regenerate it is inside
+reference/og-card/og-card.html            Previous share card. Do not regenerate it over the PNG
 wrangler.jsonc                            Cloudflare Workers static assets -> opencairn.ai
 ```
 

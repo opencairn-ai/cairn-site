@@ -23,7 +23,6 @@ window.CAIRN_COPY.fr = {
   },
 
   header: {
-    codename: "codename:",
     languageLabel: "Langue",
     themeToDark: "Passer au thème sombre",
     themeToLight: "Passer au thème clair",
@@ -35,7 +34,7 @@ window.CAIRN_COPY.fr = {
   },
 
   intro: {
-    eyebrow: "Avant-goût technique",
+    eyebrow: "Fiche technique",
     title: "Découvrez la pile d’IA souveraine à code source ouvert",
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
@@ -55,6 +54,7 @@ window.CAIRN_COPY.fr = {
   },
 
   diagram: {
+    eyebrow: "Explorer la pile",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
     // Marque les composants et les couches de la version alpha, sur les cases, dans la
@@ -69,6 +69,7 @@ window.CAIRN_COPY.fr = {
       layer: "Couche",
       crossCutting: "Couche transversale",
       component: "Composant",
+      endpoint: "Point de terminaison",
     },
   },
 
@@ -78,12 +79,16 @@ window.CAIRN_COPY.fr = {
   //   tooltip : la courte description qui s’affiche au survol, au toucher ou au clavier
   stack: {
     local: {
-      name: "Local",
+      name: "Environnement local",
       tooltip: "Au-dessus de la ligne : les applications et les SDK. Ils s’exécutent sur les appareils des utilisateurs ou dans vos produits, et se connectent à la pile par son API.",
     },
     server: {
-      name: "Serveur",
+      name: "Côté serveur",
       tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
+    },
+    localApi: {
+      name: "Point de terminaison d’API",
+      tooltip: "Le point sur la ligne où l’environnement local se connecte au côté serveur.",
     },
 
     application: {
