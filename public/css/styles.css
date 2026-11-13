@@ -559,6 +559,16 @@ h1 {
   color: #a08f79;
   font-style: italic;
 }
+/* An arrow left of each name: up to the local side, down to the server side.
+   The script puts the name first in the markup, so the arrow moves before it. */
+.boundary__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.boundary__arrow { order: -1; flex: none; width: 1em; height: 1em; }
+/* Same gray as the Local name, which is darker than its label. */
+:root:not([data-theme="dark"]) .boundary__label.is-out-of-scope .boundary__arrow { color: #5c6770; }
 .boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 6px)); }
 .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 6px)); }
 
@@ -605,19 +615,20 @@ h1 {
   display: flex;
   align-items: center;
   gap: 0.4em;
-  border: 2px solid transparent;
-  border-radius: var(--radius-sm);
   color: var(--color-boundary);
   /* Boundary type is 0.85em. Undo that so this name matches the Application label (1.1em). */
   font-size: calc(1.1em / 0.85);
   font-weight: 600;
-  /* Half the dot, plus the 2px left border, so the dot stays on the bridge center. */
-  transform: translate(calc(-0.275em - 2px), -50%);
+  /* Half the dot, so the dot stays on the bridge center. */
+  transform: translate(-0.275em, -50%);
 }
+/* The hover border goes around the name only, not the dot. */
 .local-api .label {
   flex-direction: row;
   align-items: center;
   padding: 0 0.25em;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
   background: var(--color-bg);
 }
 .local-api__dot {
@@ -766,8 +777,8 @@ h1 {
 }
 .layer:not(.is-out-of-scope).is-active,
 .layer:not(.is-out-of-scope):focus-visible,
-.local-api.is-active,
-.local-api:focus-visible,
+.local-api.is-active .label,
+.local-api:focus-visible .label,
 .boundary__label:not(.is-out-of-scope).is-active,
 .boundary__label:not(.is-out-of-scope):focus-visible {
   border-color: var(--color-pink);
