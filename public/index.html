@@ -45,10 +45,19 @@
 
   <header class="site-header">
     <a class="codename" href="./" data-page="hello"><img class="logo--light" src="assets/cairn-logo-light.png" alt="Codename: Cairn" width="846" height="104"><img class="logo--dark" src="assets/cairn-logo-dark.png" alt="Codename: Cairn" width="846" height="104"></a>
+    <!-- The tabs: the same four links on every page. The script marks the current one. -->
+    <nav class="site-nav" data-aria-label="nav.label">
+      <a href="./" data-page="hello" data-text="nav.hello"></a>
+      <a href="stack.html" data-page="stack" data-text="nav.stack"></a>
+      <a href="recipes.html" data-page="recipes" data-text="nav.recipes"></a>
+      <a href="roadmap.html" data-page="roadmap" data-text="nav.roadmap"></a>
+    </nav>
     <div class="prefs">
+      <!-- One language button: the script hides the link to the current language,
+           so the button shows the language a click switches to. -->
       <nav class="lang" data-aria-label="header.languageLabel">
-        <a href="?lang=en" hreflang="en" lang="en">EN</a>
-        <a href="?lang=fr" hreflang="fr-CA" lang="fr-CA">FR</a>
+        <a href="?lang=en" hreflang="en" lang="en" title="English">EN</a>
+        <a href="?lang=fr" hreflang="fr-CA" lang="fr-CA" title="Français">FR</a>
       </nav>
       <button type="button" class="theme-toggle" id="theme-toggle">
         <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -62,14 +71,6 @@
       </a>
     </div>
   </header>
-
-  <!-- The tabs: the same four links on every page. The script marks the current one. -->
-  <nav class="site-nav" data-aria-label="nav.label">
-    <a href="./" data-page="hello" data-text="nav.hello"></a>
-    <a href="stack.html" data-page="stack" data-text="nav.stack"></a>
-    <a href="recipes.html" data-page="recipes" data-text="nav.recipes"></a>
-    <a href="roadmap.html" data-page="roadmap" data-text="nav.roadmap"></a>
-  </nav>
 
   <!-- Content to come. For now the page shows its name only. -->
   <main>

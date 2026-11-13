@@ -106,9 +106,8 @@
       node.setAttribute("aria-label", t(node.dataset.ariaLabel));
     }
 
-    for (const link of document.querySelectorAll(".lang a")) {
-      if (link.hreflang === LOCALES[lang]) link.setAttribute("aria-current", "true");
-    }
+    // One language button: only the link to the other language shows.
+    for (const link of document.querySelectorAll(".lang a")) link.hidden = link.hreflang === LOCALES[lang];
 
     renderNav();
 
