@@ -92,20 +92,8 @@
            files. -->
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
-        <div class="layer layer--row is-out-of-scope" data-copy="application">
-          <div class="layer__items">
-            <div class="comp" data-copy="application.chatUi"></div>
-            <div class="comp" data-copy="application.codingHarness"></div>
-            <div class="comp" data-copy="application.knowledgeWorkHarness"></div>
-          </div>
-        </div>
-
-        <div class="layer layer--row is-out-of-scope" data-copy="sdk">
-          <div class="layer__items">
-            <div class="comp" data-copy="sdk.llmSdk"></div>
-            <div class="comp" data-copy="sdk.agentSdk"></div>
-          </div>
-        </div>
+        <!-- The client side: one row, with no detail. Cairn does not cover it. -->
+        <div class="layer layer--client is-out-of-scope" data-copy="application"></div>
 
         <div class="boundary">
           <span class="boundary__label is-out-of-scope" data-copy="local"><svg class="boundary__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></span>

@@ -78,7 +78,7 @@ window.CAIRN_COPY.en = {
   stack: {
     local: {
       name: "Client side",
-      tooltip: "Above the line: applications and SDKs. They are not part of the stack. They connect to the stack through its API endpoint. They can run on user devices, in your products or in the cloud.",
+      tooltip: "Above the line: your applications. They are not part of the stack. They connect to the stack through its API endpoint. They can run on user devices, in your products or in the cloud.",
     },
     server: {
       name: "Server side (the stack)",
@@ -90,33 +90,8 @@ window.CAIRN_COPY.en = {
     },
 
     application: {
-      name: "Application",
-      tooltip: "The tools that users work with every day. Teams keep their current assistants and agents, and connect them to the stack.",
-      chatUi: {
-        name: "Chat UI",
-        tooltip: "A chat interface for questions, writing and analysis.",
-      },
-      codingHarness: {
-        name: "Coding Harness",
-        tooltip: "A coding agent that reads, writes and runs code with developers.",
-      },
-      knowledgeWorkHarness: {
-        name: "Knowledge-Work Harness",
-        tooltip: "Agents for research, writing and analysis. They use your organization’s documents and tools.",
-      },
-    },
-
-    sdk: {
-      name: "SDK",
-      tooltip: "Libraries to build your own applications and agents on the stack.",
-      llmSdk: {
-        name: "LLM SDK",
-        tooltip: "A client library that calls models through the stack API. Your code does not change when the engine or the hardware changes.",
-      },
-      agentSdk: {
-        name: "Agent SDK",
-        tooltip: "A framework to build agents that plan, call tools, use memory and do multi-step tasks on the stack.",
-      },
+      name: "Bring-Your-Own Application",
+      tooltip: "Applications are not part of the stack. Teams keep their current assistants and agents, or build their own with an SDK. They connect to the stack through its API endpoint.",
     },
 
     persistence: {

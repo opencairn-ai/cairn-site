@@ -436,7 +436,7 @@
   }
 
   // One group per layer, in reading order: the layer, then each of its components,
-  // with the same text as the pop-ups. Local and Server follow the SDK row.
+  // with the same text as the pop-ups. Local and Server follow the client row.
   function legendGroups() {
     const item = (node) => {
       const entry = entries.get(node);
@@ -450,7 +450,7 @@
         el("p", "export-legend__about", entry.tooltip),
         ...[...layer.querySelectorAll(".comp")].map(item),
       ]));
-      if (layer.dataset.copy === "sdk") {
+      if (layer.dataset.copy === "application") {
         const api = diagram.querySelector(".local-api");
         if (api) groups.push(el("section", "export-legend__group", [
           el("h3", null, entries.get(api).name),

@@ -466,7 +466,14 @@ h1 {
   text-align: center;
 }
 
-/* Application, SDK, Registry and the cross-cutting layers: one row each, name on the left. */
+/* The client side: one row with its name in the center, above the API Endpoint. */
+.layer--client {
+  align-items: center;
+  padding: calc(0.55em - 2px) calc(0.65em - 2px);
+  text-align: center;
+}
+
+/* Registry and the cross-cutting layers: one row each, name on the left. */
 .layer--row {
   flex-direction: row;
   align-items: center;
@@ -748,7 +755,7 @@ h1 {
   border-color: var(--color-pink);
 }
 
-/* Upper gray stack (Application / SDK): same 2px border stroke, in gray, not pink. */
+/* The gray client row: same 2px border stroke, in gray, not pink. */
 .is-out-of-scope .comp.is-active,
 .is-out-of-scope .comp:focus-visible {
   border-color: #8b939a;
