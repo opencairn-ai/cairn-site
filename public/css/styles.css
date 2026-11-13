@@ -1031,205 +1031,280 @@ h1 {
 }
 
 /* --- Recipes page ---------------------------------------------------------
-   A list of recipes with filters, and a sheet with the files of the selected
-   recipe. The script (js/recipes.js) fills both from js/recipes-data.js.     */
+   Filters, a list of recipes, and a sheet with the files of the selected
+   recipe. The script (js/recipes.js) fills them from js/recipes-data.js.
 
-/* On a landscape screen the page is one screen high: the list scrolls inside
-   its panel, and the file preview scrolls inside the sheet. */
+   The page follows the rules of the architecture schema:
+   - Three levels: the page ground, a panel, and boxes with a 2px border.
+   - A panel has its name inside, at its start, in semibold.
+   - The object in focus has the outline of the core. Here it is the sheet.
+   - Magenta marks what is active: the border of the box changes color, and a
+     selected box also gets the Pale purple fill. Nothing else is pink.
+   - Gray marks what is outside the scope. Here it is an example recipe.
+   Sized in em of the schema's text size, so the corners match the schema.   */
+
+/* The colors of the schema's panels. A filter applies to the whole list, so the
+   filters use the panel of the rows that apply to all layers; the list and the
+   files use the panel of the core's layers. The values are the schema's. */
+.recipe-body {
+  --recipe-panel: var(--color-layer);
+  --recipe-panel-shared: rgb(92 74 56 / 0.18);
+  --recipe-panel-name: var(--color-header);
+  --recipe-box: var(--color-component);
+  --recipe-gray: #e6e8ea;
+  --recipe-gray-text: #5c6770;
+}
+
+:root[data-theme="dark"] .recipe-body {
+  --recipe-panel: rgb(220 186 246 / 0.22);
+  --recipe-panel-shared: rgb(28 14 40 / 0.7);
+  --recipe-panel-name: var(--color-boundary);
+  /* Boxes sit on the page purple, so they read against the mauve panel. */
+  --recipe-box: var(--color-bg);
+  --recipe-gray: #4a4750;
+  --recipe-gray-text: #b7b3ae;
+}
+
+/* On a landscape screen the page is one screen high: the recipes scroll inside
+   the list panel, and the file preview scrolls inside its box. */
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
   body[data-page="recipes"] .page { height: 100vh; height: 100dvh; }
   body[data-page="recipes"] main { min-height: 0; }
-  .recipe-body { flex: 1; min-height: 0; }
-  .recipe-finder, .recipe-sheet { overflow: auto; }
+  .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .recipe-finder, .recipe-sheet { min-height: 0; }
+  /* The name of the list stays in place; the recipes scroll under it. */
+  .recipe-list { flex: 1 1 auto; min-height: 0; }
+  .recipe-results { flex: 1 1 auto; min-height: 0; overflow: auto; }
+  .recipe-results > * { flex: none; }
   /* The sheet does not scroll. A short file shows in full; a long file takes the
      height that is left and scrolls inside its box. The sheet scrolls only when
      the screen is too short for the box's minimum height. */
-  .recipe-sheet { display: flex; flex-direction: column; }
-  .recipe-sheet > * { flex: none; }
-  .recipe-sheet > .recipe-code--file { display: flex; flex: 0 1 auto; min-height: 3.4rem; }
+  .recipe-sheet { overflow: auto; }
+  .recipe-sheet > *, .recipe-files > * { flex: none; }
+  .recipe-sheet > .recipe-files { flex: 0 1 auto; min-height: 8.5em; }
+  .recipe-files > .recipe-code { display: flex; flex: 0 1 auto; min-height: 3.4em; }
   .recipe-code--file pre { flex: 1; min-width: 0; }
 }
 
-/* The same as the stack page: the page title, then one line under it in the title's ink. */
-.recipe-intro { margin-bottom: 0.9rem; }
+/* The same as the stack page: the title, one line in the title's ink, then the
+   Magenta label and the hint above the panels. */
+.recipe-intro { margin-bottom: 0.7rem; }
 .recipe-intro__lead { color: var(--color-title); font-size: 0.9rem; font-weight: 500; }
 
-/* The two panels: the list with its filters, and the sheet of the selected recipe. */
-
+/* The list with its filters, and the sheet of the selected recipe. */
 .recipe-body {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 0.9rem;
+  gap: 0.6em;
   padding-bottom: 0.4rem;
+  font-size: 0.94rem;
+  line-height: 1.25;
 }
 
-.recipe-finder,
-.recipe-sheet {
-  padding: 1rem;
-  border-radius: 0.7rem;
-  font-size: 0.9rem;
+.recipe-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
 }
-.recipe-finder { background: var(--color-layer); }
-.recipe-sheet {
-  border: 1px solid var(--color-component-border);
-  background: var(--color-component);
+
+/* A panel, with its name at its start. */
+.recipe-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  padding: 0.55em 0.65em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--recipe-panel);
+}
+
+.recipe-name {
+  margin: 0;
+  color: var(--recipe-panel-name);
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: inherit;
+}
+
+/* A box: a filter choice, the search field, a recipe of the list, a file. */
+.recipe-chip,
+.recipe-input,
+.recipe-row,
+.recipe-code {
+  border: 2px solid var(--color-component-border);
+  border-radius: var(--radius-sm);
+  background: var(--recipe-box);
   box-shadow: var(--color-component-shadow);
+  color: var(--color-text);
+  font: inherit;
 }
 
-.recipe-label { color: var(--color-header); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
-.recipe-empty { color: var(--color-body); }
+/* One stroke only, as on the schema: the box's own border turns Magenta on
+   hover and keyboard focus. The selected box also gets the fill. */
+.recipe-chip:hover,
+.recipe-chip:focus-visible,
+.recipe-row:hover,
+.recipe-row:focus-visible,
+.recipe-input:focus-visible {
+  border-color: var(--color-pink);
+  outline: none;
+}
+
+.recipe-chip[aria-pressed="true"],
+.recipe-row[aria-pressed="true"] {
+  border-color: var(--color-pink);
+  background: var(--color-pink-tint);
+}
+
+.recipe-empty { padding: 0.3em 0.2em; color: var(--color-body); }
+
+/* --- Filters: one row each, with the name on the left --- */
+
+.recipe-filters { display: flex; flex-direction: column; gap: 0.5em; }
+
+.recipe-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0.4em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--recipe-panel-shared);
+  /* On this darker panel the boxes keep the box color in both themes. */
+  --recipe-box: var(--color-component);
+}
+
+.recipe-filter > .recipe-name { flex: 0 0 8.5em; }
+.recipe-chips { display: flex; flex: 1; flex-wrap: wrap; gap: 0.55em; min-width: 0; }
+.recipe-chip { flex: 1 1 auto; padding: 0.35em 0.5em; font-weight: 600; text-align: center; cursor: pointer; }
+.recipe-input { flex: 1; min-width: 0; padding: 0.35em 0.65em; font-weight: 500; }
+.recipe-input::placeholder { color: var(--color-text-muted); opacity: 1; }
+
+/* --- The list --- */
+
+.recipe-results { display: flex; flex-direction: column; gap: 0.45em; }
+
+.recipe-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.7fr) minmax(0, 1.45fr);
+  align-items: center;
+  gap: 0.3em 0.9em;
+  padding: 0.4em 0.65em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.recipe-row__name { display: flex; flex-direction: column; gap: 0.15em; font-weight: 600; overflow-wrap: anywhere; }
+.recipe-row__publisher { color: var(--color-text-muted); font-size: 0.84em; font-weight: 400; line-height: 1.2; }
+.recipe-row__where { color: var(--color-body); font-size: 0.92em; }
+/* On the selected fill, the quiet text takes the box ink so it stays readable. */
+[aria-pressed="true"] .recipe-row__publisher,
+[aria-pressed="true"] .recipe-row__where { color: var(--color-text); }
 
 /* Tags: the design system's chip. */
-.recipe-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 0.3em; }
 .recipe-tag {
   padding: 0.28em 0.6em;
   border: 1px solid var(--color-component-border);
-  border-radius: 0.4rem;
+  border-radius: var(--radius-sm);
   color: var(--color-body);
-  font-size: 0.75rem;
+  font-size: 0.8em;
   font-weight: 500;
   line-height: 1.1;
   white-space: nowrap;
 }
-.recipe-tag--accent { border-color: var(--color-pink-tint); background: var(--color-pink-tint); color: var(--color-text); }
+[aria-pressed="true"] .recipe-tag:not(.recipe-tag--example) { border-color: currentColor; color: var(--color-text); }
+/* An example recipe is not tuned for a hardware type: gray, as the client side of the schema. */
+.recipe-tag--example { border-color: transparent; background: var(--recipe-gray); color: var(--recipe-gray-text); }
 
-/* --- Filters and results --- */
+/* --- The sheet: the object in focus, with the outline of the core --- */
 
-.recipe-filters { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-bottom: 1rem; }
-.recipe-filter { display: flex; flex-direction: column; gap: 0.35rem; }
-.recipe-filter--search { flex: 1 1 10rem; }
-.recipe-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-
-.recipe-chip {
-  padding: 0.42em 0.75em;
-  border: 1px solid var(--color-component-border);
-  border-radius: 0.4rem;
-  background: var(--color-component);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 500;
-  cursor: pointer;
+.recipe-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  min-width: 0;
+  padding: 0.6em;
+  border: 2.5px solid var(--color-core-outline);
+  border-radius: var(--radius-lg);
 }
-.recipe-chip:hover { border-color: var(--color-button-outline); }
-.recipe-chip[aria-pressed="true"] { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 
-.recipe-input {
-  width: 100%;
-  padding: 0.42em 0.7em;
-  border: 1px solid var(--color-component-border);
-  border-radius: 0.4rem;
-  background: var(--color-component);
-  color: var(--color-text);
-  font: inherit;
-  font-size: 0.82rem;
-}
-.recipe-input::placeholder { color: var(--color-text-muted); }
-
-.recipe-results { display: flex; flex-direction: column; gap: 0.4rem; }
-.recipe-group { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 0.1rem; color: var(--color-header); font-size: 0.85rem; font-weight: 600; line-height: inherit; }
-.recipe-group:first-child { margin-top: 0; }
-.recipe-group__count { color: var(--color-text-muted); font-weight: 500; }
-.recipe-group__note { color: var(--color-body); font-weight: 400; }
-
-.recipe-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) minmax(0, 1.3fr);
-  align-items: center;
-  gap: 0.3rem 0.9rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--color-component-border);
-  border-radius: 0.5rem;
-  background: var(--color-component);
-  box-shadow: var(--color-component-shadow);
-  color: var(--color-text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.recipe-row:hover { border-color: var(--color-button-outline); }
-.recipe-row[aria-pressed="true"] { border-color: var(--color-pink-tint); background: var(--color-pink-tint); }
-.recipe-row__name { display: flex; flex-direction: column; font-weight: 600; overflow-wrap: anywhere; }
-.recipe-row__publisher { color: var(--color-text-muted); font-size: 0.78rem; font-weight: 400; }
-.recipe-row__where { color: var(--color-body); font-size: 0.85rem; }
-[aria-pressed="true"] .recipe-row__publisher,
-[aria-pressed="true"] .recipe-row__where,
-[aria-pressed="true"] .recipe-tag { color: var(--color-text); }
-[aria-pressed="true"] .recipe-tag { border-color: currentColor; }
-
-/* --- The recipe sheet --- */
-
-.recipe-sheet__title { margin: 0 0 0.1rem; color: var(--color-title); font-size: 1.45rem; font-weight: 600; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.recipe-sheet__head { padding: 0.3em 0.45em 0.15em; }
+.recipe-sheet__title { margin: 0 0 0.15em; color: var(--color-title); font-size: 1.5em; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; overflow-wrap: anywhere; }
 .recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
-.recipe-sheet__where { margin-bottom: 0.6rem; color: var(--color-text); font-weight: 500; }
-.recipe-sheet__heading { margin: 1.1rem 0 0.5rem; color: var(--color-header); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
-.recipe-sheet__image { margin-top: 0.5rem; color: var(--color-body); font-size: 0.82rem; }
+.recipe-sheet__where { margin-bottom: 0.55em; color: var(--color-text); font-weight: 500; }
+.recipe-sheet__image { padding: 0 0.2em; color: var(--color-body); font-size: 0.88em; }
 .recipe-sheet code { font-family: var(--font-mono); font-size: 0.92em; }
 
-.recipe-use { display: flex; flex-direction: column; gap: 0.6rem; margin: 0; padding-left: 1.3em; color: var(--color-body); }
-.recipe-use .recipe-code { margin-top: 0.35rem; }
-
-.recipe-code {
-  position: relative;
-  border: 1px solid var(--color-component-border);
-  border-radius: 0.5rem;
-  background: var(--color-bg);
+/* The file names: the tabs of the header. The current one is bold, with a Magenta underline. */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0.2em; padding-bottom: 0.25em; }
+.recipe-tab {
+  padding: 0.3em 0.5em;
+  border: 0;
+  border-radius: var(--radius-ui-sm);
+  background: none;
+  color: var(--color-tab);
+  font: inherit;
+  font-size: 0.92em;
+  font-weight: 500;
+  cursor: pointer;
 }
+.recipe-tab:hover { color: var(--color-text); }
+.recipe-tab[aria-pressed="true"] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline 2px var(--color-pink);
+  text-underline-offset: 0.5em;
+}
+
+/* A file, or a command: the content in monospace, with the Copy button in the corner. */
+.recipe-code { position: relative; }
 .recipe-code pre {
   margin: 0;
-  padding: 0.6rem 4.6rem 0.6rem 0.8rem;
+  padding: 0.6em 4.8em 0.6em 0.8em;
   overflow: auto;
-  color: var(--color-text);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.83em;
   line-height: 1.5;
 }
+/* The outline button of the header, small. */
 .recipe-copy {
   position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
-  padding: 0.3em 0.7em;
-  border: 1px solid var(--color-button-outline);
-  border-radius: 0.4rem;
-  background: var(--color-component);
+  top: 0.35em;
+  right: 0.35em;
+  padding: 0.4em 0.75em;
+  border: 1.5px solid var(--color-button-outline);
+  border-radius: var(--radius-ui-md);
+  background: var(--recipe-box);
   color: var(--color-text);
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.8em;
   font-weight: 500;
+  line-height: 1;
   cursor: pointer;
 }
 .recipe-copy:hover { background: var(--color-button-hover); }
 
-/* The file names: the design system's nav tab. */
-.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0.1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--color-component-border); }
-.recipe-tab {
-  margin-bottom: -1px;
-  padding: 0.5em 0.7em;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--color-tab);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  cursor: pointer;
-}
-.recipe-tab:hover { color: var(--color-text); }
-.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); font-weight: 700; }
-
-.recipe-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; margin-top: 1rem; font-size: 0.85rem; }
+.recipe-links { display: flex; flex-wrap: wrap; gap: 0.4em 1.3em; padding: 0 0.45em 0.3em; font-size: 0.92em; }
 .recipe-link { color: var(--color-link); font-weight: 500; text-underline-offset: 3px; }
 .recipe-link:hover { color: var(--color-link-hover); }
 
-/* Narrow screens: the sheet goes under the list. */
+/* The steps to install a recipe (shown when the stack repository is public). */
+.recipe-use { display: flex; flex-direction: column; gap: 0.6em; margin: 0; padding-left: 1.3em; color: var(--color-body); }
+.recipe-use .recipe-code { margin-top: 0.35em; }
 
+/* Narrow screens: the sheet goes under the list. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-body { grid-template-columns: minmax(0, 1fr); gap: 0.9em; }
   .recipe-sheet { scroll-margin-top: 0.5rem; }
-  /* The sheet is under the list here: the file preview keeps a fixed maximum height. */
+  /* The file preview keeps a fixed maximum height. */
   .recipe-code--file pre { max-height: 26rem; }
 }
 
+/* Phones: the name of a filter goes above its boxes, and a recipe takes one column. */
 @media (max-width: 640px) {
+  .recipe-filter { flex-direction: column; align-items: stretch; gap: 0.45em; padding: 0.55em 0.65em 0.65em; }
+  .recipe-filter > .recipe-name { flex: none; }
   .recipe-row { grid-template-columns: minmax(0, 1fr); }
 }
 

@@ -32,7 +32,6 @@
   // The hardware types and the model servers, in the order of the repository.
   const HARDWARE = unique(RECIPES.map((r) => r.hardware)).map((id) => ({ id, label: RECIPES.find((r) => r.hardware === id).hardwareLabel }));
   const SERVERS = unique(RECIPES.map((r) => r.server)).map((id) => ({ id, label: RECIPES.find((r) => r.server === id).serverLabel }));
-  const hardwareLabel = (id) => HARDWARE.find((h) => h.id === id).label;
 
   // A "<vendor>-any" folder holds the generic recipes of a vendor. They also run
   // on each specific hardware type of that vendor (for example nvidia-any on nvidia-gb10).
@@ -84,13 +83,15 @@
   }
 
   function chipGroup(name, options, current, set) {
-    const label = el("span", "recipe-label", [text(`filters.${name}`)]);
+    const label = el("span", "recipe-name", [text(`filters.${name}`)]);
     label.id = `recipe-filter-${name}`;
-    const chips = el("div", "recipe-chips", [{ id: "", label: text("filters.all") }, ...options].map((option) => {
+    // A choice is a switch: a click selects it, and a second click removes the filter.
+    // With no choice selected, the list shows all the recipes and no box is marked.
+    const chips = el("div", "recipe-chips", options.map((option) => {
       const chip = el("button", "recipe-chip", [option.label]);
       chip.type = "button";
       chip.setAttribute("aria-pressed", String(option.id === current));
-      chip.addEventListener("click", () => { set(option.id); renderFilters(); renderResults(); });
+      chip.addEventListener("click", () => { set(option.id === current ? "" : option.id); renderFilters(); renderResults(); });
       return chip;
     }));
     chips.setAttribute("role", "group");
@@ -104,7 +105,7 @@
     input.id = "recipe-filter-model";
     input.placeholder = text("filters.modelPlaceholder");
     input.addEventListener("input", () => { state.query = input.value.trim(); renderResults(); });
-    const label = el("label", "recipe-label", [text("filters.model")]);
+    const label = el("label", "recipe-name", [text("filters.model")]);
     label.htmlFor = input.id;
     return el("div", "recipe-filter recipe-filter--search", [label, input]);
   }
@@ -118,40 +119,18 @@
       (!query || `${r.publisher}/${r.model}`.toLowerCase().includes(query));
 
     // With a hardware type selected: its recipes, then the generic recipes of its vendor.
-    const groups = [];
-    if (!state.hardware) {
-      groups.push({ recipes: RECIPES.filter(matches) });
-    } else {
-      const hardware = hardwareLabel(state.hardware);
-      groups.push({
-        title: text("groups.specific", { hardware }),
-        recipes: RECIPES.filter((r) => r.hardware === state.hardware && matches(r)),
-      });
-      const generic = genericFor(state.hardware);
-      if (generic) {
-        groups.push({
-          title: text("groups.generic", { hardware: hardwareLabel(generic) }),
-          note: text("groups.genericNote", { hardware }),
-          recipes: RECIPES.filter((r) => r.hardware === generic && matches(r)),
-        });
-      }
-    }
+    // Each recipe names its hardware, so the two sets need no heading.
+    const generic = state.hardware && genericFor(state.hardware);
+    const visible = (state.hardware
+      ? [...RECIPES.filter((r) => r.hardware === state.hardware), ...RECIPES.filter((r) => r.hardware === generic)]
+      : RECIPES
+    ).filter(matches);
 
     // The sheet always shows a recipe of the list: when the filters hide the
     // selected recipe, the first recipe of the list takes its place.
-    const visible = groups.flatMap((group) => group.recipes);
     if (!visible.some((r) => r.id === state.selected)) state.selected = visible.length ? visible[0].id : "";
 
-    results.replaceChildren(...(visible.length
-      ? groups.filter((group) => group.recipes.length).flatMap((group) => [
-          group.title && el("h2", "recipe-group", [
-            group.title,
-            el("span", "recipe-group__count", [String(group.recipes.length)]),
-            group.note && el("span", "recipe-group__note", [group.note]),
-          ]),
-          ...group.recipes.map(resultRow),
-        ]).filter(Boolean)
-      : [el("p", "recipe-empty", [text("empty")])]));
+    results.replaceChildren(...(visible.length ? visible.map(resultRow) : [el("p", "recipe-empty", [text("empty")])]));
 
     renderSheet();
   }
@@ -195,16 +174,20 @@
 
     sheet.replaceChildren(...[
       // Each fact one time: the model with its publisher, then the server and the hardware.
-      el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
-      el("p", "recipe-sheet__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
-      el("div", "recipe-tags", tags(r)),
+      el("div", "recipe-sheet__head", [
+        el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
+        el("p", "recipe-sheet__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
+        el("div", "recipe-tags", tags(r)),
+      ]),
 
-      ...(STACK_IS_PUBLIC ? useThisRecipe(r) : []),
+      STACK_IS_PUBLIC && useThisRecipe(r),
 
-      el("h3", "recipe-sheet__heading", [text("sheet.files")]),
-      tabs,
-      codeBlock(file.text, "recipe-code--file"),
-      r.image && el("p", "recipe-sheet__image", [text("sheet.image"), " ", el("code", null, [r.image])]),
+      el("section", "recipe-panel recipe-files", [
+        el("h3", "recipe-name", [text("sheet.files")]),
+        tabs,
+        codeBlock(file.text, "recipe-code--file"),
+        r.image && el("p", "recipe-sheet__image", [text("sheet.image"), " ", el("code", null, [r.image])]),
+      ]),
 
       el("p", "recipe-links", [
         STACK_IS_PUBLIC && link(text("sheet.github"), `${data.repo}/tree/${data.branch}/recipes/${r.id}`),
@@ -217,13 +200,13 @@
   // The steps to install the recipe. Shown only when the stack repository is public.
   function useThisRecipe(r) {
     const env = [`HARDWARE_TARGET=${r.hardware}`, `MODEL_NAME=${r.model}`, `MODEL_ORG=${r.publisher}`, `MODEL_SERVER=${r.server}`].join("\n");
-    return [
-      el("h3", "recipe-sheet__heading", [text("sheet.use.title")]),
+    return el("section", "recipe-panel", [
+      el("h3", "recipe-name", [text("sheet.use.title")]),
       el("ol", "recipe-use", [
         el("li", null, [text("sheet.use.select"), codeBlock(env)]),
         el("li", null, [text("sheet.use.start"), codeBlock("docker compose up -d")]),
       ]),
-    ];
+    ]);
   }
 
   // The facts that the recipe files state. A fact that the files do not state shows no tag.
@@ -231,7 +214,7 @@
     const facts = r.facts;
     const count = (value) => value.toLocaleString(app.locale);
     const list = [];
-    if (r.example) list.push([text("tags.example"), "recipe-tag--accent"]);
+    if (r.example) list.push([text("tags.example"), "recipe-tag--example"]);
     if (facts.context) list.push([text(short ? "tags.contextShort" : "tags.context", { count: count(facts.context) })]);
     if (facts.tools) list.push([text("tags.tools")]);
     if (facts.reasoning) list.push([text("tags.reasoning")]);

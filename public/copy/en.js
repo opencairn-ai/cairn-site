@@ -240,24 +240,19 @@ window.CAIRN_COPY.en = {
   recipes: {
     title: "Find a recipe for your hardware",
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
-    // The name of the list for screen readers.
+    // The label and the hint above the panels, as on the stack page.
+    eyebrow: "Explore the recipes",
+    hint: "Select a recipe to see its files.",
+    // The name of the list panel.
     listLabel: "Recipes",
     filters: {
       hardware: "Hardware",
       server: "Model server",
       model: "Model",
       modelPlaceholder: "Model name",
-      all: "All",
     },
     // The model server and the hardware of a recipe, for example "vLLM on GB10".
     where: "{server} on {hardware}",
-    // The headings of the list when a hardware type is selected. The second group
-    // holds the recipes for any hardware of the same vendor, for example "any NVIDIA GPU".
-    groups: {
-      specific: "Recipes for {hardware}",
-      generic: "Recipes for any {hardware}",
-      genericNote: "These recipes are not tuned for {hardware}.",
-    },
     empty: "No recipe matches these filters. Remove a filter to see more recipes.",
     noSelection: "Select a recipe to see its configuration.",
     tags: {
