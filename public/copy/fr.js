@@ -95,7 +95,7 @@ window.CAIRN_COPY.fr = {
       tooltip: "Au-dessus de la ligne : vos applications. Elles ne font pas partie de la pile. Elles se connectent à la pile par son point de terminaison d’API. Elles peuvent s’exécuter sur les appareils des utilisateurs, dans vos produits ou dans le nuage.",
     },
     server: {
-      name: "Côté serveur (la pile)",
+      name: "Côté serveur",
       tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
     },
     localApi: {

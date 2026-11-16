@@ -91,7 +91,7 @@ window.CAIRN_COPY.en = {
       tooltip: "Above the line: your applications. They are not part of the stack. They connect to the stack through its API endpoint. They can run on user devices, in your products or in the cloud.",
     },
     server: {
-      name: "Server side (the stack)",
+      name: "Server side",
       tooltip: "Below the line: the stack. It runs on infrastructure that your organization controls: in-house, at a partner or at a compute provider.",
     },
     localApi: {
