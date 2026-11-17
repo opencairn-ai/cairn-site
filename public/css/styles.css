@@ -1,5 +1,5 @@
 /* ==========================================================================
-   opencairn.ai — the architecture page
+   opencairn.ai — all pages: the header, the architecture page, the Recipes page
    ========================================================================== */
 
 @font-face {
@@ -36,7 +36,7 @@
   --color-core-outline: #291435;
   --color-boundary: #291435;
   --color-focus: #734c90;            /* Mid purple */
-  --color-tab: #505d65;              /* Inactive language */
+  --color-tab: #505d65;              /* Inactive tab */
   --color-link: #734c90;             /* 5.6:1 */
   --color-link-hover: #291435;
   --color-button: #291435;
@@ -60,6 +60,7 @@
   --color-badge-alpha: #283f33;      /* Pop-up badges, white text: Forest green 11.4:1 */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;   /* Recipe files, as in the design system's meta chip */
   --gutter: max(16px, 2.25rem);
   /* Corner radii: the design system's sm 6px, md 9px and lg 14px as they measure on a
      1440 × 900 screen, in em of the diagram's text (rem for the header and pop-up),
@@ -179,7 +180,7 @@ a { color: inherit; }
 .codename {
   display: flex;
   align-items: center;
-  margin-right: auto;
+  text-decoration: none;
 }
 
 /* The lockup already includes "Codename:". The light or dark file follows the theme. */
@@ -195,11 +196,11 @@ a { color: inherit; }
   gap: 0.6rem;
 }
 
-/* Language and theme switches, side by side. */
+/* Language and theme buttons, side by side. */
 .prefs {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.1rem;
   margin-right: 0.4rem;
 }
 
@@ -225,28 +226,52 @@ a { color: inherit; }
 :root[data-theme="dark"] .theme-toggle__moon { display: none; }
 :root[data-theme="dark"] .theme-toggle__sun { display: block; }
 
-.lang {
-  display: flex;
-  gap: 0.1rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
+/* The language button: a ghost button like the theme button. It shows the
+   language a click switches to. */
+.lang { display: flex; font-size: 0.85rem; }
 
 .lang a {
-  padding: 0.35em 0.45em;
-  border-radius: var(--radius-ui-sm);
-  color: var(--color-tab);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.5em;
+  border-radius: var(--radius-ui-md);
+  color: var(--color-text);
+  font-weight: 600;
   text-decoration: none;
 }
 
-.lang a:hover { color: var(--color-text); }
+.lang a[hidden] { display: none; }
+.lang a:hover { background: var(--color-ghost-hover); }
 
-/* Nav tab: the active language bold, with a Magenta underline. */
-.lang a[aria-current] {
+/* The tabs, one per page, in the header next to the logo: the design system's
+   nav tab. The current tab is bold, with a Magenta underline. */
+.site-nav {
+  display: flex;
+  gap: 0.2rem;
+  margin: 0 auto 0 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.site-nav a {
+  flex: none;
+  padding: 0.4em 0.6em;
+  border-radius: var(--radius-ui-sm);
+  color: var(--color-tab);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav a:hover { color: var(--color-text); }
+
+.site-nav a[aria-current] {
   color: var(--color-text);
   font-weight: 700;
   text-decoration: underline 2px var(--color-pink);
-  text-underline-offset: 0.45em;
+  text-underline-offset: 0.5em;
 }
 
 .btn {
@@ -965,18 +990,29 @@ h1 {
 
 .noscript { padding: 1rem var(--gutter); }
 
-/* Phones: two header rows, the codename with the language and theme switches,
-   then both buttons. */
+/* Phones: three header rows. The codename with the language and theme buttons,
+   then the buttons, then the tabs. The tabs go from edge to edge and scroll
+   sideways when they are wider than the screen. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
 
   .site-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "codename prefs" "actions actions";
+    grid-template-areas: "codename prefs" "actions actions" "nav nav";
   }
 
-  .codename { grid-area: codename; margin-right: 0; min-width: 0; }
+  .codename { grid-area: codename; min-width: 0; }
+  .site-nav {
+    grid-area: nav;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 calc(var(--gutter) - 0.6em) 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .site-nav::-webkit-scrollbar { display: none; }
+  /* Inside the scrolling row, the focus ring stays within the tab so it is not cut. */
+  .site-nav a:focus-visible { outline-offset: -3px; }
   .codename img { max-width: 100%; max-height: 1.75rem; height: auto; }
   .prefs { grid-area: prefs; margin-right: 0; }
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; }
@@ -992,6 +1028,420 @@ h1 {
   .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   /* The goals stack on a phone, so the stack label needs room above it. */
   .intro { margin-bottom: 2rem; }
+}
+
+/* --- Recipes page ---------------------------------------------------------
+   Filters, a list of recipes, and a sheet with the files of the selected
+   recipe. The script (js/recipes.js) fills them from js/recipes-data.js.
+
+   The page follows the rules of the architecture schema:
+   - Three levels: the page ground, a panel, and boxes with a 2px border.
+   - A panel has its name inside, at its start, in semibold.
+   - The object in focus has the outline of the core. Here it is the sheet.
+   - Magenta marks what is active: the border of the box changes color, and a
+     selected box also gets the Pale purple fill. Nothing else is pink.
+   - Gray is the color of the client side. Here it is the filters.
+   Sized in em of the schema's text size, so the corners match the schema.   */
+
+/* The colors of the schema, with the schema's values. The list and the files use
+   the panel of the core's layers. The filters use the gray of the client side
+   (the Bring-Your-Own Application row); their boxes are painted as the boxes of
+   that row were in Design V2.B, with a gray stroke on hover. */
+.recipe-body {
+  --recipe-panel: var(--color-layer);
+  --recipe-panel-name: var(--color-header);
+  --recipe-box: var(--color-component);
+  --recipe-gray: #e6e8ea;            /* The gray row */
+  --recipe-gray-text: #5c6770;       /* Its name and the text of its boxes */
+  --recipe-gray-box: #fafbfc;        /* A box in the gray row */
+  --recipe-gray-line: #c5ced3;       /* The border of that box */
+  --recipe-gray-hover: #eef0f2;      /* That box on hover and focus */
+  --recipe-gray-hover-line: #8b939a;
+  --recipe-menu-line: #d0c2b1;       /* The border of an open menu: Beige, as in the design system */
+}
+
+:root[data-theme="dark"] .recipe-body {
+  --recipe-panel: rgb(220 186 246 / 0.22);
+  --recipe-panel-name: var(--color-boundary);
+  /* Boxes sit on the page purple, so they read against the mauve panel. */
+  --recipe-box: var(--color-bg);
+  --recipe-gray: #3a3840;
+  --recipe-gray-text: #b7b3ae;
+  --recipe-gray-box: #4a4750;
+  --recipe-gray-line: #6a6570;
+  --recipe-gray-hover: #54515a;
+  --recipe-gray-hover-line: #c5c9ce;
+  --recipe-menu-line: #a08f79;       /* Stone */
+}
+
+/* On a landscape screen the page is one screen high: the recipes scroll inside
+   the list panel, and the file preview scrolls inside its box. */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
+  body[data-page="recipes"] .page { height: 100vh; height: 100dvh; }
+  body[data-page="recipes"] main { min-height: 0; }
+  .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .recipe-finder, .recipe-sheet { min-height: 0; }
+  /* The name of the list stays in place; the recipes scroll under it. */
+  .recipe-list { flex: 1 1 auto; min-height: 0; }
+  .recipe-results { flex: 1 1 auto; min-height: 0; overflow: auto; }
+  .recipe-results > * { flex: none; }
+  /* The sheet does not scroll. A short file shows in full; a long file takes the
+     height that is left and scrolls inside its box. The sheet scrolls only when
+     the screen is too short for the box's minimum height. */
+  .recipe-sheet { overflow: auto; }
+  .recipe-sheet > *, .recipe-files > * { flex: none; }
+  .recipe-sheet > .recipe-files { flex: 0 1 auto; min-height: 8.5em; }
+  .recipe-files > .recipe-code { display: flex; flex: 0 1 auto; min-height: 3.4em; }
+  .recipe-code--file pre { flex: 1; min-width: 0; }
+}
+
+/* The same as the stack page: the title, one line in the title's ink, then the
+   Magenta label and the hint above the panels. */
+.recipe-intro { margin-bottom: 0.7rem; }
+.recipe-intro__lead { color: var(--color-title); font-size: 0.9rem; font-weight: 500; }
+
+/* The list with its filters, and the sheet of the selected recipe. */
+.recipe-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 0.6em;
+  padding-bottom: 0.4rem;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.recipe-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+}
+
+/* A panel, with its name at its start. */
+.recipe-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  padding: 0.55em 0.65em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--recipe-panel);
+}
+
+.recipe-name {
+  margin: 0;
+  color: var(--recipe-panel-name);
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: inherit;
+}
+
+/* A box: a recipe of the list, a file. */
+.recipe-row,
+.recipe-code {
+  border: 2px solid var(--color-component-border);
+  border-radius: var(--radius-sm);
+  background: var(--recipe-box);
+  box-shadow: var(--color-component-shadow);
+  color: var(--color-text);
+  font: inherit;
+}
+
+/* A box in the gray row: a menu, the search field. */
+.recipe-select,
+.recipe-input {
+  border: 2px solid var(--recipe-gray-line);
+  border-radius: var(--radius-sm);
+  background: var(--recipe-gray-box);
+  color: var(--recipe-gray-text);
+  font: inherit;
+}
+
+/* One stroke only, as on the schema: the box's own border changes color on hover
+   and keyboard focus. Magenta for a recipe, gray for a box in the gray row. */
+.recipe-row:hover,
+.recipe-row:focus-visible {
+  border-color: var(--color-pink);
+  outline: none;
+}
+
+.recipe-select:hover,
+.recipe-select:focus-visible,
+.recipe-select[aria-expanded="true"],
+.recipe-input:focus-visible {
+  border-color: var(--recipe-gray-hover-line);
+  background: var(--recipe-gray-hover);
+  outline: none;
+}
+
+/* The selected recipe, and a menu with a choice: the Magenta border and the Pale
+   purple fill. A filter that is on must read at once, so it leaves the gray. */
+.recipe-select[data-chosen="true"],
+.recipe-row[aria-pressed="true"] {
+  border-color: var(--color-pink);
+  background: var(--color-pink-tint);
+  color: var(--color-text);
+}
+
+.recipe-empty { padding: 0.3em 0.2em; color: var(--color-body); }
+
+/* --- Filters: one gray row with two menus and the search field --- */
+
+.recipe-credit { padding: 0 0.2em; color: var(--color-body); font-size: 0.84em; }
+.recipe-credit:empty { display: none; }
+
+.recipe-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55em;
+  padding: 0.4em 0.65em;
+  border-radius: var(--radius-md);
+  background: var(--recipe-gray);
+}
+
+.recipe-dropdown { position: relative; display: flex; flex: 1 1 0; min-width: 0; }
+.recipe-search { display: flex; flex: 1.4 1 0; min-width: 0; }
+
+.recipe-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  width: 100%;
+  min-width: 0;
+  padding: 0.35em 0.5em 0.35em 0.65em;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.recipe-select__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
+
+.recipe-input { flex: 1; min-width: 0; padding: 0.35em 0.65em; font-weight: 500; }
+
+/* The button that hides or shows the sheet: a square box with an icon. The
+   panel of the icon is filled while the sheet shows. */
+.recipe-toggle { flex: none; width: auto; padding: 0.35em 0.45em; }
+.recipe-toggle__icon { width: 1.25em; height: 1.25em; }
+.recipe-toggle[aria-expanded="false"] { opacity: 0.75; }
+/* Without the sheet, the list takes the full width. */
+.recipe-body--list-only { grid-template-columns: minmax(0, 1fr); }
+.recipe-sheet[hidden] { display: none; }
+.recipe-input::placeholder { color: var(--recipe-gray-text); opacity: 0.75; }
+
+/* The open menu: the design system's dropdown menu. It lies over the list, and
+   scrolls when it has more choices than the screen can show. */
+.recipe-menu {
+  position: absolute;
+  top: calc(100% + 0.3em);
+  left: 0;
+  z-index: 5;
+  min-width: 100%;
+  max-height: min(21em, 55vh);
+  margin: 0;
+  padding: 0.4em;
+  overflow: auto;
+  border: 1px solid var(--recipe-menu-line);
+  border-radius: var(--radius-md);
+  background: var(--color-component);
+  box-shadow: 0 14px 18px var(--color-tip-shadow);
+  color: var(--color-text);
+  list-style: none;
+}
+.recipe-menu[hidden] { display: none; }
+
+.recipe-menu__label {
+  padding: 0.4em 0.65em 0.25em;
+  color: var(--color-text-muted);
+  font-size: 0.75em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.recipe-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0.5em 0.65em;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* The choice under the pointer or the arrow keys. */
+.recipe-menu__item.is-active { background: var(--color-ghost-hover); }
+/* The selected choice has a Magenta check. */
+.recipe-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
+
+/* --- The list --- */
+
+.recipe-results { display: flex; flex-direction: column; gap: 0.45em; }
+
+.recipe-row,
+.recipe-columns {
+  display: grid;
+  /* The model, the hardware, the model server, and the tags. */
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.45fr) minmax(0, 0.45fr) minmax(0, 1.3fr);
+  gap: 0.3em 0.9em;
+}
+
+.recipe-row {
+  align-items: center;
+  padding: 0.4em 0.65em;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The column headings: on the same columns as a recipe box (its padding and its 2px border). */
+.recipe-columns {
+  padding: 0 calc(0.65em + 2px);
+  color: var(--recipe-panel-name);
+  font-size: 0.84em;
+  font-weight: 600;
+}
+.recipe-columns > * { min-width: 0; }
+
+.recipe-row__name { display: flex; flex-direction: column; gap: 0.15em; font-weight: 600; overflow-wrap: anywhere; }
+.recipe-row__publisher { color: var(--color-text-muted); font-size: 0.84em; font-weight: 400; line-height: 1.2; }
+.recipe-row__where { color: var(--color-body); font-size: 0.92em; }
+/* On the selected fill, the quiet text takes the box ink so it stays readable. */
+[aria-pressed="true"] .recipe-row__publisher,
+[aria-pressed="true"] .recipe-row__where { color: var(--color-text); }
+
+/* Tags: the design system's chip. */
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 0.3em; }
+.recipe-tag {
+  padding: 0.28em 0.6em;
+  border: 1px solid var(--color-component-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-body);
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+/* A use case tag: the purple of a link, with a light fill of the same purple.
+   The fact tags stay in the brown of the body text, with no fill. */
+.recipe-tag--use {
+  border-color: var(--color-link);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--color-link);
+}
+/* In the list, the tags stay on one line. The script hides the tags that do
+   not fit and adds a last tag with their number ("+2"). */
+.recipe-row .recipe-tags { flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+.recipe-tag { flex: none; }
+.recipe-tag[hidden] { display: none; }
+.recipe-tag--more { border-style: dashed; }
+/* A tag has a pop-up with its description. */
+.recipe-tag[data-tip-text] { cursor: help; }
+/* On the selected fill, all tags take the box ink. The use case tags keep their fill. */
+[aria-pressed="true"] .recipe-tag { border-color: currentColor; color: var(--color-text); }
+
+/* --- The sheet: the object in focus, with the outline of the core --- */
+
+.recipe-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  min-width: 0;
+  padding: 0.6em;
+  border: 2.5px solid var(--color-core-outline);
+  border-radius: var(--radius-lg);
+}
+
+.recipe-sheet__head { padding: 0.3em 0.45em 0.15em; }
+/* The model name, with the link to its model card at the end of the line. The
+   link goes under the name when the line is too short for both. */
+.recipe-sheet__top,
+.recipe-panel__top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2em 1.2em;
+}
+.recipe-sheet__top { margin-bottom: 0.15em; }
+.recipe-sheet__title { margin: 0; color: var(--color-title); font-size: 1.5em; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
+.recipe-sheet__where { margin-bottom: 0.55em; color: var(--color-text); font-weight: 500; }
+.recipe-sheet__image { padding: 0 0.2em; color: var(--color-body); font-size: 0.88em; }
+.recipe-sheet code { font-family: var(--font-mono); font-size: 0.92em; }
+
+/* The file names: the tabs of the header. The current one is bold, with a Magenta underline. */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0.2em; padding-bottom: 0.25em; }
+.recipe-tab {
+  padding: 0.3em 0.5em;
+  border: 0;
+  border-radius: var(--radius-ui-sm);
+  background: none;
+  color: var(--color-tab);
+  font: inherit;
+  font-size: 0.92em;
+  font-weight: 500;
+  cursor: pointer;
+}
+.recipe-tab:hover { color: var(--color-text); }
+.recipe-tab[aria-pressed="true"] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline 2px var(--color-pink);
+  text-underline-offset: 0.5em;
+}
+
+/* A file, or a command: the content in monospace, with the Copy button in the corner. */
+.recipe-code { position: relative; }
+.recipe-code pre {
+  margin: 0;
+  padding: 0.6em 4.8em 0.6em 0.8em;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 0.83em;
+  line-height: 1.5;
+}
+/* The outline button of the header, small. */
+.recipe-copy {
+  position: absolute;
+  top: 0.35em;
+  right: 0.35em;
+  padding: 0.4em 0.75em;
+  border: 1.5px solid var(--color-button-outline);
+  border-radius: var(--radius-ui-md);
+  background: var(--recipe-box);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+.recipe-copy:hover { background: var(--color-button-hover); }
+
+.recipe-link { flex: none; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
+.recipe-link:hover { color: var(--color-link-hover); }
+
+/* The steps to install a recipe (shown when the stack repository is public). */
+.recipe-use { display: flex; flex-direction: column; gap: 0.6em; margin: 0; padding-left: 1.3em; color: var(--color-body); }
+.recipe-use .recipe-code { margin-top: 0.35em; }
+
+/* Narrow screens: the sheet goes under the list. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-body { grid-template-columns: minmax(0, 1fr); gap: 0.9em; }
+  .recipe-sheet { scroll-margin-top: 0.5rem; }
+  /* The file preview keeps a fixed maximum height. */
+  .recipe-code--file pre { max-height: 26rem; }
+}
+
+/* Phones: the menu and the search field, and a recipe in two columns: the model
+   and the tags on the full width, the hardware and the model server side by side.
+   The column headings do not fit this layout, so they are hidden. */
+@media (max-width: 640px) {
+  .recipe-filters { padding: 0.55em 0.65em; }
+  .recipe-search { flex-basis: 100%; }
+  .recipe-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .recipe-columns { display: none; }
+  .recipe-row__name,
+  .recipe-row .recipe-tags { grid-column: 1 / -1; }
 }
 
 /* --- Downloaded image ----------------------------------------------------

@@ -16,7 +16,18 @@ window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {
   meta: {
     title: "Cairn: The sovereign, open source AI stack architecture",
+    // Browser tab title of the pages without their own title: {page} is the name of the tab.
+    pageTitle: "Cairn: {page}",
     description: "An open architecture to run AI models and agents on infrastructure that your organization controls. Components follow clear interface contracts, so you do not depend on one project or vendor. A Mozilla × Mila research collaboration.",
+  },
+
+  // The tabs under the header, in order. Each one is a page.
+  nav: {
+    label: "Pages",
+    hello: "Hello World",
+    stack: "The Stack",
+    recipes: "Recipes",
+    roadmap: "Roadmap",
   },
 
   header: {
@@ -31,7 +42,6 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
-    eyebrow: "The Stack",
     title: "Introducing the sovereign, open source AI stack",
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
@@ -81,7 +91,7 @@ window.CAIRN_COPY.en = {
       tooltip: "Above the line: your applications. They are not part of the stack. They connect to the stack through its API endpoint. They can run on user devices, in your products or in the cloud.",
     },
     server: {
-      name: "Server side (the stack)",
+      name: "Server side",
       tooltip: "Below the line: the stack. It runs on infrastructure that your organization controls: in-house, at a partner or at a compute provider.",
     },
     localApi: {
@@ -219,6 +229,100 @@ window.CAIRN_COPY.en = {
       magicModel: {
         name: "Hardware-to-Model Selector",
         tooltip: "Automatically selects the best model for your hardware, use cases and workloads, and tunes the serving configuration for speed.",
+      },
+    },
+  },
+
+  // The Recipes page. The recipes come from the stack repository
+  // (js/recipes-data.js); only the words around them are here.
+  //   {hardware} and {server} are names from the recipe, for example "GB10" and "vLLM".
+  //   {count} is a number from the recipe, written in the format of the language.
+  recipes: {
+    title: "Find a recipe for your hardware",
+    lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
+    // The label and the hint above the panels, as on the stack page.
+    eyebrow: "Explore the recipes",
+    hint: "Select a recipe to see its files.",
+    // The name of the list panel.
+    listLabel: "Recipes",
+    filters: {
+      // The name of the row of filters for screen readers.
+      label: "Filters",
+      // The name of the menu. The menu shows its name until the visitor selects a choice.
+      hardware: "Hardware",
+      useCase: "Use case",
+      // The first choice of the menu: it removes the filter.
+      all: "All",
+      // The search field: its name for screen readers, and the text it shows while empty.
+      model: "Model",
+      modelPlaceholder: "Model name",
+    },
+    // The column headings of the list.
+    columns: {
+      model: "Model",
+      hardware: "Hardware",
+      server: "Model server",
+      tags: "Tags",
+    },
+    // The model server and the hardware of a recipe, for example "vLLM on GB10".
+    where: "{server} on {hardware}",
+    empty: "No recipe matches these filters. Remove a filter to see more recipes.",
+    noSelection: "Select a recipe to see its configuration.",
+    // The use cases that a recipe fits best: tags, and the choices of the "Use case" menu.
+    // The rules that give a use case to a recipe are in tools/use-cases.mjs.
+    useCases: {
+      chat: "Chat",
+      coding: "Coding",
+      documents: "Documents",
+      // Under the list, before the links to the sources: "… from Hugging Face and Artificial Analysis".
+      credit: "The use case tags use benchmark data from",
+      creditAnd: "and",
+    },
+    // The pop-up of a tag: the kind of tag, the name of the tag, then its description.
+    tips: {
+      kinds: {
+        useCase: "Use case",
+        fact: "Configuration",
+        more: "Hidden tags",
+      },
+      useCases: {
+        chat: "A person talks with the model: questions, writing and explanations.",
+        coding: "The model writes and changes code, in an editor or in a coding tool.",
+        documents: "The model reads documents as images: pages, tables, charts and forms.",
+      },
+      tags: {
+        context: "The maximum length of one request, in tokens: the input plus the answer.",
+        tools: "The model server returns tool calls in a structured format. Coding tools and agents use them.",
+        reasoning: "The model server returns the reasoning of the model apart from its answer.",
+      },
+    },
+    tags: {
+      context: "Context: {count} tokens",
+      // The name of the tag "+2", which shows when the tags of a recipe do not fit
+      // on one line of the list. Its pop-up gives the names of the hidden tags.
+      moreOne: "1 more tag",
+      more: "{count} more tags",
+      tools: "Tool calling",
+      reasoning: "Reasoning",
+    },
+    sheet: {
+      // The name of the sheet for screen readers.
+      label: "Selected recipe",
+      // The name of the button that hides the sheet, then shows it again.
+      hide: "Hide the selected recipe",
+      show: "Show the selected recipe",
+      files: "Recipe files",
+      image: "Model server image:",
+      copy: "Copy",
+      copied: "Copied",
+      copyFailed: "Copy failed",
+      modelCard: "Model card",
+      // The next texts show only when the stack repository is public (STACK_IS_PUBLIC in js/recipes.js).
+      github: "Open the recipe on GitHub",
+      use: {
+        title: "Use this recipe",
+        select: "Set these values in the file .env, or run ./model-selection.sh and select them.",
+        start: "Start the stack.",
       },
     },
   },

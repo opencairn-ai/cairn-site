@@ -1,6 +1,8 @@
 /*
- * Fills the page with the copy from copy/en.js or copy/fr.js, shows the
- * architecture pop-ups, and downloads the diagram as a PNG.
+ * Fills each page with the copy from copy/en.js or copy/fr.js and marks the
+ * current tab. On the stack page, it also shows the architecture pop-ups and
+ * downloads the diagram as a PNG. The Recipes page has its own script
+ * (js/recipes.js), which uses the copy lookup that this script shares.
  */
 (() => {
   "use strict";
@@ -21,14 +23,23 @@
     return;
   }
 
+  // The page's tab: the data-page value on <body>, which is also its key under `nav`.
+  const page = document.body.dataset.page;
+  // Only the stack page has the diagram.
   const diagram = document.getElementById("architecture");
   const entries = new Map();
 
+  // For the script of a single page (js/recipes.js): the copy lookup, the
+  // language tag of the page, and the mark of an external link.
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon };
+
   renderPage();
-  renderDiagram();
   setUpTheme();
-  setUpTooltips();
-  setUpDownload();
+  if (diagram) {
+    renderDiagram();
+    setUpTooltips();
+    setUpDownload();
+  }
 
   // --- Language ------------------------------------------------------------
 
@@ -80,13 +91,19 @@
 
   function renderPage() {
     document.documentElement.lang = LOCALES[lang];
-    document.title = t("meta.title");
+    // The stack page has its own title. The other pages use the name of their tab.
+    const title = page === "stack" ? t("meta.title") : t("meta.pageTitle").replace("{page}", t(`nav.${page}`));
+    document.title = title;
     setContent('meta[name="description"]', t("meta.description"));
-    setContent('meta[property="og:title"]', t("meta.title"));
+    setContent('meta[property="og:title"]', title);
     setContent('meta[property="og:description"]', t("meta.description"));
 
     const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.href = new URL(lang === DEFAULT_LANGUAGE ? "/" : `/?lang=${lang}`, canonical.href).href;
+    if (canonical && lang !== DEFAULT_LANGUAGE) {
+      const url = new URL(canonical.href);
+      url.searchParams.set("lang", lang);
+      canonical.href = url.href;
+    }
 
     for (const node of document.querySelectorAll("[data-text]")) setText(node, t(node.dataset.text));
     for (const node of document.querySelectorAll("[data-href]")) node.href = t(node.dataset.href);
@@ -94,19 +111,22 @@
       node.setAttribute("aria-label", t(node.dataset.ariaLabel));
     }
 
-    for (const link of document.querySelectorAll(".lang a")) {
-      if (link.hreflang === LOCALES[lang]) link.setAttribute("aria-current", "true");
-    }
+    // One language button: only the link to the other language shows.
+    for (const link of document.querySelectorAll(".lang a")) link.hidden = link.hreflang === LOCALES[lang];
 
-    const points = t("intro.points") || [];
-    document.getElementById("goal-points").replaceChildren(
-      ...points.map((point) =>
-        el("li", "goal__point", [
-          el("span", "goal__point-title", point.title),
-          el("span", "goal__point-text", point.text),
-        ])
-      )
-    );
+    renderNav();
+
+    const goalPoints = document.getElementById("goal-points");
+    if (goalPoints) {
+      goalPoints.replaceChildren(
+        ...(t("intro.points") || []).map((point) =>
+          el("li", "goal__point", [
+            el("span", "goal__point-title", point.title),
+            el("span", "goal__point-text", point.text),
+          ])
+        )
+      );
+    }
 
     // "{mozilla}" and "{mila}" in the footer line become links.
     const parts = t("footer.collaboration").split(/(\{\w+\})/);
@@ -122,6 +142,34 @@
         return link;
       })
     );
+  }
+
+  // Marks the current tab and prepares the links between pages (the tabs and the logo).
+  function renderNav() {
+    const nav = document.querySelector(".site-nav");
+    const explicit = new URLSearchParams(location.search).has("lang");
+    for (const link of document.querySelectorAll("a[data-page]")) {
+      let href = link.getAttribute("href");
+      // A page opened from disk has no server to turn "./" into index.html.
+      if (href === "./" && location.protocol === "file:") href = "index.html";
+      // A language chosen in the address stays in the address on the next page.
+      if (explicit) href += `?lang=${lang}`;
+      link.setAttribute("href", href);
+    }
+    if (!nav) return;
+    const current = nav.querySelector(`a[data-page="${page}"]`);
+    if (!current) return;
+    current.setAttribute("aria-current", "page");
+    // On a phone the tabs scroll sideways: bring the current tab into view, and
+    // again when the web font arrives, because it changes the width of the tabs.
+    const reveal = () => {
+      const tab = current.getBoundingClientRect();
+      const row = nav.getBoundingClientRect();
+      const gutter = parseFloat(getComputedStyle(nav).paddingRight);
+      nav.scrollLeft += Math.max(0, tab.right - row.right + gutter);
+    };
+    reveal();
+    if (document.fonts) document.fonts.ready.then(reveal);
   }
 
   // Words wrapped in *asterisks* in the copy become a pink highlight.

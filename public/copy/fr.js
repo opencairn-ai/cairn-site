@@ -19,7 +19,18 @@ window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.fr = {
   meta: {
     title: "Cairn : l’architecture de la pile d’IA souveraine à code source ouvert",
+    // Browser tab title of the pages without their own title: {page} is the name of the tab.
+    pageTitle: "Cairn : {page}",
     description: "Une architecture ouverte pour exécuter des modèles et des agents d’IA sur une infrastructure que votre organisation contrôle. Les composants respectent des contrats d’interface clairs, si bien que vous ne dépendez d’aucun projet ni d’aucun fournisseur. Une collaboration de recherche Mozilla × Mila.",
+  },
+
+  // The tabs under the header, in order. Each one is a page.
+  nav: {
+    label: "Pages",
+    hello: "Hello World",
+    stack: "La pile",
+    recipes: "Recettes",
+    roadmap: "Feuille de route",
   },
 
   header: {
@@ -34,7 +45,6 @@ window.CAIRN_COPY.fr = {
   },
 
   intro: {
-    eyebrow: "La pile",
     title: "Découvrez la pile d’IA souveraine à code source ouvert",
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
@@ -85,7 +95,7 @@ window.CAIRN_COPY.fr = {
       tooltip: "Au-dessus de la ligne : vos applications. Elles ne font pas partie de la pile. Elles se connectent à la pile par son point de terminaison d’API. Elles peuvent s’exécuter sur les appareils des utilisateurs, dans vos produits ou dans le nuage.",
     },
     server: {
-      name: "Côté serveur (la pile)",
+      name: "Côté serveur",
       tooltip: "Sous la ligne : la pile. Elle s’exécute sur une infrastructure que votre organisation contrôle : en interne, chez un partenaire ou chez un fournisseur de calcul.",
     },
     localApi: {

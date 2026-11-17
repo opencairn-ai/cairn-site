@@ -7,10 +7,14 @@ AI inference stack. A static site: everything under `public/` is served as-is.
 
 ```
 public/
-  index.html                              Page structure and the architecture diagram (no copy)
+  index.html, stack.html,                 One page per tab: Hello World, The Stack, Recipes, Roadmap.
+  recipes.html, roadmap.html              Structure only, no copy. stack.html holds the architecture diagram,
+                                          recipes.html the list of recipes
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
   css/styles.css                          Styles; light and dark color tokens at the top
-  js/app.js                               Fills in the copy; pop-ups, theme switch, PNG download
+  js/app.js                               Fills in the copy; current tab, pop-ups, theme switch, PNG download
+  js/recipes.js                           The Recipes page: filters, list, and the sheet of the selected recipe
+  js/recipes-data.js                      The recipes. Generated from the stack repository; do not edit
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   assets/cairn-logo-light.png, cairn-logo-dark.png  Header lockup, one file per theme
@@ -19,9 +23,63 @@ public/
   site.webmanifest, robots.txt, sitemap.xml
 reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
 reference/og-card/og-card.html            Previous share card. Do not regenerate it over the PNG
+tools/gen-recipes.mjs                     Writes public/js/recipes-data.js from a cairn-stack checkout (not deployed)
+tools/use-cases.mjs                       The use cases of a recipe: the rules and the benchmark data they read
 .github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
 wrangler.jsonc                            Old Cloudflare Worker host, kept as the rollback during the move
 ```
+
+## Pages and tabs
+
+Each tab is one HTML file. All four files repeat the same header and the same
+`<nav class="site-nav">`; `<body data-page="…">` names the page, and the script
+marks its tab as the current one. The tab names are under `nav` in the copy files.
+To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
+to the nav of every page, and add the name under `nav` in both copy files.
+Hello World and Roadmap show only their name for now.
+
+## Recipes
+
+The Recipes page shows the model server recipes of
+[opencairn-ai/cairn-stack](https://github.com/opencairn-ai/cairn-stack)
+(`recipes/<hardware>/<model>/<publisher>/<server>/`). The site holds no recipe
+content of its own: `public/js/recipes-data.js` is a copy that a script writes
+from a checkout of the stack repository. To update the copy:
+
+```sh
+AA_API_KEY=… HF_TOKEN=… node tools/gen-recipes.mjs ../cairn-stack     # the path to a cairn-stack checkout, on main
+```
+
+The script also gives each recipe the use cases that it fits best (Chat,
+Coding, Documents). The rules are in `tools/use-cases.mjs`. They read
+the facts of the recipe and two outside sources:
+
+- [Hugging Face](https://huggingface.co): the original model of the recipe and
+  its rank on benchmark leaderboards. `HF_TOKEN` is optional: the data is public.
+- [Artificial Analysis](https://artificialanalysis.ai): the Intelligence Index
+  of the model. `AA_API_KEY` is an API key of that service (the free tier is
+  sufficient; one run uses 4 of the 100 requests a day).
+
+The page names the two sources under the list. The terms of Artificial Analysis
+require this credit.
+
+Then commit `public/js/recipes-data.js`. The script needs Node.js 18 or later
+and no packages. The first line of the data file gives the commit it came from.
+
+- A new recipe folder shows on the page with no other change. Its filters, names
+  and tags come from the folder path and the recipe files.
+- The names ("GB10", "vLLM") come from the heading of the recipe `README.md`:
+  `# <model> - <server> on <hardware>`. Without that heading, the page shows the
+  folder names.
+- The tags come from keys of `model-server-config.yaml`. Each model server names
+  its keys differently, so `FACT_KEYS` in the script lists them. A new model
+  server or a new kind of tag needs a new entry there, and a new tag also needs
+  its text under `recipes.tags` in the copy files.
+- A recipe has its own address:
+  `recipes.html#<hardware>/<model>/<publisher>/<server>`.
+- While the stack repository is private, the sheet does not show how to install
+  a recipe and does not link to the repository. `STACK_IS_PUBLIC` in
+  `public/js/recipes.js` turns both on.
 
 ## Editing the copy
 
@@ -59,8 +117,11 @@ reliable.
 
 ## Content sources of truth
 
-- Alpha facts (versions, recipes, limitations): the release notes shipped with
+- Alpha facts (versions, limitations): the release notes shipped with
   [opencairn-ai/cairn-hoodoo](https://github.com/opencairn-ai/cairn-hoodoo).
+- Recipes: the `recipes/` folder of
+  [opencairn-ai/cairn-stack](https://github.com/opencairn-ai/cairn-stack). See
+  [Recipes](#recipes).
 - Narrative, architecture, roadmap, audiences: the Ecosystem Roadmap deck
   (`reference/`). It stays out of `public/` so it is never deployed.
 - Colors/tokens: [opencairn-ai/design-system](https://github.com/opencairn-ai/design-system)
