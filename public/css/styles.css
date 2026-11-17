@@ -38,6 +38,7 @@
   --color-boundary: #291435;
   --color-focus: #734c90;            /* Mid purple */
   --color-tab: #505d65;              /* Inactive tab */
+  --color-nav-line: rgb(41 20 53 / 0.18);   /* The rule of the tabs: Deep purple at 18% */
   --color-link: #734c90;             /* 5.6:1 */
   --color-link-hover: #291435;
   --color-button: #291435;
@@ -91,6 +92,7 @@
   --color-boundary: #dcbaf6;
   --color-focus: #fd70f5;
   --color-tab: #aeb8be;              /* Grey, 8.3:1 */
+  --color-nav-line: rgb(255 255 255 / 0.24);
   --color-link: #dcbaf6;             /* 10:1 */
   --color-link-hover: #ffffff;
   --color-button: #f2eae1;
@@ -175,12 +177,14 @@ a { color: inherit; }
   align-items: center;
   flex-wrap: wrap;
   gap: 0.75rem 0.6rem;
-  padding: 0.95rem 0 0.35rem;
+  padding: 0.8rem 0 0.3rem;
 }
 
+/* The codename takes the free width, so the buttons go to the right end. */
 .codename {
   display: flex;
   align-items: center;
+  margin-right: auto;
   text-decoration: none;
 }
 
@@ -247,20 +251,34 @@ a { color: inherit; }
 .lang a[hidden] { display: none; }
 .lang a:hover { background: var(--color-ghost-hover); }
 
-/* The tabs, one per page, in the header next to the logo: the design system's
-   nav tab. The current tab is bold, with a Magenta underline. */
+/* The tabs, one per page, in a row under the header (the page nav of the Figma
+   frame). A 1px rule goes across the full width of the page. The tabs are 30px
+   tall at a 14px root, with a 2px gap and 10px side padding. The current tab is
+   bold Magenta, and its 2px line sits on the rule.
+   The rule is an inset shadow and not a border, so the line of the current tab
+   stays on it when the row scrolls sideways on a phone. */
 .site-nav {
   display: flex;
-  gap: 0.2rem;
-  margin: 0 auto 0 1.2rem;
-  font-size: 0.9rem;
+  flex: none;
+  align-items: stretch;
+  gap: 2px;
+  height: 2.14rem;
+  margin: 0.1rem calc(-1 * var(--gutter)) 0.35rem;
+  padding: 0 var(--gutter);
+  box-shadow: inset 0 -1px 0 var(--color-nav-line);
+  font-size: 0.86rem;
   font-weight: 500;
+  letter-spacing: 0.083em;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
 .site-nav a {
+  display: inline-flex;
   flex: none;
-  padding: 0.4em 0.6em;
-  border-radius: var(--radius-ui-sm);
+  align-items: center;
+  padding: 0 0.72rem;
+  border-bottom: 2px solid transparent;
   color: var(--color-tab);
   text-decoration: none;
   white-space: nowrap;
@@ -269,10 +287,15 @@ a { color: inherit; }
 .site-nav a:hover { color: var(--color-text); }
 
 .site-nav a[aria-current] {
-  color: var(--color-text);
+  border-bottom-color: var(--color-pink);
+  color: var(--color-pink);
   font-weight: 700;
-  text-decoration: underline 2px var(--color-pink);
-  text-underline-offset: 0.5em;
+}
+
+/* Desktop: the header stays in one row. A header in two rows moves the page down. */
+@media (min-width: 761px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
+  .site-header,
+  .header-actions { flex-wrap: nowrap; }
 }
 
 .btn {
@@ -318,7 +341,7 @@ main {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding-top: 0.8rem;
+  padding-top: 0.7rem;
 }
 
 /* --- Intro --------------------------------------------------------------- */
@@ -962,7 +985,7 @@ h1 {
 /* --- Footer -------------------------------------------------------------- */
 
 .site-footer {
-  padding: 0.7rem 0 0.85rem;
+  padding: 0.5rem 0 0.6rem;
   color: var(--color-text-muted);
   font-size: 0.8rem;
 }
@@ -985,8 +1008,8 @@ h1 {
 
 .noscript { padding: 1rem var(--gutter); }
 
-/* Phones: three header rows. The codename with the language and theme buttons,
-   then the buttons, then the tabs. The tabs go from edge to edge and scroll
+/* Phones: two header rows, then the tabs. The codename with the language and
+   theme buttons, then the buttons. The tabs go from edge to edge and scroll
    sideways when they are wider than the screen. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
@@ -994,14 +1017,12 @@ h1 {
   .site-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "codename prefs" "actions actions" "nav nav";
+    grid-template-areas: "codename prefs" "actions actions";
   }
 
-  .codename { grid-area: codename; min-width: 0; }
+  .codename { grid-area: codename; min-width: 0; margin-right: 0; }
   .site-nav {
-    grid-area: nav;
-    margin: 0 calc(-1 * var(--gutter));
-    padding: 0 calc(var(--gutter) - 0.6em) 0.5rem;
+    padding: 0 calc(var(--gutter) - 0.72rem);
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -1144,8 +1165,8 @@ h1 {
   align-self: stretch;
   align-items: center;
   justify-content: center;
-  min-height: 14rem;
-  padding: 1.2rem 1.4rem;
+  min-height: 12rem;
+  padding: 1rem 1.4rem;
   border-radius: var(--radius-ui-md);
   background: var(--color-bg);
 }

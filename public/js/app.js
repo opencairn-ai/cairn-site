@@ -1,7 +1,7 @@
 /*
  * Fills each page with the copy from copy/en.js or copy/fr.js and marks the
- * current tab. On the stack page, it also shows the architecture pop-ups and
- * downloads the diagram as a PNG. The Hello World page and the Recipes page have
+ * current tab. On every page, the download button saves the diagram of the stack
+ * page as a PNG. On the stack page, it also shows the architecture pop-ups. The Hello World page and the Recipes page have
  * their own scripts (js/hello.js, js/recipes.js), which use the copy lookup that
  * this script shares.
  */
@@ -26,8 +26,9 @@
 
   // The page's tab: the data-page value on <body>, which is also its key under `nav`.
   const page = document.body.dataset.page;
-  // Only the stack page has the diagram.
-  const diagram = document.getElementById("architecture");
+  // Only the stack page has the diagram. On another page, the download button
+  // gets the diagram from the stack page (see ensureDiagram).
+  let diagram = document.getElementById("architecture");
   const entries = new Map();
 
   // For the script of a single page (js/hello.js, js/recipes.js): the copy lookup, the
@@ -39,8 +40,8 @@
   if (diagram) {
     renderDiagram();
     setUpTooltips();
-    setUpDownload();
   }
+  if (document.getElementById("download")) setUpDownload();
 
   // --- Language ------------------------------------------------------------
 
@@ -247,7 +248,9 @@
       entries.set(node, entry);
     }
 
-    document.getElementById("status-legend").replaceChildren(...statusLegend());
+    // The legend above the schema is on the stack page only.
+    const legend = document.getElementById("status-legend");
+    if (legend) legend.replaceChildren(...statusLegend());
   }
 
   // One item per status shown on the diagram: its mark and its label. Empty when
@@ -418,6 +421,7 @@
       label.textContent = t("header.downloadBusy");
 
       try {
+        await ensureDiagram();
         await loadScript("vendor/html-to-image.min.js");
         const blob = await renderImage();
         saveFile(blob, `${t("image.fileName")}-${lang}.png`);
@@ -434,6 +438,29 @@
         button.removeAttribute("aria-busy");
       }
     });
+  }
+
+  // The diagram is on the stack page. The other pages have the same download
+  // button: they get the diagram from the stack page only when a visitor clicks
+  // the button, and keep it hidden.
+  async function ensureDiagram() {
+    if (diagram) return;
+    const response = await fetch(new URL("stack.html", location.href));
+    if (!response.ok) throw new Error("The stack page could not be loaded.");
+    const stackPage = new DOMParser().parseFromString(await response.text(), "text/html");
+    const source = stackPage.getElementById("architecture");
+    if (!source) throw new Error("The diagram is missing from the stack page.");
+    const host = el("div", "diagram-source");
+    host.hidden = true;
+    host.append(document.importNode(source, true));
+    document.body.append(host);
+    diagram = host.firstElementChild;
+    // The texts that the stack page fills when it loads.
+    for (const node of diagram.querySelectorAll("[data-text]")) setText(node, t(node.dataset.text));
+    for (const node of diagram.querySelectorAll("[data-aria-label]")) {
+      node.setAttribute("aria-label", t(node.dataset.ariaLabel));
+    }
+    renderDiagram();
   }
 
   // Clones the diagram into an off-screen 16:9 slide with a title, a legend that

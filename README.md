@@ -32,9 +32,9 @@ wrangler.jsonc                            Old Cloudflare Worker host, kept as th
 
 ## Pages and tabs
 
-Each tab is one HTML file. All four files repeat the same header and the same
-`<nav class="site-nav">`; `<body data-page="…">` names the page, and the script
-marks its tab as the current one. The tab names are under `nav` in the copy files.
+Each tab is one HTML file. All four files repeat the same header and, under it,
+the same `<nav class="site-nav">`; `<body data-page="…">` names the page, and the
+script marks its tab as the current one. The tab names are under `nav` in the copy files.
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
 Hello World is for business leaders; the stack page is for engineers. Hello World
@@ -105,10 +105,13 @@ top.
   in `index.html` (its `data-copy` value is the key path under `stack`), then the
   matching entry in both copy files.
 
-The **Download image** button saves a 16:9 slide (a 3840 × 2160 PNG) in the
-current language and theme: the title, the diagram, a legend that describes every
-layer and component with the pop-up text, and the credits. The slide shrinks its
-content to fit, so it keeps fitting after copy edits.
+The **Download schema** button is in the header of every page. It saves a 16:9
+slide (a 3840 × 2160 PNG) in the current language and theme: the title, the
+diagram, a legend that describes every layer and component with the pop-up text,
+and the credits. The slide shrinks its content to fit, so it keeps fitting after
+copy edits. On a page other than the stack page, the button gets the diagram from
+`stack.html` when a visitor clicks it, so it needs a web server (it does not work
+on a page opened from disk).
 
 ## Develop
 
