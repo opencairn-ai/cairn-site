@@ -65,6 +65,8 @@ window.CAIRN_COPY.fr = {
 
   diagram: {
     // Le titre de la page de la pile.
+    title: "Une architecture de référence pour l’IA auto-hébergée",
+    // La petite ligne rose au-dessus du schéma.
     eyebrow: "Explorer l’architecture",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",

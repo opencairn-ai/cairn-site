@@ -80,6 +80,8 @@ window.CAIRN_COPY.en = {
 
   diagram: {
     // The title of the stack page.
+    title: "A reference architecture for self-hosted AI",
+    // The small pink line above the schema.
     eyebrow: "Explore the architecture",
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",
@@ -257,10 +259,13 @@ window.CAIRN_COPY.en = {
   //   {hardware} and {server} are names from the recipe, for example "GB10" and "vLLM".
   //   {count} is a number from the recipe, written in the format of the language.
   recipes: {
-    // The title of the page, then one line about a recipe.
-    eyebrow: "Explore the recipes",
+    // The title of the page, one line about a recipe, then one line about the limit
+    // of the recipes at this time.
+    title: "Reference recipes for self-hosted models",
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
-    // The hint above the panels, as on the stack page.
+    limit: "At the moment, the recipes are for single-node setups only.",
+    // The small pink line and the hint above the panels, as on the stack page.
+    eyebrow: "Explore the recipes",
     hint: "Select a recipe to see its files.",
     // The name of the list panel.
     listLabel: "Recipes",
