@@ -239,10 +239,10 @@ window.CAIRN_COPY.en = {
   //   {hardware} and {server} are names from the recipe, for example "GB10" and "vLLM".
   //   {count} is a number from the recipe, written in the format of the language.
   recipes: {
-    title: "Find a recipe for your hardware",
-    lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
-    // The label and the hint above the panels, as on the stack page.
+    // The title of the page, then one line about a recipe.
     eyebrow: "Explore the recipes",
+    lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
+    // The hint above the panels, as on the stack page.
     hint: "Select a recipe to see its files.",
     // The name of the list panel.
     listLabel: "Recipes",
