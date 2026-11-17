@@ -72,7 +72,6 @@
     </div>
   </header>
 
-  <!-- Content to come. For now the page shows its name only. -->
   <main>
     <!-- The introduction: the title, the goal and its three points. -->
     <section class="intro">
@@ -82,6 +81,106 @@
         <ul class="goal__points" id="goal-points"></ul>
       </div>
     </section>
+
+    <!-- The animation: a task goes through the layers of Cairn and the result comes
+         back; then one component is replaced by another one. It plays in a loop. It
+         has no text above it: the title and the three points of the goal do that.
+         The script (js/flow.js) plays it. Its texts are under `flow` in the copy
+         files; the layer and component names are the names of the schema. -->
+    <figure class="flow" id="flow" data-aria-label="flow.label">
+      <!-- The pictures that the animation uses in more than one place. -->
+      <svg class="flow__defs" width="0" height="0" aria-hidden="true">
+        <symbol id="flow-answer" viewBox="0 0 20 18">
+          <path class="flow-answer__bubble" d="M3 1.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H9.5l-4 4v-4H3A1.5 1.5 0 0 1 1.5 11V3A1.5 1.5 0 0 1 3 1.5z"/>
+          <path class="flow-answer__lines" d="M5.5 5.5h9M5.5 8.6h6"/>
+        </symbol>
+        <symbol id="flow-check" viewBox="0 0 16 16">
+          <circle class="flow-check__disc" cx="8" cy="8" r="8"/>
+          <path class="flow-check__mark" d="m4.4 8.3 2.4 2.4 4.8-5"/>
+        </symbol>
+      </svg>
+
+      <!-- Pause and play. The script gives the button its name. -->
+      <button type="button" class="flow__toggle" data-state="play">
+        <svg class="flow__icon flow__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="flow__icon flow__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+      </button>
+
+      <div class="flow__stage" aria-hidden="true">
+
+        <!-- The client side: you and your AI agent, a chat window. -->
+        <div class="flow__actor">
+          <div class="flow__agent">
+            <svg class="flow__person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 21.5a8.5 8.5 0 0 1 17 0"/></svg>
+            <div class="flow__chat" data-anchor="chat">
+              <span class="flow__chat-bar"><i></i><i></i><i></i></span>
+              <span class="flow__msg flow__msg--task"></span>
+              <span class="flow__msg flow__msg--answer"></span>
+            </div>
+          </div>
+          <p class="flow__actor-name" data-text="flow.agent"></p>
+        </div>
+
+        <!-- The server side: the stack, on infrastructure that you control. -->
+        <div class="flow__area">
+          <p class="flow__area-name" data-text="flow.area"></p>
+          <div class="flow__stack">
+            <div class="flow__core">
+              <p class="flow__stack-name" data-text="flow.stack"></p>
+              <div class="flow__layer" data-anchor="agentRuntime">
+                <p class="flow__layer-name" data-text="stack.agentRuntime.name"></p>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.agentRuntime.localToolServer.name"></span></span>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.agentRuntime.sandbox.name"></span></span>
+                <span class="flow__joint flow__joint--right" data-anchor="persistence-agentRuntime"></span>
+                <span class="flow__joint flow__joint--bottom" data-anchor="agentRuntime-modelAccess"></span>
+              </div>
+              <div class="flow__layer" data-anchor="persistence">
+                <p class="flow__layer-name" data-text="stack.persistence.name"></p>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.persistence.semanticSearch.name"></span></span>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.persistence.agentMemory.name"></span></span>
+              </div>
+              <div class="flow__layer" data-anchor="modelAccess">
+                <p class="flow__layer-name" data-text="stack.modelAccess.name"></p>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.modelAccess.modelGateway.name"></span></span>
+                <!-- The component that the animation replaces: the two model servers of
+                     the Alpha release, one after the other. -->
+                <span class="flow__slot">
+                  <span class="flow__comp flow__comp--a"><span class="flow__comp-name" data-text="stack.modelAccess.modelServer.name"></span><span class="flow__impl">vLLM</span></span>
+                  <span class="flow__comp flow__comp--b"><span class="flow__comp-name" data-text="stack.modelAccess.modelServer.name"></span><span class="flow__impl">SGLang</span></span>
+                </span>
+              </div>
+              <div class="flow__layer" data-anchor="toolAccess">
+                <p class="flow__layer-name" data-text="stack.toolAccess.name"></p>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.toolAccess.toolGateway.name"></span></span>
+                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.toolAccess.toolServer.name"></span></span>
+                <span class="flow__joint flow__joint--top" data-anchor="toolAccess-persistence"></span>
+                <span class="flow__joint flow__joint--left" data-anchor="modelAccess-toolAccess"></span>
+              </div>
+            </div>
+            <p class="flow__cross">
+              <span data-text="stack.security.name"></span>
+              <span data-text="stack.observability.name"></span>
+              <span data-text="stack.controlPlane.name"></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- What the two signs of the picture mean. -->
+        <ul class="flow__legend">
+          <li><span class="flow__key"><i class="flow__key-contract"></i></span><span data-text="flow.contract"></span></li>
+          <li><span class="flow__key"><svg viewBox="0 0 16 16"><use href="#flow-check"/></svg></span><span data-text="flow.tested"></span></li>
+        </ul>
+
+        <!-- From your AI agent to the API Endpoint of the stack. -->
+        <span class="flow__link"></span>
+
+        <!-- What moves: the task and the result. -->
+        <span class="flow__packet flow__packet--task" data-packet="task"></span>
+        <svg class="flow__packet flow__packet--answer" data-packet="answer" viewBox="0 0 20 18"><use href="#flow-answer"/></svg>
+      </div>
+
+      <p class="sr-only" data-text="flow.description"></p>
+    </figure>
   </main>
 
   <footer class="site-footer">
@@ -93,5 +192,6 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
+<script src="js/flow.js"></script>
 </body>
 </html>

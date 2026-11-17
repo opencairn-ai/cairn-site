@@ -60,6 +60,24 @@ window.CAIRN_COPY.en = {
     ],
   },
 
+  // The animation of the Hello World page. It has no text above it. The layer and
+  // component names in the picture are the names under `stack`.
+  flow: {
+    // The name and the description of the animation, for screen readers.
+    label: "Animation: a task goes through Cairn",
+    description: "Your AI agent sends a task to Cairn, on infrastructure that you control. The task goes through the four core layers. Interface contracts connect these layers. Then the result comes back to your AI agent. After that, one model server is replaced by a different model server that passes the same contract tests. The other components do not change, and the next task goes through the stack in the same way.",
+    // The names in the picture.
+    agent: "You and your AI agent",
+    area: "Infrastructure that you control",
+    stack: "Cairn",
+    // What the two signs of the picture mean.
+    contract: "Interface contract",
+    tested: "Contract tests passed",
+    // The names of the button.
+    play: "Play the animation",
+    pause: "Pause the animation",
+  },
+
   diagram: {
     // The title of the stack page.
     eyebrow: "Explore the architecture",
