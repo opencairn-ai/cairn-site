@@ -277,7 +277,6 @@ window.CAIRN_COPY.en = {
       copied: "Copied",
       copyFailed: "Copy failed",
       modelCard: "Model card",
-      source: "Recipe source",
       // The next texts show only when the stack repository is public (STACK_IS_PUBLIC in js/recipes.js).
       github: "Open the recipe on GitHub",
       use: {

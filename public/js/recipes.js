@@ -259,7 +259,7 @@
     }));
 
     // Each link sits beside what it documents: the model card beside the model
-    // name, the source of the recipe beside the name of the files panel.
+    // name, the recipe on GitHub beside the name of the files panel.
     sheet.replaceChildren(...[
       // Each fact one time: the model with its publisher, then the server and the hardware.
       el("div", "recipe-sheet__head", [
@@ -276,10 +276,7 @@
       el("section", "recipe-panel recipe-files", [
         el("div", "recipe-panel__top", [
           el("h3", "recipe-name", [text("sheet.files")]),
-          el("span", "recipe-links", [
-            r.source && link(text("sheet.source"), r.source),
-            STACK_IS_PUBLIC && link(text("sheet.github"), `${data.repo}/tree/${data.branch}/recipes/${r.id}`),
-          ]),
+          STACK_IS_PUBLIC && link(text("sheet.github"), `${data.repo}/tree/${data.branch}/recipes/${r.id}`),
         ]),
         tabs,
         codeBlock(file.text, "recipe-code--file"),
