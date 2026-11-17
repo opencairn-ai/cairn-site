@@ -5,7 +5,7 @@
 // The site holds no recipe content of its own. Every value in the data file
 // comes from the stack repository:
 //   - the recipe path:            hardware, model, publisher, model server
-//   - README.md:                  the names to show, the source
+//   - README.md:                  the names to show
 //   - model-server-config.yaml:   the facts that become tags
 //   - compose.yaml:               the model server image (or the default image
 //                                 in docker/compose-<server>.yaml)
@@ -82,7 +82,7 @@ for (const hardware of dirs(recipesRoot)) {
           .map((name) => ({ name, text: read(join(dir, name)).replace(/\s+$/, "") }));
         const text = (name) => (files.find((file) => file.name === name) || {}).text || "";
 
-        // README.md starts with "# <model> - <server> on <hardware>" and can have a "Source:" line.
+        // README.md starts with "# <model> - <server> on <hardware>".
         // Without that heading, the page shows the folder names.
         const readme = text("README.md");
         const heading = /^#\s+(.+?)\s+-\s+(.+?)\s+on\s+(.+)$/m.exec(readme) || [];
@@ -94,7 +94,6 @@ for (const hardware of dirs(recipesRoot)) {
           hardware, model, publisher, server,
           hardwareLabel: heading[3] || hardware,
           serverLabel: heading[2] || server,
-          source: (/^Source:\s*(\S+)/m.exec(readme) || [])[1] || null,
           image: modelServerImage(text("compose.yaml")) || (existsSync(defaultCompose) ? modelServerImage(read(defaultCompose)) : null),
           facts: {
             context: number(firstValue(config, FACT_KEYS.context)),

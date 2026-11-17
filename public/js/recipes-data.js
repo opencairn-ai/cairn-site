@@ -15,7 +15,6 @@ window.CAIRN_RECIPES = {
       "server": "vllm",
       "hardwareLabel": "CPU",
       "serverLabel": "vLLM",
-      "source": null,
       "image": "vllm/vllm-openai-cpu:v0.30.0",
       "facts": {
         "context": 65536,
@@ -49,7 +48,6 @@ window.CAIRN_RECIPES = {
       "server": "sglang",
       "hardwareLabel": "NVIDIA GPU",
       "serverLabel": "SGLang",
-      "source": null,
       "image": "lmsysorg/sglang:v0.5.21",
       "facts": {
         "context": null,
@@ -79,7 +77,6 @@ window.CAIRN_RECIPES = {
       "server": "vllm",
       "hardwareLabel": "NVIDIA GPU",
       "serverLabel": "vLLM",
-      "source": null,
       "image": "vllm/vllm-openai:v0.30.0",
       "facts": {
         "context": null,
@@ -109,7 +106,6 @@ window.CAIRN_RECIPES = {
       "server": "vllm",
       "hardwareLabel": "DGX A100",
       "serverLabel": "vLLM",
-      "source": "https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next?hardware=h100&features=tool_calling%2Creasoning%2Cspec_decoding&kv_offload=simple&variant=fp8&frontend=python&advanced=max_batched_8k%2Cmax_num_seqs_256&strategy=single_node_tep",
       "image": "vllm/vllm-openai:qwen38-flash-next",
       "facts": {
         "context": 262144,
@@ -139,7 +135,6 @@ window.CAIRN_RECIPES = {
       "server": "vllm",
       "hardwareLabel": "GB10",
       "serverLabel": "vLLM",
-      "source": "https://recipes.vllm.ai/Qwen/Qwen3.6-35B-A3B?hardware=dgx_spark_gb10&features=tool_calling%2Creasoning%2Cspec_decoding&variant=nvfp4&frontend=rust&advanced=max_batched_8k",
       "image": "vllm/vllm-openai:v0.30.0",
       "facts": {
         "context": 262144,
@@ -169,7 +164,6 @@ window.CAIRN_RECIPES = {
       "server": "sglang",
       "hardwareLabel": "GB10",
       "serverLabel": "SGLang",
-      "source": "https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8-27B#hw=dgx-spark&variant=default&quant=nvfp4-fp4-head&nodes=single&spec=dflash&tier=high-throughput&ssmDtype=bfloat16",
       "image": "lmsysorg/sglang:v0.5.21",
       "facts": {
         "context": 262144,
@@ -199,7 +193,6 @@ window.CAIRN_RECIPES = {
       "server": "sglang",
       "hardwareLabel": "RTX 6000",
       "serverLabel": "SGLang",
-      "source": "https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8-Flash-Next#hw=rtx6000&variant=default&quant=nvfp4-nvda&strategy=low-latency&nodes=single&pleOffload=on",
       "image": "lmsysorg/sglang:dev-qwen38-next-local",
       "facts": {
         "context": 131072,
