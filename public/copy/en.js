@@ -250,6 +250,7 @@ window.CAIRN_COPY.en = {
       label: "Filters",
       // The name of the menu. The menu shows its name until the visitor selects a choice.
       hardware: "Hardware",
+      useCase: "Use case",
       // The first choice of the menu: it removes the filter.
       all: "All",
       // The search field: its name for screen readers, and the text it shows while empty.
@@ -267,8 +268,44 @@ window.CAIRN_COPY.en = {
     where: "{server} on {hardware}",
     empty: "No recipe matches these filters. Remove a filter to see more recipes.",
     noSelection: "Select a recipe to see its configuration.",
+    // The use cases that a recipe fits best: tags, and the choices of the "Use case" menu.
+    // The rules that give a use case to a recipe are in tools/use-cases.mjs.
+    useCases: {
+      chat: "Chat",
+      tasks: "Tasks",
+      coding: "Coding",
+      agents: "Agents",
+      documents: "Documents",
+      // Under the list, before the links to the sources: "… from Hugging Face and Artificial Analysis".
+      credit: "The use case tags use benchmark data from",
+      creditAnd: "and",
+    },
+    // The pop-up of a tag: the kind of tag, the name of the tag, then its description.
+    tips: {
+      kinds: {
+        useCase: "Use case",
+        fact: "Configuration",
+        more: "Hidden tags",
+      },
+      useCases: {
+        chat: "A person talks with the model: questions, writing and explanations.",
+        tasks: "An application sends one job at a time: extract, classify, summarize or translate.",
+        coding: "The model writes and changes code, in an editor or in a coding tool.",
+        agents: "The model does work in many steps and calls tools. A person does not approve each step.",
+        documents: "The model reads documents as images: pages, tables, charts and forms.",
+      },
+      tags: {
+        context: "The maximum length of one request, in tokens: the input plus the answer.",
+        tools: "The model server returns tool calls in a structured format. Agents and coding tools use them.",
+        reasoning: "The model server returns the reasoning of the model apart from its answer.",
+      },
+    },
     tags: {
       context: "Context: {count} tokens",
+      // The name of the tag "+2", which shows when the tags of a recipe do not fit
+      // on one line of the list. Its pop-up gives the names of the hidden tags.
+      moreOne: "1 more tag",
+      more: "{count} more tags",
       tools: "Tool calling",
       reasoning: "Reasoning",
     },

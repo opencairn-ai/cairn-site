@@ -1187,6 +1187,9 @@ h1 {
 
 /* --- Filters: one gray row with two menus and the search field --- */
 
+.recipe-credit { padding: 0 0.2em; color: var(--color-body); font-size: 0.84em; }
+.recipe-credit:empty { display: none; }
+
 .recipe-filters {
   display: flex;
   flex-wrap: wrap;
@@ -1308,6 +1311,22 @@ h1 {
   line-height: 1.1;
   white-space: nowrap;
 }
+/* A use case tag: the purple of a link, with a light fill of the same purple.
+   The fact tags stay in the brown of the body text, with no fill. */
+.recipe-tag--use {
+  border-color: var(--color-link);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--color-link);
+}
+/* In the list, the tags stay on one line. The script hides the tags that do
+   not fit and adds a last tag with their number ("+2"). */
+.recipe-row .recipe-tags { flex-wrap: nowrap; min-width: 0; overflow: hidden; }
+.recipe-tag { flex: none; }
+.recipe-tag[hidden] { display: none; }
+.recipe-tag--more { border-style: dashed; }
+/* A tag has a pop-up with its description. */
+.recipe-tag[data-tip-text] { cursor: help; }
+/* On the selected fill, all tags take the box ink. The use case tags keep their fill. */
 [aria-pressed="true"] .recipe-tag { border-color: currentColor; color: var(--color-text); }
 
 /* --- The sheet: the object in focus, with the outline of the core --- */

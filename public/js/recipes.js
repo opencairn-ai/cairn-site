@@ -48,6 +48,7 @@
   const state = {
     selected: fromAddress() || data.defaultId,
     hardware: "",
+    useCase: "",
     query: "",
     file: "model-server-config.yaml",
   };
@@ -60,6 +61,10 @@
     return texts.get(key).replace(/\{(\w+)\}/g, (match, name) => (name in values ? values[name] : match));
   }
 
+  // The use cases that one recipe or more has, in the order of the data.
+  // The generator gives them to each recipe (tools/use-cases.mjs).
+  const USE_CASES = unique(RECIPES.flatMap((r) => r.useCases || [])).map((id) => ({ id, label: text(`useCases.${id}`) }));
+
   window.addEventListener("hashchange", () => {
     const id = fromAddress();
     if (id && id !== state.selected) { state.selected = id; renderResults(); }
@@ -68,18 +73,20 @@
   renderColumns();
   renderFilters();
   renderResults();
+  renderCredit();
 
   // --- Filters -------------------------------------------------------------
 
-  // One row: a menu for the hardware and the search on the model name.
-  // A menu takes the same space for 5 choices or for 50.
+  // One row: a menu for the hardware, a menu for the use case, and the search
+  // on the model name. A menu takes the same space for 5 choices or for 50.
   function renderFilters() {
     // The search field stays in place while the menu is drawn again, so it keeps its text.
     const search = filters.querySelector(".recipe-search") || searchField();
-    filters.replaceChildren(
+    filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
+      USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
       search,
-    );
+    ].filter(Boolean));
   }
 
   // A menu with one choice: the design system's dropdown menu. For screen readers
@@ -199,6 +206,7 @@
   function renderResults() {
     const query = state.query.toLowerCase();
     const matches = (r) =>
+      (!state.useCase || (r.useCases || []).includes(state.useCase)) &&
       (!query || `${r.publisher}/${r.model}`.toLowerCase().includes(query));
 
     // With a hardware type selected: its recipes, then the generic recipes of its vendor.
@@ -214,6 +222,7 @@
     if (!visible.some((r) => r.id === state.selected)) state.selected = visible.length ? visible[0].id : "";
 
     results.replaceChildren(...(visible.length ? visible.map(resultRow) : [el("p", "recipe-empty", [text("empty")])]));
+    fitAllTags();
 
     renderSheet();
   }
@@ -244,6 +253,87 @@
       if (matchMedia("(max-width: 900px), (max-aspect-ratio: 1/1)").matches) sheet.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     return row;
+  }
+
+  // In the list, the tags of a recipe stay on one line. The tags that do not
+  // fit are hidden, and a last tag gives their number: "+2". The sheet shows all the tags.
+  function fitTags(container) {
+    container.querySelector(".recipe-tag--more")?.remove();
+    const all = [...container.children];
+    all.forEach((tag) => { tag.hidden = false; });
+    if (container.scrollWidth <= container.clientWidth) return;
+
+    const more = el("span", "recipe-tag recipe-tag--more");
+    container.append(more);
+    // Hide tags from the end until the line fits. The use case tags are first, so they stay the longest.
+    for (let shown = all.length - 1; shown >= 0; shown -= 1) {
+      all[shown].hidden = true;
+      const hiddenTags = all.slice(shown);
+      more.textContent = `+${hiddenTags.length}`;
+      // The pop-up and screen readers get the names of the hidden tags.
+      const names = hiddenTags.map((hiddenTag) => hiddenTag.textContent).join(", ");
+      const count = text(hiddenTags.length === 1 ? "tags.moreOne" : "tags.more", { count: hiddenTags.length });
+      setTip(more, text("tips.kinds.more"), count, names);
+      more.setAttribute("aria-label", `${count}: ${names}`);
+      if (container.scrollWidth <= container.clientWidth) break;
+    }
+  }
+
+  function fitAllTags() {
+    results.querySelectorAll(".recipe-tags").forEach(fitTags);
+  }
+
+  // The space for the tags changes with the width of the list, and the width
+  // of a tag changes when the font is loaded.
+  new ResizeObserver(fitAllTags).observe(results);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAllTags);
+
+  // --- Pop-ups ---------------------------------------------------------------
+
+  // A tag shows its description in a pop-up when the pointer is on it: the
+  // same pop-up as on the stack page. A touch screen has no hover, so it shows no pop-up.
+  setUpTips();
+  function setUpTips() {
+    const tip = document.getElementById("tip");
+    const body = document.querySelector(".recipe-body");
+    if (!tip || !body) return;
+    const [kind, name, description] = ["kind", "name", "text"].map((part) => tip.querySelector(`.tip__${part}`));
+    let active = null;
+
+    function show(node) {
+      if (node === active) return;
+      active = node;
+      kind.textContent = node.dataset.tipKind;
+      name.textContent = node.dataset.tipName;
+      description.textContent = node.dataset.tipText;
+
+      // Above the tag when there is room, otherwise below; always on screen.
+      const box = node.getBoundingClientRect();
+      const margin = 8;
+      tip.style.transform = "translate(0, 0)";
+      const { width, height } = tip.getBoundingClientRect();
+      let top = box.top - height - margin;
+      if (top < margin) top = box.bottom + margin;
+      const left = Math.max(margin, Math.min(box.left + box.width / 2 - width / 2, document.documentElement.clientWidth - width - margin));
+      tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+      tip.classList.add("is-visible");
+    }
+
+    function hide() {
+      active = null;
+      tip.classList.remove("is-visible");
+    }
+
+    body.addEventListener("pointerover", (event) => {
+      const node = event.pointerType !== "touch" && event.target instanceof Element && event.target.closest("[data-tip-text]");
+      if (node) show(node); else hide();
+    });
+    body.addEventListener("pointerleave", hide);
+    // A click draws the list again, so the tag under the pointer is a new element.
+    body.addEventListener("click", hide);
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") hide(); });
+    window.addEventListener("scroll", hide, { passive: true });
+    window.addEventListener("resize", hide);
   }
 
   // --- The recipe sheet ----------------------------------------------------
@@ -305,15 +395,40 @@
     ]);
   }
 
-  // The facts that the recipe files state. A fact that the files do not state shows no tag.
+  // The use cases of the recipe, then the facts that the recipe files state.
+  // A fact that the files do not state shows no tag.
   // The list shows no context length: only the sheet shows it.
+  // A use case tag has its own color: it says what the recipe is for. The other tags are facts.
   function tags(r, { context = true } = {}) {
     const facts = r.facts;
+    const useCases = (r.useCases || []).map((id) => tag(text(`useCases.${id}`), "useCase", text(`tips.useCases.${id}`), "recipe-tag--use"));
     const list = [];
-    if (context && facts.context) list.push(text("tags.context", { count: facts.context.toLocaleString(app.locale) }));
-    if (facts.tools) list.push(text("tags.tools"));
-    if (facts.reasoning) list.push(text("tags.reasoning"));
-    return list.map((label) => el("span", "recipe-tag", [label]));
+    if (context && facts.context) list.push(tag(text("tags.context", { count: facts.context.toLocaleString(app.locale) }), "fact", text("tips.tags.context")));
+    if (facts.tools) list.push(tag(text("tags.tools"), "fact", text("tips.tags.tools")));
+    if (facts.reasoning) list.push(tag(text("tags.reasoning"), "fact", text("tips.tags.reasoning")));
+    return [...useCases, ...list];
+  }
+
+  // A tag, with the content of its pop-up: the kind of tag and its description.
+  function tag(label, kind, description, modifier) {
+    const node = el("span", `recipe-tag ${modifier || ""}`.trim(), [label]);
+    setTip(node, text(`tips.kinds.${kind}`), label, description);
+    return node;
+  }
+
+  function setTip(node, kind, name, description) {
+    node.dataset.tipKind = kind;
+    node.dataset.tipName = name;
+    node.dataset.tipText = description;
+  }
+
+  // The sources of the benchmark data that the use cases read, under the list.
+  function renderCredit() {
+    const credit = document.getElementById("recipe-credit");
+    const sources = (data.benchmarks && data.benchmarks.sources) || [];
+    if (!credit || !sources.length || !USE_CASES.length) return;
+    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
+    credit.replaceChildren(text("useCases.credit"), ...links);
   }
 
   function codeBlock(content, modifier) {

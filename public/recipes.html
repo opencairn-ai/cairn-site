@@ -93,6 +93,8 @@
           <!-- The column headings. Screen readers get the names in each recipe instead. -->
           <div class="recipe-columns" id="recipe-columns" aria-hidden="true"></div>
           <div class="recipe-results" id="recipe-results"></div>
+          <!-- The source of the benchmark data that the use case tags read. -->
+          <p class="recipe-credit" id="recipe-credit"></p>
         </section>
       </div>
       <!-- The selected recipe. -->
@@ -104,6 +106,13 @@
     <p id="collaboration"></p>
   </footer>
 
+</div>
+
+<!-- The pop-up of a tag, as on the stack page. Screen readers do not get it. -->
+<div class="tip" id="tip" aria-hidden="true">
+  <p class="tip__kind"></p>
+  <p class="tip__name"></p>
+  <p class="tip__text"></p>
 </div>
 
 <script src="copy/en.js"></script>

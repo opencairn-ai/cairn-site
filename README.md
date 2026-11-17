@@ -24,6 +24,7 @@ public/
 reference/cairn-ecosystem-roadmap-v3.pptx Ecosystem Roadmap deck (internal, not deployed)
 reference/og-card/og-card.html            Previous share card. Do not regenerate it over the PNG
 tools/gen-recipes.mjs                     Writes public/js/recipes-data.js from a cairn-stack checkout (not deployed)
+tools/use-cases.mjs                       The use cases of a recipe: the rules and the benchmark data they read
 .github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
 wrangler.jsonc                            Old Cloudflare Worker host, kept as the rollback during the move
 ```
@@ -46,8 +47,21 @@ content of its own: `public/js/recipes-data.js` is a copy that a script writes
 from a checkout of the stack repository. To update the copy:
 
 ```sh
-node tools/gen-recipes.mjs ../cairn-stack     # the path to a cairn-stack checkout, on main
+AA_API_KEY=… HF_TOKEN=… node tools/gen-recipes.mjs ../cairn-stack     # the path to a cairn-stack checkout, on main
 ```
+
+The script also gives each recipe the use cases that it fits best (Chat, Tasks,
+Coding, Agents, Documents). The rules are in `tools/use-cases.mjs`. They read
+the facts of the recipe and two outside sources:
+
+- [Hugging Face](https://huggingface.co): the original model of the recipe and
+  its rank on benchmark leaderboards. `HF_TOKEN` is optional: the data is public.
+- [Artificial Analysis](https://artificialanalysis.ai): the Intelligence Index
+  of the model. `AA_API_KEY` is an API key of that service (the free tier is
+  sufficient; one run uses 4 of the 100 requests a day).
+
+The page names the two sources under the list. The terms of Artificial Analysis
+require this credit.
 
 Then commit `public/js/recipes-data.js`. The script needs Node.js 18 or later
 and no packages. The first line of the data file gives the commit it came from.
