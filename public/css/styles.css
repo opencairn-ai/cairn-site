@@ -38,6 +38,7 @@
   --color-boundary: #291435;
   --color-focus: #734c90;            /* Mid purple */
   --color-tab: #505d65;              /* Inactive tab */
+  --color-tab-disabled: #aeb8be;     /* The tab of a page to come: the disabled text of the design system */
   --color-nav-line: rgb(41 20 53 / 0.18);   /* The rule of the tabs: Deep purple at 18% */
   --color-link: #734c90;             /* 5.6:1 */
   --color-link-hover: #291435;
@@ -92,6 +93,7 @@
   --color-boundary: #dcbaf6;
   --color-focus: #fd70f5;
   --color-tab: #aeb8be;              /* Grey, 8.3:1 */
+  --color-tab-disabled: #63737d;
   --color-nav-line: rgb(255 255 255 / 0.24);
   --color-link: #dcbaf6;             /* 10:1 */
   --color-link-hover: #ffffff;
@@ -294,6 +296,10 @@ a { color: inherit; }
   font-weight: 700;
 }
 
+/* The tab of a page to come. */
+.site-nav a[aria-disabled="true"],
+.site-nav a[aria-disabled="true"]:hover { color: var(--color-tab-disabled); cursor: default; }
+
 /* Desktop: the header stays in one row. A header in two rows moves the page down. */
 @media (min-width: 761px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
   .site-header,
@@ -321,13 +327,16 @@ a { color: inherit; }
 .btn:hover { background: var(--color-button-hover); }
 /* While the image is prepared the button takes the disabled colors; a failure shows in
    the error color, with no hover fill so the red keeps its contrast. */
-.btn[aria-busy="true"] {
+.btn[aria-busy="true"],
+.btn[aria-disabled="true"] {
   border-color: var(--color-disabled-line);
   background: var(--color-disabled-bg);
   color: var(--color-disabled-ink);
   opacity: var(--color-disabled-opacity);
   cursor: progress;
 }
+/* The button to a page to come has the same colors, with no hover fill. */
+.btn[aria-disabled="true"] { cursor: default; }
 .btn.is-error,
 .btn.is-error:hover { border-color: var(--color-error); background: transparent; color: var(--color-error); }
 

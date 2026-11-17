@@ -16,6 +16,9 @@
   const LANGUAGE_KEY = "cairn-language";
   // Also read by the script in the page head, which sets the theme before the first paint.
   const THEME_KEY = "cairn-theme";
+  // The pages that have no content yet. Each link to one of them (its tab, a button)
+  // shows as disabled and does not open the page. Remove a name to open its page.
+  const PAGES_TO_COME = ["roadmap"];
 
   const lang = pickLanguage();
   const copy = ALL_COPY[lang] || ALL_COPY[DEFAULT_LANGUAGE];
@@ -153,6 +156,14 @@
     const nav = document.querySelector(".site-nav");
     const explicit = new URLSearchParams(location.search).has("lang");
     for (const link of document.querySelectorAll("a[data-page]")) {
+      // A page to come: the link keeps its name, but has no address, so it does not
+      // take a click or the keyboard focus. The page itself keeps its tab.
+      if (PAGES_TO_COME.includes(link.dataset.page) && link.dataset.page !== page) {
+        link.removeAttribute("href");
+        link.setAttribute("role", "link");
+        link.setAttribute("aria-disabled", "true");
+        continue;
+      }
       let href = link.getAttribute("href");
       // A page opened from disk has no server to turn "./" into index.html.
       if (href === "./" && location.protocol === "file:") href = "index.html";
