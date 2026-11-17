@@ -25,8 +25,8 @@ window.CAIRN_COPY.en = {
   nav: {
     label: "Pages",
     hello: "Hello World",
-    stack: "The Stack",
-    recipes: "Recipes",
+    stack: "LaStack",
+    recipes: "Model Recipes",
     roadmap: "Roadmap",
   },
 
