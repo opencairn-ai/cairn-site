@@ -90,6 +90,8 @@
         <div class="recipe-filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
         <section class="recipe-panel recipe-list" aria-labelledby="recipe-list-name">
           <h2 class="recipe-name" id="recipe-list-name" data-text="recipes.listLabel"></h2>
+          <!-- The column headings. Screen readers get the names in each recipe instead. -->
+          <div class="recipe-columns" id="recipe-columns" aria-hidden="true"></div>
           <div class="recipe-results" id="recipe-results"></div>
         </section>
       </div>

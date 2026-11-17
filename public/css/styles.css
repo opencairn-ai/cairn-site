@@ -1265,15 +1265,29 @@ h1 {
 
 .recipe-results { display: flex; flex-direction: column; gap: 0.45em; }
 
-.recipe-row {
+.recipe-row,
+.recipe-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.7fr) minmax(0, 1.45fr);
-  align-items: center;
+  /* The model, the hardware, the model server, and the tags. */
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.45fr) minmax(0, 0.45fr) minmax(0, 1.3fr);
   gap: 0.3em 0.9em;
+}
+
+.recipe-row {
+  align-items: center;
   padding: 0.4em 0.65em;
   text-align: left;
   cursor: pointer;
 }
+
+/* The column headings: on the same columns as a recipe box (its padding and its 2px border). */
+.recipe-columns {
+  padding: 0 calc(0.65em + 2px);
+  color: var(--recipe-panel-name);
+  font-size: 0.84em;
+  font-weight: 600;
+}
+.recipe-columns > * { min-width: 0; }
 
 .recipe-row__name { display: flex; flex-direction: column; gap: 0.15em; font-weight: 600; overflow-wrap: anywhere; }
 .recipe-row__publisher { color: var(--color-text-muted); font-size: 0.84em; font-weight: 400; line-height: 1.2; }
@@ -1390,11 +1404,16 @@ h1 {
   .recipe-code--file pre { max-height: 26rem; }
 }
 
-/* Phones: the two menus side by side, the search field under them, and a recipe in one column. */
+/* Phones: the menu and the search field, and a recipe in two columns: the model
+   and the tags on the full width, the hardware and the model server side by side.
+   The column headings do not fit this layout, so they are hidden. */
 @media (max-width: 640px) {
   .recipe-filters { padding: 0.55em 0.65em; }
   .recipe-search { flex-basis: 100%; }
-  .recipe-row { grid-template-columns: minmax(0, 1fr); }
+  .recipe-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .recipe-columns { display: none; }
+  .recipe-row__name,
+  .recipe-row .recipe-tags { grid-column: 1 / -1; }
 }
 
 /* --- Downloaded image ----------------------------------------------------

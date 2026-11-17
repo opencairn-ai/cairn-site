@@ -29,9 +29,8 @@
   const RECIPES = data.recipes;
   const byId = new Map(RECIPES.map((recipe) => [recipe.id, recipe]));
 
-  // The hardware types and the model servers, in the order of the repository.
+  // The hardware types, in the order of the repository.
   const HARDWARE = unique(RECIPES.map((r) => r.hardware)).map((id) => ({ id, label: RECIPES.find((r) => r.hardware === id).hardwareLabel }));
-  const SERVERS = unique(RECIPES.map((r) => r.server)).map((id) => ({ id, label: RECIPES.find((r) => r.server === id).serverLabel }));
 
   // A "<vendor>-any" folder holds the generic recipes of a vendor. They also run
   // on each specific hardware type of that vendor (for example nvidia-any on nvidia-gb10).
@@ -49,7 +48,6 @@
   const state = {
     selected: fromAddress() || data.defaultId,
     hardware: "",
-    server: "",
     query: "",
     file: "model-server-config.yaml",
   };
@@ -67,19 +65,19 @@
     if (id && id !== state.selected) { state.selected = id; renderResults(); }
   });
 
+  renderColumns();
   renderFilters();
   renderResults();
 
   // --- Filters -------------------------------------------------------------
 
-  // One row: a menu for the hardware, a menu for the model server, and the search
-  // on the model name. A menu takes the same space for 5 choices or for 50.
+  // One row: a menu for the hardware and the search on the model name.
+  // A menu takes the same space for 5 choices or for 50.
   function renderFilters() {
-    // The search field stays in place while the menus are drawn again, so it keeps its text.
+    // The search field stays in place while the menu is drawn again, so it keeps its text.
     const search = filters.querySelector(".recipe-search") || searchField();
     filters.replaceChildren(
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
-      menu("server", SERVERS, state.server, (id) => { state.server = id; }),
       search,
     );
   }
@@ -201,7 +199,6 @@
   function renderResults() {
     const query = state.query.toLowerCase();
     const matches = (r) =>
-      (!state.server || r.server === state.server) &&
       (!query || `${r.publisher}/${r.model}`.toLowerCase().includes(query));
 
     // With a hardware type selected: its recipes, then the generic recipes of its vendor.
@@ -221,11 +218,22 @@
     renderSheet();
   }
 
+  // The column headings, over the list. They are hidden from screen readers:
+  // each recipe gives the names of its columns to screen readers.
+  function renderColumns() {
+    const columns = document.getElementById("recipe-columns");
+    if (!columns) return;
+    columns.replaceChildren(...["model", "hardware", "server", "tags"].map((name) => el("span", "", [text(`columns.${name}`)])));
+  }
+
   function resultRow(r) {
+    // A cell with the name of its column for screen readers, for example "Hardware: GB10".
+    const cell = (name, value) => el("span", "recipe-row__where", [el("span", "sr-only", [`${text(`columns.${name}`)}: `]), value]);
     const row = el("button", "recipe-row", [
       el("span", "recipe-row__name", [r.model, el("span", "recipe-row__publisher", [r.publisher])]),
-      el("span", "recipe-row__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
-      el("span", "recipe-tags", tags(r, { short: true })),
+      cell("hardware", r.hardwareLabel),
+      cell("server", r.serverLabel),
+      el("span", "recipe-tags", tags(r, { context: false })),
     ]);
     row.type = "button";
     row.setAttribute("aria-pressed", String(r.id === state.selected));
@@ -298,11 +306,11 @@
   }
 
   // The facts that the recipe files state. A fact that the files do not state shows no tag.
-  function tags(r, { short = false } = {}) {
+  // The list shows no context length: only the sheet shows it.
+  function tags(r, { context = true } = {}) {
     const facts = r.facts;
-    const count = (value) => value.toLocaleString(app.locale);
     const list = [];
-    if (facts.context) list.push(text(short ? "tags.contextShort" : "tags.context", { count: count(facts.context) }));
+    if (context && facts.context) list.push(text("tags.context", { count: facts.context.toLocaleString(app.locale) }));
     if (facts.tools) list.push(text("tags.tools"));
     if (facts.reasoning) list.push(text("tags.reasoning"));
     return list.map((label) => el("span", "recipe-tag", [label]));

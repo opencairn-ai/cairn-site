@@ -248,14 +248,20 @@ window.CAIRN_COPY.en = {
     filters: {
       // The name of the row of filters for screen readers.
       label: "Filters",
-      // The names of the two menus. A menu shows its name until the visitor selects a choice.
+      // The name of the menu. The menu shows its name until the visitor selects a choice.
       hardware: "Hardware",
-      server: "Model server",
-      // The first choice of each menu: it removes the filter.
+      // The first choice of the menu: it removes the filter.
       all: "All",
       // The search field: its name for screen readers, and the text it shows while empty.
       model: "Model",
       modelPlaceholder: "Model name",
+    },
+    // The column headings of the list.
+    columns: {
+      model: "Model",
+      hardware: "Hardware",
+      server: "Model server",
+      tags: "Tags",
     },
     // The model server and the hardware of a recipe, for example "vLLM on GB10".
     where: "{server} on {hardware}",
@@ -263,8 +269,6 @@ window.CAIRN_COPY.en = {
     noSelection: "Select a recipe to see its configuration.",
     tags: {
       context: "Context: {count} tokens",
-      // In the list, where space is short.
-      contextShort: "{count} tokens",
       tools: "Tool calling",
       reasoning: "Reasoning",
     },
