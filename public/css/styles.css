@@ -118,9 +118,11 @@
 /* The page scales like a slide: everything is sized in rem, and the root size
    follows the smaller of the viewport's width and height, so the whole page
    fits on one landscape screen. On a screen that is too short for it, the page
-   scrolls: no row of the schema shrinks below its content. */
+   scrolls: no row of the schema shrinks below its content.
+   The two factors are set so that the tallest page, the stack page with its row
+   of tabs, fits a 1440 × 900 window in English and in French. */
 html {
-  font-size: clamp(11px, min(1.02vw, 1.75vh), 19px);
+  font-size: clamp(11px, min(0.975vw, 1.67vh), 19px);
   -webkit-text-size-adjust: 100%;
 }
 
