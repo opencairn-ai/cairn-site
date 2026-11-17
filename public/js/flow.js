@@ -6,9 +6,6 @@
  *   2. One component goes out and another one takes its place.
  *   3. The new component passes its test, like the other components.
  *
- * While it shows one of the three points of the goal, that point of the page has a
- * Magenta rule.
- *
  * css/styles.css draws the picture. This script moves the task and the result from
  * place to place, and puts classes on the picture in time.
  *
@@ -30,7 +27,6 @@
   const core = stage.querySelector(".flow__core");
   const slot = stage.querySelector(".flow__slot");
   const link = stage.querySelector(".flow__link");
-  const points = document.querySelectorAll("#goal-points .goal__point");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
   // The way of the task: from the chat window to the API Endpoint, then through the
@@ -50,14 +46,13 @@
   const CUES = [
     { at: 0, run: clearTurn },
     { at: 350, run: () => stage.classList.add("has-task") },
-    { at: 800, run: () => { showPoint(0); fly("task", TASK_PATH, 4400); } },
+    { at: 800, run: () => fly("task", TASK_PATH, 4400) },
     { at: 5200, run: () => fly("answer", ANSWER_PATH, 950) },
-    { at: 6050, run: () => { stage.classList.add("has-answer"); showPoint(null); } },
-    { at: 6600, run: () => { showPoint(1); swapOut(); } },
+    { at: 6050, run: () => stage.classList.add("has-answer") },
+    { at: 6600, run: swapOut },
     { at: 7500, run: swapIn },
     { at: 8400, run: passTest },
-    { at: 8900, run: () => { showPoint(2); wave(); } },
-    { at: 10200, run: () => showPoint(null) },
+    { at: 8900, run: wave },
   ];
 
   let wanted = !reducedMotion.matches;   // the visitor wants the animation to play
@@ -114,11 +109,6 @@
     toggle.dataset.state = state;
     toggle.setAttribute("aria-label", t(`flow.${state}`));
     toggle.title = t(`flow.${state}`);
-  }
-
-  // The point of the goal that the animation shows now (0, 1, 2 or none).
-  function showPoint(current) {
-    points.forEach((point, n) => point.classList.toggle("is-current", n === current));
   }
 
   function isColumn() {
@@ -232,7 +222,6 @@
     stage.classList.remove("has-task", "has-answer");
     core.classList.remove("is-wave");
     for (const comp of slot.children) comp.classList.remove("is-in", "is-new");
-    showPoint(null);
   }
 
   // --- The clock -----------------------------------------------------------

@@ -37,9 +37,10 @@ Each tab is one HTML file. All four files repeat the same header and the same
 marks its tab as the current one. The tab names are under `nav` in the copy files.
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
-Hello World holds the introduction (the title, the goal and its three points) and
-the animation. The animation plays in a loop and has no text above it: the title and the three
-points do that. Its texts are under `flow` in the copy files.
+Hello World holds the title of the site and the animation. The animation plays in
+a loop and has no text above it: the title does that. Its texts are under `flow`
+in the copy files. The stack page holds the goal and its three points, above the
+schema.
 Roadmap shows only its name for now.
 
 ## Recipes

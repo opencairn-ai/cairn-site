@@ -1034,7 +1034,7 @@ h1 {
 /* --- Hello World: the animation -------------------------------------------
    A task goes from your AI agent through the layers of Cairn, and the result
    comes back. Then one component is replaced by another one. It plays in a loop,
-   and it has no text above it: the title and the three points of the goal do that.
+   and it has no text above it: the title of the page does that.
    The script (js/flow.js) moves the task and the result, and puts classes on the
    picture in time. Sized in em of the stage, so it scales with the page.       */
 
@@ -1048,13 +1048,6 @@ h1 {
 }
 
 .flow__defs { position: absolute; }
-
-/* While the animation shows it, a point of the goal has a Magenta rule. */
-.goal__point { transition: border-color 0.3s, box-shadow 0.3s; }
-.goal__point.is-current {
-  border-top-color: var(--color-pink);
-  box-shadow: 0 -1.5px 0 var(--color-pink);
-}
 
 /* Pause and play: a small button in the corner of the picture. */
 .flow__toggle {
@@ -1094,9 +1087,11 @@ h1 {
   grid-template-columns: minmax(0, 27fr) minmax(0, 73fr);
   grid-template-rows: minmax(0, 1fr) auto;
   column-gap: 4em;
-  min-height: 27rem;
-  max-height: 33rem;
-  font-size: 1.22rem;
+  /* The picture is the main thing of the page. Its text grows with the width of the
+     page, so its proportions stay the same. */
+  min-height: 22.5em;
+  max-height: 27em;
+  font-size: clamp(1rem, 1.55cqi, 1.5rem);
   line-height: 1.25;
   cursor: pointer;
   user-select: none;
