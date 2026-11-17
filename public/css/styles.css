@@ -436,9 +436,9 @@ h1 {
 .label .status-mark { display: inline-block; margin-left: 0.4em; vertical-align: 0.05em; }
 .comp .label .status-mark { display: none; }
 
-/* The rule of the layout: a column is a layer, and a full-width row is shared by
-   all the columns. Client rows, the line, the core (four columns and the
-   Registry row), then the cross-cutting rows. */
+/* The rule of the layout: the four core layers make a matrix, and a full-width
+   row is shared by all of them. The client row, the line, the core (the matrix
+   and the Registry row), then the cross-cutting rows. */
 .arch {
   display: flex;
   flex: 1;
@@ -695,17 +695,18 @@ h1 {
   100% { top: calc(100% - 5px); opacity: 0; }
 }
 
-/* The server-side core: four layers side by side, and the Registry row under all four. */
+/* The server-side core: four layers in a matrix of two columns and two rows, and
+   the Registry row under all four. */
 .core {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: minmax(min-content, 1fr) auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(min-content, 1fr)) auto;
   gap: 0.6em;
-  /* Spare height goes to the core, up to 16.5em: its boxes then stand about twice as
+  /* Spare height goes to the core, up to 29em: its boxes then stand about twice as
      tall as the boxes in the rows. It never shrinks below its content. */
   flex: 1 1 auto;
   min-height: min-content;
-  max-height: 16.5em;
+  max-height: 29em;
   padding: 0.6em;
   border: 2.5px solid var(--color-core-outline);
   border-radius: var(--radius-lg);
@@ -721,7 +722,7 @@ h1 {
 .layer--registry > .label { flex-basis: calc(8.5em - 0.6em - 2.5px); }
 
 /* Security, Observability, Control Plane: one group with a name. Each layer is a
-   full-width row, so it runs under all four columns. */
+   full-width row, so it runs under the whole core. */
 .cross {
   display: flex;
   flex-direction: column;
@@ -805,17 +806,10 @@ h1 {
   border-color: #c5c9ce;
 }
 
-/* Between desktop and phone: the core has two columns. Left, where agents run and
-   remember. Right, access to models and tools. Rows with four boxes need the full
-   width, so the Registry and the cross-cutting rows put their name above the boxes. */
+/* Between desktop and phone: the core keeps its matrix. Rows with four boxes need
+   the full width, so the Registry and the cross-cutting rows put their name above
+   the boxes. */
 @container arch (min-width: 641px) and (max-width: 900px) {
-  .core { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto auto; }
-  .core > [data-copy="agentRuntime"] { grid-column: 1; grid-row: 1; }
-  .core > [data-copy="persistence"]  { grid-column: 1; grid-row: 2; }
-  .core > [data-copy="modelAccess"]  { grid-column: 2; grid-row: 1; }
-  .core > [data-copy="toolAccess"]   { grid-column: 2; grid-row: 2; }
-  .core > [data-copy="registry"]     { grid-column: 1 / -1; grid-row: 3; }
-
   .core .layer--row,
   .cross .layer--row {
     flex-direction: column;
