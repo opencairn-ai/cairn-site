@@ -6,15 +6,15 @@
 // not a subject (legal, finance): a subject is a second facet, not used here.
 //
 //   chat       A person talks with the model: questions, writing, explanation.
-//   tasks      An application sends one bounded job: extract, classify, summarize, translate.
 //   coding     The model writes and changes code, in an editor or a coding tool.
-//   agents     The model does work in many steps and calls tools, with no person at each step.
 //   documents  The model reads documents as images: pages, tables, charts, forms.
+// Two more patterns are not in use for now: `tasks` (one bounded job for each
+// request) and `agents` (work in many steps with tools).
 //
 // THE EVIDENCE
-// A recipe is a model plus a configuration, so the rules read three sources:
-//   - the recipe files (the stack repository): is tool calling on, and how
-//     long is the context? These facts say what the configuration permits.
+// The rules read three sources:
+//   - the recipe files (the stack repository): the model, and the reasoning
+//     setting.
 //   - Hugging Face (https://huggingface.co): the original model of the recipe
 //     (`base_model`), its input type, and its rank on the leaderboards of the
 //     benchmarks in BENCHMARKS. A rank says how well the model does one kind of work.
@@ -24,24 +24,21 @@
 // THE RULES
 // A use case tag says what the recipe fits best, not all that it can do.
 // The rules first find the use cases that the recipe reaches:
-//   tasks      Each recipe.
 //   chat       The model is not below the floor.
 //   coding     The model is in the top half of a coding leaderboard, and not below the floor.
-//   agents     The model is in the top half of an agent leaderboard, and not
-//              below the floor. Tool calling is on and the context is long enough.
 //   documents  The model is in the top half of a document leaderboard, and it reads images.
 // The floor is the first quartile of the Intelligence Index of all the models
 // that Artificial Analysis measured. A model with no index is not held below it.
-// Then the recipe keeps the BEST_FIT most demanding use cases that it reaches
-// in DEMAND, and `documents` when it reaches it. A recipe that reaches
-// `agents` can also do tasks, but a smaller model does tasks on less
-// hardware: `tasks` is not the best fit of that recipe.
+// Then the recipe keeps the most demanding use case that it reaches in DEMAND,
+// and `documents` when it reaches it. A recipe that reaches `coding` can also
+// do chat, but a smaller model does chat on less hardware: `chat` is not the
+// best fit of that recipe.
 //
 // LIMITS
 //   - The leaderboard results are not verified. Most come from the model card
 //     of the publisher, and each publisher uses its own test setup.
-//   - A model with no result on a leaderboard gets no tag from it: `coding`,
-//     `agents` and `documents` need a result.
+//   - A model with no result on a leaderboard gets no tag from it: `coding`
+//     and `documents` need a result.
 //   - The benchmarks measure the original model. A recipe can serve a
 //     quantized copy (FP8, NVFP4), which can score lower.
 
@@ -49,12 +46,12 @@ const AA_API = "https://artificialanalysis.ai/api/v2/language/models/free";
 const HF_API = "https://huggingface.co/api";
 
 // The use cases, in the order of the page.
-export const USE_CASES = ["chat", "tasks", "coding", "agents", "documents"];
+export const USE_CASES = ["chat", "coding", "documents"];
 
 // The use cases from the least demanding to the most demanding, and the
 // number of these use cases that a recipe keeps.
-const DEMAND = ["tasks", "chat", "coding", "agents"];
-const BEST_FIT = 2;
+const DEMAND = ["chat", "coding"];
+const BEST_FIT = 1;
 
 // The benchmarks of each use case: dataset names on Hugging Face. To add a
 // benchmark, add its name here. A leaderboard that puts more than one metric
@@ -69,11 +66,6 @@ const BENCHMARKS = {
     "harborframework/terminal-bench-2.1",
     "harborframework/terminal-bench",
   ],
-  agents: [
-    "agents-last-exam/agents-last-exam",
-    "hkust-nlp/Toolathlon",
-    "claw-eval/Claw-Eval",
-  ],
   documents: [
     "llamaindex/ParseBench",
     "llamaindex/ParseBench-2",
@@ -84,9 +76,6 @@ const BENCHMARKS = {
 // A leaderboard with fewer models than this gives no rank: the top half of a
 // short list says little.
 const SMALLEST_LEADERBOARD = 10;
-
-// The shortest context, in tokens, for work in many steps: the tool results add up.
-const AGENT_CONTEXT = 32768;
 
 // Marks of a quantized or converted copy at the end of a model name. Hugging
 // Face names the original model of a copy; these marks are the fallback for a
@@ -210,17 +199,12 @@ export async function findEvidence(recipe, index, leaderboards) {
 
 // The use cases that a recipe fits best, from its facts and its evidence.
 export function classify(recipe, evidence, index) {
-  const { tools, context } = recipe.facts;
   const notBelowFloor = evidence.intelligence === null || evidence.intelligence >= index.floor;
   const inTopHalf = (useCase) => Boolean(evidence.places[useCase]) && evidence.places[useCase].rank <= evidence.places[useCase].of / 2;
-  // A recipe that sets no context length uses the full context of the model.
-  const readyForAgents = tools && (context === null || context >= AGENT_CONTEXT);
 
   const reaches = {
-    tasks: true,
     chat: notBelowFloor,
     coding: inTopHalf("coding") && notBelowFloor,
-    agents: inTopHalf("agents") && notBelowFloor && readyForAgents,
     documents: inTopHalf("documents") && evidence.readsImages,
   };
   const best = DEMAND.filter((useCase) => reaches[useCase]).slice(-BEST_FIT);

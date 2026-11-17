@@ -50,8 +50,8 @@ from a checkout of the stack repository. To update the copy:
 AA_API_KEY=… HF_TOKEN=… node tools/gen-recipes.mjs ../cairn-stack     # the path to a cairn-stack checkout, on main
 ```
 
-The script also gives each recipe the use cases that it fits best (Chat, Tasks,
-Coding, Agents, Documents). The rules are in `tools/use-cases.mjs`. They read
+The script also gives each recipe the use cases that it fits best (Chat,
+Coding, Documents). The rules are in `tools/use-cases.mjs`. They read
 the facts of the recipe and two outside sources:
 
 - [Hugging Face](https://huggingface.co): the original model of the recipe and

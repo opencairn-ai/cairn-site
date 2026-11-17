@@ -272,9 +272,7 @@ window.CAIRN_COPY.en = {
     // The rules that give a use case to a recipe are in tools/use-cases.mjs.
     useCases: {
       chat: "Chat",
-      tasks: "Tasks",
       coding: "Coding",
-      agents: "Agents",
       documents: "Documents",
       // Under the list, before the links to the sources: "… from Hugging Face and Artificial Analysis".
       credit: "The use case tags use benchmark data from",
@@ -289,14 +287,12 @@ window.CAIRN_COPY.en = {
       },
       useCases: {
         chat: "A person talks with the model: questions, writing and explanations.",
-        tasks: "An application sends one job at a time: extract, classify, summarize or translate.",
         coding: "The model writes and changes code, in an editor or in a coding tool.",
-        agents: "The model does work in many steps and calls tools. A person does not approve each step.",
         documents: "The model reads documents as images: pages, tables, charts and forms.",
       },
       tags: {
         context: "The maximum length of one request, in tokens: the input plus the answer.",
-        tools: "The model server returns tool calls in a structured format. Agents and coding tools use them.",
+        tools: "The model server returns tool calls in a structured format. Coding tools and agents use them.",
         reasoning: "The model server returns the reasoning of the model apart from its answer.",
       },
     },
@@ -312,6 +308,9 @@ window.CAIRN_COPY.en = {
     sheet: {
       // The name of the sheet for screen readers.
       label: "Selected recipe",
+      // The name of the button that hides the sheet, then shows it again.
+      hide: "Hide the selected recipe",
+      show: "Show the selected recipe",
       files: "Recipe files",
       image: "Model server image:",
       copy: "Copy",

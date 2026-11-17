@@ -62,8 +62,7 @@ window.CAIRN_RECIPES = {
         "places": {}
       },
       "useCases": [
-        "chat",
-        "tasks"
+        "chat"
       ]
     },
     {
@@ -101,8 +100,7 @@ window.CAIRN_RECIPES = {
         "places": {}
       },
       "useCases": [
-        "chat",
-        "tasks"
+        "chat"
       ]
     },
     {
@@ -140,8 +138,7 @@ window.CAIRN_RECIPES = {
         "places": {}
       },
       "useCases": [
-        "chat",
-        "tasks"
+        "chat"
       ]
     },
     {
@@ -182,11 +179,6 @@ window.CAIRN_RECIPES = {
             "rank": 5,
             "of": 35
           },
-          "agents": {
-            "benchmark": "hkust-nlp/Toolathlon",
-            "rank": 8,
-            "of": 18
-          },
           "documents": {
             "benchmark": "Delores-Lin/MDPBench",
             "rank": 6,
@@ -196,7 +188,6 @@ window.CAIRN_RECIPES = {
       },
       "useCases": [
         "coding",
-        "agents",
         "documents"
       ]
     },
@@ -246,7 +237,6 @@ window.CAIRN_RECIPES = {
         }
       },
       "useCases": [
-        "chat",
         "coding"
       ]
     },
@@ -288,11 +278,6 @@ window.CAIRN_RECIPES = {
             "rank": 12,
             "of": 56
           },
-          "agents": {
-            "benchmark": "agents-last-exam/agents-last-exam",
-            "rank": 9,
-            "of": 10
-          },
           "documents": {
             "benchmark": "llamaindex/ParseBench",
             "rank": 9,
@@ -301,7 +286,6 @@ window.CAIRN_RECIPES = {
         }
       },
       "useCases": [
-        "chat",
         "coding",
         "documents"
       ]
@@ -348,11 +332,6 @@ window.CAIRN_RECIPES = {
             "rank": 5,
             "of": 35
           },
-          "agents": {
-            "benchmark": "hkust-nlp/Toolathlon",
-            "rank": 8,
-            "of": 18
-          },
           "documents": {
             "benchmark": "Delores-Lin/MDPBench",
             "rank": 6,
@@ -362,7 +341,6 @@ window.CAIRN_RECIPES = {
       },
       "useCases": [
         "coding",
-        "agents",
         "documents"
       ]
     }

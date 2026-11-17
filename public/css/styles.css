@@ -1218,6 +1218,15 @@ h1 {
 .recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
 
 .recipe-input { flex: 1; min-width: 0; padding: 0.35em 0.65em; font-weight: 500; }
+
+/* The button that hides or shows the sheet: a square box with an icon. The
+   panel of the icon is filled while the sheet shows. */
+.recipe-toggle { flex: none; width: auto; padding: 0.35em 0.45em; }
+.recipe-toggle__icon { width: 1.25em; height: 1.25em; }
+.recipe-toggle[aria-expanded="false"] { opacity: 0.75; }
+/* Without the sheet, the list takes the full width. */
+.recipe-body--list-only { grid-template-columns: minmax(0, 1fr); }
+.recipe-sheet[hidden] { display: none; }
 .recipe-input::placeholder { color: var(--recipe-gray-text); opacity: 0.75; }
 
 /* The open menu: the design system's dropdown menu. It lies over the list, and

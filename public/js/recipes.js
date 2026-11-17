@@ -50,6 +50,8 @@
     hardware: "",
     useCase: "",
     query: "",
+    // The visitor can hide the sheet, to give the full width to the list.
+    sheetHidden: false,
     file: "model-server-config.yaml",
   };
 
@@ -72,6 +74,7 @@
 
   renderColumns();
   renderFilters();
+  showSheet(true);
   renderResults();
   renderCredit();
 
@@ -82,11 +85,36 @@
   function renderFilters() {
     // The search field stays in place while the menu is drawn again, so it keeps its text.
     const search = filters.querySelector(".recipe-search") || searchField();
+    const toggle = filters.querySelector(".recipe-toggle") || sheetToggle();
     filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
       USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
       search,
+      toggle,
     ].filter(Boolean));
+  }
+
+  // The button at the end of the row: it hides the sheet, or shows it again.
+  // Its icon is a window with a panel on the right, as the sheet is on the page.
+  function sheetToggle() {
+    const button = el("button", "recipe-select recipe-toggle", [
+      icon("M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M15 4v16", "recipe-toggle__icon"),
+    ]);
+    button.type = "button";
+    button.setAttribute("aria-controls", sheet.id);
+    button.addEventListener("click", () => showSheet(state.sheetHidden));
+    return button;
+  }
+
+  function showSheet(shown) {
+    state.sheetHidden = !shown;
+    sheet.hidden = !shown;
+    sheet.parentElement.classList.toggle("recipe-body--list-only", !shown);
+    const button = filters.querySelector(".recipe-toggle");
+    const label = text(shown ? "sheet.hide" : "sheet.show");
+    button.setAttribute("aria-expanded", String(shown));
+    button.setAttribute("aria-label", label);
+    button.title = label;
   }
 
   // A menu with one choice: the design system's dropdown menu. For screen readers
@@ -248,6 +276,8 @@
     row.setAttribute("aria-pressed", String(r.id === state.selected));
     row.addEventListener("click", () => {
       state.selected = r.id;
+      // A visitor who selects a recipe wants to see it: the sheet comes back.
+      if (state.sheetHidden) showSheet(true);
       renderResults();
       // On a narrow screen the sheet is under the list: bring it into view.
       if (matchMedia("(max-width: 900px), (max-aspect-ratio: 1/1)").matches) sheet.scrollIntoView({ behavior: "smooth", block: "start" });
