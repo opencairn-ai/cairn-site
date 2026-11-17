@@ -1,8 +1,9 @@
 /*
  * Fills each page with the copy from copy/en.js or copy/fr.js and marks the
  * current tab. On the stack page, it also shows the architecture pop-ups and
- * downloads the diagram as a PNG. The Recipes page has its own script
- * (js/recipes.js), which uses the copy lookup that this script shares.
+ * downloads the diagram as a PNG. The Hello World page and the Recipes page have
+ * their own scripts (js/hello.js, js/recipes.js), which use the copy lookup that
+ * this script shares.
  */
 (() => {
   "use strict";
@@ -29,7 +30,7 @@
   const diagram = document.getElementById("architecture");
   const entries = new Map();
 
-  // For the script of a single page (js/recipes.js): the copy lookup, the
+  // For the script of a single page (js/hello.js, js/recipes.js): the copy lookup, the
   // language tag of the page, and the mark of an external link.
   window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon };
 
@@ -116,10 +117,12 @@
 
     renderNav();
 
+    // The three points under the title: the goal on the stack page (`intro.points`),
+    // or the copy that the page names in data-points.
     const goalPoints = document.getElementById("goal-points");
     if (goalPoints) {
       goalPoints.replaceChildren(
-        ...(t("intro.points") || []).map((point) =>
+        ...(t(goalPoints.dataset.points || "intro.points") || []).map((point) =>
           el("li", "goal__point", [
             el("span", "goal__point-title", point.title),
             el("span", "goal__point-text", point.text),

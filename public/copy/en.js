@@ -42,7 +42,9 @@ window.CAIRN_COPY.en = {
   },
 
   intro: {
+    // The title of the Hello World page.
     title: "Introducing the sovereign, open source AI stack",
+    // The goal and its three points, on the stack page.
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
       {
@@ -60,22 +62,122 @@ window.CAIRN_COPY.en = {
     ],
   },
 
-  // The animation of the Hello World page. It has no text above it. The layer and
-  // component names in the picture are the names under `stack`.
-  flow: {
-    // The name and the description of the animation, for screen readers.
-    label: "Animation: a task goes through Cairn",
-    description: "Your AI agent sends a task to Cairn, on infrastructure that you control. The task goes through the four core layers. Interface contracts connect these layers. Then the result comes back to your AI agent. After that, one model server is replaced by a different model server that passes the same contract tests. The other components do not change, and the next task goes through the stack in the same way.",
-    // The names in the picture.
-    agent: "You and your AI agent",
-    area: "Infrastructure that you control",
-    stack: "Cairn",
-    // What the two signs of the picture mean.
-    contract: "Interface contract",
-    tested: "Contract tests passed",
-    // The names of the button.
-    play: "Play the animation",
-    pause: "Pause the animation",
+  // The Hello World page, for business leaders. Its title is `intro.title`.
+  hello: {
+    // Under the title: the reason for Cairn, then three points.
+    lead: "Small and medium businesses drive most economies. They must be able to adopt AI on their own terms: safely, easily and cost-effectively. The models are not the problem. Deploying and running them is.",
+    points: [
+      {
+        title: "Your data and your policies stay on your infrastructure",
+        text: "Everything runs on infrastructure that you control. You can inspect and replace each component.",
+      },
+      {
+        title: "Open source, without the assembly",
+        text: "A tested stack. You install, upgrade and operate it from its documentation.",
+      },
+      {
+        title: "You own your capacity and your choices",
+        text: "AI runs on infrastructure that you own or share. Costs are predictable, and you do not depend on one vendor.",
+      },
+    ],
+
+    // The left section: what Cairn is, then three links.
+    what: {
+      // The small pink line above the title of the section.
+      eyebrow: "What it is",
+      title: "Cairn is an open source AI stack that an organization installs and operates on infrastructure that it controls.",
+      stack: "Explore the stack →",
+      roadmap: "See the roadmap",
+      contact: "bonjourhi@opencairn.ai",
+      contactUrl: "mailto:bonjourhi@opencairn.ai",
+    },
+
+    // The carousel shows these four principles, one at a time, each with a picture.
+    // The page has four slides: keep four principles, in this order.
+    principles: [
+      {
+        name: "Tested open source components",
+        text: "We specify what each layer must do. We test existing open source components against that specification. Then we select and integrate the best fit.",
+      },
+      {
+        name: "Replaceable by contract",
+        text: "We publish the interface contracts that each component must satisfy. A component that satisfies them can replace another one without rework.",
+      },
+      {
+        name: "Your teams keep their tools",
+        text: "Teams keep the chat assistants and coding agents that they use now. They connect these tools to one API, on the compute of your organization.",
+      },
+      {
+        name: "Composition, not creation",
+        text: "We write the code that connects components, not new components. Where no suitable open source component exists, we publish a specification.",
+      },
+    ],
+
+    // The names of the carousel and of its buttons, for screen readers.
+    carousel: {
+      label: "The four principles of Cairn",
+      previous: "Previous principle",
+      next: "Next principle",
+      pause: "Pause the carousel",
+      play: "Play the carousel",
+      // The name of a mark under the slides, for example "2 of 4: Replaceable by contract".
+      position: "{index} of {count}: {name}",
+    },
+
+    // The texts in the four pictures. The layer and component names in the pictures
+    // are the names under `stack`.
+    pictures: {
+      // Picture 1: three components and their test results.
+      tests: {
+        components: "Open source components",
+        tests: "Tests",
+        componentA: "Component A",
+        componentB: "Component B",
+        componentC: "Component C",
+        selected: "Selected",
+      },
+      // Picture 2: a Model Gateway and a Model Server, each with two choices.
+      contract: {
+        contract: "Interface contract",
+        or: "or",
+        passed: "Contract tests passed",
+      },
+      // Picture 3: the tools of the teams, Cairn, then the compute.
+      tools: {
+        chat: "Chat assistant",
+        coding: "Coding agent",
+        applications: "Your applications",
+        api: "One API",
+        cairn: "Cairn",
+        where: "On your infrastructure",
+        local: "Local compute",
+        localDetail: "Your GPUs",
+        remote: "Remote compute",
+        remoteDetail: "Cloud, hosted APIs",
+        compute: "Compute for AI models",
+      },
+      // Picture 4: what the three signs of the picture mean.
+      skeleton: {
+        component: "Open source component",
+        code: "Our connection code",
+        specification: "Our specification",
+      },
+    },
+
+    // The right section: the types of adopter, each with one line.
+    who: {
+      eyebrow: "Who it is for",
+      title: "Each organization that wants AI on its own terms.",
+      adopters: [
+        { name: "Small and medium businesses", text: "Adopt AI on your own terms, in-house or through a trusted partner." },
+        { name: "Large enterprises", text: "Standardize AI use and access across teams, with simple maintenance." },
+        { name: "Governments", text: "Keep AI capacity and data in your control and easy to inspect." },
+        { name: "Nonprofits", text: "Use AI safely and predictably, without an engineering team." },
+        { name: "Integrators and advisors", text: "Deploy open source AI solutions that your customers own." },
+        { name: "Compute providers", text: "Offer capacity on an open stack that is configured for your hardware." },
+        { name: "Open source projects", text: "Build components against the published contract of each layer." },
+      ],
+    },
   },
 
   diagram: {

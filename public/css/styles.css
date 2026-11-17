@@ -1,5 +1,6 @@
 /* ==========================================================================
-   opencairn.ai — all pages: the header, the architecture page, the Recipes page
+   opencairn.ai — all pages: the header, the Hello World page, the architecture
+   page, the Recipes page
    ========================================================================== */
 
 @font-face {
@@ -58,10 +59,6 @@
   --color-disabled-opacity: 1;
   --color-status-alpha: #5c7065;     /* Alpha marks on boxes: Moss 5.3:1 */
   --color-badge-alpha: #283f33;      /* Pop-up badges, white text: Forest green 11.4:1 */
-  --color-flow-task: #734c90;        /* Animation, the task in the chat: Mid purple */
-  --color-flow-answer: #dcbaf6;      /* Animation, the result: Pale purple */
-  --color-flow-pass: #5c7065;        /* Animation, a passed test: Moss */
-  --color-flow-empty: #a08f79;       /* Animation, the empty place of a component: Stone */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;   /* Recipe files, as in the design system's meta chip */
@@ -114,9 +111,6 @@
   --color-disabled-opacity: 0.3;
   --color-status-alpha: #bdcbc3;     /* Light Moss 7.4:1 on boxes */
   --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
-  --color-flow-task: #ab80cd;        /* Light purple */
-  --color-flow-answer: #f5e8ff;      /* Marshmallow */
-  --color-flow-pass: #bdcbc3;        /* Light Moss */
 }
 
 /* The page scales like a slide: everything is sized in rem, and the root size
@@ -1031,485 +1025,439 @@ h1 {
   .intro { margin-bottom: 2rem; }
 }
 
-/* --- Hello World: the animation -------------------------------------------
-   A task goes from your AI agent through the layers of Cairn, and the result
-   comes back. Then one component is replaced by another one. It plays in a loop,
-   and it has no text above it: the title of the page does that.
-   The script (js/flow.js) moves the task and the result, and puts classes on the
-   picture in time. Sized in em of the stage, so it scales with the page.       */
+/* --- Hello World -----------------------------------------------------------
+   For business leaders. Under the title: the reason for Cairn and its three
+   points, in the layout of the goal on the stack page. Then two sections side by
+   side: what Cairn is (a Sand panel, as a layer of the schema, with a carousel of
+   the four principles) and who Cairn is for (rows with a rule).
+   The script (js/hello.js) drives the carousel and makes the rows.            */
 
-.flow {
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  margin: 1.5rem 0 0;
-  container: flow / inline-size;
-}
+.hello { gap: 1.1rem; padding-bottom: 0.4rem; }
+/* No browser margins on the headings and lists of the page. :where() keeps these
+   rules weaker than the rules of each part. */
+:where(.hello) :where(h2, h3, dl, dd, ul) { margin: 0; padding: 0; }
+:where(.hello) ul { list-style: none; }
 
-.flow__defs { position: absolute; }
+.pic-defs { position: absolute; }
 
-/* Pause and play: a small button in the corner of the picture. */
-.flow__toggle {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.7rem;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  background: var(--color-bg);
-  color: var(--color-header);
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-
-.flow__toggle:hover,
-.flow__toggle:focus-visible,
-.flow__toggle[data-state="play"] { opacity: 1; }
-:root[data-theme="dark"] .flow__toggle { color: var(--color-boundary); }
-
-.flow__icon { display: none; width: 1.05rem; height: 1.05rem; }
-.flow__toggle[data-state="play"] .flow__icon--play,
-.flow__toggle[data-state="pause"] .flow__icon--pause { display: block; }
-
-/* The stage: you and your AI agent on the left, the stack on the right. */
-.flow__stage {
-  --flow-dir: row;
-  position: relative;
+.hello__cols {
   display: grid;
   flex: 1;
-  grid-template-columns: minmax(0, 27fr) minmax(0, 73fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-  column-gap: 4em;
-  /* The picture is the main thing of the page. Its text grows with the width of the
-     page, so its proportions stay the same. */
-  min-height: 22.5em;
-  max-height: 27em;
-  font-size: clamp(1rem, 1.55cqi, 1.5rem);
-  line-height: 1.25;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 2.4rem;
 }
 
-/* No motion: for a visitor who asks the system for reduced motion. */
-.flow__stage.is-static,
-.flow__stage.is-static * { transition: none !important; animation: none !important; }
-.flow__stage.is-paused * { animation-play-state: paused !important; }
+.what,
+.who { display: flex; flex-direction: column; padding: 1.4rem 0 0.4rem; }
 
-/* You with your AI agent. */
-.flow__actor {
-  display: flex;
-  grid-area: 1 / 1;
-  flex-direction: column;
-  align-items: center;
-  align-self: center;
-  justify-self: center;
-  gap: 0.6em;
-  text-align: center;
-}
-
-.flow__actor-name { color: var(--color-body); font-weight: 500; }
-
-.flow__agent { display: flex; align-items: flex-end; gap: 0.5em; font-size: 1.2em; }
-.flow__person { flex: none; width: 3.2em; height: 3.2em; color: var(--color-title); }
-
-/* The AI agent: a chat window. The task is the message on the right, the result
-   is the message on the left. */
-.flow__chat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-  width: 8.6em;
-  min-height: 5.9em;
-  padding: 0 0.55em 0.55em;
-  border: 2px solid var(--color-title);
-  border-radius: var(--radius-md);
-  background: var(--color-component);
-}
-
-.flow__chat-bar {
-  display: flex;
-  gap: 0.28em;
-  margin: 0 -0.55em 0.15em;
-  padding: 0.38em 0.55em;
-  border-bottom: 2px solid var(--color-title);
-}
-
-.flow__chat-bar i {
-  width: 0.36em;
-  height: 0.36em;
-  border-radius: 50%;
-  background: var(--color-title);
-}
-
-.flow__msg {
-  border-radius: 0.45em;
-  transform: scale(0);
-  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
-}
-
-.flow__msg--task {
-  align-self: flex-end;
-  width: 62%;
-  height: 0.9em;
-  background: var(--color-flow-task);
-  transform-origin: right bottom;
-}
-
-.flow__msg--answer {
-  align-self: flex-start;
-  width: 82%;
-  height: 1.8em;
-  border: 1.5px solid var(--color-title);
-  background: var(--color-flow-answer);
-  transform-origin: left top;
-}
-
-.has-task .flow__msg--task,
-.has-answer .flow__msg--answer { transform: none; }
-
-/* The server side: a dashed line, like the Server side line of the schema. */
-.flow__area {
-  display: flex;
-  grid-area: 1 / 2 / 3 / 3;
-  flex-direction: column;
-  gap: 0.6em;
-  min-width: 0;
-  padding: 0.75em 1em 1em;
-  border: 2px dashed var(--color-boundary);
+/* The slide that comes in starts a short distance to the right: the panel cuts
+   it, so it adds no width to the page. */
+.what {
+  overflow: hidden;
+  padding: 1.4rem 1.6rem 1.6rem;
   border-radius: var(--radius-lg);
-}
-
-.flow__area-name { color: var(--color-header); font-weight: 600; }
-:root[data-theme="dark"] .flow__area-name { color: var(--color-boundary); }
-
-.flow__stack {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.5em;
-  padding-top: 0.6em;
-}
-
-/* The outline of the core, as on the schema, with the name of the stack on it. */
-.flow__core {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5em;
-  padding: 1em 0.5em 0.5em;
-  border: 2.5px solid var(--color-core-outline);
-  border-radius: var(--radius-lg);
-}
-
-.flow__stack-name {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  padding: 0 0.6em;
-  background: var(--color-bg);
-  color: var(--color-title);
-  font-size: 1.1em;
-  font-weight: 700;
-  line-height: 1;
-  transform: translate(-50%, -55%);
-}
-
-.flow__layer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-  min-width: 0;
-  padding: calc(0.45em - 2px) calc(0.5em - 2px) calc(0.5em - 2px);
-  border: 2px solid transparent;
-  border-radius: var(--radius-md);
   background: var(--color-layer);
 }
 
-/* A long name takes two lines: the boxes stay at the bottom, on a line with the
-   boxes of the layer next to it. */
-.flow__layer-name { margin-bottom: auto; color: var(--color-header); font-weight: 600; line-height: 1.15; }
-
-/* The layer where the task is has the Magenta border of a selected layer on the schema. */
-.flow__layer.is-pulse { animation: flow-pulse 1s ease-out; }
-@keyframes flow-pulse {
-  0%, 55% { border-color: var(--color-pink); }
+.hello__title {
+  color: var(--color-title);
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-.flow__comp {
-  position: relative;
+.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1rem; }
+.what__links .btn { font-size: 0.95rem; }
+.what__mail { margin-left: 0.4rem; color: var(--color-link); font-size: 0.95rem; font-weight: 500; text-underline-offset: 3px; }
+.what__mail:hover { color: var(--color-link-hover); }
+
+/* Who Cairn is for: the rows share the height of the section. */
+.adopters {
   display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 1.3rem;
+  border-top: 1.5px solid var(--color-header);
+  font-size: 1.05rem;
+}
+
+.adopters__row {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   align-items: center;
-  gap: 0.45em;
-  min-height: 2em;
-  padding: 0.2em 0.45em 0.2em 0.6em;
-  border: 2px solid var(--color-component-border);
-  border-radius: var(--radius-sm);
+  gap: 1.2rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--color-component-border);
+}
+
+.adopters dt { color: var(--color-title); font-weight: 600; }
+.adopters dd { color: var(--color-body); }
+
+/* The carousel: all the slides are in the same place, and one shows. */
+.carousel { display: flex; flex: 1; flex-direction: column; min-height: 0; margin-top: 1.1rem; }
+.carousel__slides { display: grid; flex: 1; }
+
+.carousel__slide {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.2rem 1.2rem 1.2rem 1.6rem;
+  border: 1px solid var(--color-component-border);
+  border-radius: var(--radius-ui-md);
   background: var(--color-component);
   box-shadow: var(--color-component-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0s 0.45s;
+}
+
+.carousel__slide.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s ease;
+  animation: carousel-in 0.45s ease;
+}
+
+@keyframes carousel-in {
+  from { transform: translateX(1.5rem); }
+  to { transform: none; }
+}
+
+.carousel__name {
   color: var(--color-title);
-  font-size: 0.92em;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   line-height: 1.15;
-  transition: border-color 0.5s, background-color 0.5s;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
 }
 
-.flow__comp-name { flex: 1; min-width: 0; }
+.carousel__text { margin-top: 0.7rem; color: var(--color-body); font-size: 1.12rem; line-height: 1.4; }
 
-/* The colors of the schema on dark. */
-:root[data-theme="dark"] .flow__layer { background: rgb(220 186 246 / 0.22); }
-:root[data-theme="dark"] .flow__layer-name { color: var(--color-boundary); }
-:root[data-theme="dark"] .flow__comp { background: var(--color-bg); }
-
-/* The layers that apply to all layers: one row under the core. */
-.flow__cross {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5em;
+.carousel__picture {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  min-height: 14rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: var(--radius-ui-md);
+  background: var(--color-bg);
 }
 
-.flow__cross span {
-  padding: 0.4em 0.5em;
-  border-radius: var(--radius-md);
-  background: rgb(92 74 56 / 0.18);
+.carousel__nav { display: flex; align-items: center; gap: 0.2rem; margin-top: 0.6rem; }
+.carousel__marks { display: flex; flex: 1; gap: 0.4rem; margin-right: 0.8rem; }
+
+/* A mark is a line. The line of the principle that shows fills in the time that
+   the principle stays; it is full when the carousel does not move. */
+.carousel__mark {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.carousel__mark i {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-button-outline) 55%, transparent);
+}
+
+.carousel__mark:hover i { background: var(--color-button-outline); }
+.carousel__mark b { display: block; width: 0; height: 100%; background: var(--color-title); }
+.carousel__mark[aria-current="true"] b { width: 100%; }
+.carousel.is-running .carousel__mark[aria-current="true"] b { animation: carousel-time var(--carousel-time, 7s) linear both; }
+
+@keyframes carousel-time {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Ghost icon buttons, as the theme button. */
+.carousel__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.carousel__button:hover { background: var(--color-ghost-hover); }
+.carousel__button svg { width: 1.1rem; height: 1.1rem; }
+.carousel__icon--play,
+.carousel.is-paused .carousel__icon--pause { display: none; }
+.carousel.is-paused .carousel__icon--play { display: block; }
+
+/* The pictures of the carousel. They use the parts of the schema: the page ground,
+   Sand layers, White boxes, the outline of the core, and Magenta for a contract
+   or a link. */
+.pic { width: 100%; color: var(--color-body); font-size: 1.08rem; }
+
+.pic__box {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-component-border);
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-component);
+  color: var(--color-title);
+  font-weight: 600;
+  box-shadow: var(--color-component-shadow);
+}
+
+.pic__label {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pic__mark { flex: none; width: 1.15rem; height: 1.15rem; }
+.pic-pass__disc { fill: var(--color-status-alpha); }
+.pic-pass__mark { fill: none; stroke: var(--color-component); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pic-fail__ring { fill: none; stroke: var(--color-text-muted); stroke-width: 1.3; }
+.pic-fail__mark { fill: none; stroke: var(--color-text-muted); stroke-width: 1.5; stroke-linecap: round; }
+
+/* The pop-up badge: white text on the badge green, light and dark. */
+.pic__tag {
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  background: var(--color-badge-alpha);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.pic__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem 1.1rem;
+  margin-top: 1.2rem;
+  font-size: 0.88rem;
+}
+
+.pic__legend li { display: flex; align-items: center; gap: 0.4rem; }
+.pic__key { display: inline-block; flex: none; width: 1.1rem; height: 0.8rem; border-radius: 3px; }
+.pic__key--component { border: 1px solid var(--color-component-border); background: var(--color-component); }
+.pic__key--link { height: 4px; border-radius: 2px; background: var(--color-pink); }
+.pic__key--specification { border: 1.5px dashed var(--color-button-outline); }
+
+/* 1. Tests, then the selection. */
+.pic-tests { display: grid; gap: 0.6rem; max-width: 31rem; margin: 0 auto; }
+.pic-tests__row { display: grid; grid-template-columns: minmax(0, 1fr) auto 5.6rem; align-items: center; gap: 1rem; }
+.pic-tests__row--head { padding: 0 0.85rem; }
+.pic-tests__row > :last-child { justify-self: end; }
+.pic-tests__row.is-selected { border-color: var(--color-pink); box-shadow: 0 0 0 1px var(--color-pink); }
+.pic-tests__row:not(.is-selected):not(.pic-tests__row--head) { color: var(--color-body); font-weight: 500; }
+.pic-tests__marks { display: flex; gap: 0.5rem; }
+
+/* 2. One contract, and two places where one component can replace another one. */
+.pic-contract__row { display: flex; align-items: center; max-width: 31rem; margin: 0 auto; }
+
+.pic-contract__joint {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.6rem;
+  padding-bottom: 1.3rem;
+  text-align: center;
+}
+
+.pic-contract__joint i { position: relative; width: 100%; height: 2px; margin-top: 0.45rem; background: var(--color-pink); }
+
+.pic-contract__joint i::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--color-pink);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.pic-contract__place {
+  display: flex;
+  flex: 0 1 10rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  min-width: 8.4rem;
+  padding: 0.6rem;
+  border: 1.5px dashed var(--color-button-outline);
+  border-radius: var(--radius-ui-md);
+}
+
+.pic-contract__place .pic__label { margin-bottom: 0.15rem; }
+.pic-contract__or { color: var(--color-text-muted); font-size: 0.78rem; text-align: center; }
+
+/* The Magenta mark goes from one component to the other one. The two places
+   change at different times, so the picture shows the four pairs. */
+.pic-contract__choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  animation: pic-contract-turn 6s ease-in-out infinite;
+}
+
+.pic-contract__choice--b { animation-delay: -3s; }
+.pic-contract__choice--c { animation-delay: -1.5s; }
+.pic-contract__choice--d { animation-delay: -4.5s; }
+
+@keyframes pic-contract-turn {
+  0%, 42% { opacity: 1; box-shadow: 0 0 0 2px var(--color-pink); }
+  50%, 92% { opacity: 0.45; box-shadow: 0 0 0 0 transparent; }
+  100% { opacity: 1; box-shadow: 0 0 0 2px var(--color-pink); }
+}
+
+/* 3. From top to bottom, as the schema: the tools of the teams, one API, Cairn,
+   then the compute that runs the AI models. */
+.pic-tools { display: flex; flex-direction: column; max-width: 27rem; margin: 0 auto; }
+.pic-tools__tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; text-align: center; }
+.pic-tools__tools .pic__box { display: flex; align-items: center; justify-content: center; padding: 0.5rem 0.4rem; line-height: 1.2; }
+.pic-tools__lines { display: block; width: 100%; height: 2rem; overflow: visible; }
+.pic-tools__lines path { fill: none; stroke: var(--color-button-outline); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+
+.pic-tools__cairn {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 0.6rem;
+  padding: 0.75rem 1rem 0.7rem;
+  border: 2px solid var(--color-core-outline);
+  border-radius: var(--radius-ui-md);
+  background: var(--color-layer);
+}
+
+.pic-tools__cairn .pic__label { flex-basis: 100%; text-align: center; }
+.pic-tools__cairn strong { color: var(--color-title); font-size: 1.3rem; font-weight: 600; }
+
+/* The point of the one API, on the outline of Cairn. */
+.pic-tools__cairn i {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--color-pink);
+  transform: translate(-50%, -50%);
+}
+
+.pic-tools__compute { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; margin-top: 1.1rem; text-align: center; }
+.pic-tools__compute .pic__box { position: relative; display: flex; flex-direction: column; padding: 0.45rem 0.5rem; line-height: 1.25; }
+
+.pic-tools__compute .pic__box::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1.5px;
+  height: 1.1rem;
+  background: var(--color-button-outline);
+}
+
+.pic-tools__compute b { font-weight: 600; }
+.pic-tools__compute small { color: var(--color-body); font-size: 0.8em; font-weight: 400; }
+.pic-tools__foot { margin-top: 0.5rem; text-align: center; }
+
+/* 4. The skeleton of the schema: the layers, their components and the links
+   between them. */
+.pic-skeleton { max-width: 29rem; margin: 0 auto; }
+.pic-skeleton__core { padding: 0.5rem; border: 1.5px solid var(--color-core-outline); border-radius: var(--radius-ui-md); }
+.pic-skeleton__matrix { display: grid; grid-template-columns: minmax(0, 1fr) 1rem minmax(0, 1fr); grid-template-rows: auto 0.8rem auto; }
+.pic-skeleton__layer { padding: 0.4rem 0.5rem 0.5rem; border-radius: var(--radius-ui-sm); background: var(--color-layer); }
+
+.pic-skeleton__name {
+  display: block;
+  margin-bottom: 0.3rem;
   color: var(--color-header);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pic-skeleton__comps { display: flex; align-items: center; }
+
+.pic-skeleton__comp {
+  flex: 1;
+  height: 1.35rem;
+  border: 1px solid var(--color-component-border);
+  border-radius: 4px;
+  background: var(--color-component);
+  box-shadow: var(--color-component-shadow);
+}
+
+.pic-skeleton__comp--specification { border: 1.5px dashed var(--color-button-outline); background: transparent; box-shadow: none; }
+.pic-skeleton__link { flex: none; width: 0.7rem; height: 3px; background: var(--color-pink); }
+.pic-skeleton__link--across { align-self: center; width: auto; height: 4px; }
+.pic-skeleton__link--down { justify-self: center; width: 4px; height: auto; }
+.pic-skeleton__layer--row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; padding: 0.4rem 0.5rem; }
+.pic-skeleton__layer--row .pic-skeleton__name { flex: none; width: 4.2rem; margin: 0; }
+.pic-skeleton__layer--row .pic-skeleton__comps { flex: 1; gap: 0.4rem; }
+.pic-skeleton__cross { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin-top: 0.5rem; }
+
+.pic-skeleton__cross span {
+  padding: 0.3rem 0.2rem;
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-cross);
+  color: var(--color-header);
+  font-size: 0.74rem;
   font-weight: 600;
   text-align: center;
 }
 
-:root[data-theme="dark"] .flow__cross span { background: rgb(28 14 40 / 0.7); color: var(--color-boundary); }
+.pic-skeleton .pic__legend { margin-top: 0.8rem; }
 
-/* A contract: a Magenta link across the gap between two layers. It moves when the
-   task goes across it. */
-.flow__joint {
-  position: absolute;
-  z-index: 1;
-  width: 1.5em;
-  height: 0.62em;
-  border: 1.5px solid var(--color-title);
-  border-radius: 0.4em;
-  background: var(--color-pink);
-  transform: translate(var(--x), var(--y));
+@media (prefers-reduced-motion: reduce) {
+  .carousel__slide,
+  .carousel__slide.is-on { animation: none; transition: none; }
+  .pic-contract__choice { animation: none; }
 }
 
-.flow__joint--right { top: 50%; right: calc(-0.25em - 2px); --x: 50%; --y: -50%; }
-.flow__joint--left { top: 50%; left: calc(-0.25em - 2px); --x: -50%; --y: -50%; }
-.flow__joint--top,
-.flow__joint--bottom { left: 50%; width: 0.62em; height: 1.5em; --x: -50%; }
-.flow__joint--top { top: calc(-0.25em - 2px); --y: -50%; }
-.flow__joint--bottom { bottom: calc(-0.25em - 2px); --y: 50%; }
-
-.flow__joint.is-pulse { animation: flow-joint 0.6s ease-in-out; }
-@keyframes flow-joint {
-  45% { transform: translate(var(--x), var(--y)) scale(1.6); }
+/* Narrow and portrait screens: one column, and the picture under the text. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .hello__cols { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .carousel__slide { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 1rem; padding: 1.1rem; }
 }
 
-/* The component that the animation replaces. The one in place goes out, its place
-   stays empty for a moment, then the other one comes in. The new one has the colors
-   of a selected box on the schema until its test is done. */
-.flow__slot {
-  display: grid;
-  border-radius: var(--radius-sm);
-  outline: 2px dashed transparent;
-  outline-offset: -2px;
-  transition: outline-color 0.3s;
-}
-
-.flow__slot.is-empty { outline-color: var(--color-flow-empty); }
-.flow__slot > .flow__comp { grid-area: 1 / 1; opacity: 0; }
-.flow__stage:not(.has-alt) .flow__comp--a,
-.flow__stage.has-alt .flow__comp--b { opacity: 1; }
-
-.flow__slot > .flow__comp.is-out { z-index: 2; animation: flow-out 0.6s cubic-bezier(0.5, 0, 0.9, 0.5) forwards; }
-.flow__slot > .flow__comp.is-in { z-index: 2; animation: flow-in 0.65s cubic-bezier(0.2, 0.9, 0.3, 1) backwards; }
-@keyframes flow-out {
-  from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateX(-4em); }
-}
-@keyframes flow-in {
-  from { opacity: 0; transform: translateX(-4em); }
-  to { opacity: 1; transform: none; }
-}
-
-.flow__comp.is-new,
-:root[data-theme="dark"] .flow__comp.is-new { border-color: var(--color-pink); background: var(--color-pink-tint); }
-
-/* The name of the open source project that does the work of the component. */
-.flow__impl {
-  flex: none;
-  padding: 0.12em 0.5em;
-  border-radius: 1em;
-  background: var(--color-pink-tint);
-  font-size: 0.9em;
-  font-weight: 600;
-  transition: background-color 0.5s;
-}
-
-.is-new .flow__impl { background: var(--color-component); }
-:root[data-theme="dark"] .is-new .flow__impl { background: var(--color-bg); }
-
-/* A passed contract test: a check on each component. The script adds the checks. */
-.flow__check {
-  flex: none;
-  width: 1.15em;
-  height: 1.15em;
-  transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
-}
-
-.is-untested .flow__check { transform: scale(0); transition: none; }
-.flow__core.is-wave .flow__check { animation: flow-check 0.5s ease-in-out calc(var(--i) * 0.07s); }
-@keyframes flow-check {
-  45% { transform: scale(1.5); }
-}
-
-.flow-check__disc { fill: var(--color-flow-pass); }
-.flow-check__mark {
-  fill: none;
-  stroke: var(--color-component);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-:root[data-theme="dark"] .flow-check__mark { stroke: var(--color-bg); }
-
-/* What the two signs mean. */
-.flow__legend {
-  display: flex;
-  grid-area: 2 / 1;
-  flex-direction: column;
-  gap: 0.4em;
-  margin: 0;
-  padding: 0;
-  color: var(--color-text-muted);
-  font-size: 0.92em;
-  list-style: none;
-}
-
-.flow__legend li { display: flex; align-items: center; gap: 0.6em; }
-.flow__key { display: grid; flex: none; place-items: center; width: 1.5em; height: 1.15em; }
-.flow__key svg { width: 1.15em; height: 1.15em; }
-
-.flow__key-contract {
-  width: 1.5em;
-  height: 0.62em;
-  border: 1.5px solid var(--color-title);
-  border-radius: 0.4em;
-  background: var(--color-pink);
-}
-
-/* The link from your AI agent to the stack, with the point of the API Endpoint at
-   its end, on the dashed line. The script gives it its position and its length. */
-.flow__link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 0 dotted var(--color-boundary);
-  pointer-events: none;
-}
-
-.flow__link[data-dir="row"] { height: 0; border-top-width: 3px; }
-.flow__link[data-dir="column"] { width: 0; border-left-width: 3px; }
-
-.flow__link::after {
-  content: "";
-  position: absolute;
-  width: 0.8em;
-  height: 0.8em;
-  border-radius: 50%;
-  background: var(--color-boundary);
-}
-
-.flow__link[data-dir="row"]::after { top: calc(-0.4em - 1.5px); right: -0.4em; }
-.flow__link[data-dir="column"]::after { bottom: -0.4em; left: calc(-0.4em - 1.5px); }
-
-/* What moves. The script moves each one from place to place; at rest it does not show. */
-.flow__packet {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 3px rgb(41 20 53 / 0.3));
-}
-
-/* The task: the message of the chat window. */
-.flow__packet--task {
-  width: 2.1em;
-  height: 0.9em;
-  margin: -0.45em 0 0 -1.05em;
-  border: 1.5px solid var(--color-title);
-  border-radius: 0.45em;
-  background: var(--color-flow-task);
-}
-
-.flow__packet--answer { width: 2.6em; height: 2.34em; margin: -1.17em 0 0 -1.3em; overflow: visible; }
-
-.flow-answer__bubble {
-  fill: var(--color-flow-answer);
-  stroke: var(--color-title);
-  stroke-width: 1.5;
-  stroke-linejoin: round;
-}
-
-.flow-answer__lines {
-  fill: none;
-  stroke: #291435;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
-/* Narrow screens: one column. You and your AI agent, then the stack, then the signs. */
-@container flow (max-width: 820px) {
-  .flow__stage {
-    --flow-dir: column;
-    flex: none;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto;
-    width: 100%;
-    max-width: 36rem;
-    min-height: 0;
-    max-height: none;
-    margin: 0 auto;
-    font-size: 1rem;
-  }
-
-  .flow__actor,
-  .flow__area,
-  .flow__legend { grid-area: auto; }
-
-  /* Room for the link between your AI agent and the stack. */
-  .flow__actor { margin-bottom: 2.8em; }
-  .flow__stack { padding-top: 0.8em; }
-
-  .flow__legend {
-    flex-flow: row wrap;
-    justify-content: center;
-    gap: 0.4em 1.5em;
-    margin-top: 0.9em;
-  }
-}
-
-/* Phones. */
-@container flow (max-width: 480px) {
-  .flow__area { padding: 0.6em 0.6em 0.7em; }
-  .flow__agent { font-size: 1em; }
-  .flow__chat { width: 7.2em; }
-  .flow__person { width: 2.6em; height: 2.6em; }
-  .flow__core { gap: 0.4em; padding: 0.9em 0.4em 0.4em; }
-  .flow__comp { gap: 0.3em; padding: 0.2em 0.3em 0.2em 0.45em; }
-  .flow__impl { padding: 0.12em 0.35em; }
-  .flow__cross span { padding: 0.4em 0.2em; font-size: 0.92em; }
+/* Phones: smaller pictures, so each one fits the width of the slide. */
+@media (max-width: 640px) {
+  .carousel__picture { min-height: 0; padding: 1rem 0.8rem; }
+  .pic { font-size: 0.86rem; }
+  .pic-tests__row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0.6rem; }
+  .pic-contract__joint { min-width: 3.9rem; }
+  .pic-contract__joint .pic__label { font-size: 0.56rem; letter-spacing: 0.04em; }
+  .pic-contract__place { min-width: 0; padding: 0.4rem; }
+  .pic-contract__place .pic__label { font-size: 0.62rem; }
+  .pic-contract__choice { gap: 0.25rem; padding: 0.4rem 0.45rem; }
+  .pic-contract__choice .pic__mark { width: 1rem; height: 1rem; }
+  .pic-tools__tools,
+  .pic-tools__compute { gap: 0.4rem; }
+  .pic-tools__tools .pic__box { padding: 0.45rem 0.2rem; font-size: 0.78rem; }
+  .pic-skeleton__layer--row .pic-skeleton__name { width: 3.6rem; }
 }
 
 /* --- Recipes page ---------------------------------------------------------

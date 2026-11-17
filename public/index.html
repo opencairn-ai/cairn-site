@@ -72,111 +72,174 @@
     </div>
   </header>
 
-  <main>
-    <!-- The title of the page. The goal and its three points are on the stack page. -->
+  <main class="hello">
+    <!-- The title, then the reason for Cairn and its three points: the same layout
+         as the goal and its three points on the stack page. -->
     <section class="intro">
       <h1 data-text="intro.title"></h1>
+      <div class="goal">
+        <p class="goal__lead" data-text="hello.lead"></p>
+        <ul class="goal__points" id="goal-points" data-points="hello.points"></ul>
+      </div>
     </section>
 
-    <!-- The animation: a task goes through the layers of Cairn and the result comes
-         back; then one component is replaced by another one. It plays in a loop. It
-         has no text above it: the title of the page does that.
-         The script (js/flow.js) plays it. Its texts are under `flow` in the copy
-         files; the layer and component names are the names of the schema. -->
-    <figure class="flow" id="flow" data-aria-label="flow.label">
-      <!-- The pictures that the animation uses in more than one place. -->
-      <svg class="flow__defs" width="0" height="0" aria-hidden="true">
-        <symbol id="flow-answer" viewBox="0 0 20 18">
-          <path class="flow-answer__bubble" d="M3 1.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H9.5l-4 4v-4H3A1.5 1.5 0 0 1 1.5 11V3A1.5 1.5 0 0 1 3 1.5z"/>
-          <path class="flow-answer__lines" d="M5.5 5.5h9M5.5 8.6h6"/>
-        </symbol>
-        <symbol id="flow-check" viewBox="0 0 16 16">
-          <circle class="flow-check__disc" cx="8" cy="8" r="8"/>
-          <path class="flow-check__mark" d="m4.4 8.3 2.4 2.4 4.8-5"/>
-        </symbol>
-      </svg>
+    <!-- The marks of the pictures, which more than one picture uses. -->
+    <svg class="pic-defs" width="0" height="0" aria-hidden="true">
+      <symbol id="pic-pass" viewBox="0 0 16 16">
+        <circle class="pic-pass__disc" cx="8" cy="8" r="8"/>
+        <path class="pic-pass__mark" d="m4.4 8.3 2.4 2.4 4.8-5"/>
+      </symbol>
+      <symbol id="pic-fail" viewBox="0 0 16 16">
+        <circle class="pic-fail__ring" cx="8" cy="8" r="7.2"/>
+        <path class="pic-fail__mark" d="m5.4 5.4 5.2 5.2m0-5.2-5.2 5.2"/>
+      </symbol>
+    </svg>
 
-      <!-- Pause and play. The script gives the button its name. -->
-      <button type="button" class="flow__toggle" data-state="play">
-        <svg class="flow__icon flow__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="flow__icon flow__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
-      </button>
+    <!-- Two sections side by side: what Cairn is, then who Cairn is for. -->
+    <div class="hello__cols">
 
-      <div class="flow__stage" aria-hidden="true">
+      <section class="what">
+        <p class="eyebrow" data-text="hello.what.eyebrow"></p>
+        <h2 class="hello__title" data-text="hello.what.title"></h2>
+        <p class="what__links">
+          <a class="btn btn--primary" href="stack.html" data-page="stack" data-text="hello.what.stack"></a>
+          <a class="btn" href="roadmap.html" data-page="roadmap" data-text="hello.what.roadmap"></a>
+          <a class="what__mail" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
+        </p>
 
-        <!-- The client side: you and your AI agent, a chat window. -->
-        <div class="flow__actor">
-          <div class="flow__agent">
-            <svg class="flow__person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 21.5a8.5 8.5 0 0 1 17 0"/></svg>
-            <div class="flow__chat" data-anchor="chat">
-              <span class="flow__chat-bar"><i></i><i></i><i></i></span>
-              <span class="flow__msg flow__msg--task"></span>
-              <span class="flow__msg flow__msg--answer"></span>
-            </div>
+        <!-- The four principles, one at a time: a name, a description and a picture.
+             The carousel goes to the next principle by itself. The script (js/hello.js)
+             drives it and makes the marks under it, one for each principle.
+             The texts are under `hello` in the copy files; the layer and component
+             names in the pictures are the names of the schema, under `stack`. -->
+        <div class="carousel" id="principles" role="group" data-aria-label="hello.carousel.label">
+          <div class="carousel__slides">
+
+            <!-- 1. Tests, then the selection. -->
+            <article class="carousel__slide is-on">
+              <div>
+                <h3 class="carousel__name" data-text="hello.principles.0.name"></h3>
+                <p class="carousel__text" data-text="hello.principles.0.text"></p>
+              </div>
+              <div class="carousel__picture" aria-hidden="true">
+                <div class="pic pic-tests">
+                  <div class="pic-tests__row pic-tests__row--head"><span class="pic__label" data-text="hello.pictures.tests.components"></span><span class="pic__label" data-text="hello.pictures.tests.tests"></span><span></span></div>
+                  <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentA"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-fail"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span></span></div>
+                  <div class="pic__box pic-tests__row is-selected"><span data-text="hello.pictures.tests.componentB"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span class="pic__tag" data-text="hello.pictures.tests.selected"></span></div>
+                  <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentC"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-fail"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span></span></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. One contract, and two places where one component can replace another one. -->
+            <article class="carousel__slide">
+              <div>
+                <h3 class="carousel__name" data-text="hello.principles.1.name"></h3>
+                <p class="carousel__text" data-text="hello.principles.1.text"></p>
+              </div>
+              <div class="carousel__picture" aria-hidden="true">
+                <div class="pic pic-contract">
+                  <div class="pic-contract__row">
+                    <span class="pic-contract__place">
+                      <span class="pic__label" data-text="stack.modelAccess.modelGateway.name"></span>
+                      <span class="pic__box pic-contract__choice pic-contract__choice--c">LiteLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
+                      <span class="pic-contract__or" data-text="hello.pictures.contract.or"></span>
+                      <span class="pic__box pic-contract__choice pic-contract__choice--d">Otari <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
+                    </span>
+                    <span class="pic-contract__joint"><span class="pic__label" data-text="hello.pictures.contract.contract"></span><i></i></span>
+                    <span class="pic-contract__place">
+                      <span class="pic__label" data-text="stack.modelAccess.modelServer.name"></span>
+                      <span class="pic__box pic-contract__choice pic-contract__choice--a">vLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
+                      <span class="pic-contract__or" data-text="hello.pictures.contract.or"></span>
+                      <span class="pic__box pic-contract__choice pic-contract__choice--b">SGLang <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
+                    </span>
+                  </div>
+                  <ul class="pic__legend"><li><svg class="pic__mark"><use href="#pic-pass"/></svg><span data-text="hello.pictures.contract.passed"></span></li></ul>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. From top to bottom, as the schema: the tools of the teams, one API,
+                 Cairn, then the compute that runs the AI models. -->
+            <article class="carousel__slide">
+              <div>
+                <h3 class="carousel__name" data-text="hello.principles.2.name"></h3>
+                <p class="carousel__text" data-text="hello.principles.2.text"></p>
+              </div>
+              <div class="carousel__picture" aria-hidden="true">
+                <div class="pic pic-tools">
+                  <div class="pic-tools__tools">
+                    <span class="pic__box" data-text="hello.pictures.tools.chat"></span>
+                    <span class="pic__box" data-text="hello.pictures.tools.coding"></span>
+                    <span class="pic__box" data-text="hello.pictures.tools.applications"></span>
+                  </div>
+                  <svg class="pic-tools__lines" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M16.5 0C16.5 60 50 40 50 100"/><path d="M50 0V100"/><path d="M83.5 0C83.5 60 50 40 50 100"/></svg>
+                  <div class="pic-tools__cairn"><i></i><span class="pic__label" data-text="hello.pictures.tools.api"></span><strong data-text="hello.pictures.tools.cairn"></strong><span data-text="hello.pictures.tools.where"></span></div>
+                  <div class="pic-tools__compute">
+                    <span class="pic__box"><b data-text="hello.pictures.tools.local"></b><small data-text="hello.pictures.tools.localDetail"></small></span>
+                    <span class="pic__box"><b data-text="hello.pictures.tools.remote"></b><small data-text="hello.pictures.tools.remoteDetail"></small></span>
+                  </div>
+                  <p class="pic__label pic-tools__foot" data-text="hello.pictures.tools.compute"></p>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4. The skeleton of the schema of the stack: the layers, their components
+                 and the links between them. The component boxes have no names. -->
+            <article class="carousel__slide">
+              <div>
+                <h3 class="carousel__name" data-text="hello.principles.3.name"></h3>
+                <p class="carousel__text" data-text="hello.principles.3.text"></p>
+              </div>
+              <div class="carousel__picture" aria-hidden="true">
+                <div class="pic pic-skeleton">
+                  <div class="pic-skeleton__core">
+                    <div class="pic-skeleton__matrix">
+                      <div class="pic-skeleton__layer"><span class="pic-skeleton__name" data-text="stack.agentRuntime.name"></span><span class="pic-skeleton__comps"><i class="pic-skeleton__comp"></i><b class="pic-skeleton__link"></b><i class="pic-skeleton__comp"></i></span></div>
+                      <b class="pic-skeleton__link pic-skeleton__link--across"></b>
+                      <div class="pic-skeleton__layer"><span class="pic-skeleton__name" data-text="stack.persistence.name"></span><span class="pic-skeleton__comps"><i class="pic-skeleton__comp"></i><b class="pic-skeleton__link"></b><i class="pic-skeleton__comp"></i></span></div>
+                      <b class="pic-skeleton__link pic-skeleton__link--down"></b><span></span><b class="pic-skeleton__link pic-skeleton__link--down"></b>
+                      <div class="pic-skeleton__layer"><span class="pic-skeleton__name" data-text="stack.modelAccess.name"></span><span class="pic-skeleton__comps"><i class="pic-skeleton__comp"></i><b class="pic-skeleton__link"></b><i class="pic-skeleton__comp"></i></span></div>
+                      <b class="pic-skeleton__link pic-skeleton__link--across"></b>
+                      <div class="pic-skeleton__layer"><span class="pic-skeleton__name" data-text="stack.toolAccess.name"></span><span class="pic-skeleton__comps"><i class="pic-skeleton__comp"></i><b class="pic-skeleton__link"></b><i class="pic-skeleton__comp pic-skeleton__comp--specification"></i></span></div>
+                    </div>
+                    <div class="pic-skeleton__layer pic-skeleton__layer--row"><span class="pic-skeleton__name" data-text="stack.registry.name"></span><span class="pic-skeleton__comps"><i class="pic-skeleton__comp"></i><i class="pic-skeleton__comp"></i><i class="pic-skeleton__comp"></i><i class="pic-skeleton__comp"></i></span></div>
+                  </div>
+                  <div class="pic-skeleton__cross"><span data-text="stack.security.name"></span><span data-text="stack.observability.name"></span><span data-text="stack.controlPlane.name"></span></div>
+                  <ul class="pic__legend">
+                    <li><i class="pic__key pic__key--component"></i><span data-text="hello.pictures.skeleton.component"></span></li>
+                    <li><i class="pic__key pic__key--link"></i><span data-text="hello.pictures.skeleton.code"></span></li>
+                    <li><i class="pic__key pic__key--specification"></i><span data-text="hello.pictures.skeleton.specification"></span></li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
           </div>
-          <p class="flow__actor-name" data-text="flow.agent"></p>
-        </div>
 
-        <!-- The server side: the stack, on infrastructure that you control. -->
-        <div class="flow__area">
-          <p class="flow__area-name" data-text="flow.area"></p>
-          <div class="flow__stack">
-            <div class="flow__core">
-              <p class="flow__stack-name" data-text="flow.stack"></p>
-              <div class="flow__layer" data-anchor="agentRuntime">
-                <p class="flow__layer-name" data-text="stack.agentRuntime.name"></p>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.agentRuntime.localToolServer.name"></span></span>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.agentRuntime.sandbox.name"></span></span>
-                <span class="flow__joint flow__joint--right" data-anchor="persistence-agentRuntime"></span>
-                <span class="flow__joint flow__joint--bottom" data-anchor="agentRuntime-modelAccess"></span>
-              </div>
-              <div class="flow__layer" data-anchor="persistence">
-                <p class="flow__layer-name" data-text="stack.persistence.name"></p>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.persistence.semanticSearch.name"></span></span>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.persistence.agentMemory.name"></span></span>
-              </div>
-              <div class="flow__layer" data-anchor="modelAccess">
-                <p class="flow__layer-name" data-text="stack.modelAccess.name"></p>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.modelAccess.modelGateway.name"></span></span>
-                <!-- The component that the animation replaces: the two model servers of
-                     the Alpha release, one after the other. -->
-                <span class="flow__slot">
-                  <span class="flow__comp flow__comp--a"><span class="flow__comp-name" data-text="stack.modelAccess.modelServer.name"></span><span class="flow__impl">vLLM</span></span>
-                  <span class="flow__comp flow__comp--b"><span class="flow__comp-name" data-text="stack.modelAccess.modelServer.name"></span><span class="flow__impl">SGLang</span></span>
-                </span>
-              </div>
-              <div class="flow__layer" data-anchor="toolAccess">
-                <p class="flow__layer-name" data-text="stack.toolAccess.name"></p>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.toolAccess.toolGateway.name"></span></span>
-                <span class="flow__comp"><span class="flow__comp-name" data-text="stack.toolAccess.toolServer.name"></span></span>
-                <span class="flow__joint flow__joint--top" data-anchor="toolAccess-persistence"></span>
-                <span class="flow__joint flow__joint--left" data-anchor="modelAccess-toolAccess"></span>
-              </div>
-            </div>
-            <p class="flow__cross">
-              <span data-text="stack.security.name"></span>
-              <span data-text="stack.observability.name"></span>
-              <span data-text="stack.controlPlane.name"></span>
-            </p>
+          <!-- The marks (one for each principle, made by the script), then the
+               buttons. The script gives the pause button its name. -->
+          <div class="carousel__nav">
+            <div class="carousel__marks"></div>
+            <button type="button" class="carousel__button" data-carousel="previous" data-aria-label="hello.carousel.previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+            <button type="button" class="carousel__button" data-carousel="toggle">
+              <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+              <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button type="button" class="carousel__button" data-carousel="next" data-aria-label="hello.carousel.next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
           </div>
         </div>
+      </section>
 
-        <!-- What the two signs of the picture mean. -->
-        <ul class="flow__legend">
-          <li><span class="flow__key"><i class="flow__key-contract"></i></span><span data-text="flow.contract"></span></li>
-          <li><span class="flow__key"><svg viewBox="0 0 16 16"><use href="#flow-check"/></svg></span><span data-text="flow.tested"></span></li>
-        </ul>
+      <!-- The types of adopter, each with one line. The script (js/hello.js) makes
+           the rows from `hello.who.adopters` in the copy files. -->
+      <section class="who">
+        <p class="eyebrow" data-text="hello.who.eyebrow"></p>
+        <h2 class="hello__title" data-text="hello.who.title"></h2>
+        <dl class="adopters" id="adopters"></dl>
+      </section>
 
-        <!-- From your AI agent to the API Endpoint of the stack. -->
-        <span class="flow__link"></span>
-
-        <!-- What moves: the task and the result. -->
-        <span class="flow__packet flow__packet--task" data-packet="task"></span>
-        <svg class="flow__packet flow__packet--answer" data-packet="answer" viewBox="0 0 20 18"><use href="#flow-answer"/></svg>
-      </div>
-
-      <p class="sr-only" data-text="flow.description"></p>
-    </figure>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -188,6 +251,6 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
-<script src="js/flow.js"></script>
+<script src="js/hello.js"></script>
 </body>
 </html>
