@@ -61,6 +61,7 @@ window.CAIRN_COPY.en = {
   },
 
   diagram: {
+    // The title of the stack page.
     eyebrow: "Explore the architecture",
     label: "Architecture of the open source AI inference stack",
     hint: "Hover over or tap any layer or component to see what it does.",

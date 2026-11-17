@@ -36,7 +36,8 @@ Each tab is one HTML file. All four files repeat the same header and the same
 marks its tab as the current one. The tab names are under `nav` in the copy files.
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
-Hello World and Roadmap show only their name for now.
+Hello World holds the introduction: the title, the goal and its three points.
+Roadmap shows only its name for now.
 
 ## Recipes
 
