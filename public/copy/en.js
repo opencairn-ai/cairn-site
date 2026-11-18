@@ -6,7 +6,8 @@
  *   - Leave the keys (the words before each colon), the quotes and the commas as they are.
  *   - Inside the text, use typographic quotes (“ ” ’) rather than a straight double quote ("),
  *     which would end the text early.
- *   - Wrap words in *asterisks* to highlight them in pink (none are highlighted now).
+ *   - Wrap words in *asterisks* to highlight them in pink. On the Hello World page, the
+ *     highlighted sentence of `hello.lead` also starts on a new line.
  *   - {mozilla} and {mila} in the footer line are where the two links go; move them freely.
  *   - Preview by opening public/index.html in a browser, or with `npx wrangler dev`.
  *
@@ -64,8 +65,9 @@ window.CAIRN_COPY.en = {
 
   // The Hello World page, for business leaders. Its title is `intro.title`.
   hello: {
-    // Under the title: the reason for Cairn, then three points.
-    lead: "Small and medium businesses drive most economies. They must be able to adopt AI on their own terms: safely, easily and cost-effectively. The models are not the problem. Deploying and running them is.",
+    // The left column, under the title: the reason for Cairn, then three points.
+    // The sentence between the asterisks is on a new line, in the highlight color.
+    lead: "Small and medium businesses drive most economies. They must be able to adopt AI on their own terms: safely, easily and cost-effectively. *The models are not the problem. Deploying and running them is.*",
     points: [
       {
         title: "Your data and your policies stay on your infrastructure",
@@ -81,7 +83,7 @@ window.CAIRN_COPY.en = {
       },
     ],
 
-    // The left section: what Cairn is, then three links.
+    // The right column: what Cairn is, then three links.
     what: {
       // The small pink line above the title of the section.
       eyebrow: "What it is",
@@ -139,7 +141,6 @@ window.CAIRN_COPY.en = {
       // Picture 2: a Model Gateway and a Model Server, each with two choices.
       contract: {
         contract: "Interface contract",
-        or: "or",
         passed: "Contract tests passed",
       },
       // Picture 3: the tools of the teams, Cairn, then the compute.
@@ -159,24 +160,9 @@ window.CAIRN_COPY.en = {
       // Picture 4: what the three signs of the picture mean.
       skeleton: {
         component: "Open source component",
-        code: "Our connection code",
-        specification: "Our specification",
+        code: "Connection code",
+        specification: "Component specification",
       },
-    },
-
-    // The right section: the types of adopter, each with one line.
-    who: {
-      eyebrow: "Who it is for",
-      title: "Each organization that wants AI on its own terms.",
-      adopters: [
-        { name: "Small and medium businesses", text: "Adopt AI on your own terms, in-house or through a trusted partner." },
-        { name: "Large enterprises", text: "Standardize AI use and access across teams, with simple maintenance." },
-        { name: "Governments", text: "Keep AI capacity and data in your control and easy to inspect." },
-        { name: "Nonprofits", text: "Use AI safely and predictably, without an engineering team." },
-        { name: "Integrators and advisors", text: "Deploy open source AI solutions that your customers own." },
-        { name: "Compute providers", text: "Offer capacity on an open stack that is configured for your hardware." },
-        { name: "Open source projects", text: "Build components against the published contract of each layer." },
-      ],
     },
   },
 

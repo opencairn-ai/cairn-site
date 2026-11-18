@@ -14,7 +14,7 @@ public/
   css/styles.css                          Styles; light and dark color tokens at the top
   js/app.js                               Fills in the copy; current tab, pop-ups, theme switch, PNG download
   js/recipes.js                           The Recipes page: filters, list, and the sheet of the selected recipe
-  js/hello.js                             The Hello World page: the carousel of the four principles, the list of adopters
+  js/hello.js                             The Hello World page: the carousel of the four principles
   js/recipes-data.js                      The recipes. Generated from the stack repository; do not edit
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
@@ -38,10 +38,13 @@ script marks its tab as the current one. The tab names are under `nav` in the co
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
 Hello World is for business leaders; the stack page is for engineers. Hello World
-holds the title of the site, the reason for Cairn with three points, then two
-sections: what Cairn is, with a carousel of four principles (each with a picture),
-and who Cairn is for. Its texts are under `hello` in the copy files; the pictures
-of the carousel are in `index.html`. The stack page holds the goal and its three
+has two columns. Left: the title of the site, the reason for Cairn, then three
+points. Right: what Cairn is, with three links and a carousel of four principles
+(each with a picture). Its texts are under `hello` in the copy files; the pictures
+of the carousel are in `index.html`. Each picture has a motion that starts when its
+slide shows: `css/styles.css` moves the parts, and `js/hello.js` makes the points
+that move in the third picture. A visitor who asks the system for reduced motion
+sees the pictures without motion. The stack page holds the goal and its three
 points, above the schema.
 Roadmap shows only its name for now.
 
