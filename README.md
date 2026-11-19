@@ -40,7 +40,7 @@ names the page, and the script marks its tab as the current one. The tab names a
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
 Hello World is for business leaders; the stack page is for engineers. Hello World
-has two columns. Left: the title of the site, the reason for Cairn, then three
+has its title on the full width, then two columns. Left: the reason for Cairn, then three
 points. Right: what Cairn is, with a link to the stack page and the contact address,
 then a carousel of four principles, with their names as tabs
 (each with a picture). Its texts are under `hello` in the copy files; the pictures
