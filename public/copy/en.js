@@ -450,6 +450,96 @@ window.CAIRN_COPY.en = {
     },
   },
 
+  // The Roadmap page: a table. Each row is a workstream. Each column is a time.
+  roadmap: {
+    title: "The roadmap of the stack",
+    lead: "What we build now, what comes next, and where the stack goes after that.",
+    // For screen readers: the name of the table. Then the name of its first column.
+    label: "Roadmap of the stack, by workstream",
+    workstreamsLabel: "Workstreams",
+    // The three times. `text` tells how sure the items are. `release` is the
+    // release that the items are for; an empty text ("") hides that line.
+    columns: {
+      now: { name: "Now", text: "In progress.", release: "Alpha release, 8 December 2026" },
+      next: { name: "Next", text: "Planned.", release: "Beta release" },
+      later: { name: "Later", text: "The direction. Not planned yet.", release: "Release candidate of the core components" },
+    },
+    // The hint on the layer tag of an item. {layer} is the name of the layer.
+    layerLink: "See {layer} on the Stack page",
+    // The workstreams, with the items of each time between the square brackets.
+    // An item is one line:
+    //   { title: "Name of the item", text: "One sentence about it.", layer: "modelAccess" },
+    // - `title` shows at each time.
+    // - `text` shows under "Now" only. Leave it out for a title alone.
+    // - `layer` shows as a tag under "Now" and "Next". A click on the tag opens that
+    //   layer on the Stack page. Use a key from `stack` in this file: a layer
+    //   ("modelAccess") or a component ("modelAccess.modelServer"). Leave it out for no tag.
+    // An empty pair of brackets shows an empty cell.
+    workstreams: {
+      deploy: {
+        name: "Deploy",
+        text: "Install and operate the stack.",
+        now: [
+          { title: "Single-node deployment", text: "Installation instructions in the README, and setup scripts.", layer: "controlPlane.deployment" },
+        ],
+        next: [
+          { title: "Components on several nodes, with Docker", layer: "controlPlane.deployment" },
+          { title: "Several models on several nodes, with Docker", layer: "controlPlane.deployment" },
+        ],
+        later: [
+          "One model on several nodes, after the release candidate",
+          "Kubernetes",
+          "Ansible module",
+          "Terraform",
+        ],
+      },
+      features: {
+        name: "New features",
+        text: "New layers and components.",
+        now: [
+          { title: "Model gateway", text: "One API for all models, with keys and quotas.", layer: "modelAccess.modelGateway" },
+          { title: "Basic recipes", text: "The configuration to serve a model on your hardware.", layer: "modelAccess.modelServer" },
+          { title: "Security", text: "Single sign-on, network isolation between the containers, and SSL.", layer: "security" },
+          { title: "Grafana as the interface of operators", text: "Dashboards to monitor and operate the stack.", layer: "controlPlane.adminConsole" },
+        ],
+        next: [
+          { title: "Agent tracing", layer: "observability.agentTracing" },
+          { title: "Model registry", layer: "registry.modelRegistry" },
+        ],
+        later: [
+          "Tool access: tool server, then tool gateway, then tool registry. Or guardrails first",
+          "Better isolation of the containers",
+        ],
+      },
+      improvements: {
+        name: "Improvements",
+        text: "Better results from what exists.",
+        now: [
+          { title: "Contribution guide", text: "How to contribute to the stack: CONTRIBUTING.md." },
+        ],
+        next: [
+          { title: "New recipes", layer: "modelAccess.modelServer" },
+          { title: "Bug fixes" },
+        ],
+        later: [
+          "Bug fixes",
+          "Documentation",
+        ],
+      },
+      contracts: {
+        name: "Contracts",
+        text: "The interface between two layers, and its tests.",
+        now: [],
+        next: [
+          { title: "On hold until more proofs of concept" },
+        ],
+        later: [
+          "Model access contracts",
+        ],
+      },
+    },
+  },
+
   footer: {
     collaboration: "A research collaboration between {mozilla} and {mila}",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/en-US/" },

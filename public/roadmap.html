@@ -81,7 +81,104 @@
 
   <!-- Content to come. For now the page shows its name only. -->
   <main>
-    <h1 data-text="nav.roadmap"></h1>
+    <section class="roadmap-intro">
+      <h1 data-text="roadmap.title"></h1>
+      <p class="roadmap-intro__lead" data-text="roadmap.lead"></p>
+    </section>
+
+    <!-- The roadmap: a table. One row for each workstream, one column for each
+         time (now, next, later). All the texts are under `roadmap` in the copy
+         files; the script (js/roadmap.js) puts the items in the cells.
+         "Now" is in progress: the first element is a light band behind the
+         cells of that column. The name of the column inside each cell shows
+         on phones only, where the cells of a workstream stand one under the
+         other. -->
+    <div class="roadmap" id="roadmap" role="table" data-aria-label="roadmap.label">
+      <div class="roadmap__band" aria-hidden="true"></div>
+
+      <div class="roadmap__row roadmap__row--head" role="row">
+        <div class="roadmap__corner" role="columnheader" data-text="roadmap.workstreamsLabel"></div>
+        <div class="roadmap__column" role="columnheader" data-when="now">
+          <span class="roadmap__when" data-text="roadmap.columns.now.name"></span>
+          <span class="roadmap__when-text" data-text="roadmap.columns.now.text"></span>
+          <span class="roadmap__release" data-text="roadmap.columns.now.release"></span>
+        </div>
+        <div class="roadmap__column" role="columnheader" data-when="next">
+          <span class="roadmap__when" data-text="roadmap.columns.next.name"></span>
+          <span class="roadmap__when-text" data-text="roadmap.columns.next.text"></span>
+          <span class="roadmap__release" data-text="roadmap.columns.next.release"></span>
+        </div>
+        <div class="roadmap__column" role="columnheader" data-when="later">
+          <span class="roadmap__when" data-text="roadmap.columns.later.name"></span>
+          <span class="roadmap__when-text" data-text="roadmap.columns.later.text"></span>
+          <span class="roadmap__release" data-text="roadmap.columns.later.release"></span>
+        </div>
+      </div>
+
+      <div class="roadmap__row" role="row" data-workstream="deploy">
+        <div class="roadmap__name" role="rowheader">
+          <span class="roadmap__name-text" data-text="roadmap.workstreams.deploy.name"></span>
+          <span class="roadmap__note" data-text="roadmap.workstreams.deploy.text"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="now">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="next">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="later">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
+        </div>
+      </div>
+
+      <div class="roadmap__row" role="row" data-workstream="features">
+        <div class="roadmap__name" role="rowheader">
+          <span class="roadmap__name-text" data-text="roadmap.workstreams.features.name"></span>
+          <span class="roadmap__note" data-text="roadmap.workstreams.features.text"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="now">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="next">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="later">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
+        </div>
+      </div>
+
+      <div class="roadmap__row" role="row" data-workstream="improvements">
+        <div class="roadmap__name" role="rowheader">
+          <span class="roadmap__name-text" data-text="roadmap.workstreams.improvements.name"></span>
+          <span class="roadmap__note" data-text="roadmap.workstreams.improvements.text"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="now">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="next">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="later">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
+        </div>
+      </div>
+
+      <div class="roadmap__row" role="row" data-workstream="contracts">
+        <div class="roadmap__name" role="rowheader">
+          <span class="roadmap__name-text" data-text="roadmap.workstreams.contracts.name"></span>
+          <span class="roadmap__note" data-text="roadmap.workstreams.contracts.text"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="now">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="next">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
+        </div>
+        <div class="roadmap__cell" role="cell" data-when="later">
+          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -93,5 +190,6 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
+<script src="js/roadmap.js"></script>
 </body>
 </html>

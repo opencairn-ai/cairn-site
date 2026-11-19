@@ -52,6 +52,25 @@ sees the pictures without motion. The stack page holds the goal and its three
 points, above the schema.
 Roadmap shows only its name for now.
 
+## Roadmap
+
+The Roadmap page is a table: one row for each workstream (Deploy, New features,
+Improvements, Contracts) and one column for each time (Now, Next, Later). The
+table is in `roadmap.html`; `js/roadmap.js` puts the items in the cells. All the
+texts and the items are under `roadmap` in the copy files, and the comment there
+shows how to write an item.
+
+The detail of an item decreases with the distance: "Now" shows the title, one
+sentence and the layer; "Next" shows the title and the layer; "Later" shows the
+title only. The column of "Now" has a light band and the Magenta block of the
+cursor. The layer of an item is a link to its box on the stack page
+(`stack.html#<key>`, where the key is a layer or a component under `stack` in the
+copy files); the stack page opens the details of that box. On phones, each
+workstream shows its three cells one under the other.
+
+The Roadmap tab stays disabled (`PAGES_TO_COME` in `js/app.js`) until the items
+are written.
+
 ## Recipes
 
 The Recipes page shows the model server recipes of

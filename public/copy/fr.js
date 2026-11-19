@@ -451,6 +451,88 @@ window.CAIRN_COPY.fr = {
     },
   },
 
+  // La page Feuille de route : un tableau. Chaque rangée est un chantier, chaque colonne un moment.
+  roadmap: {
+    title: "La feuille de route de la pile",
+    lead: "Ce que nous construisons maintenant, ce qui vient ensuite, et où va la pile après.",
+    // Pour les lecteurs d’écran : le nom du tableau, puis le nom de sa première colonne.
+    label: "Feuille de route de la pile, par chantier",
+    workstreamsLabel: "Chantiers",
+    // Les trois moments. `text` dit à quel point les éléments sont sûrs ; `release` est la
+    // version visée. Un texte vide ("") masque cette ligne.
+    columns: {
+      now: { name: "Maintenant", text: "En cours.", release: "Version alpha, 8 décembre 2026" },
+      next: { name: "Ensuite", text: "Prévu.", release: "Version bêta" },
+      later: { name: "Plus tard", text: "L’orientation. Pas encore prévu.", release: "Version candidate des composants de base" },
+    },
+    // L’info-bulle du lien d’un élément vers sa couche. {layer} est le nom de la couche.
+    layerLink: "Voir {layer} sur la page de la pile",
+    // Les chantiers et leurs éléments : voir le commentaire de en.js pour écrire un élément.
+    workstreams: {
+      deploy: {
+        name: "Déploiement",
+        text: "Installer et exploiter la pile.",
+        now: [
+          { title: "Déploiement sur un seul nœud", text: "Les instructions d’installation dans le README, et les scripts de configuration.", layer: "controlPlane.deployment" },
+        ],
+        next: [
+          { title: "Les composants sur plusieurs nœuds, avec Docker", layer: "controlPlane.deployment" },
+          { title: "Plusieurs modèles sur plusieurs nœuds, avec Docker", layer: "controlPlane.deployment" },
+        ],
+        later: [
+          "Un modèle sur plusieurs nœuds, après la version candidate",
+          "Kubernetes",
+          "Module Ansible",
+          "Terraform",
+        ],
+      },
+      features: {
+        name: "Nouvelles fonctionnalités",
+        text: "Nouvelles couches et nouveaux composants.",
+        now: [
+          { title: "Passerelle de modèles", text: "Une seule API pour tous les modèles, avec des clés et des quotas.", layer: "modelAccess.modelGateway" },
+          { title: "Recettes de base", text: "La configuration pour servir un modèle sur votre matériel.", layer: "modelAccess.modelServer" },
+          { title: "Sécurité", text: "Authentification unique, isolation réseau des conteneurs, et SSL.", layer: "security" },
+          { title: "Grafana comme interface des opérateurs", text: "Des tableaux de bord pour surveiller et exploiter la pile.", layer: "controlPlane.adminConsole" },
+        ],
+        next: [
+          { title: "Traçage des agents", layer: "observability.agentTracing" },
+          { title: "Registre de modèles", layer: "registry.modelRegistry" },
+        ],
+        later: [
+          "Accès aux outils : serveur d’outils, puis passerelle d’outils, puis registre d’outils. Ou les garde-fous d’abord",
+          "Meilleure isolation des conteneurs",
+        ],
+      },
+      improvements: {
+        name: "Améliorations",
+        text: "De meilleurs résultats avec ce qui existe.",
+        now: [
+          { title: "Guide de contribution", text: "Comment contribuer à la pile : CONTRIBUTING.md." },
+        ],
+        next: [
+          { title: "Nouvelles recettes", layer: "modelAccess.modelServer" },
+          { title: "Corrections de bogues" },
+        ],
+        later: [
+          "Corrections de bogues",
+          "Documentation",
+        ],
+      },
+      contracts: {
+        name: "Contrats",
+        text: "L’interface entre deux couches, et ses tests.",
+        now: [],
+        next: [
+          { title: "En attente de plus de preuves de concept" },
+        ],
+        later: [
+          "Contrats d’accès aux modèles",
+        ],
+      },
+    },
+  },
+
   footer: {
     collaboration: "Une collaboration de recherche entre {mozilla} et {mila}",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/fr/" },
