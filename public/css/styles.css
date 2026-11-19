@@ -117,14 +117,12 @@
   --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
 }
 
-/* The page scales like a slide: everything is sized in rem, and the root size
-   follows the smaller of the viewport's width and height, so the whole page
-   fits on one landscape screen. On a screen that is too short for it, the page
-   scrolls: no row of the schema shrinks below its content.
-   The two factors are set so that the tallest page, the stack page with its row
-   of tabs, fits a 1440 × 900 window in English and in French. */
+/* Everything is sized in rem, and the root size starts from the text size of the
+   browser (16px by default), so browser zoom and the reader's text size setting
+   both work. It grows a little on wide screens: 16px up to about 1200px wide,
+   then up to 18px. The pages scroll. */
 html {
-  font-size: clamp(11px, min(0.975vw, 1.67vh), 19px);
+  font-size: clamp(100%, 85% + 0.2vw, 112.5%);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -170,10 +168,9 @@ a { color: inherit; }
   padding: 0 var(--gutter);
 }
 
-/* Portrait, small and short screens (phones held sideways) do not try to fit
-   one screen. They use a comfortable reading size. */
-@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
-  html { font-size: 15px; }
+/* Phones: 15px at the default text size of the browser. */
+@media (max-width: 640px) {
+  html { font-size: 93.75%; }
 }
 
 /* The header is one row: the codename, the tabs, then the language and theme
@@ -195,7 +192,7 @@ a { color: inherit; }
 }
 
 /* The lockup already includes "Codename:". The light or dark file follows the theme. */
-.codename img { display: block; width: auto; height: 1.75rem; }
+.codename img { display: block; width: auto; height: 1.5rem; }
 .codename .logo--dark,
 :root[data-theme="dark"] .codename .logo--light { display: none; }
 :root[data-theme="dark"] .codename .logo--dark { display: block; }
@@ -203,8 +200,8 @@ a { color: inherit; }
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 0;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
 }
 
 /* Language and theme buttons, side by side. */
@@ -213,7 +210,7 @@ a { color: inherit; }
   align-items: center;
   gap: 0.1rem;
   margin-right: 0.4rem;
-  padding: 0.85rem 0;
+  padding: 0.75rem 0;
 }
 
 .theme-toggle {
@@ -259,7 +256,7 @@ a { color: inherit; }
 .lang a:hover { background: var(--color-ghost-hover); }
 
 /* The tabs, one per page, after the codename: the nav tab of the design system
-   (cairn-components.css, .navtab). 14px at a 14px root, sentence case, 10px 14px
+   (cairn-components.css, .navtab). 14px at a 16px root, sentence case, 14px side
    padding, a 2px gap. The current tab is bold, in the text color, with a 2px
    Magenta line on the rule of the header. The tabs take the free width, so the
    buttons go to the right end. */
@@ -269,7 +266,7 @@ a { color: inherit; }
   align-items: stretch;
   gap: 2px;
   margin-right: auto;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.25;
 }
@@ -278,7 +275,7 @@ a { color: inherit; }
   display: inline-flex;
   flex: none;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0 0.875rem;
   border-bottom: 2px solid transparent;
   color: var(--color-tab);
   text-decoration: none;
@@ -298,11 +295,13 @@ a { color: inherit; }
 .site-nav a[aria-disabled="true"]:hover { color: var(--color-tab-disabled); cursor: default; }
 
 /* Narrow and portrait screens: the codename and the buttons in the first row,
-   the tabs in a second row on the rule. The first tab lines up with the codename. */
-@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+   the tabs in a second row on the rule. The first tab lines up with the codename.
+   One row needs about 1170px in English and 1220px in French at a 16px text size.
+   The limit is in em, so a larger text size or browser zoom moves it with the text. */
+@media (max-width: 77.5em), (max-aspect-ratio: 1/1) {
   .site-header { flex-wrap: wrap; }
   .codename { margin-right: auto; }
-  .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -1rem; }
+  .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -0.875rem; }
 }
 
 .btn {
@@ -342,9 +341,9 @@ a { color: inherit; }
 .btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }
 
-/* The two buttons of the header: 14px at a 14px root, a 1px border in the text
+/* The two buttons of the header: 14px at a 16px root, a 1px border in the text
    color, and the 6px corners of the design system's small radius. */
-.site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 1rem; }
+.site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
 .site-header .btn:not(.btn--primary):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
 
 :focus-visible {
@@ -1041,7 +1040,7 @@ h1 {
   .site-nav {
     grid-area: nav;
     margin: 0 calc(-1 * var(--gutter));
-    padding: 0 calc(var(--gutter) - 1rem);
+    padding: 0 calc(var(--gutter) - 0.875rem);
     box-shadow: inset 0 -1px 0 var(--color-header-rule);
     overflow-x: auto;
     scrollbar-width: none;
@@ -1067,7 +1066,7 @@ h1 {
 }
 
 /* --- Hello World -----------------------------------------------------------
-   For business leaders. Two columns on one screen. Left: the title, the reason
+   For business leaders. Two columns. Left: the title, the reason
    for Cairn, then its three points, one under the other. Right: what Cairn is (a
    Sand panel, as a layer of the schema): the definition, the links, then a
    carousel of the four principles. Narrow screens show one column.
@@ -1611,26 +1610,13 @@ h1 {
   --recipe-menu-line: #a08f79;       /* Stone */
 }
 
-/* On a landscape screen the page is one screen high: the recipes scroll inside
-   the list panel, and the file preview scrolls inside its box. */
-@media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 501px) {
-  body[data-page="recipes"] .page { height: 100vh; height: 100dvh; }
-  body[data-page="recipes"] main { min-height: 0; }
-  .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
-  .recipe-finder, .recipe-sheet { min-height: 0; }
-  /* The name of the list stays in place; the recipes scroll under it. */
-  .recipe-list { flex: 1 1 auto; min-height: 0; }
-  .recipe-results { flex: 1 1 auto; min-height: 0; overflow: auto; }
-  .recipe-results > * { flex: none; }
-  /* The sheet does not scroll. A short file shows in full; a long file takes the
-     height that is left and scrolls inside its box. The sheet scrolls only when
-     the screen is too short for the box's minimum height. */
-  .recipe-sheet { overflow: auto; }
-  .recipe-sheet > *, .recipe-files > * { flex: none; }
-  .recipe-sheet > .recipe-files { flex: 0 1 auto; min-height: 8.5em; }
-  .recipe-files > .recipe-code { display: flex; flex: 0 1 auto; min-height: 3.4em; }
-  .recipe-code--file pre { flex: 1; min-width: 0; }
+/* The page scrolls. On a wide screen the sheet of the selected recipe stays in
+   view while the list scrolls. The file preview has a maximum height and scrolls
+   inside its box, so the sheet itself does not scroll. */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .recipe-sheet { position: sticky; top: 1rem; align-self: start; }
 }
+.recipe-code--file pre { max-height: 26rem; }
 
 /* The same as the stack page: the title, one line in the title's ink, then the
    Magenta label and the hint above the panels. */
@@ -1965,8 +1951,6 @@ h1 {
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
   .recipe-body { grid-template-columns: minmax(0, 1fr); gap: 0.9em; }
   .recipe-sheet { scroll-margin-top: 0.5rem; }
-  /* The file preview keeps a fixed maximum height. */
-  .recipe-code--file pre { max-height: 26rem; }
 }
 
 /* Phones: the menu and the search field, and a recipe in two columns: the model
