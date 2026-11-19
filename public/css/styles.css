@@ -1189,14 +1189,14 @@ h1 {
 .carousel__nav { display: flex; flex-direction: column; }
 .carousel__head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  padding: 0 0 0.35rem 0.9rem;
+  gap: 1rem;
+  padding: 0 0 0.7rem;
   border-bottom: 1px solid var(--color-header-rule);
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
 }
+/* The heading of the section: the size of the introduction, in the title ink. */
+.carousel__title { color: var(--color-title); font-size: 1.6rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
 .carousel__marks { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
 .carousel__item { padding: 0.85rem 0.9rem 0.9rem; border-bottom: 1px solid var(--color-schema-line); transition: background 0.2s; }
 /* The current row: a Magenta block before its name, as the cursor of a terminal,
@@ -1235,6 +1235,8 @@ h1 {
   cursor: pointer;
 }
 .carousel__mark-name { flex: 1; font-size: 1.1rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
+/* A name on two lines: its second line starts under its first letter, after the room of the block. */
+.carousel__mark-name { padding-left: 1.05em; text-indent: -1.05em; }
 .carousel__mark:hover,
 .carousel__mark[aria-current="true"] { color: var(--color-title); }
 .carousel__item-text { display: none; margin-top: 0.5rem; padding-right: 5.7rem; max-width: 34em; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
@@ -1270,7 +1272,7 @@ h1 {
 
 .carousel__button:hover { background: var(--color-ghost-hover); }
 .carousel__button svg { width: 1.1rem; height: 1.1rem; }
-.carousel__head .carousel__button { width: 1.8rem; height: 1.8rem; color: var(--color-text-muted); }
+.carousel__head .carousel__button { flex: none; align-self: center; width: 1.8rem; height: 1.8rem; color: var(--color-text-muted); }
 .carousel__head .carousel__button:hover { color: var(--color-text); }
 .carousel__head .carousel__button svg { width: 0.9rem; height: 0.9rem; }
 .carousel__icon--play,
