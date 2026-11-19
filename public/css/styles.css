@@ -2074,8 +2074,13 @@ h1 {
 /* Without the sheet, the schema takes the full width. */
 .stack-sheet-hidden .stack-body { grid-template-columns: minmax(0, 1fr); }
 .stack-sheet[hidden] { display: none; }
-body[data-page="stack"] .stack-sheet-hidden .arch [data-copy],
-.stack-sheet-hidden body[data-page="stack"] .arch [data-copy] { cursor: default; }
+/* Hover on a wide screen: the Magenta border only; a click selects the box. */
+.comp.is-hovered:not(.is-selected) { border-color: var(--color-pink); }
+.layer:not(.is-out-of-scope).is-hovered,
+.local-api.is-hovered .label,
+.boundary__label:not(.is-out-of-scope).is-hovered { border-color: var(--color-pink); }
+.is-out-of-scope .comp.is-hovered:not(.is-selected),
+.layer.is-out-of-scope.is-hovered { border-color: #8b939a; }
 
 /* The hint on the left, the button of the sheet on the right, above the sheet. */
 /* Room above it, so the hint does not sit against the goals. */

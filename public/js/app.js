@@ -39,9 +39,7 @@
   // The stack page shows the selected box in a sheet beside the schema on a wide
   // screen (js/stack.js). Then the pop-ups of the schema stay off.
   const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
-  // The visitor can hide the sheet: then the pop-ups come back.
-  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches
-    && !document.documentElement.classList.contains("stack-sheet-hidden");
+  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
 
   window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
 
@@ -489,7 +487,7 @@
     const clone = diagram.cloneNode(true);
     clone.removeAttribute("id");
     // The image shows the schema at rest: no hover, no selection.
-    for (const node of clone.querySelectorAll(".is-active, .is-selected")) node.classList.remove("is-active", "is-selected");
+    for (const node of clone.querySelectorAll(".is-active, .is-selected, .is-hovered")) node.classList.remove("is-active", "is-selected", "is-hovered");
 
     const groups = legendGroups();
     const legend = el("div", "export-legend");

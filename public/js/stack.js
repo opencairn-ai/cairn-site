@@ -2,7 +2,8 @@
  * The stack page: the sheet of the selected layer or component, beside the schema.
  *
  * A wide screen shows the sheet; a narrow screen keeps the pop-ups of the schema
- * (js/app.js). A click, or Enter and Space, selects a box. The sheet shows its
+ * (js/app.js). On a wide screen the sheet is hidden at first; a click, or Enter
+ * and Space, selects a box and opens the sheet, and Escape closes it. The sheet shows its
  * kind, its name and its description, then its facts: the layer of a component
  * and the other components of that layer, or the components of a layer. The
  * names in the facts are links to their boxes. The address names the selected
@@ -78,49 +79,64 @@
     if (address) history.replaceState(null, "", `${location.pathname}${location.search}#${node.dataset.copy}`);
   }
 
-  // The button above the sheet hides it or shows it again. Without the sheet the
-  // schema takes the full width, and the pop-ups come back (js/app.js). The
-  // choice stays in this browser.
-  const KEY = "cairn-stack-sheet";
+  // The details are hidden at first: the schema takes the full width. A click
+  // (or Enter and Space) on a box selects it and opens its details beside the
+  // schema; Escape closes them. The button above the sheet opens or closes them
+  // too. An address that names a box opens with its details.
   const toggle = document.getElementById("sheet-toggle");
   function shown() { return !document.documentElement.classList.contains("stack-sheet-hidden"); }
   function setShown(show) {
     document.documentElement.classList.toggle("stack-sheet-hidden", !show);
     sheet.hidden = !show;
     if (toggle) {
-      const label = t(show ? "diagram.sheet.hide" : "diagram.sheet.show");
-      toggle.querySelector(".sheet-toggle__label").textContent = label;
+      toggle.querySelector(".sheet-toggle__label").textContent = t(show ? "diagram.sheet.hide" : "diagram.sheet.show");
       toggle.setAttribute("aria-expanded", String(show));
     }
     if (selected) selected.classList.toggle("is-selected", show);
+    // Closed details: the address no longer names a box.
+    if (!show && location.hash) history.replaceState(null, "", location.pathname + location.search);
   }
-  let saved = null;
-  try { saved = localStorage.getItem(KEY); } catch (error) { /* Storage can be off. */ }
-  setShown(saved !== "hidden");
-  if (toggle) toggle.addEventListener("click", () => {
-    const show = !shown();
-    setShown(show);
-    try { localStorage.setItem(KEY, show ? "shown" : "hidden"); } catch (error) { /* Storage can be off. */ }
-  });
+  if (toggle) toggle.addEventListener("click", () => setShown(!shown()));
 
-  // Start: the box in the address, or the Model Access layer.
+  // Start: the box in the address, with its details; else the Model Access
+  // layer, with the details hidden.
   const fromAddress = () => byKey.get(decodeURIComponent(location.hash.slice(1)));
-  select(fromAddress() || byKey.get("modelAccess"), { address: false });
-  window.addEventListener("hashchange", () => { const node = fromAddress(); if (node) select(node, { address: false }); });
+  const start = fromAddress();
+  select(start || byKey.get("modelAccess"), { address: false });
+  setShown(Boolean(start));
+  window.addEventListener("hashchange", () => { const node = fromAddress(); if (node) { select(node, { address: false }); setShown(true); } });
 
   const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
-  const wide = () => app.sheetQuery.matches && shown();
+  const wide = () => app.sheetQuery.matches;
 
+  function open(node) {
+    select(node);
+    setShown(true);
+  }
   diagram.addEventListener("click", (event) => {
     if (!wide()) return;
     const node = targetOf(event);
-    if (node) select(node);
+    if (node) open(node);
   });
   diagram.addEventListener("keydown", (event) => {
     if (!wide() || (event.key !== "Enter" && event.key !== " ")) return;
     const node = targetOf(event);
-    if (node) { event.preventDefault(); select(node); }
+    if (node) { event.preventDefault(); open(node); }
   });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && wide() && shown()) setShown(false);
+  });
+
+  // Hover: the box under the pointer gets the Magenta border, with no pop-up.
+  let hovered = null;
+  function hover(node) {
+    if (hovered === node) return;
+    if (hovered) hovered.classList.remove("is-hovered");
+    hovered = node;
+    if (node) node.classList.add("is-hovered");
+  }
+  diagram.addEventListener("pointerover", (event) => { if (wide() && event.pointerType !== "touch") hover(targetOf(event)); });
+  diagram.addEventListener("pointerleave", () => hover(null));
 
   window.CAIRN_STACK = { select, node: (key) => byKey.get(key) };
 })();
