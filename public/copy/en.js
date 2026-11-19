@@ -6,7 +6,8 @@
  *   - Leave the keys (the words before each colon), the quotes and the commas as they are.
  *   - Inside the text, use typographic quotes (“ ” ’) rather than a straight double quote ("),
  *     which would end the text early.
- *   - Wrap words in *asterisks* to highlight them in pink. On the Hello World page, the
+ *   - Wrap words in *asterisks* to highlight them in pink, and in _underscores_ to
+ *     put them in italic. On the Hello World page, the
  *     highlighted sentence of `hello.lead` also starts on a new line.
  *   - {mozilla} and {mila} in the footer line are where the two links go; move them freely.
  *   - Preview by opening public/index.html in a browser, or with `npx wrangler dev`.
@@ -86,7 +87,7 @@ window.CAIRN_COPY.en = {
     // The right column: what Cairn is, then the link to the stack page and the contact address.
     what: {
       title: "Cairn is an open source AI stack that an organization installs and operates on infrastructure that it controls.",
-      stack: "Explore the stack",
+      stack: "Explore _la stack_",
       contact: "bonjourhi@opencairn.ai",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },

@@ -193,8 +193,10 @@
   }
 
   // Words wrapped in *asterisks* in the copy become a pink highlight.
+  // Words wrapped in _underscores_ are in italic.
   function setText(node, text) {
-    node.replaceChildren(...text.split(/\*([^*]+)\*/).map((part, i) => (i % 2 ? el("mark", "hl", part) : part)));
+    const italic = (part) => part.split(/_([^_]+)_/).map((piece, i) => (i % 2 ? el("em", null, piece) : piece));
+    node.replaceChildren(...text.split(/\*([^*]+)\*/).flatMap((part, i) => (i % 2 ? [el("mark", "hl", part)] : italic(part))));
   }
 
   function setContent(selector, value) {
