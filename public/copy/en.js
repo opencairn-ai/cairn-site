@@ -457,12 +457,11 @@ window.CAIRN_COPY.en = {
     // For screen readers: the name of the table. Then the name of its first column.
     label: "Roadmap of the stack, by workstream",
     workstreamsLabel: "Workstreams",
-    // The three times. `text` tells how sure the items are. `release` is the
-    // release that the items are for; an empty text ("") hides that line.
+    // The three times. `text` tells how sure the items are.
     columns: {
-      now: { name: "Now", text: "In progress.", release: "Alpha release, 8 December 2026" },
-      next: { name: "Next", text: "Planned.", release: "Beta release" },
-      later: { name: "Later", text: "The direction. Not planned yet.", release: "Release candidate of the core components" },
+      now: { name: "Now", text: "In progress." },
+      next: { name: "Next", text: "Planned." },
+      later: { name: "Later", text: "The direction. Not planned yet." },
     },
     // The hint on the layer tag of an item. {layer} is the name of the layer.
     layerLink: "See {layer} on the Stack page",

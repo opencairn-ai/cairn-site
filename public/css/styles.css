@@ -2063,8 +2063,7 @@ h1 {
 .roadmap__row:nth-child(5) { grid-row: 4; }
 .roadmap__row:nth-child(6) { grid-row: 5; }
 
-/* The heads of the columns, over a strong rule: the time, how sure its items
-   are, and its release. */
+/* The heads of the columns, over a strong rule: the time, and how sure its items are. */
 .roadmap__row--head > * { padding: 1rem 0 0.9rem; border-bottom: 1px solid var(--color-header-rule); }
 .roadmap__column { display: flex; flex-direction: column; }
 .roadmap__when { color: var(--color-title); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
@@ -2079,14 +2078,6 @@ h1 {
   background: var(--color-pink);
 }
 .roadmap__when-text { margin-top: 0.4rem; color: var(--color-body); font-size: 0.875rem; }
-.roadmap__release { display: flex; align-items: center; gap: 0.45em; margin-top: 0.25rem; color: var(--color-text); font-size: 0.875rem; font-weight: 500; }
-.roadmap__release:empty { display: none; }
-/* The mark of a release: filled for the release in progress (the Alpha mark of
-   the schema), an outline for the next one, dashed after that. */
-.roadmap__release::before { content: ""; flex: none; width: 0.6em; height: 0.6em; border: 1.5px solid var(--color-status-alpha); border-radius: 50%; }
-[data-when="now"] > .roadmap__release::before { background: var(--color-status-alpha); }
-[data-when="later"] > .roadmap__release::before { border-style: dashed; border-color: var(--color-text-muted); }
-
 .roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600; }
 
 /* A workstream: its name with one line about it, then its three cells, over a

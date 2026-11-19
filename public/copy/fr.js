@@ -458,12 +458,11 @@ window.CAIRN_COPY.fr = {
     // Pour les lecteurs d’écran : le nom du tableau, puis le nom de sa première colonne.
     label: "Feuille de route de la pile, par chantier",
     workstreamsLabel: "Chantiers",
-    // Les trois moments. `text` dit à quel point les éléments sont sûrs ; `release` est la
-    // version visée. Un texte vide ("") masque cette ligne.
+    // Les trois moments. `text` dit à quel point les éléments sont sûrs.
     columns: {
-      now: { name: "Maintenant", text: "En cours.", release: "Version alpha, 8 décembre 2026" },
-      next: { name: "Ensuite", text: "Prévu.", release: "Version bêta" },
-      later: { name: "Plus tard", text: "L’orientation. Pas encore prévu.", release: "Version candidate des composants de base" },
+      now: { name: "Maintenant", text: "En cours." },
+      next: { name: "Ensuite", text: "Prévu." },
+      later: { name: "Plus tard", text: "L’orientation. Pas encore prévu." },
     },
     // L’info-bulle du lien d’un élément vers sa couche. {layer} est le nom de la couche.
     layerLink: "Voir {layer} sur la page de la pile",
