@@ -7,7 +7,7 @@ AI inference stack. A static site: everything under `public/` is served as-is.
 
 ```
 public/
-  index.html, stack.html,                 One page per tab: Hello World, Stack, Model Recipes, Roadmap.
+  index.html, stack.html,                 One page per tab: Hello World, LaStack, Model Recipes, Roadmap.
   recipes.html, roadmap.html              Structure only, no copy. stack.html holds the architecture diagram,
                                           recipes.html the table of recipes
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
