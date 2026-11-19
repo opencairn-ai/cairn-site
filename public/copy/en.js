@@ -412,7 +412,6 @@ window.CAIRN_COPY.en = {
       chat: "Chat",
       coding: "Coding",
       documents: "Documents",
-      // Under the list, before the links to the sources: "… from Hugging Face and Artificial Analysis".
       // The pop-up of the "?" button next to the "Use case" heading:
       // "… from Hugging Face and Artificial Analysis." The links go after this text.
       credit: "The use cases use benchmark data from",

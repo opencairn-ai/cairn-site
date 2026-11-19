@@ -554,7 +554,9 @@ h1 {
   padding: calc(0.4em - 2px) calc(0.65em - 2px);
 }
 
-.layer--row > .label { flex: 0 0 8.5em; }
+/* The column of the row names: wide enough for the longest name on one line
+   in English and in French ("Plan de contrôle", 8.7em). */
+.layer--row > .label { flex: 0 0 9.25em; }
 .layer--row .comp { padding: calc(0.35em + 1px) calc(0.5em + 1px); }
 
 /* Local / Server line. The API point sits on the dashes and links both sides. */
@@ -765,7 +767,7 @@ h1 {
 /* The Registry is a shared row: its boxes do not belong to one column. Its name is
    narrower by the core's padding and outline, so its boxes start on the same line
    as the boxes of the rows outside the core. */
-.layer--registry > .label { flex-basis: calc(8.5em - 0.6em - 2.5px); }
+.layer--registry > .label { flex-basis: calc(9.25em - 0.6em - 2.5px); }
 
 /* Security, Observability, Control Plane: one group with a name. Each layer is a
    full-width row, so it runs under the whole core. */
@@ -1753,7 +1755,7 @@ h1 {
   font-size: 0.86em;
   font-weight: 600;
   text-align: left;
-  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 .recipe-table td {
@@ -1928,7 +1930,7 @@ h1 {
 }
 .recipe-copy:hover { border-color: #f5e8ff; }
 
-.recipe-link { flex: none; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
+.recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
 .recipe-link:hover { color: var(--color-link-hover); }
 
 /* The steps to install a recipe (shown when the stack repository is public). */

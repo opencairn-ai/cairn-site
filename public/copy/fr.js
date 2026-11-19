@@ -66,10 +66,23 @@ window.CAIRN_COPY.fr = {
   diagram: {
     // Le titre de la page de la pile.
     title: "Une architecture de référence pour l’IA auto-hébergée",
-    // La petite ligne rose au-dessus du schéma.
-    eyebrow: "Explorer l’architecture",
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
-    hint: "Survolez ou touchez une couche ou un composant pour découvrir son rôle.",
+    // La ligne au-dessus du schéma. Un grand écran montre la case sélectionnée dans la
+    // fiche à côté du schéma ; un petit écran la montre dans une infobulle.
+    hint: "Sélectionnez une couche ou un composant pour découvrir son rôle.",
+    // La fiche à côté du schéma : les faits sous la description de la case sélectionnée.
+    // Les noms de couches et de composants dans ces faits sont des liens vers leurs cases.
+    sheet: {
+      components: "Composants",
+      layer: "Couche",
+      alsoInLayer: "Aussi dans cette couche",
+      appliesTo: "S’applique à",
+      allLayers: "Toutes les couches",
+      // Le bouton au-dessus de la fiche. La fiche est masquée au départ : le schéma prend
+      // toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
+      hide: "Masquer les détails",
+      show: "Afficher les détails",
+    },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "S’applique à toutes les couches",
     // Marque les composants et les couches de la version alpha, sur les cases, dans la
@@ -236,6 +249,106 @@ window.CAIRN_COPY.fr = {
       magicModel: {
         name: "Sélecteur matériel-modèle",
         tooltip: "Sélectionne automatiquement le meilleur modèle pour votre matériel, vos cas d’utilisation et vos charges de travail, et ajuste la configuration de service pour la vitesse.",
+      },
+    },
+  },
+
+  // La page des recettes. Les recettes viennent du dépôt de la pile
+  // (js/recipes-data.js) ; seuls les mots autour d’elles sont ici.
+  //   {hardware} et {server} sont des noms tirés de la recette, par exemple « GB10 » et « vLLM ».
+  //   {count} est un nombre tiré de la recette, écrit dans le format de la langue.
+  recipes: {
+    // Le titre de la page, une ligne sur ce qu’est une recette, puis une ligne sur la
+    // limite actuelle des recettes.
+    title: "Recettes de référence pour les modèles locaux",
+    lead: "Une recette contient la configuration pour servir un modèle. Elle utilise un serveur de modèles et s’exécute sur un type de matériel.",
+    limit: "Pour l’instant, les recettes visent seulement les installations sur un seul nœud.",
+    // L’indication au-dessus des filtres.
+    hint: "Sélectionnez une recette pour voir ses fichiers.",
+    // Le nom de la liste, pour les lecteurs d’écran.
+    listLabel: "Recettes",
+    filters: {
+      // Le nom de la rangée de filtres, pour les lecteurs d’écran.
+      label: "Filtres",
+      // Le nom du menu. Le menu affiche son nom jusqu’à ce qu’un choix soit fait.
+      hardware: "Matériel",
+      useCase: "Cas d’utilisation",
+      // Le premier choix du menu : il retire le filtre.
+      all: "Tous",
+      // Le champ de recherche : son nom pour les lecteurs d’écran, et le texte qu’il affiche quand il est vide.
+      model: "Modèle",
+      modelPlaceholder: "Nom du modèle",
+    },
+    // Les en-têtes des colonnes du tableau. La fiche utilise les mêmes noms pour ses faits.
+    columns: {
+      model: "Modèle",
+      hardware: "Matériel",
+      server: "Serveur de modèles",
+      context: "Contexte",
+      // Dans le tableau, quand la recette ne fixe pas de longueur de contexte.
+      contextDefault: "Défaut",
+      tools: "Appel d’outils",
+      reasoning: "Raisonnement",
+      useCase: "Cas d’utilisation",
+    },
+    // Les faits de la recette sélectionnée, dans la fiche. {count} est un nombre de jetons.
+    facts: {
+      // Sous « Serveur de modèles » dans la fiche : le nom court suffit.
+      image: "Image du serveur",
+      context: "{count} jetons",
+      contextDefault: "Valeur par défaut du serveur de modèles",
+      model: "Modèle",
+      yes: "Oui",
+      no: "Non",
+    },
+    // Le serveur de modèles et le matériel d’une recette, par exemple « vLLM sur GB10 ».
+    where: "{server} sur {hardware}",
+    empty: "Aucune recette ne correspond à ces filtres. Retirez un filtre pour voir plus de recettes.",
+    noSelection: "Sélectionnez une recette pour voir sa configuration.",
+    // Les cas d’utilisation auxquels une recette convient le mieux : les mots du tableau,
+    // et les choix du menu « Cas d’utilisation ». Les règles sont dans tools/use-cases.mjs.
+    useCases: {
+      chat: "Conversation",
+      coding: "Programmation",
+      documents: "Documents",
+      // L’infobulle du bouton « ? » à côté de l’en-tête « Cas d’utilisation » :
+      // « … de Hugging Face et Artificial Analysis. » Les liens suivent ce texte.
+      credit: "Les cas d’utilisation s’appuient sur des données d’évaluation de",
+      // Le nom du bouton « ? », pour les lecteurs d’écran et comme info-bulle.
+      about: "À propos des cas d’utilisation",
+      creditAnd: "et",
+    },
+    // L’infobulle d’un en-tête de colonne ou d’un cas d’utilisation : son type, son nom, puis sa description.
+    tips: {
+      kinds: {
+        useCase: "Cas d’utilisation",
+        fact: "Configuration",
+      },
+      useCases: {
+        chat: "Une personne converse avec le modèle : questions, rédaction et explications.",
+        coding: "Le modèle écrit et modifie du code, dans un éditeur ou dans un outil de programmation.",
+        documents: "Le modèle lit des documents sous forme d’images : pages, tableaux, graphiques et formulaires.",
+      },
+      tags: {
+        context: "La longueur maximale d’une requête, en jetons : l’entrée plus la réponse.",
+        tools: "Le serveur de modèles renvoie les appels d’outils dans un format structuré. Les outils de programmation et les agents s’en servent.",
+        reasoning: "Le serveur de modèles renvoie le raisonnement du modèle à part de sa réponse.",
+      },
+    },
+    sheet: {
+      // Le nom de la fiche, pour les lecteurs d’écran.
+      label: "Recette sélectionnée",
+      files: "Fichiers de la recette",
+      copy: "Copier",
+      copied: "Copié",
+      copyFailed: "Échec de la copie",
+      modelCard: "Fiche du modèle",
+      // Les textes suivants ne s’affichent que lorsque le dépôt de la pile est public (STACK_IS_PUBLIC dans js/recipes.js).
+      github: "Ouvrir la recette sur GitHub",
+      use: {
+        title: "Utiliser cette recette",
+        select: "Définissez ces valeurs dans le fichier .env, ou lancez ./model-selection.sh et sélectionnez-les.",
+        start: "Démarrez la pile.",
       },
     },
   },

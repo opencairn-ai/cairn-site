@@ -439,14 +439,15 @@
     // The facts of the recipe: two columns on a wide sheet. A wide fact takes the full width.
     const fact = (label, value, wide) => [el("dt", wide ? "is-wide" : null, [label]), el("dd", wide ? "is-wide" : null, [value])];
     const list = el("dl", "recipe-facts", [
+      // Short facts in pairs; long facts (the image, the use cases) on a full row.
       ...fact(text("columns.hardware"), r.hardwareLabel),
       ...fact(text("columns.server"), r.serverLabel),
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
-      ...fact(text("columns.useCase"), (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ")),
+      ...fact(text("columns.useCase"), (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", "), true),
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
       ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
       ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
-      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`), true),
+      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`)),
     ]);
 
     sheet.replaceChildren(...[
