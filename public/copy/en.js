@@ -181,6 +181,10 @@ window.CAIRN_COPY.en = {
       alsoInLayer: "Also in this layer",
       appliesTo: "Applies to",
       allLayers: "All layers",
+      // The button above the sheet. Without the sheet, the schema takes the full
+      // width, and a box shows its description in a pop-up.
+      hide: "Hide details",
+      show: "Show details",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "Applies to all layers",

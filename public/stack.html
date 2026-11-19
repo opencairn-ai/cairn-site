@@ -91,7 +91,14 @@
 
     <figure class="arch-figure">
       <figcaption class="arch-caption">
-        <p class="hint stack-hint" data-text="diagram.hint"></p>
+        <!-- The hint, and on wide screens the button that hides or shows the sheet. -->
+        <div class="stack-caption">
+          <p class="hint stack-hint" data-text="diagram.hint"></p>
+          <button type="button" class="sheet-toggle" id="sheet-toggle" aria-controls="stack-sheet" aria-expanded="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M15 4v16"/></svg>
+            <span class="sheet-toggle__label"></span>
+          </button>
+        </div>
         <ul class="legend" id="status-legend"></ul>
       </figcaption>
 

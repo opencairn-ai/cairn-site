@@ -39,7 +39,9 @@
   // The stack page shows the selected box in a sheet beside the schema on a wide
   // screen (js/stack.js). Then the pop-ups of the schema stay off.
   const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
-  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
+  // The visitor can hide the sheet: then the pop-ups come back.
+  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches
+    && !document.documentElement.classList.contains("stack-sheet-hidden");
 
   window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
 

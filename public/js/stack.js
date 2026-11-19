@@ -73,10 +73,35 @@
     if (!entries.has(node)) return;
     if (selected) selected.classList.remove("is-selected");
     selected = node;
-    node.classList.add("is-selected");
+    if (shown()) node.classList.add("is-selected");
     render(node, step);
     if (address) history.replaceState(null, "", `${location.pathname}${location.search}#${node.dataset.copy}`);
   }
+
+  // The button above the sheet hides it or shows it again. Without the sheet the
+  // schema takes the full width, and the pop-ups come back (js/app.js). The
+  // choice stays in this browser.
+  const KEY = "cairn-stack-sheet";
+  const toggle = document.getElementById("sheet-toggle");
+  function shown() { return !document.documentElement.classList.contains("stack-sheet-hidden"); }
+  function setShown(show) {
+    document.documentElement.classList.toggle("stack-sheet-hidden", !show);
+    sheet.hidden = !show;
+    if (toggle) {
+      const label = t(show ? "diagram.sheet.hide" : "diagram.sheet.show");
+      toggle.querySelector(".sheet-toggle__label").textContent = label;
+      toggle.setAttribute("aria-expanded", String(show));
+    }
+    if (selected) selected.classList.toggle("is-selected", show);
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (error) { /* Storage can be off. */ }
+  setShown(saved !== "hidden");
+  if (toggle) toggle.addEventListener("click", () => {
+    const show = !shown();
+    setShown(show);
+    try { localStorage.setItem(KEY, show ? "shown" : "hidden"); } catch (error) { /* Storage can be off. */ }
+  });
 
   // Start: the box in the address, or the Model Access layer.
   const fromAddress = () => byKey.get(decodeURIComponent(location.hash.slice(1)));
@@ -84,7 +109,7 @@
   window.addEventListener("hashchange", () => { const node = fromAddress(); if (node) select(node, { address: false }); });
 
   const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
-  const wide = () => app.sheetQuery.matches;
+  const wide = () => app.sheetQuery.matches && shown();
 
   diagram.addEventListener("click", (event) => {
     if (!wide()) return;

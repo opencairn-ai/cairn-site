@@ -818,6 +818,11 @@ h1 {
 .boundary__label:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) {
   border-color: var(--color-pink);
 }
+/* A selected layer takes the same band as a selected component. On dark, the
+   layers are lighter than the page, so their band is a lighter Marshmallow (28%)
+   than the band of a box (10%): it reads as lighter, as on light. */
+.layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) { background: var(--color-selected); }
+:root[data-theme="dark"] .layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) { background: rgb(245 232 255 / 0.28); }
 
 /* The gray client row: same 2px border stroke, in gray, not pink. */
 .is-out-of-scope .comp:is(.is-active, .is-selected, :focus-visible) {
@@ -2062,8 +2067,38 @@ h1 {
   body[data-page="stack"] .arch [data-copy] { cursor: pointer; }
 }
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .stack-sheet { display: none; }
+  .stack-sheet,
+  .sheet-toggle { display: none; }
 }
+
+/* Without the sheet, the schema takes the full width. */
+.stack-sheet-hidden .stack-body { grid-template-columns: minmax(0, 1fr); }
+.stack-sheet[hidden] { display: none; }
+body[data-page="stack"] .stack-sheet-hidden .arch [data-copy],
+.stack-sheet-hidden body[data-page="stack"] .arch [data-copy] { cursor: default; }
+
+/* The hint on the left, the button of the sheet on the right, above the sheet. */
+/* Room above it, so the hint does not sit against the goals. */
+.stack-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; }
+.stack-caption .hint { margin-bottom: 0; }
+.arch-caption { margin-bottom: 0.6rem; }
+.sheet-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.35em 0.7em;
+  border: 1px solid var(--color-schema-line);
+  border-radius: var(--radius-ui-sm);
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.sheet-toggle:hover { border-color: var(--color-header-rule); }
+.sheet-toggle svg { width: 1.15em; height: 1.15em; }
 
 /* The sheet: a strong rule over it, then the kind, the name, the description,
    and the facts as label | value rows. Names in the facts are links to their boxes. */
