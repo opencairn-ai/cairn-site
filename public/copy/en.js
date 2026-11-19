@@ -67,7 +67,7 @@ window.CAIRN_COPY.en = {
   hello: {
     // The left column, under the title: the reason for Cairn, then three points.
     // The sentence between the asterisks is on a new line, in the highlight color.
-    lead: "Small and medium businesses drive most economies. They must be able to adopt AI on their own terms: safely, easily and cost-effectively. *The models are not the problem. Deploying and running them is.*",
+    lead: "Your organization must be able to adopt AI on its own terms: safely, easily and cost-effectively. *The models are not the problem. Deploying and running them is.*",
     points: [
       {
         title: "Your data and your policies stay on your infrastructure",
