@@ -334,10 +334,14 @@
       el("td", "recipe-cell-mark", [mark(r.facts.reasoning)]),
       el("td", "recipe-cell-uses", useCases),
     ]);
-    row.addEventListener("click", () => {
+    row.addEventListener("click", (event) => {
       state.selected = r.id;
       renderResults();
-      results.querySelector(".recipe-row.is-selected .recipe-pick")?.focus({ preventScroll: true });
+      // The list is drawn again: the focus goes to the new button of the row, so
+      // the keyboard keeps its place. The focus ring shows only when the row was
+      // chosen with the keyboard (a click from a key has no pointer: detail 0).
+      const fromKey = event.detail === 0;
+      results.querySelector(".recipe-row.is-selected .recipe-pick")?.focus({ preventScroll: true, focusVisible: fromKey });
       // When the sheet is under the list, bring it into view.
       if (matchMedia("(max-width: 900px), (max-aspect-ratio: 1/1)").matches) sheet.scrollIntoView({ behavior: "smooth", block: "start" });
     });
