@@ -66,8 +66,8 @@ window.CAIRN_COPY.en = {
 
   // The Hello World page, for business leaders. Its title is `intro.title`.
   hello: {
-    // The left column, under the title: the reason for Cairn, then three points.
-    // The sentence between the asterisks is on a new line, in the highlight color.
+    // Under the title: the reason for Cairn. The sentence between the asterisks is in
+    // the highlight color. The three points are in columns beside it.
     lead: "Your organization must be able to adopt AI on its own terms: safely, easily and cost-effectively. *The models are not the problem. Deploying and running them is.*",
     points: [
       {
@@ -84,7 +84,7 @@ window.CAIRN_COPY.en = {
       },
     ],
 
-    // The right column: what Cairn is, then the link to the stack page and the contact address.
+    // What Cairn is, then the link to the stack page and the contact address.
     what: {
       title: "Cairn is an open source AI stack that an organization installs and operates on infrastructure that it controls.",
       stack: "Explore _la stack_",
@@ -113,13 +113,12 @@ window.CAIRN_COPY.en = {
       },
     ],
 
-    // The names of the carousel and of its buttons, for screen readers.
     carousel: {
       // The heading of the list of the principles, and the name of the carousel for screen readers.
       label: "Our approach to building Cairn",
       pause: "Pause the carousel",
       play: "Play the carousel",
-      // The name of a mark under the slides, for example "2 of 4: Replaceable by contract".
+      // The name of a principle of the list for screen readers, for example "2 of 4: Replaceable by contract".
       position: "{index} of {count}: {name}",
     },
 

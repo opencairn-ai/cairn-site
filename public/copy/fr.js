@@ -9,7 +9,8 @@
  *     guillemet droit ("), qui terminerait le texte trop tôt.
  *   - Les espaces avant « : » sont des espaces insécables, pour éviter qu’un deux-points se
  *     retrouve seul en début de ligne.
- *   - Entourez des mots d’*astérisques* pour les surligner en rose (aucun ne l’est pour l’instant).
+ *   - Entourez des mots d’*astérisques* pour les surligner en rose, et de _traits de
+ *     soulignement_ pour les mettre en italique.
  *   - {mozilla} et {mila}, dans la ligne du pied de page, indiquent l’emplacement des deux liens.
  *   - Pour prévisualiser, ouvrez public/index.html?lang=fr dans un navigateur, ou lancez `npx wrangler dev`.
  *
@@ -61,6 +62,103 @@ window.CAIRN_COPY.fr = {
         text: "Dans chaque couche, notre implémentation de référence utilise les composants à code source ouvert qui obtiennent les meilleurs résultats aux tests de contrat.",
       },
     ],
+  },
+
+  // La page Hello World, pour les gestionnaires et les décideurs. Son titre est `intro.title`.
+  hello: {
+    // Sous le titre : la raison d’être de Cairn. La phrase entre astérisques est en rose.
+    lead: "Votre organisation doit pouvoir adopter l’IA selon ses propres conditions : de façon sûre, simple et économique. *Les modèles ne sont pas le problème. Les déployer et les exploiter, si.*",
+    // Les trois points, en colonnes à côté du texte.
+    points: [
+      {
+        title: "Vos données et vos politiques restent sur votre infrastructure",
+        text: "Tout s’exécute sur une infrastructure que vous contrôlez. Vous pouvez inspecter et remplacer chaque composant.",
+      },
+      {
+        title: "Du code source ouvert, sans l’assemblage",
+        text: "Une pile testée. Vous l’installez, la mettez à niveau et l’exploitez à partir de sa documentation.",
+      },
+      {
+        title: "Votre capacité et vos choix vous appartiennent",
+        text: "L’IA s’exécute sur une infrastructure que vous possédez ou que vous partagez. Les coûts sont prévisibles, et vous ne dépendez pas d’un seul fournisseur.",
+      },
+    ],
+
+    // Ce qu’est Cairn, puis le lien vers la page de la pile et l’adresse de contact.
+    // Les mots entre traits de soulignement sont en italique.
+    what: {
+      title: "Cairn est une pile d’IA à code source ouvert qu’une organisation installe et exploite sur une infrastructure qu’elle contrôle.",
+      stack: "Explorez _la pile_",
+      contact: "bonjourhi@opencairn.ai",
+      contactUrl: "mailto:bonjourhi@opencairn.ai",
+    },
+
+    // Les quatre principes, un à la fois, chacun avec une image. Gardez quatre principes, dans cet ordre.
+    principles: [
+      {
+        name: "Des composants à code source ouvert testés",
+        text: "Nous précisons ce que chaque couche doit faire. Nous testons des composants à code source ouvert existants selon cette spécification. Puis nous choisissons et intégrons le plus adapté.",
+      },
+      {
+        name: "Remplaçables par contrat",
+        text: "Nous publions les contrats d’interface que chaque composant doit respecter. Un composant qui les respecte peut en remplacer un autre sans travail supplémentaire.",
+      },
+      {
+        name: "Vos équipes gardent leurs outils",
+        text: "Les équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent déjà. Elles relient ces outils à une seule API, sur les ressources de calcul de votre organisation.",
+      },
+      {
+        name: "Assembler, pas créer",
+        text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
+      },
+    ],
+
+    carousel: {
+      // Le titre de la liste des principes, et le nom du carrousel pour les lecteurs d’écran.
+      label: "Notre approche pour bâtir Cairn",
+      pause: "Mettre le carrousel en pause",
+      play: "Lancer le carrousel",
+      // Le nom d’un principe de la liste pour les lecteurs d’écran, par exemple « 2 sur 4 : Remplaçables par contrat ».
+      position: "{index} sur {count} : {name}",
+    },
+
+    // Les textes des quatre images. Les noms des couches et des composants viennent de `stack`.
+    pictures: {
+      // Image 1 : trois composants et les résultats de leurs tests.
+      tests: {
+        components: "Composants à code source ouvert",
+        tests: "Tests",
+        componentA: "Composant A",
+        componentB: "Composant B",
+        componentC: "Composant C",
+        selected: "Sélectionné",
+      },
+      // Image 2 : une passerelle et un serveur de modèles, chacun avec deux choix.
+      contract: {
+        contract: "Contrat d’interface",
+        passed: "Tests de contrat réussis",
+      },
+      // Image 3 : les outils des équipes, Cairn, puis les ressources de calcul.
+      tools: {
+        chat: "Assistant de conversation",
+        coding: "Agent de programmation",
+        applications: "Vos applications",
+        api: "Une seule API",
+        cairn: "Cairn",
+        where: "Sur votre infrastructure",
+        local: "Calcul local",
+        localDetail: "Vos GPU",
+        remote: "Calcul distant",
+        remoteDetail: "Nuage, API hébergées",
+        compute: "Calcul pour les modèles d’IA",
+      },
+      // Image 4 : ce que signifient les trois signes de l’image.
+      skeleton: {
+        component: "Composant à code source ouvert",
+        code: "Code de liaison",
+        specification: "Spécification de composant",
+      },
+    },
   },
 
   diagram: {
