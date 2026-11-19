@@ -87,22 +87,21 @@
       <p class="recipe-intro__lead" data-text="recipes.limit"></p>
     </section>
 
-    <div class="recipe-caption">
-      <p class="eyebrow" data-text="recipes.eyebrow"></p>
-      <p class="hint" data-text="recipes.hint"></p>
-    </div>
+    <p class="hint recipe-hint" data-text="recipes.hint"></p>
 
     <div class="recipe-body">
-      <!-- The filters: one row. Then the list: a panel with one box for each recipe. -->
+      <!-- The filters: one row. Then the table of the recipes, which scrolls inside its box. -->
       <div class="recipe-finder">
         <div class="recipe-filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
         <section class="recipe-panel recipe-list" aria-labelledby="recipe-list-name">
-          <h2 class="recipe-name" id="recipe-list-name" data-text="recipes.listLabel"></h2>
-          <!-- The column headings. Screen readers get the names in each recipe instead. -->
-          <div class="recipe-columns" id="recipe-columns" aria-hidden="true"></div>
-          <div class="recipe-results" id="recipe-results"></div>
-          <!-- The source of the benchmark data that the use case tags read. -->
-          <p class="recipe-credit" id="recipe-credit"></p>
+          <!-- The name of the list is for screen readers only. -->
+          <h2 class="sr-only" id="recipe-list-name" data-text="recipes.listLabel"></h2>
+          <div class="recipe-scroll">
+            <table class="recipe-table">
+              <thead id="recipe-columns"></thead>
+              <tbody id="recipe-results"></tbody>
+            </table>
+          </div>
         </section>
       </div>
       <!-- The selected recipe. -->

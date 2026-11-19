@@ -9,11 +9,11 @@ AI inference stack. A static site: everything under `public/` is served as-is.
 public/
   index.html, stack.html,                 One page per tab: Hello World, Stack, Model Recipes, Roadmap.
   recipes.html, roadmap.html              Structure only, no copy. stack.html holds the architecture diagram,
-                                          recipes.html the list of recipes
+                                          recipes.html the table of recipes
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
   css/styles.css                          Styles; light and dark color tokens at the top
   js/app.js                               Fills in the copy; current tab, pop-ups, theme switch, PNG download
-  js/recipes.js                           The Recipes page: filters, list, and the sheet of the selected recipe
+  js/recipes.js                           The Recipes page: filters, table, and the sheet of the selected recipe
   js/hello.js                             The Hello World page: the carousel of the four principles
   js/recipes-data.js                      The recipes. Generated from the stack repository; do not edit
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
@@ -78,14 +78,19 @@ Then commit `public/js/recipes-data.js`. The script needs Node.js 18 or later
 and no packages. The first line of the data file gives the commit it came from.
 
 - A new recipe folder shows on the page with no other change. Its filters, names
-  and tags come from the folder path and the recipe files.
+  and facts come from the folder path and the recipe files.
 - The names ("GB10", "vLLM") come from the heading of the recipe `README.md`:
   `# <model> - <server> on <hardware>`. Without that heading, the page shows the
   folder names.
-- The tags come from keys of `model-server-config.yaml`. Each model server names
-  its keys differently, so `FACT_KEYS` in the script lists them. A new model
-  server or a new kind of tag needs a new entry there, and a new tag also needs
-  its text under `recipes.tags` in the copy files.
+- The facts (context length, tool calling, reasoning) come from keys of
+  `model-server-config.yaml`. Each model server names its keys differently, so
+  `FACT_KEYS` in the script lists them. A new model server or a new kind of fact
+  needs a new entry there; a new fact also needs a column in `js/recipes.js` and
+  its texts under `recipes.columns`, `recipes.facts` and `recipes.tips` in the
+  copy files.
+- On a wide screen that is tall enough, the page is the height of the window:
+  the table and the file preview scroll inside it. A shorter window, a larger
+  text size or browser zoom gives a page that scrolls.
 - A recipe has its own address:
   `recipes.html#<hardware>/<model>/<publisher>/<server>`.
 - While the stack repository is private, the sheet does not show how to install

@@ -1,6 +1,6 @@
 /*
- * The Recipes page: a list of the model server recipes with filters, and a
- * sheet that shows the files of the selected recipe.
+ * The Recipes page: a table of the model server recipes with filters, and a
+ * sheet that shows the facts and the files of the selected recipe.
  *
  * The recipes come from js/recipes-data.js, which tools/gen-recipes.mjs writes
  * from the stack repository. This script holds no recipe content: a new recipe
@@ -50,8 +50,6 @@
     hardware: "",
     useCase: "",
     query: "",
-    // The visitor can hide the sheet, to give the full width to the list.
-    sheetHidden: false,
     file: "model-server-config.yaml",
   };
 
@@ -74,9 +72,7 @@
 
   renderColumns();
   renderFilters();
-  showSheet(true);
   renderResults();
-  renderCredit();
 
   // --- Filters -------------------------------------------------------------
 
@@ -85,36 +81,11 @@
   function renderFilters() {
     // The search field stays in place while the menu is drawn again, so it keeps its text.
     const search = filters.querySelector(".recipe-search") || searchField();
-    const toggle = filters.querySelector(".recipe-toggle") || sheetToggle();
     filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
       USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
       search,
-      toggle,
     ].filter(Boolean));
-  }
-
-  // The button at the end of the row: it hides the sheet, or shows it again.
-  // Its icon is a window with a panel on the right, as the sheet is on the page.
-  function sheetToggle() {
-    const button = el("button", "recipe-select recipe-toggle", [
-      icon("M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M15 4v16", "recipe-toggle__icon"),
-    ]);
-    button.type = "button";
-    button.setAttribute("aria-controls", sheet.id);
-    button.addEventListener("click", () => showSheet(state.sheetHidden));
-    return button;
-  }
-
-  function showSheet(shown) {
-    state.sheetHidden = !shown;
-    sheet.hidden = !shown;
-    sheet.parentElement.classList.toggle("recipe-body--list-only", !shown);
-    const button = filters.querySelector(".recipe-toggle");
-    const label = text(shown ? "sheet.hide" : "sheet.show");
-    button.setAttribute("aria-expanded", String(shown));
-    button.setAttribute("aria-label", label);
-    button.title = label;
   }
 
   // A menu with one choice: the design system's dropdown menu. For screen readers
@@ -249,74 +220,148 @@
     // selected recipe, the first recipe of the list takes its place.
     if (!visible.some((r) => r.id === state.selected)) state.selected = visible.length ? visible[0].id : "";
 
-    results.replaceChildren(...(visible.length ? visible.map(resultRow) : [el("p", "recipe-empty", [text("empty")])]));
-    fitAllTags();
+    if (visible.length) results.replaceChildren(...visible.map(resultRow));
+    else {
+      const cell = el("td", "recipe-empty", [text("empty")]);
+      cell.colSpan = 7;
+      results.replaceChildren(el("tr", null, [cell]));
+    }
+    revealSelected();
 
     renderSheet();
   }
 
-  // The column headings, over the list. They are hidden from screen readers:
-  // each recipe gives the names of its columns to screen readers.
+  // The list scrolls inside its box: the selected recipe stays in view there,
+  // without a move of the page.
+  function revealSelected() {
+    const box = results.closest(".recipe-scroll");
+    const row = results.querySelector(".recipe-row.is-selected");
+    if (!box || !row) return;
+    const head = box.querySelector("thead").offsetHeight;
+    const top = row.offsetTop - head;
+    const bottom = row.offsetTop + row.offsetHeight;
+    if (top < box.scrollTop) box.scrollTop = top;
+    else if (bottom > box.scrollTop + box.clientHeight) box.scrollTop = bottom - box.clientHeight;
+  }
+
+  // The column headings of the table. The headings of the facts have a pop-up
+  // with their description.
   function renderColumns() {
     const columns = document.getElementById("recipe-columns");
     if (!columns) return;
-    columns.replaceChildren(...["model", "hardware", "server", "tags"].map((name) => el("span", "", [text(`columns.${name}`)])));
+    const heading = (label, tip, className) => {
+      const cell = el("th", className, [label]);
+      cell.scope = "col";
+      if (tip) {
+        const name = el("span", "recipe-tip", [label]);
+        setTip(name, text("tips.kinds.fact"), label, tip);
+        cell.replaceChildren(name);
+      }
+      return cell;
+    };
+    columns.replaceChildren(el("tr", null, [
+      heading(text("columns.model")),
+      heading(text("columns.hardware")),
+      heading(text("columns.server")),
+      heading(text("columns.context"), text("tips.tags.context"), "recipe-col-context"),
+      heading(text("columns.tools"), text("tips.tags.tools"), "recipe-col-mark"),
+      heading(text("columns.reasoning"), text("tips.tags.reasoning"), "recipe-col-mark"),
+      useCaseHeading(),
+    ]));
   }
 
-  function resultRow(r) {
-    // A cell with the name of its column for screen readers, for example "Hardware: GB10".
-    const cell = (name, value) => el("span", "recipe-row__where", [el("span", "sr-only", [`${text(`columns.${name}`)}: `]), value]);
-    const row = el("button", "recipe-row", [
-      el("span", "recipe-row__name", [r.model, el("span", "recipe-row__publisher", [r.publisher])]),
-      cell("hardware", r.hardwareLabel),
-      cell("server", r.serverLabel),
-      el("span", "recipe-tags", tags(r, { context: false })),
+  // The heading of the use cases, with a "?" button. The button opens a pop-up
+  // with the sources of the benchmark data that the use cases read, and their
+  // links. It is a popover: a click or a tap opens it, Escape or a click outside
+  // closes it, and the keyboard reaches its links after the button.
+  function useCaseHeading() {
+    const cell = el("th", null, [text("columns.useCase")]);
+    cell.scope = "col";
+    const sources = (data.benchmarks && data.benchmarks.sources) || [];
+    if (!sources.length || !USE_CASES.length || !HTMLElement.prototype.togglePopover) return cell;
+
+    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
+    const about = el("div", "recipe-about", [
+      el("p", "tip__kind", [text("columns.useCase")]),
+      el("p", null, [text("useCases.credit"), ...links, "."]),
     ]);
-    row.type = "button";
-    row.setAttribute("aria-pressed", String(r.id === state.selected));
+    about.id = "recipe-about";
+    about.popover = "auto";
+
+    const button = el("button", "recipe-about-button", ["?"]);
+    button.type = "button";
+    button.setAttribute("popovertarget", about.id);
+    button.setAttribute("aria-label", text("useCases.about"));
+    button.title = text("useCases.about");
+
+    // Under the button, and always on screen. It closes when the table or the page scrolls.
+    about.addEventListener("toggle", (event) => {
+      button.setAttribute("aria-expanded", String(event.newState === "open"));
+      if (event.newState !== "open") return;
+      const box = button.getBoundingClientRect();
+      const margin = 8;
+      const { width } = about.getBoundingClientRect();
+      about.style.top = `${Math.round(box.bottom + margin)}px`;
+      about.style.left = `${Math.round(Math.max(margin, Math.min(box.left + box.width / 2 - width / 2, document.documentElement.clientWidth - width - margin)))}px`;
+    });
+    const close = () => { if (about.matches(":popover-open")) about.hidePopover(); };
+    results.closest(".recipe-scroll")?.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("resize", close);
+
+    cell.append(button, about);
+    return cell;
+  }
+
+  // One row for each recipe. The row takes a click; the model name is a button,
+  // for the keyboard and for screen readers.
+  function resultRow(r) {
+    const selected = r.id === state.selected;
+    const pick = el("button", "recipe-pick", [el("span", "recipe-pick__model", [r.model]), el("span", "recipe-pick__publisher", [r.publisher])]);
+    pick.type = "button";
+    pick.setAttribute("aria-pressed", String(selected));
+    const useCases = (r.useCases || []).flatMap((id, i) => {
+      const name = el("span", "recipe-tip", [text(`useCases.${id}`)]);
+      setTip(name, text("tips.kinds.useCase"), text(`useCases.${id}`), text(`tips.useCases.${id}`));
+      return i ? [", ", name] : [name];
+    });
+    const row = el("tr", `recipe-row${selected ? " is-selected" : ""}`, [
+      el("td", "recipe-cell-model", [pick]),
+      el("td", "recipe-cell-nowrap", [r.hardwareLabel]),
+      el("td", "recipe-cell-nowrap", [r.serverLabel]),
+      el("td", null, [contextBar(r.facts.context)]),
+      el("td", "recipe-cell-mark", [mark(r.facts.tools)]),
+      el("td", "recipe-cell-mark", [mark(r.facts.reasoning)]),
+      el("td", "recipe-cell-uses", useCases),
+    ]);
     row.addEventListener("click", () => {
       state.selected = r.id;
-      // A visitor who selects a recipe wants to see it: the sheet comes back.
-      if (state.sheetHidden) showSheet(true);
       renderResults();
-      // On a narrow screen the sheet is under the list: bring it into view.
+      results.querySelector(".recipe-row.is-selected .recipe-pick")?.focus({ preventScroll: true });
+      // When the sheet is under the list, bring it into view.
       if (matchMedia("(max-width: 900px), (max-aspect-ratio: 1/1)").matches) sheet.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     return row;
   }
 
-  // In the list, the tags of a recipe stay on one line. The tags that do not
-  // fit are hidden, and a last tag gives their number: "+2". The sheet shows all the tags.
-  function fitTags(container) {
-    container.querySelector(".recipe-tag--more")?.remove();
-    const all = [...container.children];
-    all.forEach((tag) => { tag.hidden = false; });
-    if (container.scrollWidth <= container.clientWidth) return;
-
-    const more = el("span", "recipe-tag recipe-tag--more");
-    container.append(more);
-    // Hide tags from the end until the line fits. The use case tags are first, so they stay the longest.
-    for (let shown = all.length - 1; shown >= 0; shown -= 1) {
-      all[shown].hidden = true;
-      const hiddenTags = all.slice(shown);
-      more.textContent = `+${hiddenTags.length}`;
-      // The pop-up and screen readers get the names of the hidden tags.
-      const names = hiddenTags.map((hiddenTag) => hiddenTag.textContent).join(", ");
-      const count = text(hiddenTags.length === 1 ? "tags.moreOne" : "tags.more", { count: hiddenTags.length });
-      setTip(more, text("tips.kinds.more"), count, names);
-      more.setAttribute("aria-label", `${count}: ${names}`);
-      if (container.scrollWidth <= container.clientWidth) break;
-    }
+  // The context length as a bar, on a log scale from 16K tokens to the longest
+  // recipe, then its value. A recipe that does not set it uses the default of the model server.
+  function contextBar(tokens) {
+    const longest = Math.max(...RECIPES.map((r) => r.facts.context || 0));
+    const low = Math.log2(16384);
+    const width = tokens ? Math.max(6, ((Math.log2(tokens) - low) / (Math.log2(longest) - low)) * 100) : 0;
+    const fill = el("i");
+    fill.style.width = `${width}%`;
+    return el("span", "recipe-context", [
+      el("span", "recipe-context__bar", [fill]),
+      el("span", "recipe-context__value", [tokens ? `${Math.round(tokens / 1024)}K` : text("columns.contextDefault")]),
+    ]);
   }
 
-  function fitAllTags() {
-    results.querySelectorAll(".recipe-tags").forEach(fitTags);
+  // Tool calling and reasoning: a filled dot for yes, an empty dot for no.
+  function mark(on) {
+    return el("span", `recipe-mark${on ? " is-on" : ""}`, [el("span", "sr-only", [text(on ? "facts.yes" : "facts.no")])]);
   }
-
-  // The space for the tags changes with the width of the list, and the width
-  // of a tag changes when the font is loaded.
-  new ResizeObserver(fitAllTags).observe(results);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAllTags);
 
   // --- Pop-ups ---------------------------------------------------------------
 
@@ -377,6 +422,7 @@
       return;
     }
 
+    const facts = r.facts;
     const file = r.files.find((f) => f.name === state.file) || r.files.find((f) => f.name === "model-server-config.yaml") || r.files[0];
     const tabs = el("div", "recipe-tabs", r.files.map((f) => {
       const tab = el("button", "recipe-tab", [f.name]);
@@ -386,29 +432,36 @@
       return tab;
     }));
 
-    // Each link sits beside what it documents: the model card beside the model
-    // name, the recipe on GitHub beside the name of the files panel.
+    // The facts of the recipe: two columns on a wide sheet. A wide fact takes the full width.
+    const fact = (label, value, wide) => [el("dt", wide ? "is-wide" : null, [label]), el("dd", wide ? "is-wide" : null, [value])];
+    const list = el("dl", "recipe-facts", [
+      ...fact(text("columns.hardware"), r.hardwareLabel),
+      ...fact(text("columns.server"), r.serverLabel),
+      ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
+      ...fact(text("columns.useCase"), (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ")),
+      ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
+      ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
+      ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
+      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`), true),
+    ]);
+
     sheet.replaceChildren(...[
-      // Each fact one time: the model with its publisher, then the server and the hardware.
+      // The model with its publisher, then the server and the hardware, then the facts.
       el("div", "recipe-sheet__head", [
-        el("div", "recipe-sheet__top", [
-          el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
-          link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`),
-        ]),
+        el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
         el("p", "recipe-sheet__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
-        el("div", "recipe-tags", tags(r)),
+        list,
       ]),
 
       STACK_IS_PUBLIC && useThisRecipe(r),
 
-      el("section", "recipe-panel recipe-files", [
-        el("div", "recipe-panel__top", [
-          el("h3", "recipe-name", [text("sheet.files")]),
+      el("section", "recipe-files", [
+        el("div", "recipe-files__top", [
+          el("h3", "recipe-files__name", [text("sheet.files")]),
           STACK_IS_PUBLIC && link(text("sheet.github"), `${data.repo}/tree/${data.branch}/recipes/${r.id}`),
         ]),
         tabs,
-        codeBlock(file.text, "recipe-code--file"),
-        r.image && el("p", "recipe-sheet__image", [text("sheet.image"), " ", el("code", null, [r.image])]),
+        codeBlock(file.text, "recipe-code--file", file.name),
       ]),
     ].filter(Boolean));
   }
@@ -416,34 +469,13 @@
   // The steps to install the recipe. Shown only when the stack repository is public.
   function useThisRecipe(r) {
     const env = [`HARDWARE_TARGET=${r.hardware}`, `MODEL_NAME=${r.model}`, `MODEL_ORG=${r.publisher}`, `MODEL_SERVER=${r.server}`].join("\n");
-    return el("section", "recipe-panel", [
-      el("h3", "recipe-name", [text("sheet.use.title")]),
+    return el("section", "recipe-use-panel", [
+      el("h3", "recipe-files__name", [text("sheet.use.title")]),
       el("ol", "recipe-use", [
         el("li", null, [text("sheet.use.select"), codeBlock(env)]),
         el("li", null, [text("sheet.use.start"), codeBlock("docker compose up -d")]),
       ]),
     ]);
-  }
-
-  // The use cases of the recipe, then the facts that the recipe files state.
-  // A fact that the files do not state shows no tag.
-  // The list shows no context length: only the sheet shows it.
-  // A use case tag has its own color: it says what the recipe is for. The other tags are facts.
-  function tags(r, { context = true } = {}) {
-    const facts = r.facts;
-    const useCases = (r.useCases || []).map((id) => tag(text(`useCases.${id}`), "useCase", text(`tips.useCases.${id}`), "recipe-tag--use"));
-    const list = [];
-    if (context && facts.context) list.push(tag(text("tags.context", { count: facts.context.toLocaleString(app.locale) }), "fact", text("tips.tags.context")));
-    if (facts.tools) list.push(tag(text("tags.tools"), "fact", text("tips.tags.tools")));
-    if (facts.reasoning) list.push(tag(text("tags.reasoning"), "fact", text("tips.tags.reasoning")));
-    return [...useCases, ...list];
-  }
-
-  // A tag, with the content of its pop-up: the kind of tag and its description.
-  function tag(label, kind, description, modifier) {
-    const node = el("span", `recipe-tag ${modifier || ""}`.trim(), [label]);
-    setTip(node, text(`tips.kinds.${kind}`), label, description);
-    return node;
   }
 
   function setTip(node, kind, name, description) {
@@ -452,16 +484,9 @@
     node.dataset.tipText = description;
   }
 
-  // The sources of the benchmark data that the use cases read, under the list.
-  function renderCredit() {
-    const credit = document.getElementById("recipe-credit");
-    const sources = (data.benchmarks && data.benchmarks.sources) || [];
-    if (!credit || !sources.length || !USE_CASES.length) return;
-    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
-    credit.replaceChildren(text("useCases.credit"), ...links);
-  }
-
-  function codeBlock(content, modifier) {
+  // A file, or a command, in the dark panel with the Copy button. In a YAML or
+  // .env file the keys and the comments have their own colors.
+  function codeBlock(content, modifier, name = "") {
     const copy = el("button", "recipe-copy", [text("sheet.copy")]);
     copy.type = "button";
     copy.addEventListener("click", async () => {
@@ -469,7 +494,24 @@
       catch { copy.textContent = text("sheet.copyFailed"); }
       setTimeout(() => { copy.textContent = text("sheet.copy"); }, 1600);
     });
-    return el("div", `recipe-code ${modifier || ""}`.trim(), [el("pre", null, [content]), copy]);
+    const pre = el("pre");
+    if (/\.ya?ml$|^\.env$/.test(name)) pre.append(...highlight(content));
+    else pre.textContent = content;
+    return el("div", `recipe-code ${modifier || ""}`.trim(), [pre, copy]);
+  }
+
+  // The lines of a YAML or .env file, with the keys and the comments in spans.
+  function highlight(content) {
+    return content.split("\n").flatMap((line, i) => {
+      const parts = [];
+      const key = line.match(/^(\s*-?\s*[\w.@-]+)(\s*[:=])/);
+      let rest = line;
+      if (key) { parts.push(el("span", "recipe-code__key", [key[1]]), key[2]); rest = line.slice(key[0].length); }
+      const hash = rest.search(/(^|\s)#/);
+      if (hash >= 0) parts.push(rest.slice(0, hash), el("span", "recipe-code__comment", [rest.slice(hash)]));
+      else parts.push(rest);
+      return i ? ["\n", ...parts] : parts;
+    });
   }
 
   function link(label, href) {

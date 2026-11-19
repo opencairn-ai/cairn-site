@@ -352,8 +352,7 @@ window.CAIRN_COPY.en = {
     title: "Reference recipes for self-hosted models",
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
     limit: "At the moment, the recipes are for single-node setups only.",
-    // The small pink line and the hint above the panels, as on the stack page.
-    eyebrow: "Explore the recipes",
+    // The hint above the filters.
     hint: "Select a recipe to see its files.",
     // The name of the list panel.
     listLabel: "Recipes",
@@ -369,12 +368,26 @@ window.CAIRN_COPY.en = {
       model: "Model",
       modelPlaceholder: "Model name",
     },
-    // The column headings of the list.
+    // The column headings of the table. The sheet uses the same names for its facts.
     columns: {
       model: "Model",
       hardware: "Hardware",
       server: "Model server",
-      tags: "Tags",
+      context: "Context",
+      // In the table, when the recipe does not set a context length.
+      contextDefault: "Default",
+      tools: "Tool calling",
+      reasoning: "Reasoning",
+      useCase: "Use case",
+    },
+    // The facts of the selected recipe, in the sheet. {count} is a number of tokens.
+    facts: {
+      image: "Model server image",
+      context: "{count} tokens",
+      contextDefault: "Model server default",
+      model: "Model",
+      yes: "Yes",
+      no: "No",
     },
     // The model server and the hardware of a recipe, for example "vLLM on GB10".
     where: "{server} on {hardware}",
@@ -387,15 +400,18 @@ window.CAIRN_COPY.en = {
       coding: "Coding",
       documents: "Documents",
       // Under the list, before the links to the sources: "… from Hugging Face and Artificial Analysis".
-      credit: "The use case tags use benchmark data from",
+      // The pop-up of the "?" button next to the "Use case" heading:
+      // "… from Hugging Face and Artificial Analysis." The links go after this text.
+      credit: "The use cases use benchmark data from",
+      // The name of the "?" button, for screen readers and as its tooltip.
+      about: "About the use cases",
       creditAnd: "and",
     },
-    // The pop-up of a tag: the kind of tag, the name of the tag, then its description.
+    // The pop-up of a column heading or a use case: its kind, its name, then its description.
     tips: {
       kinds: {
         useCase: "Use case",
         fact: "Configuration",
-        more: "Hidden tags",
       },
       useCases: {
         chat: "A person talks with the model: questions, writing and explanations.",
@@ -408,23 +424,10 @@ window.CAIRN_COPY.en = {
         reasoning: "The model server returns the reasoning of the model apart from its answer.",
       },
     },
-    tags: {
-      context: "Context: {count} tokens",
-      // The name of the tag "+2", which shows when the tags of a recipe do not fit
-      // on one line of the list. Its pop-up gives the names of the hidden tags.
-      moreOne: "1 more tag",
-      more: "{count} more tags",
-      tools: "Tool calling",
-      reasoning: "Reasoning",
-    },
     sheet: {
       // The name of the sheet for screen readers.
       label: "Selected recipe",
-      // The name of the button that hides the sheet, then shows it again.
-      hide: "Hide the selected recipe",
-      show: "Show the selected recipe",
       files: "Recipe files",
-      image: "Model server image:",
       copy: "Copy",
       copied: "Copied",
       copyFailed: "Copy failed",
