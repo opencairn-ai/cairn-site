@@ -32,9 +32,10 @@ wrangler.jsonc                            Old Cloudflare Worker host, kept as th
 
 ## Pages and tabs
 
-Each tab is one HTML file. All four files repeat the same header and, under it,
-the same `<nav class="site-nav">`; `<body data-page="…">` names the page, and the
-script marks its tab as the current one. The tab names are under `nav` in the copy files.
+Each tab is one HTML file. All four files repeat the same header, with the
+`<nav class="site-nav">` of the tabs inside it, after the codename: the header is
+one row (two rows on narrow screens, three on phones). `<body data-page="…">`
+names the page, and the script marks its tab as the current one. The tab names are under `nav` in the copy files.
 To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
 Hello World is for business leaders; the stack page is for engineers. Hello World
