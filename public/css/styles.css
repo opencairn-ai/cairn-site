@@ -1073,19 +1073,20 @@ h1 {
 }
 
 /* --- Hello World -----------------------------------------------------------
-   For business leaders. The title on the full width, then two columns. Left: the
-   reason for Cairn, then its three points, one under the other. Right: what Cairn is, under a rule (the
-   definition and the links), then a carousel of the four principles, with their
-   names as tabs. The frame of the picture is the only surface (Sand, as a layer
-   of the schema). Narrow screens show one column.
-   The script (js/hello.js) drives the carousel.                               */
+   For business leaders. Three rows, each on the full width:
+   1. The title.
+   2. The reason for Cairn, then what Cairn is (two paragraphs) with their two
+      links, then the three points in columns, as the goal of the stack page.
+   3. The carousel of the four principles: the list on the left (each name, the
+      line of its time, and the description of the current one), the picture of
+      the current principle on the right. The frame of the picture is the only
+      surface (Sand, as a layer of the schema).
+   Narrow screens show one column. The script (js/hello.js) drives the carousel. */
 
 .hello {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  /* Each column takes its own height. */
-  align-items: start;
-  gap: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
   padding: 1.2rem 0 0.4rem;
 }
 
@@ -1096,57 +1097,51 @@ h1 {
 
 .pic-defs { position: absolute; }
 
-/* The left column. The title and the lead are larger than on the stack page: the
-   lead is the largest text after the title. The three points are under the lead. */
-/* The title takes the full width, over the two columns. */
-.hello .hello__heading { grid-column: 1 / -1; margin: 0.5rem 0 0; font-size: 3.3rem; text-wrap: balance; }
-.hello .intro { margin: 0; padding: 0 0 0.6rem; }
-.hello .goal { display: block; font-size: 1.08rem; }
-.hello .goal__lead { font-size: 1.6rem; font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; text-wrap: pretty; }
-/* The highlighted sentence of the lead starts on a new line. Its lines have equal
-   lengths, so the line break comes between its two sentences where the width permits. */
-.hello .goal__lead .hl { display: block; margin-top: 0.45em; text-wrap: balance; }
-.hello .goal__points { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; margin-top: 2.2rem; line-height: 1.4; }
-.hello .goal__point { padding-top: 0.7rem; }
-.hello .goal__point-title { margin-bottom: 0.2rem; font-size: 1.18rem; line-height: 1.25; }
-
-/* The right column: under a rule, as the sheet of the stack page. The slide that
-   comes in starts a short distance to the right: the column cuts it, so it adds
-   no width to the page. */
-.what {
-  overflow: hidden;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--color-header-rule);
-}
-
-.hello__title {
-  color: var(--color-title);
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+/* 1. The title. */
+.hello .hello__heading {
+  margin: 0.5rem 0 -0.6rem;
+  font-size: clamp(2.6rem, 5.4vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
+/* 2. The paragraph and its links on the left; the three points on the right, in
+   the columns of the goal of the stack page (a rule over each one). */
+.hello__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 2.8rem;
+  align-items: start;
+  margin: 0;
+}
+.hello__lead { color: var(--color-title); font-size: 1.3rem; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; }
+/* What Cairn is: its lines have equal lengths, so no word is alone on the last line. */
+.hello__lead + .hello__lead { margin-top: 0.8em; text-wrap: balance; }
+.hello .goal__points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; font-size: 0.95rem; line-height: 1.4; }
+.hello .goal__point { padding-top: 0.6rem; }
+.hello .goal__point-title { margin-bottom: 0.25rem; }
 
-.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1rem; }
+.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1.2rem; }
 /* The button of the header: 14px, a 1px border, the small radius. */
 .what__links .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
 .what__mail { margin-left: 0.4rem; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
 .what__mail:hover { color: var(--color-link-hover); }
 
-/* The carousel: all the slides are in the same place, and one shows. */
-.carousel { display: flex; flex-direction: column; margin-top: 1.8rem; }
+/* 3. The carousel: the list on the left, the picture on the right. All the slides
+   are in the same place, and one shows. The slide that comes in starts a short
+   distance to the right: the section cuts it, so it adds no width to the page. */
+.hello__principles { overflow: hidden; padding-top: 1.4rem; border-top: 1px solid var(--color-header-rule); }
+.carousel { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2.8rem; align-items: start; }
 .carousel__slides { display: grid; }
+/* The name and the description of a principle are in the list: the slide shows
+   only its picture. */
+.carousel__slide > div:first-child { display: none; }
 
-/* The text, then the picture under it: the picture has the width of the slide and
-   the height that the text leaves. */
+/* A slide: its picture. */
 .carousel__slide {
   display: grid;
   grid-area: 1 / 1;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 1.1rem;
-  padding-top: 1.2rem;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.45s ease, visibility 0s 0.45s;
@@ -1186,18 +1181,18 @@ h1 {
 }
 :root[data-theme="dark"] .carousel__picture { background: rgb(220 186 246 / 0.12); }
 
-/* The tabs, then the pause button. */
-.carousel__nav { display: flex; align-items: flex-end; gap: 0.6rem; }
-.carousel__marks { display: grid; flex: 1; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+/* The list of the principles, then the pause button. */
+.carousel__nav { display: flex; flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+.carousel__marks { display: flex; flex-direction: column; gap: 1.3rem; align-self: stretch; margin: 0; padding: 0; list-style: none; }
 
-/* A tab: the name of the principle (the nav tab of the design system, 14px), then
-   a line. The line of the current tab fills in Magenta in the time that the
-   principle stays; it is full when the carousel does not move. */
+/* A principle of the list: its name, a line, then its description (the current
+   principle only). The line of the current principle fills in Magenta in the time
+   that the principle stays; it is full when the carousel does not move. */
 .carousel__mark {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  width: 100%;
   padding: 0;
   border: 0;
   background: none;
@@ -1206,10 +1201,12 @@ h1 {
   text-align: left;
   cursor: pointer;
 }
-.carousel__mark-name { font-size: 0.875rem; font-weight: 500; line-height: 1.25; }
+.carousel__mark-name { font-size: 1.2rem; font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; }
+.carousel__item-text { display: none; margin-top: 0.7rem; max-width: 34em; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
+.carousel__item.is-current .carousel__item-text { display: block; }
 .carousel__mark:hover,
 .carousel__mark[aria-current="true"] { color: var(--color-text); }
-.carousel__mark[aria-current="true"] .carousel__mark-name { font-weight: 700; }
+.carousel__mark[aria-current="true"] { color: var(--color-title); }
 
 .carousel__mark i {
   display: block;
@@ -1538,23 +1535,18 @@ h1 {
 
 /* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .hello { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; padding-top: 0.7rem; }
-  .hello .intro { padding: 0; }
-  .hello .hello__heading { margin-bottom: -1.2rem; font-size: 2.35rem; }
-  .hello .goal { font-size: 1rem; }
-  .hello .goal__lead { font-size: 1.3rem; line-height: 1.35; }
-  .hello .goal__points { gap: 0.8rem; margin-top: 1.4rem; }
+  .hello { gap: 2.4rem; padding-top: 0.7rem; }
+  .hello .hello__heading { margin-bottom: -0.8rem; font-size: 2.35rem; }
+  .hello__intro,
+  .carousel { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .hello__lead { font-size: 1.2rem; }
+  .hello .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   .hello .goal__point { padding-top: 0.45rem; }
   .hello .goal__point-title { margin-bottom: 0; font-size: 1rem; }
-  .hello__title { font-size: 1.4rem; }
-  .carousel__slide { gap: 1rem; }
 }
 
-/* Phones: smaller pictures, so each one fits the width of the slide. The tabs
-   go in two rows of two. */
+/* Phones: smaller pictures, so each one fits the width of the slide. */
 @media (max-width: 640px) {
-  .carousel__marks { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0.9rem; }
-  .carousel__picture { padding: 1rem 0.8rem; }
   .carousel__picture { padding: 1rem 0.8rem; }
   .pic { font-size: 0.9rem; }
   .pic__label { font-size: 0.66rem; }

@@ -83,12 +83,18 @@
     <!-- The title, on the full width of the page. -->
     <h1 class="hello__heading" data-text="intro.title"></h1>
 
-    <!-- The left column: the reason for Cairn, then its three points. -->
-    <section class="intro">
-      <div class="goal">
-        <p class="goal__lead" data-text="hello.lead"></p>
-        <ul class="goal__points" id="goal-points" data-points="hello.points"></ul>
+    <!-- The reason for Cairn, then what Cairn is, with the two links under them;
+         then the three points in columns, as the goal of the stack page. -->
+    <section class="intro hello__intro">
+      <div class="hello__about">
+        <p class="hello__lead" data-text="hello.lead"></p>
+        <p class="hello__lead" data-text="hello.what.title"></p>
+        <p class="what__links">
+          <a class="btn btn--primary" href="stack.html" data-page="stack" data-text="hello.what.stack"></a>
+          <a class="what__mail" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
+        </p>
       </div>
+      <ul class="goal__points" id="goal-points" data-points="hello.points"></ul>
     </section>
 
     <!-- The marks of the pictures, which more than one picture uses. -->
@@ -103,25 +109,17 @@
       </symbol>
     </svg>
 
-    <!-- The right column: what Cairn is, under a rule; then the four principles. -->
-    <section class="what">
-      <h2 class="hello__title" data-text="hello.what.title"></h2>
-      <p class="what__links">
-        <a class="btn btn--primary" href="stack.html" data-page="stack" data-text="hello.what.stack"></a>
-        <a class="what__mail" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
-      </p>
-
-      <!-- The four principles, one at a time: a name, a description and a picture.
-           The carousel goes to the next principle by itself. The script (js/hello.js)
-           drives it and makes the marks under it, one for each principle.
-           The texts are under `hello` in the copy files; the layer and component
-           names in the pictures are the names of the schema, under `stack`. -->
+    <!-- The four principles, one at a time. On the left, the list of the four:
+         each name, the line that fills in the time that the principle stays, and
+         the description of the current principle. On the right, its picture. The
+         carousel goes to the next principle by itself. The script (js/hello.js)
+         drives it and makes the list from the slides.
+         The texts are under `hello` in the copy files; the layer and component
+         names in the pictures are the names of the schema, under `stack`. -->
+    <section class="hello__principles">
       <div class="carousel" id="principles" role="group" data-aria-label="hello.carousel.label">
-        <!-- The names of the four principles, as tabs: the script (js/hello.js) makes
-             one for each slide. The line under the current name fills in the time
-             that the principle stays. Then the button that pauses the carousel. -->
         <div class="carousel__nav">
-          <div class="carousel__marks"></div>
+          <ul class="carousel__marks"></ul>
           <button type="button" class="carousel__button" data-carousel="toggle">
             <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
             <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
@@ -246,8 +244,6 @@
 
         </div>
 
-        <!-- The marks (one for each principle, made by the script), then the
-             buttons. The script gives the pause button its name. -->
       </div>
     </section>
   </main>

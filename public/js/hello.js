@@ -8,7 +8,7 @@
  *
  * css/styles.css draws the slides and the pictures, and moves the parts of the
  * pictures. This script changes the slide that shows and makes the marks under the
- * slides: the tabs with the names of the principles. It also makes the points that move in the
+ * slides: the list of the principles, with their names and descriptions. It also makes the points that move in the
  * picture of the third principle ("Your teams keep their tools").
  */
 (() => {
@@ -106,33 +106,36 @@
 
     root.style.setProperty("--carousel-time", `${SLIDE_TIME}ms`);
 
-    // One tab for each principle: its name, then the line that fills with the time.
-    // For screen readers, the name of a tab is the position and the name of its
-    // principle, for example "2 of 4: Replaceable by contract". The left and right
-    // arrow keys move between the tabs.
-    const marks = slides.map((slide, i) => {
+    // The list of the principles: for each one, a button with its name and the
+    // line that fills with the time, then its description, which shows under the
+    // current principle only. For screen readers, the name of a button is the
+    // position and the name of its principle, for example "2 of 4: Replaceable by
+    // contract". The up and down arrow keys (and left and right) move in the list.
+    const items = slides.map((slide, i) => {
+      const name = slide.querySelector(".carousel__name").textContent;
       const mark = el("button", "carousel__mark");
       mark.type = "button";
       mark.setAttribute(
         "aria-label",
-        t("hello.carousel.position")
-          .replace("{index}", i + 1)
-          .replace("{count}", slides.length)
-          .replace("{name}", slide.querySelector(".carousel__name").textContent)
+        t("hello.carousel.position").replace("{index}", i + 1).replace("{count}", slides.length).replace("{name}", name)
       );
       const line = el("i");
       line.append(el("b"));
-      mark.append(el("span", "carousel__mark-name", slide.querySelector(".carousel__name").textContent), line);
+      mark.append(el("span", "carousel__mark-name", name), line);
       mark.addEventListener("click", () => show(i));
       mark.addEventListener("keydown", (event) => {
-        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+        if (!step) return;
         event.preventDefault();
-        show(index + (event.key === "ArrowRight" ? 1 : -1));
+        show(index + step);
         marks[index].focus();
       });
-      return mark;
+      const item = el("li", "carousel__item");
+      item.append(mark, el("p", "carousel__item-text", slide.querySelector(".carousel__text").textContent));
+      return item;
     });
-    root.querySelector(".carousel__marks").replaceChildren(...marks);
+    const marks = items.map((item) => item.querySelector(".carousel__mark"));
+    root.querySelector(".carousel__marks").replaceChildren(...items);
 
     // Starts the time of the slide that shows from zero, or stops it.
     function run() {
@@ -153,6 +156,7 @@
         slide.setAttribute("aria-hidden", String(i !== index));
       });
       marks.forEach((mark, i) => mark.setAttribute("aria-current", String(i === index)));
+      items.forEach((item, i) => item.classList.toggle("is-current", i === index));
       // The moving points of a picture start again with their slide.
       slides[index].querySelectorAll("svg").forEach((svg) => {
         if (svg.setCurrentTime) svg.setCurrentTime(0);
