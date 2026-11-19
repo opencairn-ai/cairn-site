@@ -813,7 +813,7 @@ h1 {
 [data-copy]:focus-visible { outline: none; }
 
 /* The selected box (and the box of a pop-up, and keyboard focus): the Marshmallow
-   band and a 2px Magenta line, as the selected recipe. The line is the 1px border
+   band, as the selected recipe, and a 2px Magenta border. The line is the 1px border
    and a 1px inset shadow, so the box does not change size. Pink is for in-scope only. */
 .comp:is(.is-active, .is-selected, :focus-visible) {
   border-color: var(--color-pink);
@@ -1130,7 +1130,7 @@ h1 {
 /* 3. The carousel: the list on the left, the picture on the right. All the slides
    are in the same place, and one shows. The slide that comes in starts a short
    distance to the right: the section cuts it, so it adds no width to the page. */
-.hello__principles { overflow: hidden; padding-top: 1.4rem; border-top: 1px solid var(--color-header-rule); }
+.hello__principles { overflow: hidden; }
 .carousel { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2.8rem; align-items: start; }
 .carousel__slides { display: grid; }
 /* The name and the description of a principle are in the list: the slide shows
@@ -1181,17 +1181,50 @@ h1 {
 }
 :root[data-theme="dark"] .carousel__picture { background: rgb(220 186 246 / 0.12); }
 
-/* The list of the principles, then the pause button. */
-.carousel__nav { display: flex; flex-direction: column; align-items: flex-start; gap: 0.8rem; }
-.carousel__marks { display: flex; flex-direction: column; gap: 1.3rem; align-self: stretch; margin: 0; padding: 0; list-style: none; }
+/* The list of the principles: a table of four rows, as the recipes table. A
+   heading row (the name of the list and the pause button), a strong rule, then
+   hairlines between the rows. The current row is in the Marshmallow band, with
+   its description; its time is a thin ink bar on a track at the end of the row,
+   as the context bar of a recipe. */
+.carousel__nav { display: flex; flex-direction: column; }
+.carousel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0.35rem 0.9rem;
+  border-bottom: 1px solid var(--color-header-rule);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.carousel__marks { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.carousel__item { padding: 0.85rem 0.9rem 0.9rem; border-bottom: 1px solid var(--color-schema-line); transition: background 0.2s; }
+/* The current row: a Magenta block before its name, as the cursor of a terminal,
+   in place of a band. Each row keeps the room of the block, so the names stay
+   on one line of alignment. The block blinks, as a cursor, unless the visitor
+   asks the system for reduced motion. */
+.carousel__mark-name::before {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-right: 0.55em;
+  vertical-align: -0.17em;
+  background: transparent;
+}
+.carousel__mark[aria-current="true"] .carousel__mark-name::before { background: var(--color-pink); }
+.carousel__mark:hover:not([aria-current="true"]) .carousel__mark-name::before { background: var(--color-schema-line); }
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__mark[aria-current="true"] .carousel__mark-name::before { animation: cursor-blink 1.06s steps(1) infinite; }
+}
+@keyframes cursor-blink { 50% { background: transparent; } }
+/* The description lines up with the name, after the room of the block. */
+.carousel__item-text { margin-left: calc(1.05em * 1.1); }
 
-/* A principle of the list: its name, a line, then its description (the current
-   principle only). The line of the current principle fills in Magenta in the time
-   that the principle stays; it is full when the carousel does not move. */
 .carousel__mark {
   display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
+  align-items: center;
+  gap: 1.2rem;
   width: 100%;
   padding: 0;
   border: 0;
@@ -1201,23 +1234,17 @@ h1 {
   text-align: left;
   cursor: pointer;
 }
-.carousel__mark-name { font-size: 1.2rem; font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; }
-.carousel__item-text { display: none; margin-top: 0.7rem; max-width: 34em; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
-.carousel__item.is-current .carousel__item-text { display: block; }
+.carousel__mark-name { flex: 1; font-size: 1.1rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
 .carousel__mark:hover,
-.carousel__mark[aria-current="true"] { color: var(--color-text); }
 .carousel__mark[aria-current="true"] { color: var(--color-title); }
+.carousel__item-text { display: none; margin-top: 0.5rem; padding-right: 5.7rem; max-width: 34em; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
+.carousel__item.is-current .carousel__item-text { display: block; }
 
-.carousel__mark i {
-  display: block;
-  overflow: hidden;
-  width: 100%;
-  height: 2px;
-  background: var(--color-schema-line);
-}
-
-.carousel__mark:hover i { background: var(--color-header-rule); }
-.carousel__mark b { display: block; width: 0; height: 100%; background: var(--color-pink); }
+/* The time: a thin bar on a track (Deep purple on light, Pale purple on dark). */
+.carousel__mark i { position: relative; flex: none; overflow: hidden; width: 4.5rem; height: 0.35rem; background: rgb(41 20 53 / 0.1); }
+:root[data-theme="dark"] .carousel__mark i { background: rgb(245 232 255 / 0.12); }
+.carousel__mark b { display: block; width: 0; height: 100%; background: var(--color-title); }
+:root[data-theme="dark"] .carousel__mark b { background: #dcbaf6; }
 .carousel__mark[aria-current="true"] b { width: 100%; }
 .carousel.is-running .carousel__mark[aria-current="true"] b { animation: carousel-time var(--carousel-time, 7s) linear both; }
 
@@ -1243,6 +1270,9 @@ h1 {
 
 .carousel__button:hover { background: var(--color-ghost-hover); }
 .carousel__button svg { width: 1.1rem; height: 1.1rem; }
+.carousel__head .carousel__button { width: 1.8rem; height: 1.8rem; color: var(--color-text-muted); }
+.carousel__head .carousel__button:hover { color: var(--color-text); }
+.carousel__head .carousel__button svg { width: 0.9rem; height: 0.9rem; }
 .carousel__icon--play,
 .carousel.is-paused .carousel__icon--pause { display: none; }
 .carousel.is-paused .carousel__icon--play { display: block; }
@@ -1577,8 +1607,8 @@ h1 {
    js/recipes-data.js.
 
    Field notes: no panels and no boxes, hairline rules. The selected recipe is in
-   a Marshmallow band with a 2px Magenta line at its start (the line of the
-   current tab); a filter with a choice gets the same band. The files are in a
+   a Marshmallow band, with no vertical line (the table has none); a filter with
+   a choice gets the same band. The files are in a
    dark panel. The table sits beside the sheet on a wide screen.
    On a wide screen that is tall enough, the page is the height of the window:
    the table and the file preview scroll inside it, and the page does not. A
@@ -1774,7 +1804,7 @@ h1 {
 .recipe-row { cursor: pointer; }
 .recipe-row:hover td { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
 .recipe-row.is-selected td { background: var(--recipe-band); }
-.recipe-row.is-selected td:first-child { box-shadow: inset 2px 0 0 var(--color-pink); }
+
 
 /* The model name is the button of the row. */
 .recipe-pick {

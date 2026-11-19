@@ -119,11 +119,16 @@
     <section class="hello__principles">
       <div class="carousel" id="principles" role="group" data-aria-label="hello.carousel.label">
         <div class="carousel__nav">
+          <!-- The heading row of the list, as the column headings of the recipes
+               table: the name of the list, then the button that pauses the carousel. -->
+          <div class="carousel__head">
+            <span data-text="hello.carousel.label"></span>
+            <button type="button" class="carousel__button" data-carousel="toggle">
+              <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+              <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+          </div>
           <ul class="carousel__marks"></ul>
-          <button type="button" class="carousel__button" data-carousel="toggle">
-            <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
-            <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          </button>
         </div>
         <div class="carousel__slides">
 

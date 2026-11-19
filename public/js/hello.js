@@ -2,8 +2,9 @@
  * The Hello World page: the carousel of the four principles.
  *
  * The carousel shows one principle at a time and goes to the next one by itself.
- * It stops while the pointer or the keyboard focus is on it, and when the visitor
- * uses the pause button. A visitor who asks the system for reduced motion sees a
+ * It stops when the visitor chooses a principle (a click, or the arrow keys) or
+ * uses the pause button, and while the keyboard focus is on it. The pointer
+ * alone does not stop it. A visitor who asks the system for reduced motion sees a
  * carousel that does not move, and can start it with the button.
  *
  * css/styles.css draws the slides and the pictures, and moves the parts of the
@@ -122,11 +123,14 @@
       const line = el("i");
       line.append(el("b"));
       mark.append(el("span", "carousel__mark-name", name), line);
-      mark.addEventListener("click", () => show(i));
+      // A click on a principle shows it and stops the carousel there; the pause
+      // button starts it again.
+      mark.addEventListener("click", () => { paused = true; show(i); });
       mark.addEventListener("keydown", (event) => {
         const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
         if (!step) return;
         event.preventDefault();
+        paused = true;
         show(index + step);
         marks[index].focus();
       });
@@ -175,9 +179,9 @@
       paused = !paused;
       run();
     });
-    root.addEventListener("pointerenter", hold(true));
-    root.addEventListener("pointerleave", hold(false));
-    root.addEventListener("focusin", hold(true));
+    // The pointer does not stop the carousel. The keyboard focus does, so a
+    // keyboard user can read a principle: a focus from a click does not.
+    root.addEventListener("focusin", (event) => { if (event.target.matches(":focus-visible")) hold(true)(); });
     root.addEventListener("focusout", hold(false));
 
     show(0);

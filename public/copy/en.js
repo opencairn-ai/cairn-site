@@ -115,7 +115,8 @@ window.CAIRN_COPY.en = {
 
     // The names of the carousel and of its buttons, for screen readers.
     carousel: {
-      label: "The four principles of Cairn",
+      // The heading of the list of the principles, and the name of the carousel for screen readers.
+      label: "Our approach to building Cairn",
       pause: "Pause the carousel",
       play: "Play the carousel",
       // The name of a mark under the slides, for example "2 of 4: Replaceable by contract".
