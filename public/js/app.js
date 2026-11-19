@@ -36,7 +36,12 @@
 
   // For the script of a single page (js/hello.js, js/recipes.js): the copy lookup, the
   // language tag of the page, and the mark of an external link.
-  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon };
+  // The stack page shows the selected box in a sheet beside the schema on a wide
+  // screen (js/stack.js). Then the pop-ups of the schema stay off.
+  const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
+  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
+
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
 
   renderPage();
   setUpTheme();
@@ -311,6 +316,7 @@
     const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
 
     function show(node) {
+      if (usesSheet()) return hide();
       if (!node) return hide();
       if (node === active) return;
       if (active) active.classList.remove("is-active");
@@ -480,7 +486,8 @@
   async function renderImage() {
     const clone = diagram.cloneNode(true);
     clone.removeAttribute("id");
-    for (const node of clone.querySelectorAll(".is-active")) node.classList.remove("is-active");
+    // The image shows the schema at rest: no hover, no selection.
+    for (const node of clone.querySelectorAll(".is-active, .is-selected")) node.classList.remove("is-active", "is-selected");
 
     const groups = legendGroups();
     const legend = el("div", "export-legend");

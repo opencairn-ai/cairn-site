@@ -169,10 +169,19 @@ window.CAIRN_COPY.en = {
   diagram: {
     // The title of the stack page.
     title: "A reference architecture for self-hosted AI",
-    // The small pink line above the schema.
-    eyebrow: "Explore the architecture",
     label: "Architecture of the open source AI inference stack",
-    hint: "Hover over or tap any layer or component to see what it does.",
+    // The line above the schema. A wide screen shows the selected box in the sheet
+    // beside the schema; a narrow screen shows it in a pop-up.
+    hint: "Select a layer or component to see what it does.",
+    // The sheet beside the schema: the facts under the description of the selected box.
+    // The names of layers and components in these facts are links to their boxes.
+    sheet: {
+      components: "Components",
+      layer: "Layer",
+      alsoInLayer: "Also in this layer",
+      appliesTo: "Applies to",
+      allLayers: "All layers",
+    },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "Applies to all layers",
     // Marks the components and layers in the Alpha release, on the boxes, in the

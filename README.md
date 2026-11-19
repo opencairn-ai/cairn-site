@@ -14,6 +14,7 @@ public/
   css/styles.css                          Styles; light and dark color tokens at the top
   js/app.js                               Fills in the copy; current tab, pop-ups, theme switch, PNG download
   js/recipes.js                           The Recipes page: filters, table, and the sheet of the selected recipe
+  js/stack.js                             The stack page: the sheet of the selected layer or component
   js/hello.js                             The Hello World page: the carousel of the four principles
   js/recipes-data.js                      The recipes. Generated from the stack repository; do not edit
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)

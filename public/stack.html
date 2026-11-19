@@ -91,8 +91,7 @@
 
     <figure class="arch-figure">
       <figcaption class="arch-caption">
-        <p class="eyebrow" data-text="diagram.eyebrow"></p>
-        <p class="hint" data-text="diagram.hint"></p>
+        <p class="hint stack-hint" data-text="diagram.hint"></p>
         <ul class="legend" id="status-legend"></ul>
       </figcaption>
 
@@ -102,6 +101,9 @@
            the roadmap. This view does not show it. To show a mark on a box (and
            its layer), give the box data-status instead; its label is in the copy
            files. -->
+      <!-- The schema on the left, the sheet of the selected box on the right
+           (wide screens; narrow screens keep the pop-ups). -->
+      <div class="stack-body">
       <div class="arch" id="architecture" role="group" data-aria-label="diagram.label">
 
         <!-- The client side: one row, with no detail. Cairn does not cover it. -->
@@ -192,6 +194,8 @@
         </div>
 
       </div>
+      <aside class="stack-sheet" id="stack-sheet" aria-live="polite"></aside>
+      </div>
     </figure>
   </main>
 
@@ -216,5 +220,7 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
+<script src="js/stack.js"></script>
+
 </body>
 </html>

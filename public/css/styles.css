@@ -34,6 +34,9 @@
   --color-component: #ffffff;
   --color-component-border: #d0c2b1;
   --color-component-shadow: 0 1px 2px rgb(41 20 53 / 0.1);
+  --color-schema-line: rgb(41 20 53 / 0.3);  /* The 1px border of every box of the schema */
+  --color-selected: #f5e8ff;         /* The selected box: Marshmallow, as the selected recipe */
+  --color-cross: rgb(92 74 56 / 0.08); /* The rows that apply to all layers: a light warm tint */
   --color-core-outline: #291435;
   --color-boundary: #291435;
   --color-focus: #734c90;            /* Mid purple */
@@ -89,6 +92,9 @@
   --color-component: #402c4c;        /* 13%; Cream on it 10.5:1 */
   --color-component-border: #544161; /* 24% */
   --color-component-shadow: none;
+  --color-schema-line: rgb(245 232 255 / 0.36);
+  --color-selected: #3d2a4a;         /* Marshmallow over Deep purple */
+  --color-cross: rgb(245 232 255 / 0.07); /* Marshmallow 7%: lighter than the page, as the core layers */
   --color-core-outline: #dcbaf6;     /* Pale purple */
   --color-boundary: #dcbaf6;
   --color-focus: #fd70f5;
@@ -504,10 +510,12 @@ h1 {
 }
 
 .layer > .label .label__name { color: var(--color-header); font-size: 1.1em; }
-/* Dark only: layer titles match the API Endpoint, which is the pale purple. */
+/* Dark: the layer names take the color of the page title (white). */
 :root[data-theme="dark"] .layer:not(.is-out-of-scope) > .label .label__name {
-  color: var(--color-boundary);
+  color: var(--color-title);
 }
+/* The client row is named as a component: the size of the component names. */
+.layer--client > .label .label__name { font-size: 1em; }
 
 .layer__items {
   display: flex;
@@ -522,11 +530,12 @@ h1 {
   justify-content: center;
   gap: 0.4em;
   min-width: 0;
-  padding: 0.5em 0.65em;
-  border: 2px solid var(--color-component-border);
+  /* A 1px border in one color for every box. The padding keeps the size of the
+     2px border of before, and the 2px line of the selected box. */
+  padding: calc(0.5em + 1px) calc(0.65em + 1px);
+  border: 1px solid var(--color-schema-line);
   border-radius: var(--radius-sm);
   background: var(--color-component);
-  box-shadow: var(--color-component-shadow);
   text-align: center;
 }
 
@@ -546,7 +555,7 @@ h1 {
 }
 
 .layer--row > .label { flex: 0 0 8.5em; }
-.layer--row .comp { padding: 0.35em 0.5em; }
+.layer--row .comp { padding: calc(0.35em + 1px) calc(0.5em + 1px); }
 
 /* Local / Server line. The API point sits on the dashes and links both sides. */
 .boundary {
@@ -631,7 +640,6 @@ h1 {
 .is-out-of-scope .comp {
   background: #fafbfc;
   border-color: #c5ced3;
-  box-shadow: none;
 }
 .boundary__label.is-out-of-scope { color: #8b939a; background: none; }
 
@@ -658,8 +666,8 @@ h1 {
   align-items: center;
   gap: 0.4em;
   color: var(--color-boundary);
-  /* Boundary type is 0.85em. Undo that so this name matches the Application label (1.1em). */
-  font-size: calc(1.1em / 0.85);
+  /* Boundary type is 0.85em. Undo that so this name has the size of the component names. */
+  font-size: calc(1em / 0.85);
   font-weight: 600;
   /* Half the dot, so the dot stays on the bridge center. */
   transform: translate(-0.275em, -50%);
@@ -780,23 +788,16 @@ h1 {
   line-height: 1.1;
 }
 
-/* A darker brown, kept translucent so the cream ground still lightens it. */
-.layer--cross { background: rgb(92 74 56 / 0.18); }
+/* A light tint, so the three rows read as one group, quieter than the core. */
+.layer--cross { background: var(--color-cross); }
 
 .layer--cross .comp { overflow-wrap: break-word; }
 
-/* These two sit a little quieter than the other boxes in the row. */
-[data-copy="security.iam"]:not(.is-active),
-[data-copy="security.guardrails"]:not(.is-active) {
-  opacity: 0.85;
-}
-
-/* #1c0e28 at 70%, so more of the page purple shows through. */
-:root[data-theme="dark"] .layer--cross { background: rgb(28 14 40 / 0.7); }
 /* Pale purple, kept translucent so the deep purple page still shows through. */
 :root[data-theme="dark"] .core .layer { background: rgb(220 186 246 / 0.22); }
-/* Boxes inside those layers sit darker, on the page purple, so they read against the mauve. */
-:root[data-theme="dark"] .core .comp:not(.is-active) { background: var(--color-bg); }
+/* Dark: the boxes sit darker, on the page purple, in the core and in the rows
+   that apply to all layers. */
+:root[data-theme="dark"] :is(.core, .cross) .comp:not(.is-active, .is-selected, :focus-visible) { background: var(--color-bg); }
 
 /* Hover, tap and keyboard focus. */
 [data-copy] { cursor: default; }
@@ -804,43 +805,37 @@ h1 {
 [data-copy]:focus,
 [data-copy]:focus-visible { outline: none; }
 
-/* One stroke only: recolor the box's own 2px border. No outer outline (that
-   sat on top of the border and shifted the highlight). Pink is for in-scope only. */
-.comp.is-active,
-.comp:focus-visible {
+/* The selected box (and the box of a pop-up, and keyboard focus): the Marshmallow
+   band and a 2px Magenta line, as the selected recipe. The line is the 1px border
+   and a 1px inset shadow, so the box does not change size. Pink is for in-scope only. */
+.comp:is(.is-active, .is-selected, :focus-visible) {
   border-color: var(--color-pink);
-  background: var(--color-pink-tint);
+  background: var(--color-selected);
+  box-shadow: inset 0 0 0 1px var(--color-pink);
 }
-.layer:not(.is-out-of-scope).is-active,
-.layer:not(.is-out-of-scope):focus-visible,
-.local-api.is-active .label,
-.local-api:focus-visible .label,
-.boundary__label:not(.is-out-of-scope).is-active,
-.boundary__label:not(.is-out-of-scope):focus-visible {
+.layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible),
+.local-api:is(.is-active, .is-selected, :focus-visible) .label,
+.boundary__label:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) {
   border-color: var(--color-pink);
 }
 
 /* The gray client row: same 2px border stroke, in gray, not pink. */
-.is-out-of-scope .comp.is-active,
-.is-out-of-scope .comp:focus-visible {
+.is-out-of-scope .comp:is(.is-active, .is-selected, :focus-visible) {
   border-color: #8b939a;
   background: #eef0f2;
+  box-shadow: inset 0 0 0 1px #8b939a;
 }
-.layer.is-out-of-scope.is-active,
-.layer.is-out-of-scope:focus-visible,
-.boundary__label.is-out-of-scope.is-active,
-.boundary__label.is-out-of-scope:focus-visible {
+.layer.is-out-of-scope:is(.is-active, .is-selected, :focus-visible),
+.boundary__label.is-out-of-scope:is(.is-active, .is-selected, :focus-visible) {
   border-color: #8b939a;
 }
-:root[data-theme="dark"] .is-out-of-scope .comp.is-active,
-:root[data-theme="dark"] .is-out-of-scope .comp:focus-visible {
+:root[data-theme="dark"] .is-out-of-scope .comp:is(.is-active, .is-selected, :focus-visible) {
   border-color: #c5c9ce;
   background: #54515a;
+  box-shadow: inset 0 0 0 1px #c5c9ce;
 }
-:root[data-theme="dark"] .layer.is-out-of-scope.is-active,
-:root[data-theme="dark"] .layer.is-out-of-scope:focus-visible,
-:root[data-theme="dark"] .boundary__label.is-out-of-scope.is-active,
-:root[data-theme="dark"] .boundary__label.is-out-of-scope:focus-visible {
+:root[data-theme="dark"] .layer.is-out-of-scope:is(.is-active, .is-selected, :focus-visible),
+:root[data-theme="dark"] .boundary__label.is-out-of-scope:is(.is-active, .is-selected, :focus-visible) {
   border-color: #c5c9ce;
 }
 
@@ -2054,3 +2049,33 @@ h1 {
 
 .export-sheet__foot .legend { gap: 18px; }
 .export-sheet__foot p { margin-left: auto; }   /* Stays on the right when there is no legend. */
+
+/* --- Stack page: the sheet beside the schema ----------------------------------
+   js/stack.js fills the sheet of the selected box.                          */
+
+/* Wide screens: the schema on the left, the sheet on the right. The sheet stays
+   in view while the page scrolls. Narrow screens: no sheet; the pop-ups show. */
+.arch { position: relative; }
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .stack-body { display: grid; flex: 1; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 2.4rem; align-items: start; }
+  .stack-sheet { position: sticky; top: 1rem; }
+  body[data-page="stack"] .arch [data-copy] { cursor: pointer; }
+}
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .stack-sheet { display: none; }
+}
+
+/* The sheet: a strong rule over it, then the kind, the name, the description,
+   and the facts as label | value rows. Names in the facts are links to their boxes. */
+.stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 0.94rem; }
+.stack-sheet__kind { color: var(--color-text-muted); font-size: 0.86em; font-weight: 600; }
+.stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.45em; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.stack-sheet__text { margin-top: 0.7rem; color: var(--color-body); line-height: 1.45; }
+.stack-sheet__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.2em; margin: 1.1rem 0 0; font-size: 0.92em; }
+.stack-sheet__facts dt,
+.stack-sheet__facts dd { margin: 0; padding: 0.5em 0; border-top: 1px solid var(--color-schema-line); }
+.stack-sheet__facts dt { color: var(--color-text-muted); }
+.stack-sheet__facts dd { color: var(--color-text); font-weight: 500; }
+.stack-sheet__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
+.stack-sheet__link { padding: 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: 500; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.stack-sheet__link:hover { color: var(--color-link-hover); }
