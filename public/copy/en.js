@@ -362,7 +362,7 @@ window.CAIRN_COPY.en = {
   recipes: {
     // The title of the page, one line about a recipe, then one line about the limit
     // of the recipes at this time.
-    title: "Reference recipes for self-hosted models",
+    title: "A list of reference recipes for local models",
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
     limit: "At the moment, the recipes are for single-node setups only.",
     // The hint above the filters.
