@@ -8,7 +8,7 @@
  *
  * css/styles.css draws the slides and the pictures, and moves the parts of the
  * pictures. This script changes the slide that shows and makes the marks under the
- * slides, one for each principle. It also makes the points that move in the
+ * slides: the tabs with the names of the principles. It also makes the points that move in the
  * picture of the third principle ("Your teams keep their tools").
  */
 (() => {
@@ -106,8 +106,10 @@
 
     root.style.setProperty("--carousel-time", `${SLIDE_TIME}ms`);
 
-    // One mark for each principle. The name of a mark is the position and the
-    // name of its principle, for example "2 of 4: Replaceable by contract".
+    // One tab for each principle: its name, then the line that fills with the time.
+    // For screen readers, the name of a tab is the position and the name of its
+    // principle, for example "2 of 4: Replaceable by contract". The left and right
+    // arrow keys move between the tabs.
     const marks = slides.map((slide, i) => {
       const mark = el("button", "carousel__mark");
       mark.type = "button";
@@ -120,8 +122,14 @@
       );
       const line = el("i");
       line.append(el("b"));
-      mark.append(line);
+      mark.append(el("span", "carousel__mark-name", slide.querySelector(".carousel__name").textContent), line);
       mark.addEventListener("click", () => show(i));
+      mark.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        show(index + (event.key === "ArrowRight" ? 1 : -1));
+        marks[index].focus();
+      });
       return mark;
     });
     root.querySelector(".carousel__marks").replaceChildren(...marks);
@@ -159,8 +167,6 @@
       };
     }
 
-    root.querySelector('[data-carousel="previous"]').addEventListener("click", () => show(index - 1));
-    root.querySelector('[data-carousel="next"]').addEventListener("click", () => show(index + 1));
     toggle.addEventListener("click", () => {
       paused = !paused;
       run();

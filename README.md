@@ -41,7 +41,8 @@ To add a tab: copy `roadmap.html`, give it a new `data-page` value, add the link
 to the nav of every page, and add the name under `nav` in both copy files.
 Hello World is for business leaders; the stack page is for engineers. Hello World
 has two columns. Left: the title of the site, the reason for Cairn, then three
-points. Right: what Cairn is, with three links and a carousel of four principles
+points. Right: what Cairn is, with a link to the stack page and the contact address,
+then a carousel of four principles, with their names as tabs
 (each with a picture). Its texts are under `hello` in the copy files; the pictures
 of the carousel are in `index.html`. Each picture has a motion that starts when its
 slide shows: `css/styles.css` moves the parts, and `js/hello.js` makes the points

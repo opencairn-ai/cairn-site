@@ -83,13 +83,10 @@ window.CAIRN_COPY.en = {
       },
     ],
 
-    // The right column: what Cairn is, then three links.
+    // The right column: what Cairn is, then the link to the stack page and the contact address.
     what: {
-      // The small pink line above the title of the section.
-      eyebrow: "What it is",
       title: "Cairn is an open source AI stack that an organization installs and operates on infrastructure that it controls.",
-      stack: "Explore the stack →",
-      roadmap: "See the roadmap",
+      stack: "Explore the stack",
       contact: "bonjourhi@opencairn.ai",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
@@ -118,8 +115,6 @@ window.CAIRN_COPY.en = {
     // The names of the carousel and of its buttons, for screen readers.
     carousel: {
       label: "The four principles of Cairn",
-      previous: "Previous principle",
-      next: "Next principle",
       pause: "Pause the carousel",
       play: "Play the carousel",
       // The name of a mark under the slides, for example "2 of 4: Replaceable by contract".

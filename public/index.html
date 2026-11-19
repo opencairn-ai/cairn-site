@@ -101,13 +101,11 @@
       </symbol>
     </svg>
 
-    <!-- The right column: what Cairn is. -->
+    <!-- The right column: what Cairn is, under a rule; then the four principles. -->
     <section class="what">
-      <p class="eyebrow" data-text="hello.what.eyebrow"></p>
       <h2 class="hello__title" data-text="hello.what.title"></h2>
       <p class="what__links">
         <a class="btn btn--primary" href="stack.html" data-page="stack" data-text="hello.what.stack"></a>
-        <a class="btn" href="roadmap.html" data-page="roadmap" data-text="hello.what.roadmap"></a>
         <a class="what__mail" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
       </p>
 
@@ -117,6 +115,16 @@
            The texts are under `hello` in the copy files; the layer and component
            names in the pictures are the names of the schema, under `stack`. -->
       <div class="carousel" id="principles" role="group" data-aria-label="hello.carousel.label">
+        <!-- The names of the four principles, as tabs: the script (js/hello.js) makes
+             one for each slide. The line under the current name fills in the time
+             that the principle stays. Then the button that pauses the carousel. -->
+        <div class="carousel__nav">
+          <div class="carousel__marks"></div>
+          <button type="button" class="carousel__button" data-carousel="toggle">
+            <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+            <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
         <div class="carousel__slides">
 
           <!-- 1. Tests, then the selection. The test marks come one at a time. -->
@@ -238,15 +246,6 @@
 
         <!-- The marks (one for each principle, made by the script), then the
              buttons. The script gives the pause button its name. -->
-        <div class="carousel__nav">
-          <div class="carousel__marks"></div>
-          <button type="button" class="carousel__button" data-carousel="previous" data-aria-label="hello.carousel.previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
-          <button type="button" class="carousel__button" data-carousel="toggle">
-            <svg class="carousel__icon carousel__icon--pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
-            <svg class="carousel__icon carousel__icon--play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <button type="button" class="carousel__button" data-carousel="next" data-aria-label="hello.carousel.next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
-        </div>
       </div>
     </section>
   </main>
