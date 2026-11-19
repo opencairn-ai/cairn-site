@@ -18,7 +18,7 @@
   const THEME_KEY = "cairn-theme";
   // The pages that have no content yet. Each link to one of them (its tab, a button)
   // shows as disabled and does not open the page. Remove a name to open its page.
-  const PAGES_TO_COME = ["roadmap"];
+  const PAGES_TO_COME = [];
 
   const lang = pickLanguage();
   const copy = ALL_COPY[lang] || ALL_COPY[DEFAULT_LANGUAGE];

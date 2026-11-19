@@ -68,9 +68,6 @@ cursor. The layer of an item is a link to its box on the stack page
 copy files); the stack page opens the details of that box. On phones, each
 workstream shows its three cells one under the other.
 
-The Roadmap tab stays disabled (`PAGES_TO_COME` in `js/app.js`) until the items
-are written.
-
 ## Recipes
 
 The Recipes page shows the model server recipes of
