@@ -13,7 +13,7 @@
  * The French copy lives in fr.js and follows exactly the same structure. A key missing from
  * fr.js falls back to the English text and logs a warning in the browser console.
  *
- * Adding or removing a box in the diagram is a structure change: add the element in index.html
+ * Adding or removing a box in the schema is a structure change: add the element in index.html
  * (its data-copy value is the key path under `stack`), then the matching entry in en.js and fr.js.
  */
 window.CAIRN_COPY = window.CAIRN_COPY || {};

@@ -32,7 +32,8 @@ This repository holds the website opencairn.ai. In scope:
 
 Not in scope:
 
-- **The Cairn stack.** Send a vulnerability in the stack to the same address.
+- **The Cairn stack** has its own repository. Report a vulnerability in the
+  stack to the same address.
 - **The services that host the site** (GitHub Pages and Cloudflare). If the
   problem is in the service itself, report it to GitHub or to Cloudflare. If the
   problem is in how we configure the service, it is in scope.

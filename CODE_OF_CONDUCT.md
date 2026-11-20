@@ -5,7 +5,7 @@ Those guidelines are the policy. They are not reproduced here, because a local
 copy drifts from the original and then nobody can tell which one governs.
 
 What this document adds is the part those guidelines cannot know about a project
-run by two organisations: where it applies, who it binds, where to report
+run by two organizations: where it applies, who it binds, where to report
 something, and what this project is actually able to do about it.
 
 ## What we expect
@@ -13,7 +13,7 @@ something, and what this project is actually able to do about it.
 The guidelines cover this in full. These are the parts that come up most often
 in a repository, said plainly.
 
-- **Criticise things, not people.** The interface, the algorithm, the recipe,
+- **Criticize things, not people.** The interface, the algorithm, the recipe,
   the idea. Not the person who wrote it.
 - **Disagreement is useful to us** as long as it stays about the work. Telling
   us a decision is wrong is the contribution we asked for.
@@ -33,22 +33,18 @@ discussions, and any event, channel or venue where Cairn is the subject.
 
 It binds Mozilla staff, Mila staff, contractors of either, and everyone else
 identically. Cairn is a joint project rather than a Mozilla activity or a Mila
-activity, so neither organisation's own policy reaches it by itself. That is why
+activity, so neither organization's own policy reaches it by itself. That is why
 this paragraph exists. Without it, an outside contributor could argue the policy
 is Mozilla's internal business, and a Mila employee could argue that Mozilla's
 policy does not bind them.
 
 ## Reporting
 
-Report to **conduct@opencairn.ai**. It reaches one maintainer on the Mozilla
-side and one on the Mila side, and a report is handled by whoever is not
-involved in it.
+Report to **conduct@opencairn.ai**. It reaches one maintainer on each side:
+Matt Harris for Mozilla and Jerome Solis for Mila. A report is handled by
+whoever is not involved in it.
 
-> **TODO before this file is published:** name the person on each side who reads
-> that alias and confirm they have agreed to hold it. An address nobody reads is
-> worse than no address at all.
-
-If you would rather not report to the project, either organisation's own process
+If you would rather not report to the project, either organization's own process
 is open to you, and you do not have to tell us you used it.
 
 - **Mila:** [Mila's contact form](https://mila.quebec/en/contact/). Say that the
@@ -56,7 +52,7 @@ is open to you, and you do not have to tell us you used it.
 - **Mozilla:** `cpg-report@mozilla.com`, which is triaged by Mozilla's Community
   Participation Guidelines Response Lead.
 
-Each of those reaches one organisation rather than the project, which is the
+Each of those reaches one organization rather than the project, which is the
 point of listing them. Neither can act on the other's staff.
 
 Reports are held in confidence. We will not share who reported something with
@@ -66,7 +62,7 @@ the person it concerns, or more widely than the people who have to act on it.
 
 A project is not an employer, and we will not claim levers we do not have. What
 this project can do is edit or remove a comment, lock a thread, close an issue
-or pull request, revoke write access, and ban an account from the organisation.
+or pull request, revoke write access, and ban an account from the organization.
 We will say what we did and why, as far as saying so does not identify the
 person who reported it.
 
@@ -85,10 +81,10 @@ that side.
 
 Adapted with modifications from [Mozilla's Community Participation
 Guidelines][cpg], version 3.1, updated 16 January 2020, which are distributed
-under a Creative Commons Attribution-ShareAlike licence. This adaptation carries
-the same licence.
+under a Creative Commons Attribution-ShareAlike license. This adaptation carries
+the same license.
 
-The behaviour notes are adapted from the [Thunderbolt Code of
+The behavior notes are adapted from the [Thunderbolt Code of
 Conduct](https://github.com/thunderbird/thunderbolt/blob/main/CODE_OF_CONDUCT.md),
 which layers project norms on the same guidelines.
 

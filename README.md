@@ -1,23 +1,27 @@
-# cairn-landing
+[![Codename: Cairn. The sovereign, open source AI stack. A Mozilla × Mila research collaboration.](.github/banner.png)](https://opencairn.ai)
 
-The website of Cairn, the sovereign, open source AI stack:
+# Cairn Landing
+
+The website of Cairn, the sovereign, open source AI stack from
+[Mozilla](https://www.mozilla.org/en-US/) and [Mila](https://mila.quebec/en):
 [opencairn.ai](https://opencairn.ai).
 
 ## Layout
 
 ```
 public/
-  index.html                              Page structure and the architecture diagram (no copy)
+  index.html                              Page structure and the architecture schema (no copy)
   copy/en.js, copy/fr.js                  All the text on the page, one file per language
   css/styles.css                          Styles; light and dark color tokens at the top
   js/app.js                               Fills in the copy; pop-ups, theme switch, PNG download
-  vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
+  vendor/html-to-image.min.js             Renders the schema to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   assets/cairn-logo*.svg                  Wordmark (deep purple and cream), from the design system
   assets/og-card.png                      Share card for link previews (from reference/og-card/)
   site.webmanifest, robots.txt, sitemap.xml
 reference/og-card/og-card.html            Share card source; how to regenerate it is inside
 .github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
+.github/banner.png                        Banner at the top of this README (not published)
 ```
 
 ## Contributing, security and conduct
