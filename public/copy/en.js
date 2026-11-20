@@ -10,7 +10,11 @@
  *   - {mozilla} and {mila} in the footer line are where the two links go; move them freely.
  *   - Preview by opening public/index.html in a browser, or with `python3 -m http.server -d public 8080`.
  *
- * The French copy lives in fr.js and follows exactly the same structure.
+ * The French copy lives in fr.js and follows exactly the same structure. A key missing from
+ * fr.js falls back to the English text and logs a warning in the browser console.
+ *
+ * Adding or removing a box in the diagram is a structure change: add the element in index.html
+ * (its data-copy value is the key path under `stack`), then the matching entry in en.js and fr.js.
  */
 window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.en = {

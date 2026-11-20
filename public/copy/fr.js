@@ -13,7 +13,13 @@
  *   - {mozilla} et {mila}, dans la ligne du pied de page, indiquent l’emplacement des deux liens.
  *   - Pour prévisualiser, ouvrez public/index.html?lang=fr dans un navigateur, ou lancez `python3 -m http.server -d public 8080`.
  *
- * Les textes anglais se trouvent dans en.js et suivent exactement la même structure.
+ * Les textes anglais se trouvent dans en.js et suivent exactement la même structure. Une clé
+ * absente de fr.js affiche le texte anglais et produit un avertissement dans la console du
+ * navigateur.
+ *
+ * Ajouter ou retirer une boîte du schéma modifie la structure : ajoutez l’élément dans index.html
+ * (sa valeur data-copy est le chemin de la clé sous `stack`), puis l’entrée correspondante dans
+ * en.js et fr.js.
  */
 window.CAIRN_COPY = window.CAIRN_COPY || {};
 window.CAIRN_COPY.fr = {
