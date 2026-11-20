@@ -1,6 +1,6 @@
 [![Codename: Cairn. The sovereign, open source AI stack. A Mozilla × Mila research collaboration.](.github/banner.png)](https://opencairn.ai)
 
-# Cairn Landing
+# Cairn Site
 
 The website of Cairn, the sovereign, open source AI stack from
 [Mozilla](https://www.mozilla.org/en-US/) and [Mila](https://mila.quebec/en):
