@@ -1,0 +1,13 @@
+{
+  "name": "CAIRN — The sovereign, open source AI inference stack",
+  "short_name": "CAIRN",
+  "description": "The sovereign, open source AI inference stack. Alpha.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#291435",
+  "theme_color": "#291435",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
