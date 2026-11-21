@@ -108,21 +108,21 @@ window.CAIRN_COPY.fr = {
       {
         tag: "Transparence",
         name: "Composants à code source ouvert testés",
-        text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
+        text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
         forYou: "Pour votre organisation :",
         points: [
-          "Du code source ouvert, sans le travail d’assemblage",
+          "Le meilleur de l’open source, couche par couche",
           "Chaque composant ouvert à l’inspection",
         ],
       },
       {
         tag: "Portabilité",
         name: "Remplaçable par contrat",
-        text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
+        text: "Tout ce qui respecte le même contrat peut le remplacer. Le reste de la pile ne change pas.",
         forYou: "Pour votre organisation :",
         points: [
-          "Du code source ouvert, sans le travail d’assemblage",
-          "Chaque composant ouvert à l’inspection",
+          "Aucun code d’intégration sur mesure",
+          "Aucun projet ni fournisseur imposé",
         ],
       },
       {
