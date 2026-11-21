@@ -1,0 +1,69 @@
+name: Smoke test
+
+on:
+  pull_request:
+  push:
+    branches: [main, hello-world-improvement]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run headless checks
+        run: |
+          set -euo pipefail
+
+          python3 -m http.server 8080 --directory public >/tmp/cairn-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          source = Path("public/index.html").read_text()
+          probe = """<script>
+          document.fonts.ready.then(function () {
+            setTimeout(function () {
+              var stage = document.querySelector('.approach__stage');
+              document.body.setAttribute('data-scale', getComputedStyle(stage).getPropertyValue('--contract-scale').trim());
+              document.getElementById('theme-toggle').click();
+              document.body.setAttribute('data-light', document.documentElement.dataset.theme);
+            }, 300);
+          });
+          </script>"""
+          Path("public/__smoke.html").write_text(source.replace("</body>", probe + "</body>"))
+          PY
+
+          CHROME_FLAGS="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage --dump-dom --virtual-time-budget=3000"
+
+          for LANG in fr en; do
+            HTML=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/?lang=$LANG" 2>/dev/null)
+            echo "$HTML" | grep -q 'data-theme="dark"'
+            echo "$HTML" | grep -q 'carousel__slide is-on" data-picture="1"'
+            echo "$HTML" | grep -q 'pic-pass-contract.svg'
+            if [ "$LANG" = fr ]; then
+              echo "$HTML" | grep -q 'Faites-nous signe'
+              echo "$HTML" | grep -q 'Signalez vulnérabilité'
+            else
+              echo "$HTML" | grep -q 'Drop us a pebble'
+              echo "$HTML" | grep -q 'Report a vulnerability'
+            fi
+            echo "OK: $LANG dark"
+          done
+
+          LIGHT=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
+          echo "$LIGHT" | grep -q 'data-light="light"'
+          echo "OK: light toggle"
+
+          MOBILE=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" --window-size=390,844 "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
+          echo "$MOBILE" | grep -Eq 'data-scale="0\.[0-9]+"'
+          echo "OK: mobile scale"
+
+          rm -f public/__smoke.html
