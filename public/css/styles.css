@@ -1,11 +1,39 @@
 /* ==========================================================================
-   opencairn.ai — the architecture page
+   opencairn.ai — all pages: the header, the Hello World page, the architecture
+   page, the Recipes page
    ========================================================================== */
 
 @font-face {
   font-family: "Space Grotesk";
   src: url("../fonts/SpaceGrotesk-Variable.woff2") format("woff2");
   font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* "open source" in the Hello World title. The cut is Regular, so the mark must not go italic. */
+@font-face {
+  font-family: "Default Lingo";
+  src: url("../fonts/DefaultLingo-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* The mono label of the approach cards (Figma 28:10391). */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* The footer research-collab line uses Regular in Figma (28:11885 / 28:12003). */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -25,7 +53,7 @@
   --color-title: #291435;            /* Deep purple, 14.2:1 on bg */
   --color-header: #291435;           /* Layer names, goal headings */
   --color-body: #544b40;             /* Dark brown, 7.2:1 */
-  --color-text: #291435;             /* Box names, codename, controls */
+  --color-text: #291435;             /* Box names, controls */
   --color-text-muted: #505d65;       /* Captions: Slate, 5.7:1 (the deck's Cool grey is 4.1:1 on Cream) */
   --color-layer: #e3d3bc;            /* Sand */
   --color-cross: #d0c2b1;            /* Beige */
@@ -33,10 +61,15 @@
   --color-component: #ffffff;
   --color-component-border: #d0c2b1;
   --color-component-shadow: 0 1px 2px rgb(41 20 53 / 0.1);
+  --color-schema-line: rgb(41 20 53 / 0.3);  /* The 1px border of every box of the schema */
+  --color-selected: #f5e8ff;         /* The selected box: Marshmallow, as the selected recipe */
+  --color-cross: rgb(92 74 56 / 0.08); /* The rows that apply to all layers: a light warm tint */
   --color-core-outline: #291435;
   --color-boundary: #291435;
   --color-focus: #734c90;            /* Mid purple */
-  --color-tab: #505d65;              /* Inactive language */
+  --color-tab: #505d65;              /* Inactive tab */
+  --color-tab-disabled: #aeb8be;     /* The tab of a page to come: the disabled text of the design system */
+  --color-header-rule: #291435;      /* The rule under the header and the outline of its buttons: Deep purple */
   --color-link: #734c90;             /* 5.6:1 */
   --color-link-hover: #291435;
   --color-button: #291435;
@@ -51,15 +84,23 @@
   --color-tip-close-hover: rgb(255 255 255 / 0.1);  /* Ghost button hover on the pop-up */
   --color-pink: #fd70f5;             /* As text on light: 2.0:1, the deck's documented eyebrow exception */
   --color-pink-tint: #dcbaf6;        /* Selected box: Pale purple */
-  --color-technical: #0d5054;        /* Technical reference: Teal, 7.7:1 */
+  /* Principle cards, Figma 28:12066 (dark) and 28:10390 (light). */
+  --approach-card-bg: #f2eae1;       /* Cream */
+  --approach-card-border: #d0c2b1;   /* Beige */
+  --approach-card-ink: #291435;      /* Deep purple */
+  --approach-tag-bg: #a08f79;        /* Stone */
+  --approach-open-bg: #ffffff;
+  --approach-for-ink: #a08f79;       /* Stone */
   --color-error: #b2364a;            /* Red, 5.0:1 */
   --color-disabled-bg: #f4f5f6;
   --color-disabled-ink: #aeb8be;
   --color-disabled-line: #aeb8be;
   --color-disabled-opacity: 1;
+  --color-status-alpha: #5c7065;     /* Alpha marks on boxes: Moss 5.3:1 */
+  --color-badge-alpha: #283f33;      /* Pop-up badges, white text: Forest green 11.4:1 */
 
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;   /* Recipe files, as in the design system's meta chip */
   --gutter: max(16px, 2.25rem);
   /* Corner radii: the design system's sm 6px, md 9px and lg 14px as they measure on a
      1440 × 900 screen, in em of the diagram's text (rem for the header and pop-up),
@@ -73,6 +114,7 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  background: #291435;
   --color-bg: #291435;               /* Deep purple */
   --color-title: #ffffff;            /* 16.9:1 */
   --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
@@ -85,10 +127,15 @@
   --color-component: #402c4c;        /* 13%; Cream on it 10.5:1 */
   --color-component-border: #544161; /* 24% */
   --color-component-shadow: none;
+  --color-schema-line: rgb(245 232 255 / 0.36);
+  --color-selected: #3d2a4a;         /* Marshmallow over Deep purple */
+  --color-cross: rgb(245 232 255 / 0.07); /* Marshmallow 7%: lighter than the page, as the core layers */
   --color-core-outline: #dcbaf6;     /* Pale purple */
   --color-boundary: #dcbaf6;
   --color-focus: #fd70f5;
   --color-tab: #aeb8be;              /* Grey, 8.3:1 */
+  --color-tab-disabled: #63737d;
+  --color-header-rule: #f5e8ff;      /* Marshmallow */
   --color-link: #dcbaf6;             /* 10:1 */
   --color-link-hover: #ffffff;
   --color-button: #f2eae1;
@@ -102,26 +149,31 @@
   --color-tip-shadow: rgb(0 0 0 / 0.22);
   --color-tip-close-hover: rgb(41 20 53 / 0.06);
   --color-pink-tint: #734c90;        /* Selected box: Mid purple; Cream on it 5.6:1 */
-  --color-technical: #63bcc1;        /* River, 7.6:1 */
+  /* Principle cards, Figma 28:12066: 65px closed, 248px open, 12px gaps. */
+  --approach-card-bg: #402c4c;
+  --approach-card-border: #734c90;   /* Secondary light purple */
+  --approach-card-ink: #ffffff;
+  --approach-tag-bg: #291435;        /* Deep purple */
+  --approach-open-bg: #402c4c;
+  --approach-for-ink: #dcbaf6;       /* Pale purple */
   --color-error: #fe7a8b;            /* Rose, 6.7:1 */
   --color-disabled-bg: #ffffff;
   --color-disabled-ink: #291435;
   --color-disabled-line: #63737d;
   --color-disabled-opacity: 0.3;
+  --color-status-alpha: #bdcbc3;     /* Light Moss 7.4:1 on boxes */
+  --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
 }
 
-/* The page scales like a slide: everything is sized in rem, and the root size
-   follows the smaller of the viewport's width and height so the whole page
-   fits on one landscape screen. */
+/* Everything is sized in rem, and the root size starts from the text size of the
+   browser (16px by default), so browser zoom and the reader's text size setting
+   both work. It grows a little on wide screens: 16px up to about 1200px wide,
+   then up to 18px. The pages scroll. */
 html {
-  font-size: clamp(11px, min(1.02vw, 1.8vh), 19px);
+  font-size: clamp(100%, 85% + 0.2vw, 112.5%);
   -webkit-text-size-adjust: 100%;
-}
-
-/* Portrait, small and short screens (phones held sideways) scroll instead,
-   at a comfortable reading size. */
-@media (max-width: 760px), (max-aspect-ratio: 1/1), (max-height: 500px) {
-  html { font-size: 15px; }
+  /* The page background stays on the body, so it ends at the footer. */
+  background: #fff;
 }
 
 *,
@@ -130,6 +182,9 @@ html {
 
 body {
   margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
@@ -155,6 +210,7 @@ a { color: inherit; }
 /* --- Page frame ---------------------------------------------------------- */
 
 .page {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -164,47 +220,152 @@ a { color: inherit; }
   padding: 0 var(--gutter);
 }
 
+/* Trail map on the cream. Height follows the page, not the Figma artboard ratio,
+   so the clip cannot extend the scroll past the footer. */
+.hello-ground-clip {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gutter) * -1);
+  width: calc(100% + (var(--gutter) * 2));
+  height: auto;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+}
+
+/* Portrait slot turned on its side: light dither (28:10292) or dark union (28:11036). */
+.hello-ground-stack {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  transform: translate(-50%, -50%) rotate(90deg);
+  pointer-events: none;
+}
+
+.hello-ground-stack--light {
+  width: calc(1177 / 1440 * 100%);
+  aspect-ratio: 1177 / 1440;
+}
+
+.hello-ground-stack--dark {
+  display: none;
+  /* Figma 28:11035 terrain export (portrait slot, rotated like the light dither). */
+  width: calc(1101.45 / 1440 * 100%);
+  aspect-ratio: 1101.45 / 1444.17;
+}
+
+/* Dark only: degrade under the halftone union (28:11036). */
+.hello-ground__degrade {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hello-ground {
+  position: absolute;
+  border: 0;
+  max-width: none;
+  pointer-events: none;
+}
+
+.hello-ground__dither {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Figma contour (28:10770): x −2, y 462 on the 1440 × 1164 page, not inside the rotated map. */
+.hello-ground__contour {
+  z-index: 1;
+  left: calc(-2 / 1440 * 100%);
+  top: calc(462 / 1164 * 100%);
+  width: calc(1442 / 1440 * 100%);
+  height: calc(634 / 1164 * 100%);
+}
+
+/* Figma 28:11503 inside 28:11033 (1164 × 1440 artboard). */
+.hello-ground__contour--dark {
+  display: none;
+  z-index: 1;
+  left: calc(453 / 1164 * 100%);
+  top: calc(806 / 1440 * 100%);
+  width: calc(1442 / 1164 * 100%);
+  height: calc(634 / 1440 * 100%);
+}
+
+.hello-ground__terrain {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.site-header,
+.hello,
+.site-footer { position: relative; z-index: 1; }
+
+/* Phones: 15px at the default text size of the browser. */
+@media (max-width: 640px) {
+  html { font-size: 93.75%; }
+}
+
+/* The header is one row: the codename, the tabs, then the two buttons, then
+   the language and theme. The current tab is Bold, with a 4px magenta line
+   as wide as the tab. Narrow screens put the tabs in a second row. */
 .site-header {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem 0.6rem;
-  padding: 0.95rem 0 0.35rem;
+  gap: 0 0.6rem;
+  min-height: 4.0625rem;
+  margin-bottom: 0.35rem;
 }
+
+/* Under the row, from one screen edge to the other. */
+.site-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  background: #d0c2b1;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* The 1px rule under the menu. The pink tab marker sits on top of it. */
+:root[data-theme="dark"] .site-header::after { background: #734c90; } /* Secondary light purple */
 
 .codename {
   display: flex;
-  align-items: baseline;
-  gap: 0.45em;
-  margin-right: auto;
-  font-family: var(--font-mono);
-  font-size: 1.3rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  align-items: center;
+  text-decoration: none;
 }
 
-/* The wordmark's letters sit on the bottom edge of the image, so it shares the text baseline.
-   The light or dark file shows with the theme. */
-.codename img { display: block; width: auto; height: 1.2em; }
+/* The lockup already includes "Codename:". The light or dark file follows the theme.
+   Height is the old 1.5rem, 15% larger, then 5% smaller than that. */
+.codename img { display: block; width: auto; height: 1.63875rem; }
 .codename .logo--dark,
 :root[data-theme="dark"] .codename .logo--light { display: none; }
 :root[data-theme="dark"] .codename .logo--dark { display: block; }
-/* The code-like label takes the technical-reference color. */
-.codename > span { color: var(--color-technical); }
 
 .header-actions {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
 }
 
-/* Language and theme switches, side by side. */
+/* Language and theme buttons, side by side. */
 .prefs {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.1rem;
   margin-right: 0.4rem;
+  padding: 0.75rem 0;
 }
 
 .theme-toggle {
@@ -229,28 +390,91 @@ a { color: inherit; }
 :root[data-theme="dark"] .theme-toggle__moon { display: none; }
 :root[data-theme="dark"] .theme-toggle__sun { display: block; }
 
-.lang {
-  display: flex;
-  gap: 0.1rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
+/* The language button: a ghost button like the theme button. It shows the
+   language a click switches to. */
+.lang { display: flex; font-size: 0.85rem; }
 
 .lang a {
-  padding: 0.35em 0.45em;
-  border-radius: var(--radius-ui-sm);
-  color: var(--color-tab);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.5em;
+  border-radius: var(--radius-ui-md);
+  color: var(--color-text);
+  font-weight: 600;
   text-decoration: none;
 }
 
-.lang a:hover { color: var(--color-text); }
+.lang a[hidden] { display: none; }
+.lang a:hover { background: var(--color-ghost-hover); }
 
-/* Nav tab: the active language bold, with a Magenta underline. */
-.lang a[aria-current] {
-  color: var(--color-text);
+/* The tabs, one per page, 60px after the lockup. 14.4px type, line 18px.
+   Each tab is the 65px height of the bar. Side padding is the width of the
+   pink line, not a gap between labels. The current tab is Bold. The others
+   stay Medium. Roadmap is Stone until it is the current page. The tabs take
+   the free width, so the buttons go to the right end. */
+.site-nav {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  margin-right: auto;
+  /* 60px from the lockup to the first tab. The header's column gap supplies the rest. */
+  margin-left: calc(3.75rem - 0.6rem);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.site-nav a {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 4.0625rem;
+  padding: 0.625rem 1.75rem 0;
+  color: var(--color-title);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav a:hover { color: var(--color-text); }
+
+.site-nav a[aria-current="page"] {
+  padding-left: 1.5rem;
+  padding-right: 1.4375rem;
   font-weight: 700;
-  text-decoration: underline 2px var(--color-pink);
-  text-underline-offset: 0.45em;
+}
+
+/* The line is as wide as the tab, padding included, and sits on the header rule. */
+.site-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--color-pink);
+  z-index: 1;
+}
+
+/* Roadmap stays Stone, as in the header frame. The page itself still opens. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]) { color: #a08f79; }
+
+/* The tab of a page to come. */
+.site-nav a[aria-disabled="true"],
+.site-nav a[aria-disabled="true"]:hover { color: var(--color-tab-disabled); cursor: default; }
+
+/* Narrow and portrait screens: the codename and the buttons in the first row,
+   the tabs in a second row on the rule. The first tab lines up with the codename.
+   One row needs about 1170px in English and 1220px in French at a 16px text size.
+   The limit is in em, so a larger text size or browser zoom moves it with the text. */
+@media (max-width: 77.5em), (max-aspect-ratio: 1/1) {
+  .site-header { flex-wrap: wrap; }
+  .codename { margin-right: auto; }
+  .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -1.5rem; }
+  .site-nav a { height: 2.6rem; padding-top: 0; }
 }
 
 .btn {
@@ -274,18 +498,26 @@ a { color: inherit; }
 .btn:hover { background: var(--color-button-hover); }
 /* While the image is prepared the button takes the disabled colors; a failure shows in
    the error color, with no hover fill so the red keeps its contrast. */
-.btn[aria-busy="true"] {
+.btn[aria-busy="true"],
+.btn[aria-disabled="true"] {
   border-color: var(--color-disabled-line);
   background: var(--color-disabled-bg);
   color: var(--color-disabled-ink);
   opacity: var(--color-disabled-opacity);
   cursor: progress;
 }
+/* The button to a page to come has the same colors, with no hover fill. */
+.btn[aria-disabled="true"] { cursor: default; }
 .btn.is-error,
 .btn.is-error:hover { border-color: var(--color-error); background: transparent; color: var(--color-error); }
 
 .btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }
+
+/* The two buttons of the header: 14px at a 16px root, a 1px border in the text
+   color, and the 6px corners of the design system's small radius. */
+.site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
+.site-header .btn:not(.btn--primary):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
 
 :focus-visible {
   outline: 3px solid var(--color-focus);
@@ -296,12 +528,13 @@ main {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding-top: 0.8rem;
+  padding-top: 0.7rem;
 }
 
 /* --- Intro --------------------------------------------------------------- */
 
-.intro { margin-bottom: 0.95rem; }
+/* 12px tighter than the previous 0.95rem, so the stack label sits closer to the goals. */
+.intro { margin-bottom: max(0px, calc(0.95rem - 12px)); }
 
 .eyebrow {
   margin-bottom: 0.35rem;
@@ -312,8 +545,9 @@ main {
   text-transform: uppercase;
 }
 
+/* Extra 12px under the title, so the goal line sits clear of it. */
 h1 {
-  margin: 0 0 0.85rem;
+  margin: 0 0 calc(0.85rem + 12px);
   color: var(--color-title);
   font-size: 2.35rem;
   font-weight: 600;
@@ -329,10 +563,11 @@ h1 {
   font-size: 0.9rem;
 }
 
-.goal__lead { color: var(--color-body); font-weight: 500; }
+/* Same ink as the page title (h1), light and dark. */
+.goal__lead { color: var(--color-title); font-weight: 500; }
 
-/* Words wrapped in *asterisks* in the copy files (none at the moment). Semibold so
-   the pink reads the same as the label next to the ink text. */
+/* Words wrapped in *asterisks* in the copy files. Semibold so the pink reads the
+   same as the label next to the ink text. */
 .hl { background: none; color: var(--color-pink); font-weight: 600; }
 
 .goal__points {
@@ -350,6 +585,8 @@ h1 {
 }
 
 .goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
+/* Dark: the three goal titles match the page title. */
+:root[data-theme="dark"] .goal__point-title { color: var(--color-title); }
 .goal__point-text { display: block; color: var(--color-body); }
 
 /* --- Architecture diagram -----------------------------------------------
@@ -363,37 +600,73 @@ h1 {
   container: arch / inline-size;
 }
 
+/* The hint, with the legend on the right (below it when space runs out). */
 .hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem 1.5rem;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
   font-size: 0.78rem;
 }
 
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend:empty { display: none; }
+.legend li { display: inline-flex; align-items: center; gap: 0.4em; }
+
+/* Alpha mark: a filled dot on the components and layers in the Alpha release.
+   Layers show it after their name. Components show it in their top-right corner,
+   or after their name on narrow screens (see the arch container queries). */
+.status-mark,
+.comp[data-status]::after {
+  flex: none;
+  width: 0.62em;
+  height: 0.62em;
+  border: 1.5px solid var(--status-color);
+  border-radius: 50%;
+  background: var(--status-fill);
+}
+
+[data-status="alpha"] { --status-color: var(--color-status-alpha); --status-fill: var(--color-status-alpha); }
+
+.comp[data-status] { position: relative; }
+.comp[data-status]::after { content: ""; position: absolute; top: 0.5em; right: 0.5em; }
+
+/* In a name, the mark stays joined to the last word (.label__tail). */
+.label__tail { white-space: nowrap; }
+.label .status-mark { display: inline-block; margin-left: 0.4em; vertical-align: 0.05em; }
+.comp .label .status-mark { display: none; }
+
+/* The rule of the layout: the four core layers make a matrix, and a full-width
+   row is shared by all of them. The client row, the line, the core (the matrix
+   and the Registry row), then the cross-cutting rows. */
 .arch {
-  display: grid;
+  display: flex;
   flex: 1;
-  grid-template-columns: minmax(0, 4.4fr) repeat(3, minmax(0, 1fr));
-  grid-template-rows: auto auto auto 1fr;
-  grid-template-areas:
-    "application   application   application   ."
-    "sdk           sdk           sdk           ."
-    "boundary      boundary      boundary      boundary"
-    "core          security      observability control";
-  gap: 0.5em 0.7em;
-  font-size: 0.86rem;
+  flex-direction: column;
+  gap: 0.5em;
+  /* A touch larger so names inside the boxes stay readable. */
+  font-size: 0.94rem;
   line-height: 1.25;
 }
 
-.arch > [data-copy="application"]   { grid-area: application; }
-.arch > [data-copy="sdk"]           { grid-area: sdk; }
-.arch > .boundary                   { grid-area: boundary; }
-.arch > .core                       { grid-area: core; }
-.arch > [data-copy="security"]      { grid-area: security; }
-.arch > [data-copy="observability"] { grid-area: observability; }
-.arch > [data-copy="controlPlane"]  { grid-area: control; }
-
 .label { display: flex; flex-direction: column; gap: 0.15em; }
 .label__name { font-weight: 600; }
+/* Component names in the regular weight, so the layer names (semibold) lead. The
+   client row and the API Endpoint are named as components. */
+.comp .label__name,
+.layer--client > .label .label__name,
+.local-api .label__name { font-weight: 400; }
 .label__detail { color: var(--color-text-muted); font-size: 0.84em; line-height: 1.2; }
 
 .layer {
@@ -401,12 +674,20 @@ h1 {
   flex-direction: column;
   gap: 0.5em;
   min-width: 0;
-  padding: 0.55em 0.65em 0.65em;
+  /* Padding absorbs the 2px border so the active stroke never shifts the box. */
+  padding: calc(0.55em - 2px) calc(0.65em - 2px) calc(0.65em - 2px);
+  border: 2px solid transparent;
   border-radius: var(--radius-md);
   background: var(--color-layer);
 }
 
 .layer > .label .label__name { color: var(--color-header); font-size: 1.1em; }
+/* Dark: the layer names take the color of the page title (white). */
+:root[data-theme="dark"] .layer:not(.is-out-of-scope) > .label .label__name {
+  color: var(--color-title);
+}
+/* The client row is named as a component: the size of the component names. */
+.layer--client > .label .label__name { font-size: 1em; }
 
 .layer__items {
   display: flex;
@@ -421,56 +702,231 @@ h1 {
   justify-content: center;
   gap: 0.4em;
   min-width: 0;
-  padding: 0.5em 0.65em;
-  border: 1px solid var(--color-component-border);
+  /* A 1px border in one color for every box. The padding keeps the size of the
+     2px border of before, and the 2px line of the selected box. */
+  padding: calc(0.5em + 1px) calc(0.65em + 1px);
+  border: 1px solid var(--color-schema-line);
   border-radius: var(--radius-sm);
   background: var(--color-component);
-  box-shadow: var(--color-component-shadow);
   text-align: center;
 }
 
-/* Application and SDK: one row each, name on the left. */
+/* The client side: one row with its name in the center, above the API Endpoint. */
+.layer--client {
+  align-items: center;
+  padding: calc(0.55em - 2px) calc(0.65em - 2px);
+  text-align: center;
+}
+
+/* Registry and the cross-cutting layers: one row each, name on the left. */
 .layer--row {
   flex-direction: row;
   align-items: center;
   gap: 0.65em;
-  padding: 0.4em 0.65em;
+  padding: calc(0.4em - 2px) calc(0.65em - 2px);
 }
 
-.layer--row > .label { flex: 0 0 8.5em; }
-.layer--row .comp { padding: 0.35em 0.5em; }
+/* The column of the row names: wide enough for the longest name on one line
+   in English and in French ("Plan de contrôle", 8.7em). */
+.layer--row > .label { flex: 0 0 9.25em; }
+.layer--row .comp { padding: calc(0.35em + 1px) calc(0.5em + 1px); }
 
-/* Local / Server line. */
+/* Local / Server line. The API point sits on the dashes and links both sides. */
 .boundary {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 1.4em;
-  margin: 0.1em 0;
+  align-items: flex-start;
+  gap: 0;
+  /* Pulls the line closer to the rows above and below. */
+  margin: -0.2em 0;
   color: var(--color-text-muted);
   font-size: 0.85em;
   font-weight: 600;
 }
 
-.boundary::before {
+.boundary__line {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 10px more above and below the API Endpoint than the 1em row. */
+  min-height: calc(1em + 20px);
+}
+
+.boundary__line::before {
   content: "";
   position: absolute;
   top: 50%;
   right: 0;
   left: 0;
-  border-top: 2px dashed var(--color-boundary);
-  transform: translateY(-50%);
+  height: 1px;
+  /* Same gray as the Local label. Half height and half strength, so it stays finer than the type. */
+  background: #8b939a;
+  opacity: 0.5;
+  transform: translateY(-50%) scaleY(0.5);
+}
+:root[data-theme="dark"] .boundary__line::before {
+  background: #b7b3ae;
+  opacity: 0.65;
 }
 
-.boundary__label { padding: 0 0.2em; line-height: 1.1; }
+/* On light, the Local / Server labels read in italic stone.
+   The line row is tall so the API has room. Pull the words back to the stroke. */
+.boundary__label {
+  position: relative;
+  z-index: 1;
+  padding: 0 0.2em;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  line-height: 1.1;
+  color: #a08f79;
+  font-style: italic;
+}
+/* An arrow left of each name: up to the local side, down to the server side.
+   The script puts the name first in the markup, so the arrow moves before it. */
+.boundary__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.boundary__arrow { order: -1; flex: none; width: 1em; height: 1em; }
+/* Same gray as the Local name, which is darker than its label. */
+:root:not([data-theme="dark"]) .boundary__label.is-out-of-scope .boundary__arrow { color: #5c6770; }
+.boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 6px)); }
+.boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 6px)); }
 
-/* The server-side core: the four layers and the registry. */
+/* On dark, the same labels switch to italic lavender. */
+:root[data-theme="dark"] .boundary__label {
+  color: #dcbaf6;
+}
+
+/* Above the line is out of scope in this version, so it reads in gray. */
+.is-out-of-scope {
+  background: #e6e8ea;
+}
+.is-out-of-scope > .label .label__name,
+.is-out-of-scope .comp {
+  /* Darker than the beige ground. The previous gray sat too close to it. */
+  color: #5c6770;
+}
+.is-out-of-scope .comp {
+  background: #fafbfc;
+  border-color: #c5ced3;
+}
+.boundary__label.is-out-of-scope { color: #8b939a; background: none; }
+
+/* At rest the 2px border matches the gray ground, so it stays invisible until hover. */
+.layer.is-out-of-scope { border-color: #e6e8ea; }
+
+:root[data-theme="dark"] .is-out-of-scope { background: #3a3840; }
+:root[data-theme="dark"] .is-out-of-scope > .label .label__name { color: #b7b3ae; }
+:root[data-theme="dark"] .is-out-of-scope .comp {
+  color: #b7b3ae;
+  background: #4a4750;
+  border-color: #6a6570;
+}
+:root[data-theme="dark"] .boundary__label.is-out-of-scope { color: #b7b3ae; background: none; }
+:root[data-theme="dark"] .layer.is-out-of-scope { border-color: #3a3840; }
+
+/* The point on the dashed line. The dot stays at the middle; the name sits beside it. */
+.local-api {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--color-boundary);
+  /* Boundary type is 0.85em. Undo that so this name has the size of the component names. */
+  font-size: calc(1em / 0.85);
+  font-weight: 600;
+  /* Half the dot, so the dot stays on the bridge center. */
+  transform: translate(-0.275em, -50%);
+}
+/* The hover border goes around the name only, not the dot. */
+.local-api .label {
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0.25em;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+}
+.local-api__dot {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 0.55em;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px var(--color-bg);
+  order: -1;
+}
+
+/* Two-way link through the point. Small beige rounds, with the endpoint color traveling on top. */
+.api-bridge {
+  position: absolute;
+  left: 50%;
+  z-index: 0;
+  width: 4px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  /* The diagram gap is 0.5em, and this row is pulled 0.2em into it. */
+  top: calc(-0.5em / 0.85 + 0.2em);
+  bottom: calc(-0.5em / 0.85 + 0.2em);
+}
+.api-bridge__dots {
+  position: absolute;
+  inset: 0;
+  /* Stone, the dark beige already used for the Local / Server labels. */
+  background-color: #a08f79;
+  /* 10% smaller than the 2.56px circles, on a shorter step so they sit closer. */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4.5' viewBox='0 0 4 4.5'%3E%3Ccircle cx='2' cy='2.25' r='1.15' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4.5' viewBox='0 0 4 4.5'%3E%3Ccircle cx='2' cy='2.25' r='1.15' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-size: 4px 4.5px;
+  mask-size: 4px 4.5px;
+  -webkit-mask-repeat: repeat-y;
+  mask-repeat: repeat-y;
+  -webkit-mask-position: center top;
+  mask-position: center top;
+}
+
+/* The endpoint color, so the moving point matches the API Endpoint name. */
+.api-bridge__pulse {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-boundary);
+  transform: translateX(-50%);
+  animation: api-flow 2.8s ease-in-out infinite alternate;
+}
+@keyframes api-flow {
+  0% { top: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: calc(100% - 5px); opacity: 0; }
+}
+
+/* The server-side core: four layers in a matrix of two columns and two rows, and
+   the Registry row under all four. */
 .core {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: 1fr 1fr auto;
+  grid-template-rows: repeat(2, minmax(min-content, 1fr)) auto;
   gap: 0.6em;
+  /* Spare height goes to the core, up to 29em: its boxes then stand about twice as
+     tall as the boxes in the rows. It never shrinks below its content. */
+  flex: 1 1 auto;
+  min-height: min-content;
+  max-height: 29em;
   padding: 0.6em;
   border: 2.5px solid var(--color-core-outline);
   border-radius: var(--radius-lg);
@@ -480,82 +936,133 @@ h1 {
 
 .layer--stack .layer__items { flex-direction: column; }
 
-.layer--registry > .label {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.2em 0.7em;
+/* The Registry is a shared row: its boxes do not belong to one column. Its name is
+   narrower by the core's padding and outline, so its boxes start on the same line
+   as the boxes of the rows outside the core. */
+.layer--registry > .label { flex-basis: calc(9.25em - 0.6em - 2.5px); }
+
+/* Security, Observability, Control Plane: one group with a name. Each layer is a
+   full-width row, so it runs under the whole core. */
+.cross {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+  margin-top: 0.35em;
 }
 
-/* Security, Observability, Control Plane: tall columns beside the core. */
-.layer--cross {
-  gap: 0.75em;
-  padding: 0.65em 0.55em;
-  background: var(--color-cross);
+/* The group name: the same type as the Client side / Server side labels, in the
+   color of the hint line above the schema (5.7:1 on Cream, 5.4:1 on Deep purple). */
+.cross-label {
+  padding: 0 0.2em;
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.1;
 }
 
-.layer--cross .layer__items {
-  display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
-  gap: 0.55em;
-}
+/* A light tint, so the three rows read as one group, quieter than the core. */
+.layer--cross { background: var(--color-cross); }
 
-.layer--cross .comp {
-  padding: 0.5em 0.55em;
-  overflow-wrap: break-word;
-}
+.layer--cross .comp { overflow-wrap: break-word; }
 
-.layer--control { background: var(--color-control); }
+/* Pale purple, kept translucent so the deep purple page still shows through. */
+:root[data-theme="dark"] .core .layer { background: rgb(220 186 246 / 0.22); }
+/* Dark: the boxes sit darker, on the page purple, in the core and in the rows
+   that apply to all layers. */
+:root[data-theme="dark"] :is(.core, .cross) .comp:not(.is-active, .is-selected, :focus-visible) { background: var(--color-bg); }
 
 /* Hover, tap and keyboard focus. */
 [data-copy] { cursor: default; }
-[data-copy]:focus { outline: none; }
+/* Kill the page-wide focus ring on diagram nodes: the highlight is the box border. */
+[data-copy]:focus,
+[data-copy]:focus-visible { outline: none; }
 
-/* The active box turns pink; keyboard focus keeps the ink outline, which meets
-   contrast on both grounds. */
-[data-copy].is-active { outline: 2px solid var(--color-pink); outline-offset: 1px; }
-.comp.is-active { border-color: var(--color-pink); background: var(--color-pink-tint); }
-[data-copy]:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+/* The selected box (and the box of a pop-up, and keyboard focus): the Marshmallow
+   band, as the selected recipe, and a 2px Magenta border. The line is the 1px border
+   and a 1px inset shadow, so the box does not change size. Pink is for in-scope only. */
+.comp:is(.is-active, .is-selected, :focus-visible) {
+  border-color: var(--color-pink);
+  background: var(--color-selected);
+  box-shadow: inset 0 0 0 1px var(--color-pink);
+}
+.layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible),
+.local-api:is(.is-active, .is-selected, :focus-visible) .label,
+.boundary__label:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) {
+  border-color: var(--color-pink);
+}
+/* A selected layer takes the same band as a selected component. On dark, the
+   layers are lighter than the page, so their band is a lighter Marshmallow (28%)
+   than the band of a box (10%): it reads as lighter, as on light. */
+.layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) { background: var(--color-selected); }
+:root[data-theme="dark"] .layer:not(.is-out-of-scope):is(.is-active, .is-selected, :focus-visible) { background: rgb(245 232 255 / 0.28); }
 
-.layer.is-active,
-.layer:focus-visible { outline-offset: 2px; }
+/* The gray client row: same 2px border stroke, in gray, not pink. */
+.is-out-of-scope .comp:is(.is-active, .is-selected, :focus-visible) {
+  border-color: #8b939a;
+  background: #eef0f2;
+  box-shadow: inset 0 0 0 1px #8b939a;
+}
+.layer.is-out-of-scope:is(.is-active, .is-selected, :focus-visible),
+.boundary__label.is-out-of-scope:is(.is-active, .is-selected, :focus-visible) {
+  border-color: #8b939a;
+}
+:root[data-theme="dark"] .is-out-of-scope .comp:is(.is-active, .is-selected, :focus-visible) {
+  border-color: #c5c9ce;
+  background: #54515a;
+  box-shadow: inset 0 0 0 1px #c5c9ce;
+}
+:root[data-theme="dark"] .layer.is-out-of-scope:is(.is-active, .is-selected, :focus-visible),
+:root[data-theme="dark"] .boundary__label.is-out-of-scope:is(.is-active, .is-selected, :focus-visible) {
+  border-color: #c5c9ce;
+}
 
-/* Narrower screens: the cross-cutting layers move below the core. */
-@container arch (max-width: 860px) {
-  .arch {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: none;
-    grid-template-areas:
-      "application   application   application"
-      "sdk           sdk           sdk"
-      "boundary      boundary      boundary"
-      "core          core          core"
-      "security      observability control";
+/* Between desktop and phone: the core keeps its matrix. Rows with four boxes need
+   the full width, so the Registry and the cross-cutting rows put their name above
+   the boxes. */
+@container arch (min-width: 641px) and (max-width: 900px) {
+  .core .layer--row,
+  .cross .layer--row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45em;
+    padding: calc(0.55em - 2px) calc(0.65em - 2px) calc(0.65em - 2px);
   }
-
-  .layer--cross .layer__items { grid-template-rows: none; }
+  .core .layer--row > .label,
+  .cross .layer--row > .label { flex: none; }
 }
 
 /* Phones: everything in a single column. */
 @container arch (max-width: 640px) {
-  .arch {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "application"
-      "sdk"
-      "boundary"
-      "core"
-      "security"
-      "observability"
-      "control";
-  }
+  .cross { margin-top: 0.6em; }
 
   .layer--row { flex-direction: column; align-items: stretch; }
   .layer--row > .label { flex: none; }
   .layer__items { flex-wrap: wrap; }
-  .layer:not(.layer--stack) > .layer__items > .comp { flex-basis: 9em; }
+  /* One box per line, so the long French names are not crushed into three columns. */
+  .layer--row .layer__items { flex-direction: column; }
+  .layer--row:not(.layer--stack) > .layer__items > .comp { flex: 1 1 auto; width: 100%; }
+  /* The French name is long. Cap it so it wraps beside the Local label. */
+  .local-api .label { max-width: 8.5em; }
+  /* 5px more above and below the API than on desktop. */
+  .boundary__line { min-height: calc(1em + 30px); }
+  /* The line is taller here, so keep Local and Server on the stroke. */
+  .boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 11px)); }
+  .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 11px)); }
   .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
-  .layer--cross .layer__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Four French names do not fit on one line. Two columns keep every word whole. */
+  .layer--registry .layer__items,
+  .layer--control .layer__items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .layer--registry .comp { overflow-wrap: break-word; }
+
+  /* Boxes get short here, often one line: a status mark follows the name, as
+     on layers, so it cannot touch the text. */
+  .comp[data-status]::after { content: none; }
+  .comp .label .status-mark { display: inline-block; }
 }
 
 /* --- Pop-up -------------------------------------------------------------- */
@@ -595,6 +1102,21 @@ h1 {
 }
 
 .tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
+.tip__status { margin-bottom: 0.4rem; }
+.tip__status[hidden] { display: none; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3em 0.65em;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pill[data-status="alpha"] { background: var(--color-badge-alpha); }
 
 /* Phones: the pop-up is a panel along the bottom of the screen, in the same
    colors as the tooltip: the inverse of the page. */
@@ -645,41 +1167,162 @@ h1 {
   .tip.is-visible,
   .tip.tip--sheet,
   .tip.tip--sheet.is-visible { transition: none; }
+  .api-bridge__pulse { animation: none; visibility: hidden; }
 }
 
 /* --- Footer -------------------------------------------------------------- */
 
 .site-footer {
-  padding: 0.7rem 0 0.85rem;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 12px;
+  /* 64px of the page background between the content and the bar, on every page. */
+  margin: 64px calc(var(--gutter) * -1) 0;
+  /* Figma 28:10323: 18px × 20px inset on the deep purple bar. */
+  padding: 18px 20px;
+  background: #291435;
+  color: #fff;
 }
 
-.site-footer a {
-  color: var(--color-link);
+/* In the dark theme the page is the same purple, so a hairline keeps the bar visible. */
+:root[data-theme="dark"] .site-footer { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16); }
+
+.footer-brand {
+  display: flex;
+  flex: none;
+  align-items: flex-end;
+  gap: 5.73px;
+  height: 28.652px;
+  margin: 0;
+  font-family: "JetBrains Mono", var(--font-mono);
+  font-size: 17.191px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Figma 28:11885 / 28:12003: the left slot is 505px in English, 562px in French. */
+.footer-brand--en { width: 505px; }
+.footer-brand--fr { width: 562px; }
+
+.footer-brand__a,
+.footer-brand__x,
+.footer-brand__role {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 28.652px;
+  color: #fff;
+  word-break: break-word;
+}
+
+.footer-brand__a { width: 15.281px; line-height: 13.371px; }
+.footer-brand--fr .footer-brand__a { width: 31px; }
+.footer-brand__x { width: 8.596px; line-height: 13.371px; }
+.footer-brand__role { width: 232.085px; line-height: 11.461px; }
+.footer-brand--fr .footer-brand__role { width: 276px; }
+
+/* Mozilla, the x, and Mila sit on one baseline, a little wider apart than the words. */
+.footer-logos {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 11.461px;
+  width: 251.187px;
+  height: 28.652px;
+}
+
+.footer-brand__logo {
+  display: block;
+  flex: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-brand__logo img { display: block; max-width: none; }
+.footer-brand__mozilla { width: 119.773px; height: 28.652px; }
+
+/* The mark and the word are two files, placed as in the logo lockup. */
+.footer-brand__mila {
+  position: relative;
+  width: 99.182px;
+  height: 28.652px;
+}
+
+.footer-brand__mila-mark,
+.footer-brand__mila-word { position: absolute; top: 11.14%; }
+
+.footer-brand__mila-mark { left: 5.37%; }
+.footer-brand__mila-word { left: 36.11%; }
+
+.footer-actions { display: flex; flex: none; align-items: flex-start; gap: 12px; }
+
+.site-footer .footer-btn {
+  height: 34.304px;
+  padding: 8.652px 14.42px;
+  border-width: 1px;
+  border-color: #291435;
+  border-radius: 6.76px;
+  background: transparent;
+  color: #fff;
+  font-size: 14.4px;
   font-weight: 500;
-  text-underline-offset: 3px;
+  line-height: 14.42px;
+  gap: 7.2px;
+  white-space: nowrap;
 }
 
-.site-footer a:hover { color: var(--color-link-hover); }
+.footer-actions .footer-btn:first-child { width: 177.84px; }
+.footer-actions .footer-btn:last-child { width: 140.84px; }
+
+.footer-btn:hover { background: rgb(255 255 255 / 0.08); }
+.footer-btn img { display: block; }
+
+/* External links show a small arrow-out mark after the text. */
+.ext-link__icon {
+  width: 0.85em;
+  height: 0.85em;
+  margin-left: 0;
+  vertical-align: -0.08em;
+}
 
 .noscript { padding: 1rem var(--gutter); }
 
-/* Phones: two header rows, the codename with the language and theme switches,
-   then both buttons. */
+/* Phones: three header rows. The codename with the language and theme buttons,
+   then the buttons, then the tabs. The tabs go from edge to edge and scroll
+   sideways when they are wider than the screen. Their rule is an inset shadow on
+   the row, so the line of the current tab stays on it while the row scrolls. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
 
   .site-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "codename prefs" "actions actions";
+    grid-template-areas: "codename prefs" "actions actions" "nav nav";
   }
 
-  .codename { grid-area: codename; margin-right: 0; }
-  .prefs { grid-area: prefs; margin-right: 0; }
-  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; }
+  .codename { grid-area: codename; min-width: 0; margin-right: 0; }
+  .site-nav {
+    grid-area: nav;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 calc(var(--gutter) - 0.875rem);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .site-nav::-webkit-scrollbar { display: none; }
+  /* Inside the scrolling row, the focus ring stays within the tab so it is not cut. */
+  .site-nav a:focus-visible { outline-offset: -3px; }
+  .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
+  .prefs { grid-area: prefs; margin-right: 0; padding: 0.7rem 0; }
+  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
   .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
+
+  /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. */
+  .footer-brand { width: auto; max-width: 100%; flex-wrap: wrap; }
+  .footer-brand .footer-brand__role { width: auto; }
+  .footer-actions { width: 100%; flex-wrap: wrap; }
 }
 
 /* Intro on narrower screens. */
@@ -689,6 +1332,1928 @@ h1 {
 
 @media (max-width: 640px) {
   .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+  /* The goals stack on a phone, so the stack label needs room above it. */
+  .intro { margin-bottom: 2rem; }
+}
+
+/* --- Hello World -----------------------------------------------------------
+   For business leaders. Three rows, each on the full width:
+   1. The title.
+   2. The reason for Cairn, then what Cairn is (two paragraphs) with their two
+      links, then the three points in columns, as the goal of the stack page.
+   3. The carousel of the four principles: the list on the left (each name, the
+      line of its time, and the description of the current one), the picture of
+      the current principle on the right. The frame of the picture is the only
+      surface (Sand, as a layer of the schema).
+   Narrow screens show one column. The script (js/hello.js) drives the carousel. */
+
+.hello {
+  display: flex;
+  flex-direction: column;
+  /* Cream above “Our approach to building Cairn” (hero to principles block). */
+  gap: 35px;
+  /* Cream above “Introducing”: tighter now that the title is larger. */
+  padding: calc(30px - 0.35rem) 0 0;
+}
+
+/* No browser margins on the headings and lists of the page. :where() keeps these
+   rules weaker than the rules of each part. */
+:where(.hello) :where(h2, h3, ul) { margin: 0; padding: 0; }
+:where(.hello) ul { list-style: none; }
+
+.pic-defs { position: absolute; }
+
+/* 1. The title, then the two lines and the buttons, on the same left edge. */
+.hello__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.hello .hello__heading {
+  margin: 0;
+  color: var(--color-title);
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.hello__title-line { display: block; }
+
+/* The default-lingo line: 90px against the 80px of the Space Grotesk line.
+   English ("open source") and French ("à code source ouvert") each pick their
+   own alternates and kernings, letter by letter, in js/hello.js. */
+.hello__title-mark {
+  font-family: "Default Lingo", "Iowan Old Style", Palatino, serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.125em;
+  font-feature-settings: "ss02" 1, "salt" 1;
+  line-height: 0.9;
+}
+
+.hello__title-mark .salt { font-feature-settings: "salt" 1; }
+.hello__title-mark .ss02 { font-feature-settings: "ss02" 1; }
+.hello__title-mark .plain { font-feature-settings: normal; }
+/* The wide "e" of "open" sits 3px closer to the next letter, at the 90px size.
+   In "stack", "a" sits 2px closer and "c" sits 1px looser, at the 80px size. */
+.hello__title-mark .kern-e { letter-spacing: -0.0333em; }
+.hello__heading .kern-a { letter-spacing: -0.025em; }
+.hello__heading .kern-c { letter-spacing: 0.0125em; }
+
+/* French "à code source ouvert": one space is set at the 80px of the first line,
+   and the last two letters are pulled in by 8px and 2px at the 90px size. */
+.hello__title-mark .space-base { font-size: 0.8889em; }
+.hello__title-mark .kern-r { letter-spacing: -0.0889em; }
+.hello__title-mark .kern-t { letter-spacing: -0.0222em; }
+
+.hello__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0;
+}
+
+.hello__deck { display: flex; flex-direction: column; }
+.hello__lead {
+  margin: 0;
+  color: var(--color-title);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.208px;
+}
+.hello__lead--mark { color: var(--color-pink); font-weight: 700; }
+
+/* The Magenta block after the sentence is a text cursor (11 by 24 at 22px type,
+   2px after the last letter). It blinks so it reads as a clicker. A visitor who
+   asks for reduced motion sees it still. */
+.hello__lead--mark::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1.0909em;
+  margin-left: 0.09em;
+  background: currentColor;
+  vertical-align: middle;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hello__lead--mark::after { animation: cursor-blink 1.06s steps(1) infinite; }
+}
+
+.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+.what__links .btn,
+.what__pebble {
+  gap: 7.2px;
+  padding: 8.652px 14.42px;
+  border-radius: 6.76px;
+  font-size: 14.4px;
+  font-weight: 500;
+  line-height: 14.42px;
+}
+.what__links .btn { border-width: 1px; border-color: var(--color-title); }
+.what__pebble {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-title);
+  text-decoration: none;
+}
+.what__links img { display: block; flex: none; }
+.what__pebble:hover { color: var(--color-link); }
+
+:root[data-theme="dark"] .what__links img { filter: brightness(0) invert(1); }
+
+/* The principles on the left, the picture on the right. */
+.hello__approach-title {
+  margin: 0 0 1.1rem;
+  color: var(--color-title);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Principle cards. Light: Figma 28:10390, 454 × 60 closed, 8px gaps, cream on
+   Beige. Dark: Figma 28:12066, 454 × 65 closed, 12px gaps, #402c4c on purple.
+   Both use the same 454 × 248 open card with a Magenta outline. */
+.approach {
+  --approach-closed-h: 60px;
+  --approach-gap: 8px;
+  --approach-stack-height: calc(60px * 3 + 8px * 3 + 248px);
+  display: grid;
+  grid-template-columns: 454px minmax(0, 1fr);
+  gap: 15px;
+  align-items: stretch;
+}
+
+:root[data-theme="dark"] .approach {
+  --approach-closed-h: 65px;
+  --approach-gap: 12px;
+  --approach-stack-height: calc(65px * 3 + 12px * 3 + 248px);
+}
+
+.approach__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--approach-gap);
+  min-height: var(--approach-stack-height);
+}
+
+.approach__item {
+  border: 1px solid var(--approach-card-border);
+  border-radius: 6px;
+  background: var(--approach-card-bg);
+  color: var(--approach-card-ink);
+}
+
+.approach__item:not(.is-open) { height: var(--approach-closed-h); }
+.approach__item:not(.is-open) .approach__card {
+  height: 100%;
+  min-height: 0;
+  padding: 17px 18px 16px;
+}
+/* In the dark frame the first card uses Muted purple, the other two Light purple. */
+:root[data-theme="dark"] .approach__item:first-child:not(.is-open) { border-color: #614972; }
+
+.approach__item.is-open {
+  /* Fixed block height: the list and graph frame do not jump between principles. */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  /* 248px is the Figma size. French wraps one bullet onto a second line, so the
+     card grows by a line when it needs to; the graph box stretches with it. */
+  min-height: 248px;
+  padding: 16px;
+  border-color: var(--color-pink);
+  background: var(--approach-open-bg);
+}
+
+.approach__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 3.55rem;
+  padding: 0.7rem 1.1rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--approach-card-ink);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.176px;
+  line-height: 24px;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The open card's header is the 98 × 24 chip above a 24px bold name. It is
+   54px for one line, but grows when a French name wraps onto two lines so the
+   title never spills over the text below. */
+.approach__item.is-open .approach__card {
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 54px;
+  height: auto;
+  padding: 0;
+}
+
+/* 98 × 24 chip: white 12px JetBrains Mono Medium. */
+.approach__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 98px;
+  height: 24px;
+  padding: 6px;
+  border-radius: 3px;
+  background: var(--approach-tag-bg);
+  color: #fff;
+  font-family: "JetBrains Mono", var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+.approach__name {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.176px;
+  line-height: 24px;
+}
+
+.approach__item.is-open .approach__tag { background: var(--color-pink); }
+.approach__item.is-open .approach__name { font-size: 24px; font-weight: 700; letter-spacing: -0.176px; }
+
+.approach__panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  color: var(--approach-card-ink);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.176px;
+  line-height: 24px;
+}
+.approach__panel[hidden] { display: none; }
+.approach__panel > p:first-child { width: 424px; max-width: 100%; min-height: 72px; margin: 0 0 8px; }
+.approach__for { margin: 0; color: var(--approach-for-ink); font-weight: 500; }
+.approach__points { width: 424px; max-width: 100%; margin: 0; padding-left: 1.5rem; list-style: disc; }
+.approach__points li { margin: 0; line-height: 24px; }
+
+.approach__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  position: relative;
+  min-height: var(--approach-stack-height);
+  align-self: stretch;
+  padding: 2.4rem 1.7rem 2.6rem;
+  --pic-size: calc(var(--approach-stack-height) - 2.4rem - 2.6rem);
+  overflow: hidden;
+  border: 1px solid #e3d3bc;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* One mark per picture. The current one is magenta. */
+.approach__dots {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+}
+
+.approach__dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #d0c2b1;
+}
+
+.approach__dots i.is-on { background: var(--color-pink); }
+
+/* The four pictures share one frame. The open card decides which one shows.
+   The shared slide rule hides a slide's first text block; these slides are pictures. */
+.approach__stage > .carousel__slide {
+  grid-area: 1 / 1;
+  height: 100%;
+  min-height: 0;
+  place-content: center;
+  pointer-events: none;
+}
+
+.approach__stage > .carousel__slide.is-on {
+  z-index: 1;
+  pointer-events: auto;
+}
+.approach__stage .carousel__slide > .pic {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each diagram shares the tools height and sits in the vertical middle of the card. */
+.approach__stage .pic {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--pic-size, auto);
+}
+.approach__stage .pic.pic-tests {
+  min-height: auto;
+  gap: 0;
+}
+
+.approach__stage .pic { max-width: none; }
+
+.approach__stage .pic-tools__cairn {
+  border: 2px solid var(--color-pink);
+  border-radius: 12px;
+  background: #f5e8ff;
+}
+.approach__stage .pic-tools__cairn strong { font-size: 1.35rem; }
+.approach__stage .pic-tools__cairn span:last-child { color: #544b40; font-size: 1.15rem; font-weight: 400; }
+
+/* The dark graph box is the same height as the card stack: 479px, on #402c4c
+   with the Muted purple outline of frame 28:11147. */
+:root[data-theme="dark"] .approach__stage {
+  border-color: #614972;
+  background: var(--color-component);
+}
+:root[data-theme="dark"] .approach__item.is-open { border-color: var(--color-pink); }
+:root[data-theme="dark"] .approach__stage .pic-tools__cairn { background: var(--color-selected); }
+:root[data-theme="dark"] .approach__stage .pic-tools__cairn span:last-child { color: var(--color-body); }
+/* Halftone pixels animate; the stone contour stays still (Figma 28:10770). */
+@media (prefers-reduced-motion: no-preference) {
+  .hello-ground__dither {
+    animation: trail-dither-twinkle 12s ease-in-out infinite;
+  }
+}
+
+@keyframes trail-dither-twinkle {
+  0%, 100% { opacity: 0.5; }
+  33% { opacity: 0.62; }
+  66% { opacity: 0.42; }
+}
+
+/* Dark Hello World: the whole background of frame 28:11033, exported from Figma
+   as trail-map-dark-landscape.svg (base #291435, terrain and contour on gradients).
+   It already contains every dark layer, so the portrait exports are hidden. */
+:root[data-theme="dark"] .hello-ground-stack,
+:root[data-theme="dark"] .hello-ground__contour {
+  display: none;
+}
+
+:root[data-theme="dark"] .hello-ground__degrade {
+  display: block;
+  background-color: #291435;
+  background-image: url("../assets/hello/trail-map-dark-landscape.svg?v=11033");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+}
+
+
+/* 3. The carousel: the list on the left, the picture on the right. All the slides
+   are in the same place, and one shows. The slide that comes in starts a short
+   distance to the right: the section cuts it, so it adds no width to the page. */
+.hello__principles { overflow: hidden; }
+.carousel { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2.8rem; align-items: start; }
+.carousel__slides { display: grid; }
+/* The name and the description of a principle are in the list: the slide shows
+   only its picture. */
+.carousel__slide > div:first-child { display: none; }
+
+/* A slide: its picture. */
+.carousel__slide {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template-columns: minmax(0, 1fr);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0s 0.45s;
+}
+
+.carousel__slide.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s ease;
+  animation: carousel-in 0.45s ease;
+}
+
+@keyframes carousel-in {
+  from { transform: translateX(1.5rem); }
+  to { transform: none; }
+}
+
+.carousel__name {
+  color: var(--color-title);
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.carousel__text { max-width: 40em; margin-top: 0.4rem; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
+
+/* The frame of the picture: the only surface of the column. */
+.carousel__picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.6rem;
+  border-radius: var(--radius-ui-md);
+  background: var(--color-layer);
+}
+:root[data-theme="dark"] .carousel__picture { background: rgb(220 186 246 / 0.12); }
+
+/* The list of the principles: a table of four rows, as the recipes table. A
+   heading row (the name of the list and the pause button), a strong rule, then
+   hairlines between the rows. The current row is in the Marshmallow band, with
+   its description; its time is a thin ink bar on a track at the end of the row,
+   as the context bar of a recipe. */
+.carousel__nav { display: flex; flex-direction: column; }
+.carousel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0 0.7rem;
+  border-bottom: 1px solid var(--color-header-rule);
+}
+/* The heading of the section: the size of the introduction, in the title ink. */
+.carousel__title { color: var(--color-title); font-size: 1.6rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.carousel__marks { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.carousel__item { padding: 0.85rem 0.9rem 0.9rem; border-bottom: 1px solid var(--color-schema-line); transition: background 0.2s; }
+/* The current row: a Magenta block before its name, as the cursor of a terminal,
+   in place of a band. Each row keeps the room of the block, so the names stay
+   on one line of alignment. The block blinks, as a cursor, unless the visitor
+   asks the system for reduced motion. */
+.carousel__mark-name::before {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-right: 0.55em;
+  vertical-align: -0.17em;
+  background: transparent;
+}
+.carousel__mark[aria-current="true"] .carousel__mark-name::before { background: var(--color-pink); }
+.carousel__mark:hover:not([aria-current="true"]) .carousel__mark-name::before { background: var(--color-schema-line); }
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__mark[aria-current="true"] .carousel__mark-name::before { animation: cursor-blink 1.06s steps(1) infinite; }
+}
+@keyframes cursor-blink { 50% { background: transparent; } }
+/* The description lines up with the name, after the room of the block. */
+.carousel__item-text { margin-left: calc(1.05em * 1.1); }
+
+.carousel__mark {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.carousel__mark-name { flex: 1; font-size: 1.1rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
+/* A name on two lines: its second line starts under its first letter, after the room of the block. */
+.carousel__mark-name { padding-left: 1.05em; text-indent: -1.05em; }
+.carousel__mark:hover,
+.carousel__mark[aria-current="true"] { color: var(--color-title); }
+.carousel__item-text { display: none; margin-top: 0.5rem; padding-right: 5.7rem; max-width: 34em; color: var(--color-body); font-size: 1rem; line-height: 1.45; }
+.carousel__item.is-current .carousel__item-text { display: block; }
+
+/* The time: a thin bar on a track (Deep purple on light, Pale purple on dark). */
+.carousel__mark i { position: relative; flex: none; overflow: hidden; width: 4.5rem; height: 0.35rem; background: rgb(41 20 53 / 0.1); }
+:root[data-theme="dark"] .carousel__mark i { background: rgb(245 232 255 / 0.12); }
+.carousel__mark b { display: block; width: 0; height: 100%; background: var(--color-title); }
+:root[data-theme="dark"] .carousel__mark b { background: #dcbaf6; }
+.carousel__mark[aria-current="true"] b { width: 100%; }
+.carousel.is-running .carousel__mark[aria-current="true"] b { animation: carousel-time var(--carousel-time, 7s) linear both; }
+
+@keyframes carousel-time {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Ghost icon buttons, as the theme button. */
+.carousel__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.carousel__button:hover { background: var(--color-ghost-hover); }
+.carousel__button svg { width: 1.1rem; height: 1.1rem; }
+.carousel__head .carousel__button { flex: none; align-self: center; width: 1.8rem; height: 1.8rem; color: var(--color-text-muted); }
+.carousel__head .carousel__button:hover { color: var(--color-text); }
+.carousel__head .carousel__button svg { width: 0.9rem; height: 0.9rem; }
+.carousel__icon--play,
+.carousel.is-paused .carousel__icon--pause { display: none; }
+.carousel.is-paused .carousel__icon--play { display: block; }
+
+/* The pictures of the carousel. They use the parts of the schema: the page ground,
+   Sand layers, White boxes, the outline of the core, and Magenta for a contract
+   or a link.
+
+   Each picture has a motion, which starts when its slide shows (`.is-on`). The
+   styles without motion are the end state of the motion: a visitor who asks the
+   system for reduced motion sees that state. For this reason, each rule that
+   starts a motion is in a `prefers-reduced-motion: no-preference` block. */
+.pic { width: 100%; max-width: 34rem; margin: 0 auto; color: var(--color-body); font-size: 1rem; }
+
+/* A box of a picture: as a box of the schema, a 1px border and a regular name. */
+.pic__box {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-schema-line);
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-component);
+  color: var(--color-title);
+  font-weight: 400;
+}
+
+.pic__label {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pic__mark { flex: none; width: 1.3rem; height: 1.3rem; }
+
+/* The pop-up badge: white text on the badge green, light and dark. */
+.pic__tag {
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  background: var(--color-badge-alpha);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pic__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem 1.1rem;
+  margin-top: 1.2rem;
+  font-size: 0.98rem;
+}
+
+.pic__legend li { display: flex; align-items: center; gap: 0.4rem; }
+.pic__key { display: inline-block; flex: none; width: 1.1rem; height: 0.8rem; border-radius: 3px; }
+.pic__key--component { border: 1px solid var(--color-component-border); background: var(--color-component); }
+.pic__key--link { height: 4px; border-radius: 2px; background: var(--color-pink); }
+.pic__key--specification { border: 1.5px dashed var(--color-button-outline); }
+
+/* The ways that a part of a picture comes in. Each one goes to the style of the part. */
+@keyframes pic-pop { from { opacity: 0; transform: scale(0.3); } }
+@keyframes pic-rise { from { opacity: 0; transform: translateY(0.35rem); } }
+@keyframes pic-fade { from { opacity: 0; } }
+
+/* 1. Tests, then the selection. The test marks come one at a time, one component
+   after the other (`--r` is the row and `--m` is the mark). Then the selected
+   component gets its magenta outline and its tag. The other rows stay as they are. */
+/* Figma Graph 1 (28:9601), light theme: a 865 × 452 frame with the diagram 807px
+   wide at x=29. The head is 573px; the three rows share one column grid so the
+   marks sit at x=531 and the tag at x=655, exactly as in the frame. */
+.pic-tests {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  --tests-row-bg: #fff;
+  --tests-row-line: #a08f79;
+  --tests-ink: #291435;
+  color: var(--tests-ink);
+}
+/* The stage's generic .pic rule clears max-width; restore the Figma 807px. */
+.approach__stage .pic.pic-tests { max-width: 807px; margin: 0 auto; }
+
+.pic-tests .pic__label {
+  color: #a08f79;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1.081px;
+  line-height: 18.24px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* Figma 28:11008: 573px wide, the two labels at its two ends. */
+.pic-tests__head {
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 573px;
+  max-width: 100%;
+  margin: 0 0 20px;
+}
+.pic-tests__head .pic__label:first-child { width: 391px; max-width: 70%; }
+.pic-tests__head .pic__label:last-child { flex: none; width: 44.73px; }
+
+.pic-tests__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+/* Name, marks at 531px, then a 28.45px gap before the 88px tag slot at 655px. */
+.pic-tests__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 95.55px 28.45px 88px 49px;
+  column-gap: 0;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 64px;
+  margin: 0;
+  padding: 0 14px;
+  border: 1px solid var(--tests-row-line);
+  border-radius: 6.76px;
+  background: var(--tests-row-bg);
+  color: var(--tests-ink);
+  font-weight: 400;
+}
+.pic-tests__row:first-child { height: 63px; padding-top: 18px; padding-bottom: 16px; }
+.pic-tests__row > :first-child {
+  grid-column: 1;
+  min-width: 0;
+  font-size: 20px;
+  line-height: 26.7px;
+}
+.pic-tests__slot { grid-column: 4; display: block; }
+.pic-tests__marks {
+  grid-column: 2;
+  display: flex;
+  gap: 8.2px;
+  justify-content: flex-start;
+}
+.pic-tests .pic__mark {
+  display: block;
+  flex: none;
+  width: 26.36px;
+  height: 26.36px;
+}
+.pic-tests__row.is-selected {
+  border-color: #fd70f5;
+  background: #f5e8ff;
+  box-shadow: inset 0 0 0 2px #fd70f5;
+}
+.pic-tests .pic__tag {
+  grid-column: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 88px;
+  height: 26.004px;
+  margin: 0;
+  padding: 3.502px 8.405px;
+  border: 0;
+  border-radius: 5px;
+  background: #291435;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.91px;
+  text-align: center;
+}
+
+/* Figma Graph 3 (28:12067): the same 807px diagram on #402c4c. Idle dots and
+   row outlines are Pale purple #dcbaf6, labels and names white, and the selected
+   row is Light purple #734c90 behind a 2px Magenta ring. */
+:root[data-theme="dark"] .pic-tests {
+  --tests-row-bg: transparent;
+  --tests-row-line: #dcbaf6;
+  --tests-ink: #ffffff;
+}
+:root[data-theme="dark"] .pic-tests .pic__label { color: #dcbaf6; }
+:root[data-theme="dark"] .approach__dots i { background: #734c90; }
+:root[data-theme="dark"] .approach__dots i.is-on { background: var(--color-pink); }
+:root[data-theme="dark"] .pic-tests__row.is-selected {
+  background: #734c90;
+  color: #ffffff;
+}
+:root[data-theme="dark"] .pic-tests .pic__tag {
+  width: 99px;
+  margin-left: -1px;
+  background: #291435;
+  color: #ffffff;
+}
+.pic-tests__rows .pic-tests__row:nth-child(1) { --r: 0; }
+.pic-tests__rows .pic-tests__row:nth-child(2) { --r: 1; }
+.pic-tests__rows .pic-tests__row:nth-child(3) { --r: 2; }
+.pic-tests__marks .pic__mark:nth-child(1) { --m: 0; }
+.pic-tests__marks .pic__mark:nth-child(2) { --m: 1; }
+.pic-tests__marks .pic__mark:nth-child(3) { --m: 2; }
+
+/* The approach card keeps the static Figma layout. The pop-in motion is for other contexts only. */
+.approach__stage .carousel__slide.is-on .pic-tests__marks .pic__mark,
+.approach__stage .carousel__slide.is-on .pic-tests .pic__tag,
+.approach__stage .carousel__slide.is-on .pic-tests__row.is-selected { animation: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__slide.is-on .pic-tests__marks .pic__mark {
+    animation: pic-pop 0.35s cubic-bezier(0.3, 1.5, 0.6, 1) both;
+    animation-delay: calc(0.6s + (var(--r) * 3 + var(--m)) * 0.2s);
+  }
+  .carousel__slide.is-on .pic-tests .pic__tag { animation: pic-pop 0.4s cubic-bezier(0.3, 1.5, 0.6, 1) 2.9s forwards; }
+}
+
+/* 2. One contract, and two places where one component can replace another one.
+   Figma Graph 28:9475: an 865 × 452 frame, centred in the stage. The magenta
+   slot stays fixed while the two components inside it swap, one place at a
+   time, so the other place visibly stays as it is. js/hello.js scales the frame
+   down when the stage is narrower than the design. */
+.pic-contract {
+  --gap: 10px;
+  --contract-frame: 865px;
+  --contract-height: 452px;
+  /* Figma 28:11531 (inside the pink slot) and 28:9748 (outside of it). */
+  --choice-in-bg: #f5e8ff;
+  --choice-in-ink: #291435;
+  --choice-in-radius: 6px;
+  --choice-out-bg: #fff;
+  --choice-out-ink: #63737d;
+  --choice-out-radius: 6.76px;
+}
+
+:root[data-theme="dark"] .pic-contract {
+  --choice-in-bg: var(--color-selected);
+  --choice-in-ink: var(--color-title);
+  --choice-out-bg: var(--color-component);
+  --choice-out-ink: var(--color-text-muted);
+}
+
+.approach__stage .pic-contract {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--contract-frame);
+  height: var(--contract-height);
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  transform: translate(-50%, -50%) scale(var(--contract-scale, 1));
+  transform-origin: center;
+}
+
+.approach__stage .pic-contract__grid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* With the contract open, the shared dots follow the scaled Figma frame. */
+.approach__stage:has(.carousel__slide[data-picture="1"].is-on) .approach__dots {
+  top: calc(50% - 204px * var(--contract-scale, 1));
+  right: calc(50% - 410.5px * var(--contract-scale, 1));
+  width: calc(66px * var(--contract-scale, 1));
+  gap: calc(6px * var(--contract-scale, 1));
+}
+.approach__stage:has(.carousel__slide[data-picture="1"].is-on) .approach__dots i {
+  width: calc(12px * var(--contract-scale, 1));
+  height: calc(12px * var(--contract-scale, 1));
+}
+
+.pic-contract__frame {
+  position: absolute;
+  top: 109px;
+  width: 335px;
+  height: 235px;
+  margin: 0;
+  border: 1px dashed #a08f79;
+  border-radius: 10.05px;
+}
+.pic-contract__frame--gateway { left: 24px; }
+.pic-contract__frame--server { left: 504px; }
+
+.pic-contract__name {
+  position: absolute;
+  top: 122px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 307.88px;
+  height: 19.23px;
+  margin: 0;
+  color: #a08f79;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1.081px;
+  line-height: 18.24px;
+  text-transform: uppercase;
+}
+.pic-contract__name--gateway { left: 38px; }
+.pic-contract__name--server { left: 518px; }
+
+/* The fixed magenta outline behind the active component. */
+.pic-contract__slot {
+  position: absolute;
+  top: 143px;
+  z-index: 0;
+  display: block;
+  width: 318px;
+  height: 95px;
+  border: 2px solid #fd70f5;
+  border-radius: 10px;
+}
+.pic-contract__slot--gateway { left: 33px; }
+.pic-contract__slot--server { left: 513px; }
+
+/* The line of the contract, from one slot to the other one, with its name above it. */
+.pic-contract__joint {
+  position: absolute;
+  top: 185px;
+  left: 351px;
+  width: 162px;
+  height: 2px;
+  margin: 0;
+  background: #fd70f5;
+}
+
+.pic-contract__joint::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15.132px;
+  height: 15.132px;
+  background: #fd70f5;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.pic-contract__joint-label {
+  position: absolute;
+  bottom: 19px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 101px;
+  height: 33px;
+  gap: 0;
+  color: #fd70f5;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.081px;
+  line-height: 16.22px;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.pic-contract__choice {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 308px;
+  height: 85px;
+  min-height: 0;
+  padding: 12.08px 22px 12.65px 14px;
+  border: 1px solid #aeb8be;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25.59px;
+}
+.pic-contract__choice--gateway.pic-contract__choice--in { top: 148px; left: 38px; }
+.pic-contract__choice--gateway.pic-contract__choice--out { top: 243px; left: 38px; }
+.pic-contract__choice--server.pic-contract__choice--in { top: 148px; left: 518px; }
+.pic-contract__choice--server.pic-contract__choice--out { top: 243px; left: 518px; }
+.pic__mark-contract { display: block; flex: none; }
+
+.pic-contract__choice--in {
+  background: var(--choice-in-bg);
+  color: var(--choice-in-ink);
+  border-radius: var(--choice-in-radius);
+}
+
+.pic-contract__choice--out {
+  background: var(--choice-out-bg);
+  color: var(--choice-out-ink);
+  border-radius: var(--choice-out-radius);
+  opacity: 1;
+}
+
+.approach__stage .pic-contract .pic__legend {
+  position: absolute;
+  top: 402px;
+  left: 29px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0 4.9px;
+  width: 806.518px;
+  height: 22px;
+  margin: 0;
+  color: #544b40;
+  font-size: 16px;
+  line-height: 21.8px;
+}
+.pic-contract .pic__legend li { height: 22px; gap: 6.58px; }
+
+:root[data-theme="dark"] .pic-contract__slot { border-color: var(--color-pink); }
+
+:root[data-theme="dark"] .pic-contract__joint,
+:root[data-theme="dark"] .pic-contract__joint::after { background: var(--color-pink); }
+
+:root[data-theme="dark"] .pic-contract__joint-label { color: var(--color-pink); }
+
+:root[data-theme="dark"] .pic-contract__name { color: var(--color-text-muted); }
+
+:root[data-theme="dark"] .pic-contract .pic__legend { color: var(--color-body); }
+
+/* The Model Server starts a quarter of the loop before the Model Gateway. */
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__slide.is-on .pic-contract__choice--in { animation: pic-contract-leave 8s ease-in-out infinite; }
+  .carousel__slide.is-on .pic-contract__choice--out { animation: pic-contract-enter 8s ease-in-out infinite; }
+  .carousel__slide.is-on .pic-contract__choice--server { animation-delay: -2s; }
+}
+
+/* The card that leaves the slot takes the white "out" style (28:9748); the
+   card that enters it takes the marshmallow "in" style (28:11531). */
+@keyframes pic-contract-leave {
+  0%, 37.5% {
+    opacity: 1;
+    transform: none;
+    background-color: var(--choice-in-bg);
+    color: var(--choice-in-ink);
+    border-radius: var(--choice-in-radius);
+  }
+  50%, 87.5% {
+    opacity: 0.5;
+    transform: translateY(calc(100% + var(--gap)));
+    background-color: var(--choice-out-bg);
+    color: var(--choice-out-ink);
+    border-radius: var(--choice-out-radius);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    background-color: var(--choice-in-bg);
+    color: var(--choice-in-ink);
+    border-radius: var(--choice-in-radius);
+  }
+}
+
+@keyframes pic-contract-enter {
+  0%, 37.5% {
+    opacity: 0.5;
+    transform: none;
+    background-color: var(--choice-out-bg);
+    color: var(--choice-out-ink);
+    border-radius: var(--choice-out-radius);
+  }
+  50%, 87.5% {
+    opacity: 1;
+    transform: translateY(calc(-100% - var(--gap)));
+    background-color: var(--choice-in-bg);
+    color: var(--choice-in-ink);
+    border-radius: var(--choice-in-radius);
+  }
+  100% {
+    opacity: 0.5;
+    transform: none;
+    background-color: var(--choice-out-bg);
+    color: var(--choice-out-ink);
+    border-radius: var(--choice-out-radius);
+  }
+}
+
+/* 3. From top to bottom, as the schema: the tools of the teams, one API, Cairn,
+   then the compute that runs the AI models. Points go from the tools to the one
+   API, then from Cairn to the compute, as the moving point of the schema on the
+   stack page. The script (js/hello.js) makes the points. */
+.pic-tools { display: flex; flex-direction: column; }
+.pic-tools__tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; text-align: center; }
+.pic-tools__tools .pic__box { display: flex; align-items: center; justify-content: center; padding: 0.5rem 0.4rem; line-height: 1.2; }
+
+/* The lines keep their proportions (no stretch), so the points stay round. The
+   lines are above the outline of Cairn, for the point of the one API. */
+.pic-tools__lines { position: relative; z-index: 1; display: block; width: 100%; height: auto; overflow: visible; }
+.pic-tools__lines path { fill: none; stroke: var(--color-button-outline); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.pic-tools__pixel rect { fill: var(--color-pink); shape-rendering: crispEdges; }
+.pic-tools__api { fill: var(--color-pink); }
+.pic-tools__ring { fill: none; stroke: var(--color-pink); stroke-width: 1.2; }
+
+.pic-tools__cairn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 0.6rem;
+  padding: 0.75rem 1rem 0.7rem;
+  border: 2px solid var(--color-core-outline);
+  border-radius: var(--radius-ui-md);
+  background: var(--color-layer);
+}
+
+.pic-tools__cairn .pic__label { flex-basis: 100%; text-align: center; }
+.pic-tools__cairn strong { color: var(--color-title); font-size: 1.15rem; font-weight: 600; }
+
+.pic-tools__compute { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; text-align: center; }
+.pic-tools__compute .pic__box { display: flex; flex-direction: column; padding: 0.45rem 0.5rem; line-height: 1.25; }
+.pic-tools__compute b { font-weight: 500; }
+.pic-tools__compute small { color: var(--color-body); font-size: 0.8em; font-weight: 400; }
+.pic-tools__foot { margin-top: 0.5rem; text-align: center; }
+
+/* 4. The skeleton of the schema: the layers, their components and the links
+   between them. The links are the subject of the picture, so the layer names are
+   lighter than on the schema. The picture comes in three steps: the open source
+   components (one layer after the other: `--n` is the layer), then the connection
+   code, then the component specification. Each sign of the legend comes with its
+   step. */
+/* Figma Graph 2 (28:9469): Operations skeleton in the approach carousel. */
+.pic-skeleton__core {
+  display: flex;
+  flex-direction: column;
+  gap: 0.515rem;
+  padding: 0.75rem;
+  border: 1px solid #d0c2b1;
+  border-radius: 0.628rem;
+  background: #fff;
+}
+
+.pic-skeleton__matrix {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr);
+  grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto);
+}
+
+.pic-skeleton__layer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.308rem;
+  padding: 0.349rem 0.515rem 0.515rem;
+  border: 1px solid #dcbaf6;
+  border-radius: 0.423rem;
+  background: #f5e8ff;
+}
+
+.pic-skeleton__name {
+  display: block;
+  margin: 0;
+  color: #291435;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.081;
+}
+
+.pic-skeleton__comps { display: flex; align-items: center; }
+
+.pic-skeleton__comp {
+  flex: 1;
+  height: 1.648rem;
+  border: 1px solid #dcbaf6;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.pic-skeleton__comp--specification { border: 1px dashed #a08f79; background: transparent; }
+.pic-skeleton__link { flex: none; width: 1.339rem; height: 4px; background: var(--color-pink); transform-origin: left center; }
+.pic-skeleton__link--across { align-self: center; width: auto; height: 5px; }
+.pic-skeleton__link--down { justify-self: center; width: 5px; height: auto; transform-origin: center top; }
+.pic-skeleton__layer--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.617rem;
+  min-height: 3.438rem;
+  margin-top: 0;
+  padding: 0.412rem 0.515rem;
+  border: 1px solid #dcbaf6;
+  border-radius: 0.423rem;
+  background: #f5e8ff;
+}
+
+.pic-skeleton__layer--row .pic-skeleton__name { flex: none; width: 4.75rem; }
+.pic-skeleton__layer--row .pic-skeleton__comps { flex: 1; gap: 0.412rem; min-width: 0; align-self: stretch; }
+.pic-skeleton__cross { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.412rem; margin-top: 0.412rem; }
+
+.pic-skeleton__cross span {
+  padding: 0.246rem 0.206rem 0.323rem;
+  border-radius: 0.423rem;
+  background: #ecedef;
+  color: rgb(41 20 53 / 0.72);
+  font-size: 0.844rem;
+  font-weight: 500;
+  line-height: 1.351;
+  text-align: center;
+}
+
+.pic-skeleton .pic__legend {
+  margin-top: 0.62rem;
+  padding-top: 0.31rem;
+  gap: 0.31rem 1.131rem;
+  font-size: 1rem;
+  line-height: 1.3625;
+  color: #544b40;
+}
+
+.pic-skeleton .pic__legend li { gap: 0.411rem; }
+.pic-skeleton .pic__key { width: 1.133rem; height: 0.823rem; border-radius: 3px; }
+.pic-skeleton .pic__key--component { border: 1px solid #d0c2b1; background: #fff; }
+.pic-skeleton .pic__key--specification { border: 1px dashed #a08f79; background: transparent; }
+
+/* Figma Graph 4 (28:12133): the dark Operations skeleton. The frame is
+   865 × 452 with the diagram at x=29, y=86. Values stay in px: the site's
+   1rem is 16.48px, so rem geometry overshoots the frame. */
+/* The 452px frame must not stretch the box: the slide is taken out of flow so
+   the stage keeps the height of the principle cards. Its negative top/left
+   offsets cancel the stage padding, so the frame centres in the whole card. */
+:root[data-theme="dark"] .approach__stage > .carousel__slide[data-picture="3"] {
+  position: absolute;
+  top: -2.4rem;
+  left: -1.7rem;
+  right: 0;
+  bottom: 0;
+  height: auto;
+}
+:root[data-theme="dark"] .approach__stage .pic-skeleton {
+  width: 814px;
+  height: 452px;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  justify-self: center;
+  align-self: center;
+  justify-content: flex-start;
+}
+
+:root[data-theme="dark"] .pic-skeleton__core {
+  box-sizing: border-box;
+  flex: none;
+  width: 814px;
+  height: 235px;
+  margin-top: 86px;
+  padding: 12px;
+  gap: 8.24px;
+  border: 1px solid #734c90;
+  border-radius: 10.05px;
+  background: #402c4c;
+}
+
+:root[data-theme="dark"] .pic-skeleton__matrix {
+  box-sizing: border-box;
+  flex: none;
+  width: 100%;
+  height: 143px;
+  grid-template-columns: minmax(0, 1fr) 24.72px minmax(0, 1fr);
+  grid-template-rows: 62.33px 18.13px 62.33px;
+  column-gap: 0;
+  row-gap: 0;
+}
+
+/* The four corner layers: 381.64 × 62.11, inset 5.58px / 8.24px. The border
+   is inside the frame, so the padding is 1px smaller than Figma's offset. */
+:root[data-theme="dark"] .pic-skeleton__matrix > .pic-skeleton__layer {
+  box-sizing: border-box;
+  height: 62.11px;
+  padding: 4.58px 7.24px 7.24px;
+  gap: 4.93px;
+  border: 1px solid #a08f79;
+  border-radius: 6.76px;
+  background: #402c4c;
+}
+
+:root[data-theme="dark"] .pic-skeleton__name {
+  min-height: 17px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 16.22px;
+}
+
+:root[data-theme="dark"] .pic-skeleton__comps { gap: 0; }
+:root[data-theme="dark"] .pic-skeleton__comp {
+  box-sizing: border-box;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 26.36px;
+  border: 1px solid #a08f79;
+  border-radius: 4px;
+  background: #291435;
+}
+:root[data-theme="dark"] .pic-skeleton__comp--specification {
+  border: 1px dashed #dcbaf6;
+  background: transparent;
+}
+:root[data-theme="dark"] .pic-skeleton__link { width: 21.42px; height: 4px; background: #fd70f5; }
+:root[data-theme="dark"] .pic-skeleton__link--across { width: 24.72px; height: 5px; }
+:root[data-theme="dark"] .pic-skeleton__link--down { width: 5px; height: 18.13px; }
+
+/* Registry: 788 × 55, its four components separated by 6.6px. */
+:root[data-theme="dark"] .pic-skeleton__layer--row {
+  box-sizing: border-box;
+  flex: none;
+  width: 100%;
+  height: 55px;
+  min-height: 0;
+  margin-top: 0;
+  padding: 5.592px 7.24px;
+  gap: 9.87px;
+  border: 1px solid #a08f79;
+  border-radius: 6.76px;
+  background: #402c4c;
+}
+:root[data-theme="dark"] .pic-skeleton__layer--row .pic-skeleton__name {
+  flex: none;
+  width: 76px;
+  min-height: 25px;
+}
+:root[data-theme="dark"] .pic-skeleton__layer--row .pic-skeleton__comps {
+  gap: 6.6px;
+  align-self: center;
+}
+
+:root[data-theme="dark"] .pic-skeleton__cross {
+  box-sizing: border-box;
+  width: 814px;
+  height: 28.11px;
+  margin-top: 16px;
+  gap: 6.6px;
+}
+:root[data-theme="dark"] .pic-skeleton__cross span {
+  box-sizing: border-box;
+  min-height: 28.11px;
+  padding: 3.94px 3.296px 5.17px;
+  border-radius: 6.76px;
+  background: #614972;
+  color: #dcbaf6;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 18.24px;
+  white-space: nowrap;
+}
+
+:root[data-theme="dark"] .pic-skeleton .pic__legend {
+  box-sizing: border-box;
+  flex: none;
+  width: 806.968px;
+  height: 26.97px;
+  margin: 33.89px 0 0 3.516px;
+  padding-top: 4.97px;
+  gap: 4.9px 18.1px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.8px;
+}
+:root[data-theme="dark"] .pic-skeleton .pic__legend li { flex: none; gap: 6.57px; }
+:root[data-theme="dark"] .pic-skeleton .pic__key { width: 18.13px; height: 13.17px; }
+:root[data-theme="dark"] .pic-skeleton .pic__key--component { border: 1px solid #a08f79; background: #291435; }
+:root[data-theme="dark"] .pic-skeleton .pic__key--link { width: 18.13px; height: 4px; border-radius: 2px; background: #fd70f5; }
+:root[data-theme="dark"] .pic-skeleton .pic__key--specification { border: 1px dashed #dcbaf6; border-radius: 3px; background: transparent; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__slide.is-on .pic-skeleton__comp { animation: pic-rise 0.4s ease both; animation-delay: calc(0.5s + var(--n) * 0.16s); }
+  .carousel__slide.is-on .pic-skeleton__link { animation: pic-skeleton-link 0.45s ease both; animation-delay: calc(2s + var(--n, 0) * 0.1s); }
+  .carousel__slide.is-on .pic-skeleton__link--across { animation-delay: 2.6s; }
+  .carousel__slide.is-on .pic-skeleton__link--down { animation-name: pic-skeleton-link-down; animation-delay: 2.6s; }
+  .carousel__slide.is-on .pic-skeleton__comp--specification { animation: pic-skeleton-specification 0.5s ease 3.6s both; }
+  .carousel__slide.is-on .pic-skeleton .pic__legend li { animation: pic-fade 0.4s ease both; }
+  .carousel__slide.is-on .pic-skeleton .pic__legend li:nth-child(1) { animation-delay: 0.5s; }
+  .carousel__slide.is-on .pic-skeleton .pic__legend li:nth-child(2) { animation-delay: 2s; }
+  .carousel__slide.is-on .pic-skeleton .pic__legend li:nth-child(3) { animation-delay: 3.6s; }
+}
+
+@keyframes pic-skeleton-link { from { transform: scaleX(0); } }
+@keyframes pic-skeleton-link-down { from { transform: scaleY(0); } }
+@keyframes pic-skeleton-specification { from { opacity: 0; transform: scale(0.8); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__slide,
+  .carousel__slide.is-on { animation: none; transition: none; }
+  .pic-tools__pixel,
+  .pic-tools__ring { display: none; }
+}
+
+/* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .hello .hello__heading { max-width: none; font-size: 2.43rem; }
+  .hello__lead { font-size: 1.05rem; }
+  .approach { grid-template-columns: minmax(0, 1fr); }
+  .site-footer { align-items: flex-start; }
+}
+
+/* Phones: smaller pictures, so each one fits the width of the slide. */
+@media (max-width: 640px) {
+  .carousel__picture { padding: 1rem 0.8rem; }
+  .pic { font-size: 0.9rem; }
+  .pic__label { font-size: 0.66rem; }
+  .pic__mark { width: 1.05rem; height: 1.05rem; }
+  .pic__tag { font-size: 0.7rem; }
+  .pic-tests__head { width: 100%; max-width: none; margin-bottom: 12px; }
+  .pic-tests__head .pic__label:first-child,
+  .pic-tests__head .pic__label:last-child { width: auto; max-width: none; }
+  .pic-tests__row,
+  .pic-tests__row:first-child { height: auto; min-height: 0; padding: 10px 12px; font-size: 16px; line-height: 1.3; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 8px; }
+  .pic-tests__row > :first-child { font-size: 16px; line-height: 1.3; }
+  .pic-tests__slot,
+  .pic-tests .pic__tag { grid-column: 3; }
+  .pic-tests .pic__label { font-size: 12px; letter-spacing: 0.08em; }
+  .pic-tests__marks { gap: 4px; }
+  .approach__stage .pic-tests .pic__mark { width: 20px; height: 20px; }
+  .pic-tests .pic__tag { font-size: 12px; line-height: 1.3; }
+  .pic-tools__tools,
+  .pic-tools__compute { gap: 0.4rem; }
+  .pic-tools__tools .pic__box { padding: 0.45rem 0.2rem; font-size: 0.78rem; }
+  .pic-skeleton__name,
+  .pic-skeleton__cross span { font-size: 0.7rem; }
+  .pic-skeleton__link { width: 0.8rem; }
+  .pic-skeleton__link--across { width: auto; height: 4px; }
+  .pic-skeleton__link--down { width: 4px; }
+  .pic-skeleton__layer--row .pic-skeleton__name { width: 3.8rem; }
+  /* Keep the dark Figma colours, but let the fixed desktop diagram reflow. */
+  :root[data-theme="dark"] .approach__stage > .carousel__slide[data-picture="3"] { top: -2.4rem; left: -1.7rem; right: 0; bottom: 0; }
+  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: calc(100% - 3.4rem); height: auto; margin: 0; justify-self: center; align-self: center; }
+  :root[data-theme="dark"] .pic-skeleton__core { width: 100%; height: auto; margin-top: 0; padding: 0.75rem; gap: 0.515rem; }
+  :root[data-theme="dark"] .pic-skeleton__matrix { height: auto; grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr); grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto); }
+  :root[data-theme="dark"] .pic-skeleton__matrix > .pic-skeleton__layer { height: auto; padding: 0.349rem 0.515rem 0.515rem; gap: 0.308rem; }
+  :root[data-theme="dark"] .pic-skeleton__name { min-height: 0; font-size: 0.7rem; line-height: 1.081; }
+  :root[data-theme="dark"] .pic-skeleton__comp { height: 1.648rem; }
+  :root[data-theme="dark"] .pic-skeleton__link { width: 0.8rem; }
+  :root[data-theme="dark"] .pic-skeleton__link--across { width: auto; height: 4px; }
+  :root[data-theme="dark"] .pic-skeleton__link--down { width: 4px; height: auto; }
+  :root[data-theme="dark"] .pic-skeleton__layer--row { height: auto; min-height: 3.438rem; padding: 0.412rem 0.515rem; gap: 0.617rem; }
+  :root[data-theme="dark"] .pic-skeleton__layer--row .pic-skeleton__name { width: 3.8rem; min-height: 0; }
+  :root[data-theme="dark"] .pic-skeleton__cross { width: 100%; height: auto; margin-top: 0.412rem; }
+  :root[data-theme="dark"] .pic-skeleton__cross span { min-height: 0; padding: 0.246rem 0.206rem 0.323rem; font-size: 0.7rem; line-height: 1.351; }
+  :root[data-theme="dark"] .pic-skeleton .pic__legend { width: 100%; height: auto; margin: 0.62rem 0 0; padding-top: 0.31rem; flex-wrap: wrap; font-size: 0.98rem; line-height: 1.3625; }
+  :root[data-theme="dark"] .pic-skeleton .pic__key { width: 1.133rem; height: 0.823rem; }
+  :root[data-theme="dark"] .pic-skeleton .pic__key--link { width: 1.133rem; }
+}
+
+/* --- Recipes page ---------------------------------------------------------
+   Filters, a table of the recipes, and a sheet with the facts and the files of
+   the selected recipe. The script (js/recipes.js) fills them from
+   js/recipes-data.js.
+
+   Field notes: no panels and no boxes, hairline rules. The selected recipe is in
+   a Marshmallow band, with no vertical line (the table has none); a filter with
+   a choice gets the same band. The files are in a
+   dark panel. The table sits beside the sheet on a wide screen.
+   On a wide screen that is tall enough, the page is the height of the window:
+   the table and the file preview scroll inside it, and the page does not. A
+   shorter window, a larger text size or browser zoom gives a page that scrolls. */
+
+.recipe-body {
+  --recipe-band: #f5e8ff;            /* Marshmallow */
+  --recipe-rule: rgb(41 20 53 / 0.14);
+  --recipe-bar: #291435;             /* Deep purple */
+  --recipe-track: rgb(41 20 53 / 0.1);
+  --recipe-shade: rgb(41 20 53 / 0.14);
+  --recipe-menu-line: #d0c2b1;       /* The border of an open menu: Beige, as in the design system */
+  --recipe-code-bg: #291435;
+}
+
+:root[data-theme="dark"] .recipe-body {
+  --recipe-band: #3d2a4a;            /* Marshmallow over Deep purple */
+  --recipe-rule: rgb(245 232 255 / 0.16);
+  --recipe-bar: #dcbaf6;             /* Pale purple */
+  --recipe-track: rgb(245 232 255 / 0.12);
+  --recipe-shade: rgb(0 0 0 / 0.35);
+  --recipe-menu-line: #734c90;       /* Secondary light purple */
+  --recipe-code-bg: #1d0e26;
+}
+
+/* The same as the stack page: the title and two lines in the title's ink. Then
+   the hint above the filters. */
+.recipe-intro { margin-bottom: 0.7rem; }
+.recipe-intro__lead { color: var(--color-title); font-size: 0.9rem; font-weight: 500; }
+.recipe-hint { margin-bottom: 0.9rem; }
+
+/* The table with its filters on the left, the sheet of the selected recipe on the right. */
+.recipe-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding-bottom: 0.4rem;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.recipe-finder,
+.recipe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  min-width: 0;
+}
+
+.recipe-list { gap: 0.5em; }
+
+/* --- Filters: two menus and the search field, each a field on a 1px line --- */
+
+/* 14px at a 16px root: the size of the design system's field and menu item. */
+.recipe-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em 1.6em;
+  font-size: 0.875rem;
+}
+
+.recipe-dropdown { position: relative; display: flex; flex: 0 1 14em; min-width: 0; }
+.recipe-search { display: flex; flex: 1 1 14em; max-width: 22em; min-width: 0; }
+
+.recipe-select,
+.recipe-input {
+  padding: 0.5em 0.3em;
+  border: 0;
+  border-bottom: 1px solid var(--color-header-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 500;
+}
+
+.recipe-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.recipe-select__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
+
+.recipe-input { flex: 1; min-width: 0; }
+.recipe-input::placeholder { color: var(--color-text-muted); opacity: 1; }
+
+.recipe-select:hover,
+.recipe-select:focus-visible,
+.recipe-select[aria-expanded="true"],
+.recipe-input:focus-visible {
+  background: color-mix(in srgb, var(--recipe-band) 55%, transparent);
+  outline: none;
+}
+
+/* A menu with a choice: the band of the selected recipe, and a 2px line. */
+.recipe-select[data-chosen="true"] {
+  padding-bottom: calc(0.5em - 1px);
+  border-bottom-width: 2px;
+  background: var(--recipe-band);
+  font-weight: 600;
+}
+
+/* The open menu: the design system's dropdown menu. It lies over the table, and
+   scrolls when it has more choices than the screen can show. */
+.recipe-menu {
+  position: absolute;
+  top: calc(100% + 0.3em);
+  left: 0;
+  z-index: 5;
+  min-width: 100%;
+  max-height: min(21em, 55vh);
+  margin: 0;
+  padding: 0.375rem;
+  overflow: auto;
+  border: 1px solid var(--recipe-menu-line);
+  border-radius: var(--radius-md);
+  background: var(--color-component);
+  box-shadow: 0 14px 18px var(--color-tip-shadow);
+  color: var(--color-text);
+  list-style: none;
+}
+.recipe-menu[hidden] { display: none; }
+
+.recipe-menu__label {
+  padding: 0.4em 0.65em 0.25em;
+  color: var(--color-text-muted);
+  font-size: 0.75em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.recipe-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* The choice under the pointer or the arrow keys. */
+.recipe-menu__item.is-active { background: var(--color-ghost-hover); }
+/* The selected choice has a Magenta check. */
+.recipe-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
+
+/* --- The table --- */
+
+/* The table scrolls inside its box. The headings stay at the top, and a shade
+   at the bottom edge shows that more recipes are below: a cover that moves with
+   the rows hides the shade at the end of the list. */
+.recipe-scroll {
+  max-height: min(24rem, 36dvh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background:
+    linear-gradient(transparent, var(--color-bg) 70%) bottom / 100% 2.5rem no-repeat local,
+    linear-gradient(transparent, var(--recipe-shade)) bottom / 100% 1rem no-repeat scroll;
+}
+
+.recipe-table { width: 100%; border-collapse: collapse; }
+
+.recipe-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.2em 0.6em 0.6em;
+  background: var(--color-bg);
+  box-shadow: inset 0 -1px 0 var(--color-header-rule);
+  color: var(--color-text-muted);
+  font-size: 0.86em;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.recipe-table td {
+  padding: 0.6em;
+  border-bottom: 1px solid var(--recipe-rule);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.recipe-table th:first-child,
+.recipe-table td:first-child { padding-left: 0.8em; }
+
+.recipe-row { cursor: pointer; }
+.recipe-row:hover td { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
+.recipe-row.is-selected td { background: var(--recipe-band); }
+
+
+/* The model name is the button of the row. */
+.recipe-pick {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.recipe-pick:focus-visible { outline-offset: 4px; }
+.recipe-pick__model { display: block; font-weight: 600; white-space: nowrap; }
+.recipe-pick__publisher { display: block; margin-top: 0.15em; color: var(--color-text-muted); font-size: 0.86em; }
+
+.recipe-cell-nowrap { white-space: nowrap; }
+.recipe-table .recipe-col-mark,
+.recipe-table .recipe-cell-mark { text-align: center; }
+.recipe-cell-uses { color: var(--color-body); }
+
+/* The context length: a bar, then the value. */
+.recipe-col-context,
+.recipe-context { min-width: 5em; }
+.recipe-context { display: flex; align-items: center; gap: 0.6em; }
+.recipe-context__bar { position: relative; flex: 1; height: 0.4em; background: var(--recipe-track); }
+.recipe-context__bar i { position: absolute; inset: 0 auto 0 0; background: var(--recipe-bar); }
+.recipe-context__value { width: 3.2em; font-size: 0.86em; font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
+.recipe-mark { display: inline-block; width: 0.6em; height: 0.6em; border: 1.5px solid var(--color-text-muted); border-radius: 50%; vertical-align: middle; }
+.recipe-mark.is-on { border-color: var(--color-text); background: var(--color-text); }
+
+/* A column heading or a use case with a pop-up: a dotted underline. */
+.recipe-tip {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.recipe-empty { padding: 1em 0.8em; color: var(--color-body); }
+
+/* The "?" button next to the "Use case" heading, and its pop-up with the
+   sources of the benchmark data. The pop-up has the colors of the pop-ups of
+   the schema; the script places it under the button. */
+.recipe-about-button {
+  display: inline-grid;
+  place-items: center;
+  width: 1.4em;
+  height: 1.4em;
+  margin-left: 0.4em;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: none;
+  color: var(--color-text-muted);
+  font: 600 0.8em/1 var(--font-sans);
+  vertical-align: 0.1em;
+  cursor: pointer;
+}
+.recipe-about-button:hover,
+.recipe-about-button[aria-expanded="true"] { color: var(--color-text); }
+
+.recipe-about {
+  position: fixed;
+  inset: auto;
+  max-width: min(22rem, calc(100vw - 32px));
+  margin: 0;
+  padding: 0.7rem 0.9rem 0.8rem;
+  border: 0;
+  border-radius: var(--radius-ui-sm);
+  background: var(--color-tip-bg);
+  box-shadow: 0 8px 24px var(--color-tip-shadow);
+  color: var(--color-tip-text);
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  white-space: normal;
+}
+.recipe-about .recipe-link { color: inherit; font-size: inherit; }
+
+/* --- The sheet: the name and the facts, then the files --- */
+
+.recipe-sheet { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
+
+.recipe-sheet__title { margin: 0; color: var(--color-title); font-size: 1.45em; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
+.recipe-sheet__where { margin-top: 0.3em; color: var(--color-text); }
+
+/* The facts in two columns of label and value. A wide fact takes the full width. */
+.recipe-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: 1em;
+  margin: 0.9em 0 0;
+  font-size: 0.92em;
+}
+.recipe-facts dt,
+.recipe-facts dd { margin: 0; padding: 0.45em 0; border-top: 1px solid var(--recipe-rule); }
+.recipe-facts dt { color: var(--color-text-muted); }
+.recipe-facts dd { color: var(--color-text); font-weight: 500; }
+.recipe-facts dd.is-wide { grid-column: 2 / -1; }
+.recipe-facts code { font-family: var(--font-mono); font-size: 0.92em; font-weight: 400; overflow-wrap: anywhere; }
+
+.recipe-files { display: flex; flex-direction: column; min-height: 0; }
+.recipe-files__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.2em 1.2em;
+  margin-bottom: 0.4rem;
+}
+.recipe-files__name { margin: 0; color: var(--color-text-muted); font-size: 0.86em; font-weight: 600; }
+
+/* The file names: monospace tabs, the current one with the Magenta line of the tabs. */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--color-header-rule); }
+.recipe-tab {
+  margin-bottom: -1px;
+  padding: 0.5em 0.8em;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-text-muted);
+  font: 500 0.88em var(--font-mono);
+  cursor: pointer;
+}
+.recipe-tab:hover { color: var(--color-text); }
+.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); }
+
+/* A file, or a command: the dark panel, with the Copy button in the corner. YAML
+   keys in River and comments in Stone, the colors of technical text on dark. */
+.recipe-code { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--recipe-code-bg); color: #f5e8ff; }
+.recipe-files .recipe-code { margin-top: 1rem; }
+.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 5rem 1rem 1.2rem; overflow: auto; font: 0.86em/1.7 var(--font-mono); }
+.recipe-code--file pre { max-height: 26rem; }
+.recipe-code__key { color: #63bcc1; }
+.recipe-code__comment { color: #a08f79; }
+
+.recipe-copy {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.25em 0.7em;
+  border: 1px solid rgb(245 232 255 / 0.35);
+  border-radius: var(--radius-ui-sm);
+  background: inherit;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.recipe-copy:hover { border-color: #f5e8ff; }
+
+.recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
+.recipe-link:hover { color: var(--color-link-hover); }
+
+/* The steps to install a recipe (shown when the stack repository is public). */
+.recipe-use { display: flex; flex-direction: column; gap: 0.6em; margin: 0.4rem 0 0; padding-left: 1.3em; color: var(--color-body); }
+.recipe-use .recipe-code { margin-top: 0.35em; }
+
+/* Wide screens: the sheet stays in view while the page scrolls. */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .recipe-sheet { position: sticky; top: 1rem; align-self: start; }
+}
+
+/* Wide screens below 1400px: the table gets more of the width, and long model
+   names break at their hyphens, so the seven columns fit. */
+@media (min-width: 901px) and (max-width: 87.5em) and (min-aspect-ratio: 1/1) {
+  .recipe-body { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); }
+  .recipe-pick__model { white-space: normal; }
+}
+
+/* A wide screen that is tall enough: the page is the height of the window. The
+   table takes the height that the filters leave and scrolls; the file preview
+   takes the height that the facts leave and scrolls. The limit is in em, so a
+   larger text size or browser zoom gives a page that scrolls. */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 46em) {
+  body[data-page="recipes"] .page { height: 100vh; height: 100dvh; min-height: 0; }
+  body[data-page="recipes"] main { flex: 1; min-height: 0; }
+  .recipe-intro { margin-bottom: 0.5rem; }
+  .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .recipe-finder,
+  .recipe-list { min-height: 0; }
+  .recipe-list { flex: 1; }
+  .recipe-scroll { flex: 1; min-height: 0; max-height: none; }
+  .recipe-sheet { position: static; align-self: stretch; min-height: 0; }
+  .recipe-files { flex: 1; }
+  .recipe-files .recipe-code { flex: 1 1 auto; min-height: 5rem; }
+  .recipe-code--file pre { min-height: 0; max-height: none; }
+}
+
+/* Narrow screens: the sheet goes under the table. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-body { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+  .recipe-sheet { scroll-margin-top: 0.5rem; }
+}
+
+/* Phones: the search on its own line. The table scrolls sideways, and the model
+   column stays in view. */
+@media (max-width: 640px) {
+  .recipe-search { flex-basis: 100%; max-width: none; }
+  .recipe-table th:first-child,
+  .recipe-table td:first-child { position: sticky; left: 0; background: var(--color-bg); }
+  .recipe-table th:first-child { z-index: 2; }
+  .recipe-row.is-selected td:first-child { background: var(--recipe-band); }
+}
+
+/* --- Roadmap page ----------------------------------------------------------
+   A table, in Field notes: one row for each workstream, one column for each time
+   (Now, Next, Later). The script (js/roadmap.js) fills the cells from the copy
+   files. No boxes: hairline rules, a strong rule under the heads of the columns.
+
+   How sure an item is shows in its type, not in a frame:
+   - Now (in progress): the title in the title ink, one sentence, the layer.
+     The column has a light Marshmallow band, and its head has the Magenta block
+     of the cursor (the active line, as on Hello World).
+   - Next (planned): the title in the text ink, the layer.
+   - Later (the direction): the title in the quiet gray.
+   The layer of an item is a link to its box on the stack page.               */
+
+.roadmap-intro { margin-bottom: 2rem; }
+.roadmap-intro h1 { margin-bottom: 0.6rem; }
+.roadmap-intro__lead { color: var(--color-title); font-size: 1.05rem; }
+
+.roadmap {
+  display: grid;
+  /* The names of the workstreams, then the three times. The nearer the time,
+     the wider its column. */
+  grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.15fr) minmax(0, 0.9fr);
+  grid-template-rows: min-content repeat(4, auto);
+  column-gap: 1.6rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* The band of "Now": behind the cells of that column, on the full height. */
+.roadmap__band {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  margin: 0 -0.8rem;
+  background: color-mix(in srgb, var(--color-selected) 70%, transparent);
+}
+
+.roadmap__row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
+.roadmap__row:nth-child(2) { grid-row: 1; }
+.roadmap__row:nth-child(3) { grid-row: 2; }
+.roadmap__row:nth-child(4) { grid-row: 3; }
+.roadmap__row:nth-child(5) { grid-row: 4; }
+.roadmap__row:nth-child(6) { grid-row: 5; }
+
+/* The heads of the columns, over a strong rule: the time, and how sure its items are. */
+.roadmap__row--head > * { padding: 1rem 0 0.9rem; border-bottom: 1px solid var(--color-header-rule); }
+.roadmap__column { display: flex; flex-direction: column; }
+.roadmap__when { color: var(--color-title); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
+/* The cursor of the active line, before "Now". */
+[data-when="now"] > .roadmap__when::before {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 0.95em;
+  margin-right: 0.4em;
+  vertical-align: -0.12em;
+  background: var(--color-pink);
+}
+.roadmap__when-text { margin-top: 0.4rem; color: var(--color-body); font-size: 0.875rem; }
+.roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600; }
+
+/* A workstream: its name with one line about it, then its three cells, over a
+   hairline. */
+.roadmap__name,
+.roadmap__cell { padding: 1.1rem 0 1.3rem; border-bottom: 1px solid var(--color-schema-line); }
+.roadmap__name { display: flex; flex-direction: column; gap: 0.3rem; padding-right: 0.6rem; }
+.roadmap__name-text { color: var(--color-title); font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; }
+.roadmap__note { max-width: 20ch; color: var(--color-text-muted); font-size: 0.875rem; }
+.roadmap__cell { min-width: 0; }
+
+/* Narrow screens only: see below. */
+.roadmap__cell-label { display: none; }
+
+.roadmap__items { display: flex; flex-direction: column; gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
+.roadmap-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; overflow-wrap: break-word; }
+.roadmap-item__title { color: var(--color-text); font-weight: 500; }
+.roadmap-item__text { color: var(--color-body); font-size: 0.92rem; }
+.roadmap-item--now .roadmap-item__title { color: var(--color-title); }
+.roadmap-item--next .roadmap-item__title { font-weight: 400; }
+.roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); font-weight: 400; }
+
+/* The layer of an item: a quiet link to its box on the stack page, with the
+   dotted line of the words that have more to tell (as on the recipes page). */
+.roadmap-tag {
+  margin-top: 0.2rem;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  text-underline-offset: 3px;
+}
+.roadmap-tag:hover { color: var(--color-link); text-decoration-style: solid; }
+
+/* Narrow screens: four columns do not fit. Each workstream is a group: its name,
+   then its three cells one under the other, each with the name of its column.
+   The cell of "Now" has the band. */
+@media (max-width: 900px) {
+  .roadmap,
+  .roadmap__row { display: flex; flex-direction: column; }
+  .roadmap { gap: 2rem; }
+  .roadmap__row { gap: 0.4rem; }
+  .roadmap__band,
+  .roadmap__row--head { display: none; }
+  .roadmap__name { padding: 0 0 0.6rem; border-bottom: 1px solid var(--color-header-rule); }
+  .roadmap__name-text { font-size: 1.3rem; }
+  .roadmap__note { max-width: none; }
+  .roadmap__cell { padding: 0.6rem 0 0.8rem; }
+  .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; background: color-mix(in srgb, var(--color-selected) 70%, transparent); border-bottom: 0; }
+  .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600; }
+  [data-when="now"] > .roadmap__cell-label::before {
+    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-right: 0.4em; vertical-align: -0.12em; background: var(--color-pink);
+  }
 }
 
 /* --- Downloaded image ----------------------------------------------------
@@ -751,4 +3316,80 @@ h1 {
 
 .export-sheet__title { color: var(--color-title); font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
 
-.export-sheet__foot { margin-top: auto; color: var(--color-text-muted); font-size: 14px; }
+.export-sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: auto;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.export-sheet__foot .legend { gap: 18px; }
+.export-sheet__foot p { margin-left: auto; }   /* Stays on the right when there is no legend. */
+
+/* --- Stack page: the sheet beside the schema ----------------------------------
+   js/stack.js fills the sheet of the selected box.                          */
+
+/* Wide screens: the schema on the left, the sheet on the right. The sheet stays
+   in view while the page scrolls. Narrow screens: no sheet; the pop-ups show. */
+.arch { position: relative; }
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .stack-body { display: grid; flex: 1; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 2.4rem; align-items: start; }
+  .stack-sheet { position: sticky; top: 1rem; }
+  body[data-page="stack"] .arch [data-copy] { cursor: pointer; }
+}
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .stack-sheet,
+  .sheet-toggle { display: none; }
+}
+
+/* Without the sheet, the schema takes the full width. */
+.stack-sheet-hidden .stack-body { grid-template-columns: minmax(0, 1fr); }
+.stack-sheet[hidden] { display: none; }
+/* Hover on a wide screen: the Magenta border only; a click selects the box. */
+.comp.is-hovered:not(.is-selected) { border-color: var(--color-pink); }
+.layer:not(.is-out-of-scope).is-hovered,
+.local-api.is-hovered .label,
+.boundary__label:not(.is-out-of-scope).is-hovered { border-color: var(--color-pink); }
+.is-out-of-scope .comp.is-hovered:not(.is-selected),
+.layer.is-out-of-scope.is-hovered { border-color: #8b939a; }
+
+/* The hint on the left, the button of the sheet on the right, above the sheet. */
+/* Room above it, so the hint does not sit against the goals. */
+.stack-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; }
+.stack-caption .hint { margin-bottom: 0; }
+.arch-caption { margin-bottom: 0.6rem; }
+.sheet-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.35em 0.7em;
+  border: 1px solid var(--color-schema-line);
+  border-radius: var(--radius-ui-sm);
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.sheet-toggle:hover { border-color: var(--color-header-rule); }
+.sheet-toggle svg { width: 1.15em; height: 1.15em; }
+
+/* The sheet: a strong rule over it, then the kind, the name, the description,
+   and the facts as label | value rows. Names in the facts are links to their boxes. */
+.stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 0.94rem; }
+.stack-sheet__kind { color: var(--color-text-muted); font-size: 0.86em; font-weight: 600; }
+.stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.45em; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.stack-sheet__text { margin-top: 0.7rem; color: var(--color-body); line-height: 1.45; }
+.stack-sheet__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.2em; margin: 1.1rem 0 0; font-size: 0.92em; }
+.stack-sheet__facts dt,
+.stack-sheet__facts dd { margin: 0; padding: 0.5em 0; border-top: 1px solid var(--color-schema-line); }
+.stack-sheet__facts dt { color: var(--color-text-muted); }
+.stack-sheet__facts dd { color: var(--color-text); font-weight: 500; }
+.stack-sheet__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
+.stack-sheet__link { padding: 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: 500; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.stack-sheet__link:hover { color: var(--color-link-hover); }
