@@ -64,8 +64,16 @@ window.CAIRN_COPY.fr = {
     ],
   },
 
-  // La page Hello World, pour les gestionnaires et les décideurs. Son titre est `intro.title`.
+  // La page Hello World, pour les gestionnaires et les décideurs.
+  // Le titre affiché est `hello.title`. `intro.title` reste tel quel : le schéma téléchargé l’utilise.
   hello: {
+    // Le titre. `mark` est en Default Lingo, un cran plus grand. `before` et `after` restent en Space Grotesk.
+    title: {
+      line: "Découvrez la pile d’IA souveraine",
+      before: "à ",
+      mark: "code source ouvert",
+      after: "",
+    },
     // Sous le titre : la raison d’être de Cairn. La phrase entre astérisques est en rose.
     lead: "Les modèles ne sont pas le problème. Les déployer et les exploiter, si.",
     // Les trois points, en colonnes à côté du texte.
@@ -87,7 +95,7 @@ window.CAIRN_COPY.fr = {
     // Ce qu’est Cairn, puis le lien vers la page de la pile et l’adresse de contact.
     // Les mots entre traits de soulignement sont en italique.
     what: {
-      title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle.",
+      title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle",
       stack: "Explorer LaStack",
       contact: "Laissez-nous un caillou",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
@@ -108,10 +116,11 @@ window.CAIRN_COPY.fr = {
       {
         tag: "Portabilité",
         name: "Remplaçable par contrat",
-        text: "Nous publions les contrats d’interface que chaque composant doit respecter. Un composant qui les respecte peut en remplacer un autre sans reprise.",
+        text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
         forYou: "Pour votre organisation",
         points: [
-          "Votre choix de composants, sans dépendance à un seul fournisseur",
+          "Du code source ouvert, sans le travail d’assemblage",
+          "Chaque composant ouvert à l’inspection",
         ],
       },
       {
@@ -157,7 +166,8 @@ window.CAIRN_COPY.fr = {
       },
       // Image 2 : une passerelle et un serveur de modèles, chacun avec deux choix.
       contract: {
-        contract: "Contrat d’interface",
+        interface: "Contrat",
+        contractWord: "d’interface",
         passed: "Tests de contrat réussis",
       },
       // Image 3 : les outils des équipes, Cairn, puis les ressources de calcul.

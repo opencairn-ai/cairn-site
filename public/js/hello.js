@@ -21,9 +21,32 @@
   // The principle that is open when the page loads: Portability, as in the design.
   const OPEN_AT = 1;
 
+  shapeTitle();
   setUpFlow();
   setUpPrinciples();
   fitPictures();
+
+  // The English "open source" uses one alternate per letter, as in the frame.
+  // A child feature setting replaces the one on the word, so each letter names its own.
+  function shapeTitle() {
+    const mark = document.querySelector(".hello__title-mark");
+    if (!mark || mark.textContent !== "open source") return;
+    mark.replaceChildren(
+      el("span", "salt", "o"),
+      el("span", "plain", "p"),
+      el("span", "salt kern-e", "e"),
+      el("span", "ss02", "n "),
+      el("span", "plain", "s"),
+      el("span", "salt", "our"),
+      el("span", "plain", "c"),
+      el("span", "salt", "e"),
+    );
+    // "stack" stays in Space Grotesk. Two letters are pulled in, as in the frame.
+    const rest = mark.nextElementSibling;
+    if (!rest || !rest.textContent.endsWith("stack")) return;
+    const prefix = rest.textContent.slice(0, -5);
+    rest.replaceChildren(prefix, "st", el("span", "kern-a", "a"), el("span", "kern-c", "c"), "k");
+  }
 
   function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -38,10 +61,7 @@
     return node;
   }
 
-  // Makes the points of the picture of the tools. Each second, a point goes from
-  // one tool to the point of the one API, the point of the API makes a ring, then a
-  // point goes from Cairn to the local or the remote compute. css/styles.css hides
-  // the points for a visitor who asks the system for reduced motion.
+  // Small magenta pixels along the connector lines (not purple dots on the lines).
   function setUpFlow() {
     const tools = document.getElementById("flow-tools");
     const compute = document.getElementById("flow-compute");
@@ -54,19 +74,25 @@
     // The attributes of a motion that starts at `begin` seconds and repeats.
     const loop = (begin) => ({ dur: `${FLOW_LOOP}s`, begin: `${begin}s`, repeatCount: "indefinite" });
 
-    // A point that goes along a line in `share` of the loop, then stays hidden.
+    const px = 3;
+    const half = px / 2;
+
+    // A pixel that travels along a line briefly, then hides until the next lap.
     function point(line, begin, share) {
-      const circle = svgEl("circle", { class: "pic-tools__dot", r: 2.4, opacity: 0 });
+      const group = svgEl("g", { class: "pic-tools__pixel", opacity: 0 });
+      group.append(svgEl("rect", { x: -half, y: -half, width: px, height: px }));
       const motion = svgEl("animateMotion", { ...loop(begin), calcMode: "linear", keyPoints: "0;1;1", keyTimes: `0;${share};1` });
       motion.append(svgEl("mpath", { href: `#${line}` }));
+      const tIn = share * 0.12;
+      const tOut = share * 0.88;
       const show = svgEl("animate", {
         ...loop(begin),
         attributeName: "opacity",
-        values: "0;1;1;0;0",
-        keyTimes: `0;${share * 0.15};${share * 0.85};${share};1`,
+        values: "0;0;1;1;0;0",
+        keyTimes: `0;${tIn};${tIn + 0.02};${tOut};${tOut + 0.02};1`,
       });
-      circle.append(motion, show);
-      return circle;
+      group.append(motion, show);
+      return group;
     }
 
     // The ring that the point of the API makes when a point comes to it.
@@ -132,7 +158,7 @@
     const dots = [...document.querySelectorAll(".approach__dots i")];
     root.replaceChildren(...items);
 
-    // Picture order matches the principles: tests, contract, tools, skeleton.
+    // Picture order matches Figma Hello World (24:5409): tests, tools, contract, skeleton.
     let current = 0;
     let timer = null;
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");

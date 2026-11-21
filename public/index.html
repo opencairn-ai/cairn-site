@@ -38,7 +38,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=52">
 </head>
 <body data-page="hello">
 <div class="page">
@@ -78,14 +78,20 @@
     </div>
   </header>
 
-  <!-- Dotted ground from the design. Clipped so it ends with the footer. -->
+  <!-- Trail map from the frame, laid on the cream. Clipped so it ends with the footer. -->
   <div class="hello-ground-clip">
-    <img class="hello-ground" src="assets/hello/trail.svg" alt="" width="1207" height="1440">
+    <div class="hello-ground-stack" aria-hidden="true">
+      <object class="hello-ground hello-ground__dither" type="image/svg+xml" data="assets/hello/trail-dither.svg?v=10292" width="1177" height="1440"></object>
+    </div>
+    <object class="hello-ground hello-ground__contour" type="image/svg+xml" data="assets/hello/trail-contour.svg?v=10770" width="1442" height="634" aria-hidden="true"></object>
   </div>
 
   <main class="hello">
     <div class="hello__hero">
-      <h1 class="hello__heading" data-text="intro.title"></h1>
+      <h1 class="hello__heading">
+        <span class="hello__title-line" data-text="hello.title.line"></span>
+        <span class="hello__title-line"><span data-text="hello.title.before"></span><em class="hello__title-mark" data-text="hello.title.mark"></em><span data-text="hello.title.after"></span></span>
+      </h1>
 
       <section class="hello__intro">
         <div class="hello__deck">
@@ -97,10 +103,7 @@
             <img src="assets/hello/explore.svg" alt="" width="15.8594" height="15.8594">
             <span data-text="hello.what.stack"></span>
           </a>
-          <a class="what__pebble" data-href="hello.what.contactUrl">
-            <img src="assets/hello/title-bubble.svg" alt="" width="16" height="16">
-            <span data-text="hello.what.contact"></span>
-          </a>
+          <a class="what__pebble" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
         </p>
       </section>
     </div>
@@ -108,12 +111,12 @@
     <!-- Marks shared by the pictures. -->
     <svg class="pic-defs" width="0" height="0" aria-hidden="true">
       <symbol id="pic-pass" viewBox="0 0 16 16">
-        <circle class="pic-pass__disc" cx="8" cy="8" r="8"/>
-        <path class="pic-pass__mark" d="m4.4 8.3 2.4 2.4 4.8-5"/>
+        <circle cx="8" cy="8" r="8" fill="var(--mark-pass, #5c7065)"/>
+        <path d="m4.4 8.3 2.4 2.4 4.8-5" fill="none" stroke="var(--mark-pass-ink, var(--color-component))" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </symbol>
       <symbol id="pic-fail" viewBox="0 0 16 16">
-        <circle class="pic-fail__ring" cx="8" cy="8" r="7.2"/>
-        <path class="pic-fail__mark" d="m5.4 5.4 5.2 5.2m0-5.2-5.2 5.2"/>
+        <circle cx="8" cy="8" r="7.2" fill="none" stroke="var(--mark-fail, var(--color-text-muted))" stroke-width="1.3"/>
+        <path d="m5.4 5.4 5.2 5.2m0-5.2-5.2 5.2" fill="none" stroke="var(--mark-fail, var(--color-text-muted))" stroke-width="1.5" stroke-linecap="round"/>
       </symbol>
     </svg>
 
@@ -127,13 +130,43 @@
         <div class="approach__stage">
           <div class="carousel__slide" data-picture="0">
             <div class="pic pic-tests">
-              <div class="pic-tests__row pic-tests__row--head"><span class="pic__label" data-text="hello.pictures.tests.components"></span><span class="pic__label" data-text="hello.pictures.tests.tests"></span><span></span></div>
-              <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentA"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-fail"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span></span></div>
-              <div class="pic__box pic-tests__row is-selected"><span data-text="hello.pictures.tests.componentB"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span class="pic__tag" data-text="hello.pictures.tests.selected"></span></div>
-              <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentC"></span><span class="pic-tests__marks"><svg class="pic__mark"><use href="#pic-fail"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg><svg class="pic__mark"><use href="#pic-pass"/></svg></span><span></span></div>
+              <div class="pic-tests__head">
+                <span class="pic__label" data-text="hello.pictures.tests.components"></span>
+                <span class="pic__label" data-text="hello.pictures.tests.tests"></span>
+              </div>
+              <div class="pic-tests__rows">
+                <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentA"></span><span class="pic-tests__marks"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-fail.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"></span><span class="pic-tests__slot" aria-hidden="true"></span></div>
+                <div class="pic__box pic-tests__row is-selected"><span data-text="hello.pictures.tests.componentB"></span><span class="pic-tests__marks"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"></span><span class="pic__tag" data-text="hello.pictures.tests.selected"></span></div>
+                <div class="pic__box pic-tests__row"><span data-text="hello.pictures.tests.componentC"></span><span class="pic-tests__marks"><img class="pic__mark" src="assets/hello/pic-fail.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"><img class="pic__mark" src="assets/hello/pic-pass.svg" alt="" width="26" height="26"></span><span class="pic-tests__slot" aria-hidden="true"></span></div>
+              </div>
             </div>
           </div>
           <div class="carousel__slide" data-picture="1">
+            <div class="pic pic-tools">
+              <div class="pic-tools__tools">
+                <span class="pic__box" data-text="hello.pictures.tools.chat"></span>
+                <span class="pic__box" data-text="hello.pictures.tools.coding"></span>
+                <span class="pic__box" data-text="hello.pictures.tools.applications"></span>
+              </div>
+              <svg class="pic-tools__lines" id="flow-tools" viewBox="0 0 300 22">
+                <path id="flow-chat" d="M48.5 0C48.5 14 150 8 150 22"/>
+                <path id="flow-coding" d="M150 0V22"/>
+                <path id="flow-applications" d="M251.5 0C251.5 14 150 8 150 22"/>
+                <circle class="pic-tools__api" cx="150" cy="22" r="3"/>
+              </svg>
+              <div class="pic-tools__cairn"><span class="pic__label" data-text="hello.pictures.tools.api"></span><strong data-text="hello.pictures.tools.cairn"></strong><span data-text="hello.pictures.tools.where"></span></div>
+              <svg class="pic-tools__lines" id="flow-compute" viewBox="0 0 300 11">
+                <path id="flow-local" d="M73.75 0V11"/>
+                <path id="flow-remote" d="M226.25 0V11"/>
+              </svg>
+              <div class="pic-tools__compute">
+                <span class="pic__box"><b data-text="hello.pictures.tools.local"></b><small data-text="hello.pictures.tools.localDetail"></small></span>
+                <span class="pic__box"><b data-text="hello.pictures.tools.remote"></b><small data-text="hello.pictures.tools.remoteDetail"></small></span>
+              </div>
+              <p class="pic__label pic-tools__foot" data-text="hello.pictures.tools.compute"></p>
+            </div>
+          </div>
+          <div class="carousel__slide" data-picture="2">
             <div class="pic pic-contract">
               <div class="pic-contract__grid">
                 <i class="pic-contract__frame pic-contract__frame--gateway"></i>
@@ -142,7 +175,12 @@
                 <span class="pic__label pic-contract__name pic-contract__name--server" data-text="stack.modelAccess.modelServer.name"></span>
                 <i class="pic-contract__slot pic-contract__slot--gateway"></i>
                 <i class="pic-contract__slot pic-contract__slot--server"></i>
-                <span class="pic-contract__joint"><span class="pic__label" data-text="hello.pictures.contract.contract"></span></span>
+                <span class="pic-contract__joint">
+                  <span class="pic__label pic-contract__joint-label">
+                    <span data-text="hello.pictures.contract.interface"></span>
+                    <span data-text="hello.pictures.contract.contractWord"></span>
+                  </span>
+                </span>
                 <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--in">LiteLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
                 <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--out">Otari <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
                 <span class="pic__box pic-contract__choice pic-contract__choice--server pic-contract__choice--in">vLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
@@ -150,31 +188,6 @@
               </div>
               <ul class="pic__legend"><li><svg class="pic__mark"><use href="#pic-pass"/></svg><span data-text="hello.pictures.contract.passed"></span></li></ul>
             </div>
-          </div>
-          <div class="carousel__slide" data-picture="2">
-          <div class="pic pic-tools">
-            <div class="pic-tools__tools">
-              <span class="pic__box" data-text="hello.pictures.tools.chat"></span>
-              <span class="pic__box" data-text="hello.pictures.tools.coding"></span>
-              <span class="pic__box" data-text="hello.pictures.tools.applications"></span>
-            </div>
-            <svg class="pic-tools__lines" id="flow-tools" viewBox="0 0 300 22">
-              <path id="flow-chat" d="M48.5 0C48.5 14 150 8 150 22"/>
-              <path id="flow-coding" d="M150 0V22"/>
-              <path id="flow-applications" d="M251.5 0C251.5 14 150 8 150 22"/>
-              <circle class="pic-tools__api" cx="150" cy="22" r="3"/>
-            </svg>
-            <div class="pic-tools__cairn"><span class="pic__label" data-text="hello.pictures.tools.api"></span><strong data-text="hello.pictures.tools.cairn"></strong><span data-text="hello.pictures.tools.where"></span></div>
-            <svg class="pic-tools__lines" id="flow-compute" viewBox="0 0 300 11">
-              <path id="flow-local" d="M73.75 0V11"/>
-              <path id="flow-remote" d="M226.25 0V11"/>
-            </svg>
-            <div class="pic-tools__compute">
-              <span class="pic__box"><b data-text="hello.pictures.tools.local"></b><small data-text="hello.pictures.tools.localDetail"></small></span>
-              <span class="pic__box"><b data-text="hello.pictures.tools.remote"></b><small data-text="hello.pictures.tools.remoteDetail"></small></span>
-            </div>
-            <p class="pic__label pic-tools__foot" data-text="hello.pictures.tools.compute"></p>
-          </div>
           </div>
           <div class="carousel__slide" data-picture="3">
             <div class="pic pic-skeleton">
@@ -208,10 +221,7 @@
     <div class="footer-brand" id="collaboration"></div>
     <div class="footer-actions">
       <a class="btn footer-btn" data-href="footer.reportUrl" data-text="footer.report"></a>
-      <a class="btn footer-btn footer-btn--line" data-href="hello.what.contactUrl">
-        <img src="assets/hello/footer-bubble.svg" alt="" width="16" height="16">
-        <span data-text="hello.what.contact"></span>
-      </a>
+      <a class="btn footer-btn footer-btn--line" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
     </div>
   </footer>
 
@@ -220,6 +230,6 @@
 <script src="copy/en.js"></script>
 <script src="copy/fr.js"></script>
 <script src="js/app.js"></script>
-<script src="js/hello.js"></script>
+<script src="js/hello.js?v=10292"></script>
 </body>
 </html>

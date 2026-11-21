@@ -64,9 +64,17 @@ window.CAIRN_COPY.en = {
     ],
   },
 
-  // The Hello World page, for business leaders. Its title is `intro.title`.
+  // The Hello World page, for business leaders.
+  // The heading on the page is `hello.title`. `intro.title` stays plain: the downloaded schema uses it.
   hello: {
-    // The two lines under the title. The second line is hello.what.title, in magenta.
+    // The heading. `mark` is Default Lingo, one step larger. `before` and `after` stay in Space Grotesk.
+    title: {
+      line: "Introducing the sovereign,",
+      before: "",
+      mark: "open source",
+      after: " AI stack",
+    },
+    // The two lines under the title. The first is Medium. The second is hello.what.title, Bold, in magenta.
     lead: "The models are not the problem. Deploying and running them is.",
     points: [
       {
@@ -85,7 +93,7 @@ window.CAIRN_COPY.en = {
 
     // What Cairn is, then the link to the stack page and the contact address.
     what: {
-      title: "Cairn is an open source AI stack that your organization deploys and runs on infrastructure it controls.",
+      title: "Cairn is an open source AI stack that your organization deploys and runs on infrastructure it controls",
       stack: "Explore LaStack",
       contact: "Drop us a pebble",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
@@ -108,10 +116,11 @@ window.CAIRN_COPY.en = {
       {
         tag: "Portability",
         name: "Replaceable by contract",
-        text: "We publish the interface contracts that each component must satisfy. A component that satisfies them can replace another one without rework.",
+        text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
         forYou: "For your organization",
         points: [
-          "Your choice of components, with no dependence on a single vendor",
+          "Open source, without the assembly work",
+          "Every component open to inspection",
         ],
       },
       {
@@ -158,7 +167,8 @@ window.CAIRN_COPY.en = {
       },
       // Picture 2: a Model Gateway and a Model Server, each with two choices.
       contract: {
-        contract: "Interface contract",
+        interface: "Interface",
+        contractWord: "contract",
         passed: "Contract tests passed",
       },
       // Picture 3: the tools of the teams, Cairn, then the compute.

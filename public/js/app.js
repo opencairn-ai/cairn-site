@@ -140,8 +140,7 @@
       );
     }
 
-    // The footer lockup: "A", the two logos, then "Research collaboration".
-    // The downloaded schema still uses the sentence in footer.collaboration.
+    // Footer lockup (Figma 28:10323 / 28:10889): SVG marks in a fixed research-collab slot.
     const brand = document.getElementById("collaboration");
     if (brand) {
       const logoLink = (key) => {
@@ -161,21 +160,40 @@
         return img;
       };
       const mozilla = logoLink("mozilla");
+      mozilla.classList.add("footer-lockup__mozilla");
       mozilla.append(image("footer-mozilla.svg", 119.773, 28.6525));
       const mila = logoLink("mila");
-      mila.classList.add("footer-brand__mila");
+      mila.classList.add("footer-brand__mila", "footer-lockup__mila");
       const mark = image("footer-mila-mark.svg", 26.2001, 25.531);
       const word = image("footer-mila-word.svg", 57.9405, 25.53);
       mark.classList.add("footer-brand__mila-mark");
       word.classList.add("footer-brand__mila-word");
       mila.append(mark, word);
-      const logos = el("span", "footer-logos");
-      logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
-      brand.replaceChildren(
-        el("span", "footer-brand__a", t("footer.a")),
-        logos,
-        el("span", "footer-brand__role", t("footer.role"))
-      );
+
+      if (lang === "en") {
+        brand.className = "footer-brand footer-lockup";
+        brand.setAttribute("role", "group");
+        brand.setAttribute("aria-label", t("footer.collaboration"));
+        brand.replaceChildren(
+          image("footer-a.svg", 8.596, 12.55),
+          mozilla,
+          image("footer-x.svg", 8.596, 9.455),
+          mila,
+          image("footer-role-en.svg", 223.658, 13.53)
+        );
+        brand.firstChild.classList.add("footer-lockup__a");
+        brand.children[2].classList.add("footer-lockup__x");
+        brand.lastChild.classList.add("footer-lockup__role");
+      } else {
+        brand.className = "footer-brand";
+        const logos = el("span", "footer-logos");
+        logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
+        brand.replaceChildren(
+          el("span", "footer-brand__a", t("footer.a")),
+          logos,
+          el("span", "footer-brand__role", t("footer.role"))
+        );
+      }
     }
   }
 

@@ -11,6 +11,15 @@
   font-display: swap;
 }
 
+/* "open source" in the Hello World title. The cut is Regular, so the mark must not go italic. */
+@font-face {
+  font-family: "Default Lingo";
+  src: url("../fonts/DefaultLingo-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Colors, from the Cairn design system (cairn-color-palette.md, the deck rules in
    cairn-deck-system.md §4 and §7, and the component tokens in cairn-components.css).
    Light: Cream ground, Sand layer panels, Beige side columns, White boxes, with the
@@ -179,29 +188,53 @@ a { color: inherit; }
   padding: 0 var(--gutter);
 }
 
-/* Dotted ground on Hello World. The clip ends with the page, so the pattern
-   does not paint past the footer or lengthen the scroll. */
+/* Trail map on the cream. Height follows the page, not the Figma artboard ratio,
+   so the clip cannot extend the scroll past the footer. */
 .hello-ground-clip {
   position: absolute;
   z-index: 0;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gutter) * -1);
+  width: calc(100% + (var(--gutter) * 2));
+  height: auto;
   overflow: hidden;
   contain: paint;
   pointer-events: none;
 }
 
-/* The file is portrait; the design turns it on its side. */
+/* Portrait slot turned on its side: dither (28:10292) plus stone contour (28:10770). */
+.hello-ground-stack {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(1177 / 1440 * 100%);
+  aspect-ratio: 1177 / 1440;
+  max-width: none;
+  transform: translate(-50%, -50%) rotate(90deg);
+  pointer-events: none;
+}
+
 .hello-ground {
   position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: 8%;
-  width: 140%;
+  border: 0;
   max-width: none;
-  height: auto;
-  transform: translateX(-50%) rotate(90deg);
   pointer-events: none;
-  opacity: 0.45;
+}
+
+.hello-ground__dither {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Figma contour (28:10770): x −2, y 462 on the 1440 × 1164 page, not inside the rotated map. */
+.hello-ground__contour {
+  z-index: 1;
+  left: calc(-2 / 1440 * 100%);
+  top: calc(462 / 1164 * 100%);
+  width: calc(1442 / 1440 * 100%);
+  height: calc(634 / 1164 * 100%);
 }
 
 .site-header,
@@ -214,13 +247,13 @@ a { color: inherit; }
 }
 
 /* The header is one row: the codename, the tabs, then the two buttons, then
-   the language and theme. The current tab has a 4px magenta line under its
-   label only. Narrow screens put the tabs in a second row. */
+   the language and theme. The current tab is Bold, with a 4px magenta line
+   as wide as the tab. Narrow screens put the tabs in a second row. */
 .site-header {
   display: flex;
   align-items: center;
   gap: 0 0.6rem;
-  min-height: 4.5rem;
+  min-height: 4.0625rem;
   margin-bottom: 0.35rem;
 }
 
@@ -242,12 +275,12 @@ a { color: inherit; }
 .codename {
   display: flex;
   align-items: center;
-  margin-right: 1.4rem;
   text-decoration: none;
 }
 
-/* The lockup already includes "Codename:". The light or dark file follows the theme. */
-.codename img { display: block; width: auto; height: 1.5rem; }
+/* The lockup already includes "Codename:". The light or dark file follows the theme.
+   Height is the old 1.5rem, 15% larger, then 5% smaller than that. */
+.codename img { display: block; width: auto; height: 1.63875rem; }
 .codename .logo--dark,
 :root[data-theme="dark"] .codename .logo--light { display: none; }
 :root[data-theme="dark"] .codename .logo--dark { display: block; }
@@ -310,17 +343,18 @@ a { color: inherit; }
 .lang a[hidden] { display: none; }
 .lang a:hover { background: var(--color-ghost-hover); }
 
-/* The tabs, one per page, after the codename. 14px, medium weight, about 24px
-   of side padding. The current tab keeps that weight and adds a 4px magenta
-   line on the beige rule. Roadmap stays grey. The tabs take the free width,
-   so the buttons go to the right end. */
+/* The tabs, one per page, 60px after the lockup. 14.4px type, line 18px.
+   Each tab is the 65px height of the bar. Side padding is the width of the
+   pink line, not a gap between labels. The current tab is Bold. The others
+   stay Medium. Roadmap is Stone until it is the current page. The tabs take
+   the free width, so the buttons go to the right end. */
 .site-nav {
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-  gap: 2.1rem;
   margin-right: auto;
-  margin-left: 1.6rem;
+  /* 60px from the lockup to the first tab. The header's column gap supplies the rest. */
+  margin-left: calc(3.75rem - 0.6rem);
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.25;
@@ -331,7 +365,8 @@ a { color: inherit; }
   display: inline-flex;
   flex: none;
   align-items: center;
-  padding: 0.7rem 0 0.85rem;
+  height: 4.0625rem;
+  padding: 0.625rem 1.75rem 0;
   color: var(--color-title);
   text-decoration: none;
   white-space: nowrap;
@@ -339,21 +374,26 @@ a { color: inherit; }
 
 .site-nav a:hover { color: var(--color-text); }
 
-/* The mark is the width of the label. It hangs down to the header rule,
-   which is the header's min-height, so the pink sits on that line. */
-.site-nav a[aria-current]::after {
+.site-nav a[aria-current="page"] {
+  padding-left: 1.5rem;
+  padding-right: 1.4375rem;
+  font-weight: 700;
+}
+
+/* The line is as wide as the tab, padding included, and sits on the header rule. */
+.site-nav a[aria-current="page"]::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc((100% - 4.5rem) / 2);
+  bottom: 0;
   height: 4px;
   background: var(--color-pink);
   z-index: 1;
 }
 
-/* Roadmap stays muted, as in the Hello World frame. The page itself still opens. */
-.site-nav a[data-page="roadmap"]:not([aria-current="page"]) { color: var(--color-tab-disabled); }
+/* Roadmap stays Stone, as in the header frame. The page itself still opens. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]) { color: #a08f79; }
 
 /* The tab of a page to come. */
 .site-nav a[aria-disabled="true"],
@@ -366,8 +406,8 @@ a { color: inherit; }
 @media (max-width: 77.5em), (max-aspect-ratio: 1/1) {
   .site-header { flex-wrap: wrap; }
   .codename { margin-right: auto; }
-  .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -0.875rem; }
-  .site-nav a[aria-current]::after { bottom: 0; }
+  .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -1.5rem; }
+  .site-nav a { height: 2.6rem; padding-top: 0; }
 }
 
 .btn {
@@ -1073,7 +1113,8 @@ h1 {
   gap: 1rem 12px;
   /* 64px of the page background between the content and the bar, on every page. */
   margin: 64px calc(var(--gutter) * -1) 0;
-  padding: 18px var(--gutter);
+  /* Figma 28:10323: 18px × 20px inset on the deep purple bar. */
+  padding: 18px 20px;
   background: #291435;
   color: #fff;
 }
@@ -1092,6 +1133,52 @@ h1 {
   font-weight: 400;
   line-height: 1;
   white-space: nowrap;
+}
+
+/* English lockup: absolute positions from Figma Research collab (28:10889). */
+.footer-lockup {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 495px;
+  max-width: 100%;
+  height: 31px;
+  overflow: hidden;
+}
+
+.footer-lockup img {
+  display: block;
+  max-width: none;
+}
+
+.footer-lockup__a {
+  position: absolute;
+  left: 1px;
+  top: 15px;
+}
+
+.footer-lockup__mozilla {
+  position: absolute;
+  left: 18px;
+  top: 0;
+}
+
+.footer-lockup__x {
+  position: absolute;
+  left: 147px;
+  top: 20px;
+}
+
+.footer-lockup__mila {
+  position: absolute;
+  left: 162px;
+  top: 1px;
+}
+
+.footer-lockup__role {
+  position: absolute;
+  left: 270px;
+  top: 15.19px;
 }
 
 /* Mozilla, the x, and Mila sit on one baseline, a little wider apart than the words. */
@@ -1177,7 +1264,7 @@ h1 {
   .site-nav::-webkit-scrollbar { display: none; }
   /* Inside the scrolling row, the focus ring stays within the tab so it is not cut. */
   .site-nav a:focus-visible { outline-offset: -3px; }
-  .codename img { max-width: 100%; max-height: 1.75rem; height: auto; }
+  .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
   .prefs { grid-area: prefs; margin-right: 0; padding: 0.7rem 0; }
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
   .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
@@ -1208,8 +1295,13 @@ h1 {
 .hello {
   display: flex;
   flex-direction: column;
-  gap: 2.2rem;
-  padding: 1.6rem 0 0;
+  /* 42px of cream above the words "Our approach to building Cairn".
+     The line box starts 3px above the letters, so the gap is 45px. */
+  gap: 45px;
+  /* 30px of cream above the word "Introducing". The line height is tighter than
+     the letters, so they rise into the gap: the extra 15px puts the word at 30px.
+     The header's own margin is the rest. */
+  padding: calc(45px - 0.35rem) 0 0;
 }
 
 /* No browser margins on the headings and lists of the page. :where() keeps these
@@ -1219,12 +1311,12 @@ h1 {
 
 .pic-defs { position: absolute; }
 
-/* 1. The title, then the two lines and the buttons, indented as in the design. */
+/* 1. The title, then the two lines and the buttons, on the same left edge. */
 .hello__hero {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 19px;
+  gap: 24px;
 }
 
 .hello .hello__heading {
@@ -1232,10 +1324,31 @@ h1 {
   color: var(--color-title);
   font-size: 80px;
   font-weight: 500;
-  line-height: 0.98;
+  line-height: 0.9;
   letter-spacing: 0;
-  white-space: pre-line;
 }
+
+.hello__title-line { display: block; }
+
+/* The words "open source": Default Lingo at 90px, against the 80px of the rest.
+   The English letters pick their own alternates in js/hello.js. French keeps both. */
+.hello__title-mark {
+  font-family: "Default Lingo", "Iowan Old Style", Palatino, serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.125em;
+  font-feature-settings: "ss02" 1, "salt" 1;
+  line-height: 0.9;
+}
+
+.hello__title-mark .salt { font-feature-settings: "salt" 1; }
+.hello__title-mark .ss02 { font-feature-settings: "ss02" 1; }
+.hello__title-mark .plain { font-feature-settings: normal; }
+/* The wide "e" of "open" sits 3px closer to the next letter, at the 90px size.
+   In "stack", "a" sits 2px closer and "c" sits 1px looser, at the 80px size. */
+.hello__title-mark .kern-e { letter-spacing: -0.0333em; }
+.hello__heading .kern-a { letter-spacing: -0.025em; }
+.hello__heading .kern-c { letter-spacing: 0.0125em; }
 
 .hello__intro {
   display: flex;
@@ -1243,7 +1356,6 @@ h1 {
   align-items: flex-start;
   gap: 12px;
   margin: 0;
-  padding-left: 100px;
 }
 
 .hello__deck { display: flex; flex-direction: column; }
@@ -1251,11 +1363,27 @@ h1 {
   margin: 0;
   color: var(--color-title);
   font-size: 22px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.4;
   letter-spacing: -0.208px;
 }
 .hello__lead--mark { color: var(--color-pink); font-weight: 700; }
+
+/* The Magenta block after the sentence is a text cursor (11 by 24 at 22px type,
+   2px after the last letter). It blinks so it reads as a clicker. A visitor who
+   asks for reduced motion sees it still. */
+.hello__lead--mark::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1.0909em;
+  margin-left: 0.09em;
+  background: currentColor;
+  vertical-align: middle;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hello__lead--mark::after { animation: cursor-blink 1.06s steps(1) infinite; }
+}
 
 .what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
 .what__links .btn,
@@ -1284,7 +1412,7 @@ h1 {
   margin: 0 0 1.1rem;
   color: var(--color-title);
   font-size: 1.75rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -1385,8 +1513,8 @@ h1 {
 /* One mark per picture. The current one is magenta. */
 .approach__dots {
   position: absolute;
-  left: 19px;
-  bottom: 14px;
+  top: 18px;
+  right: 20px;
   z-index: 1;
   display: flex;
   gap: 6px;
@@ -1405,46 +1533,35 @@ h1 {
    The shared slide rule hides a slide's first text block; these slides are pictures. */
 .approach__stage > .carousel__slide {
   height: 100%;
-  align-content: center;
+  min-height: 0;
+  place-content: center;
 }
 .approach__stage .carousel__slide > div:first-child { display: block; }
 
-.approach__stage .pic { max-width: none; }
-
-/* Sovereignty is the size of record. The other three fill that same box. */
-.approach__stage .pic-tests,
-.approach__stage .pic-contract,
-.approach__stage .pic-skeleton {
-  min-height: var(--pic-size, auto);
-}
-
-.approach__stage .pic-tests {
+/* Each diagram shares the tools height and sits in the vertical middle of the card. */
+.approach__stage .pic {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  font-size: 1.2rem;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--pic-size, auto);
+}
+.approach__stage .pic.pic-tests {
+  min-height: auto;
+  gap: 20px;
 }
 
-.approach__stage .pic-tests .pic__box { flex: 1; align-items: center; }
-.approach__stage .pic-tests .pic__mark { width: 1.6rem; height: 1.6rem; }
-
-.approach__stage .pic-contract { display: flex; flex-direction: column; }
+.approach__stage .pic { max-width: none; }
 
 .approach__stage .pic-contract__grid {
-  flex: 1;
+  flex: none;
   width: 100%;
   max-width: none;
   grid-template-columns: minmax(0, 1fr) minmax(6rem, 0.55fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(3.2rem, 1fr) minmax(3.2rem, 1fr);
+  grid-template-rows: auto minmax(5.3125rem, auto) minmax(5.3125rem, auto);
 }
 
-.approach__stage .pic-contract__choice { height: 100%; font-size: 1.15rem; }
-
-.approach__stage .pic-skeleton {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+.approach__stage .pic-contract__choice { min-height: 5.3125rem; height: auto; font-size: 1.25rem; }
 .approach__stage .pic-tools__cairn {
   border: 2px solid var(--color-pink);
   border-radius: 12px;
@@ -1458,7 +1575,21 @@ h1 {
 :root[data-theme="dark"] .approach__item.is-open { border-color: var(--color-pink); }
 :root[data-theme="dark"] .approach__stage .pic-tools__cairn { background: var(--color-selected); }
 :root[data-theme="dark"] .approach__stage .pic-tools__cairn span:last-child { color: var(--color-body); }
-:root[data-theme="dark"] .hello-ground { opacity: 0.18; }
+/* Halftone pixels animate; the stone contour stays still (Figma 28:10770). */
+@media (prefers-reduced-motion: no-preference) {
+  .hello-ground__dither {
+    animation: trail-dither-twinkle 12s ease-in-out infinite;
+  }
+}
+
+@keyframes trail-dither-twinkle {
+  0%, 100% { opacity: 0.5; }
+  33% { opacity: 0.62; }
+  66% { opacity: 0.42; }
+}
+
+:root[data-theme="dark"] .hello-ground__dither,
+:root[data-theme="dark"] .hello-ground__contour { opacity: 0.35; }
 
 /* 3. The carousel: the list on the left, the picture on the right. All the slides
    are in the same place, and one shows. The slide that comes in starts a short
@@ -1641,10 +1772,6 @@ h1 {
 }
 
 .pic__mark { flex: none; width: 1.3rem; height: 1.3rem; }
-.pic-pass__disc { fill: var(--color-status-alpha); }
-.pic-pass__mark { fill: none; stroke: var(--color-component); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.pic-fail__ring { fill: none; stroke: var(--color-text-muted); stroke-width: 1.3; }
-.pic-fail__mark { fill: none; stroke: var(--color-text-muted); stroke-width: 1.5; stroke-linecap: round; }
 
 /* The pop-up badge: white text on the badge green, light and dark. */
 .pic__tag {
@@ -1678,37 +1805,135 @@ h1 {
 
 /* 1. Tests, then the selection. The test marks come one at a time, one component
    after the other (`--r` is the row and `--m` is the mark). Then the selected
-   component gets its outline and its tag, and the other components go back. */
-.pic-tests { display: grid; gap: 0.7rem; }
-.pic-tests .pic__box { padding: 0.55rem 0.85rem; }
-.pic-tests__row { display: grid; grid-template-columns: minmax(0, 1fr) auto 5.6rem; align-items: center; gap: 1rem; }
-.pic-tests__row--head { padding: 0 1rem; }
-.pic-tests__row > :last-child { justify-self: end; }
-/* The selected component: the band and the Magenta line of the schema. */
-.pic-tests__row.is-selected { border-color: var(--color-pink); background: var(--color-selected); box-shadow: inset 0 0 0 1px var(--color-pink); }
-.pic-tests__row:not(.is-selected):not(.pic-tests__row--head) { color: var(--color-body); opacity: 0.62; }
-.pic-tests__marks { display: flex; gap: 0.5rem; }
-.pic-tests__row:nth-child(2) { --r: 0; }
-.pic-tests__row:nth-child(3) { --r: 1; }
-.pic-tests__row:nth-child(4) { --r: 2; }
+   component gets its magenta outline and its tag. The other rows stay as they are. */
+.pic-tests {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  --tests-row-bg: #fff;
+  --tests-row-line: #a08f79;
+  --tests-ink: #291435;
+  color: var(--tests-ink);
+}
+.pic-tests .pic__label {
+  color: #a08f79;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.081px;
+  line-height: 18.24px;
+  text-transform: uppercase;
+}
+/* Labels line up over the name and the marks columns, as in the frame. */
+.pic-tests__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 631.73px;
+  width: 100%;
+  padding: 0 14px;
+}
+.pic-tests__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+/* Plain rows use a three-column grid so the marks stay aligned when row B has a tag. */
+.pic-tests__row:not(.is-selected) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 95.55px 92.29px;
+  align-items: center;
+  column-gap: 16.48px;
+}
+.pic-tests__slot { display: block; }
+.pic-tests .pic__box {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--tests-row-line);
+  border-radius: 6.76px;
+  background: var(--tests-row-bg);
+  color: var(--tests-ink);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 26.7px;
+  box-shadow: none;
+}
+.pic-tests__row:not(.is-selected) {
+  min-height: 63px;
+  padding: 18px 14px;
+}
+.pic-tests__rows .pic-tests__row:last-child {
+  min-height: 64px;
+}
+/* Selected row: flex, as in the frame, with the tag on the end. */
+.pic-tests__row.is-selected {
+  display: flex;
+  align-items: center;
+  gap: 16.5px;
+  min-height: 64px;
+  padding: 9px 14.008px;
+  border-color: var(--color-pink);
+  background: #f5e8ff;
+  box-shadow: inset 0 0 0 2px var(--color-pink);
+}
+.pic-tests__row.is-selected > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+.pic-tests__marks {
+  display: flex;
+  gap: 8.2px;
+  justify-content: flex-start;
+}
+.pic-tests__row.is-selected .pic-tests__marks {
+  flex: none;
+  width: 95px;
+  padding-right: 15.81px;
+  box-sizing: border-box;
+}
+.pic-tests .pic__mark {
+  display: block;
+  width: 26.36px;
+  height: 26.36px;
+}
+.pic-tests .pic__tag {
+  flex: none;
+  width: 88px;
+  padding: 3.5px 8.405px;
+  border-radius: 5px;
+  background: #291435;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18.91px;
+  text-align: center;
+}
+
+:root[data-theme="dark"] .pic-tests {
+  --tests-row-bg: transparent;
+  --tests-ink: var(--color-text);
+}
+:root[data-theme="dark"] .pic-tests__row.is-selected { background: var(--color-selected); color: var(--color-text); }
+:root[data-theme="dark"] .pic-tests .pic__tag { background: var(--color-button); color: var(--color-button-text); }
+.pic-tests__rows .pic-tests__row:nth-child(1) { --r: 0; }
+.pic-tests__rows .pic-tests__row:nth-child(2) { --r: 1; }
+.pic-tests__rows .pic-tests__row:nth-child(3) { --r: 2; }
 .pic-tests__marks .pic__mark:nth-child(1) { --m: 0; }
 .pic-tests__marks .pic__mark:nth-child(2) { --m: 1; }
 .pic-tests__marks .pic__mark:nth-child(3) { --m: 2; }
+
+/* The approach card keeps the static Figma layout. The pop-in motion is for other contexts only. */
+.approach__stage .carousel__slide.is-on .pic-tests__marks .pic__mark,
+.approach__stage .carousel__slide.is-on .pic-tests .pic__tag,
+.approach__stage .carousel__slide.is-on .pic-tests__row.is-selected { animation: none; }
 
 @media (prefers-reduced-motion: no-preference) {
   .carousel__slide.is-on .pic-tests__marks .pic__mark {
     animation: pic-pop 0.35s cubic-bezier(0.3, 1.5, 0.6, 1) both;
     animation-delay: calc(0.6s + (var(--r) * 3 + var(--m)) * 0.2s);
   }
-  .carousel__slide.is-on .pic-tests__row.is-selected { animation: pic-tests-select 0.5s ease 2.7s both; }
-  .carousel__slide.is-on .pic-tests__row:not(.is-selected):not(.pic-tests__row--head) { animation: pic-tests-rest 0.5s ease 2.7s both; }
-  .carousel__slide.is-on .pic-tests .pic__tag { animation: pic-pop 0.4s cubic-bezier(0.3, 1.5, 0.6, 1) 2.9s both; }
+  .carousel__slide.is-on .pic-tests .pic__tag { animation: pic-pop 0.4s cubic-bezier(0.3, 1.5, 0.6, 1) 2.9s forwards; }
 }
-
-@keyframes pic-tests-select {
-  from { border-color: var(--color-schema-line); background: var(--color-component); box-shadow: none; color: var(--color-body); }
-}
-@keyframes pic-tests-rest { from { opacity: 1; } }
 
 /* 2. One contract, and two places where one component can replace another one.
    A grid of three columns (a place, the contract, a place) and three rows (the
@@ -1716,7 +1941,8 @@ h1 {
    Magenta slot is the contract: it does not move. One component is in the slot
    and the other one waits under it. They change places, one place at a time, so
    the other place visibly stays as it is. */
-.pic-contract { --gap: 0.6rem; --pad: 0.65rem; }
+/* Figma Graph (28:9475): contract diagram in the approach carousel. */
+.pic-contract { --gap: 0.515rem; --pad: 0.75rem; }
 
 .pic-contract__grid {
   display: grid;
@@ -1727,11 +1953,37 @@ h1 {
   padding: var(--pad);
 }
 
-.pic-contract__frame { grid-row: 1 / 4; margin: calc(-1 * var(--pad)); border: 1.5px dashed var(--color-button-outline); border-radius: var(--radius-ui-md); }
-.pic-contract__frame--gateway, .pic-contract__name--gateway, .pic-contract__slot--gateway, .pic-contract__choice--gateway { grid-column: 1; }
-.pic-contract__frame--server, .pic-contract__name--server, .pic-contract__slot--server, .pic-contract__choice--server { grid-column: 3; }
-.pic-contract__name { grid-row: 1; }
-.pic-contract__slot { grid-row: 2; margin: -4px; border: 2px solid var(--color-pink); border-radius: calc(var(--radius-ui-sm) + 4px); }
+.pic-contract__frame {
+  grid-row: 1 / 4;
+  margin: calc(-1 * var(--pad));
+  border: 1px dashed #a08f79;
+  border-radius: 0.628rem;
+}
+
+.pic-contract__frame--gateway,
+.pic-contract__name--gateway,
+.pic-contract__slot--gateway,
+.pic-contract__choice--gateway { grid-column: 1; }
+
+.pic-contract__frame--server,
+.pic-contract__name--server,
+.pic-contract__slot--server,
+.pic-contract__choice--server { grid-column: 3; }
+
+.pic-contract__name {
+  grid-row: 1;
+  margin-bottom: 0.15rem;
+  color: #a08f79;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 1.081px;
+  line-height: 1.216;
+}
+
+.pic-contract__slot {
+  display: none;
+  grid-row: 2;
+}
 
 /* The line of the contract, from one slot to the other one, with its name above it. */
 .pic-contract__joint {
@@ -1741,7 +1993,7 @@ h1 {
   align-self: center;
   height: 2px;
   margin: 0 4px;
-  background: var(--color-pink);
+  background: #fd70f5;
 }
 
 .pic-contract__joint::after {
@@ -1749,13 +2001,29 @@ h1 {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0.65rem;
-  height: 0.65rem;
-  background: var(--color-pink);
+  width: 0.669rem;
+  height: 0.669rem;
+  background: #fd70f5;
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.pic-contract__joint .pic__label { position: absolute; right: var(--pad); bottom: 0.6rem; left: var(--pad); line-height: 1.2; text-align: center; }
+.pic-contract__joint-label {
+  position: absolute;
+  right: 0;
+  bottom: 1.2rem;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  color: #fd70f5;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 1.081px;
+  line-height: 1.158;
+  text-align: center;
+  text-transform: uppercase;
+}
 
 .pic-contract__choice {
   position: relative;
@@ -1765,9 +2033,61 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem;
+  min-height: 5.3125rem;
+  padding: 0.755rem 1.375rem 0.791rem 0.875rem;
+  border-radius: 0.423rem;
+  font-size: 1.25rem;
+  line-height: 1.28;
 }
 
-.pic-contract__choice--out { grid-row: 3; opacity: 0.5; }
+.pic-contract__choice .pic__mark { width: 1.339rem; height: 1.339rem; }
+
+.pic-contract__choice--in {
+  border: 2px solid #fd70f5;
+  background: #f5e8ff;
+  color: #291435;
+  font-weight: 400;
+}
+
+.pic-contract__choice--out {
+  grid-row: 3;
+  border: 1px solid #aeb8be;
+  background: #fff;
+  color: #63737d;
+  font-weight: 400;
+  opacity: 1;
+}
+
+.pic-contract .pic__legend {
+  margin-top: 0.62rem;
+  gap: 0.411rem;
+  font-size: 1rem;
+  line-height: 1.3625;
+  color: #544b40;
+}
+
+.pic-contract .pic__legend .pic__mark { width: 1.339rem; height: 1.339rem; }
+
+:root[data-theme="dark"] .pic-contract__choice--in {
+  border-color: var(--color-pink);
+  background: var(--color-selected);
+  color: var(--color-title);
+}
+
+:root[data-theme="dark"] .pic-contract__choice--out {
+  border-color: var(--color-schema-line);
+  background: var(--color-component);
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .pic-contract__joint,
+:root[data-theme="dark"] .pic-contract__joint::after { background: var(--color-pink); }
+
+:root[data-theme="dark"] .pic-contract__joint-label { color: var(--color-pink); }
+
+:root[data-theme="dark"] .pic-contract__name { color: var(--color-text-muted); }
+
+:root[data-theme="dark"] .pic-contract .pic__legend { color: var(--color-body); }
 
 /* The Model Server starts a quarter of the loop before the Model Gateway. */
 @media (prefers-reduced-motion: no-preference) {
@@ -1800,7 +2120,7 @@ h1 {
    lines are above the outline of Cairn, for the point of the one API. */
 .pic-tools__lines { position: relative; z-index: 1; display: block; width: 100%; height: auto; overflow: visible; }
 .pic-tools__lines path { fill: none; stroke: var(--color-button-outline); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-.pic-tools__dot { fill: var(--color-boundary); }
+.pic-tools__pixel rect { fill: var(--color-pink); shape-rendering: crispEdges; }
 .pic-tools__api { fill: var(--color-pink); }
 .pic-tools__ring { fill: none; stroke: var(--color-pink); stroke-width: 1.2; }
 
@@ -1831,49 +2151,109 @@ h1 {
    components (one layer after the other: `--n` is the layer), then the connection
    code, then the component specification. Each sign of the legend comes with its
    step. */
-.pic-skeleton__core { padding: 0.5rem; border: 1.5px solid var(--color-core-outline); border-radius: var(--radius-ui-md); }
-.pic-skeleton__matrix { display: grid; grid-template-columns: minmax(0, 1fr) 1.5rem minmax(0, 1fr); grid-template-rows: auto 1.1rem auto; }
-.pic-skeleton__layer { padding: 0.4rem 0.5rem 0.5rem; border-radius: var(--radius-ui-sm); background: var(--color-layer); }
+/* Figma Graph 2 (28:9469): Operations skeleton in the approach carousel. */
+.pic-skeleton__core {
+  display: flex;
+  flex-direction: column;
+  gap: 0.515rem;
+  padding: 0.75rem;
+  border: 1px solid #d0c2b1;
+  border-radius: 0.628rem;
+  background: #fff;
+}
+
+.pic-skeleton__matrix {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr);
+  grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto);
+}
+
+.pic-skeleton__layer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.308rem;
+  padding: 0.349rem 0.515rem 0.515rem;
+  border: 1px solid #dcbaf6;
+  border-radius: 0.423rem;
+  background: #f5e8ff;
+}
 
 .pic-skeleton__name {
   display: block;
-  margin-bottom: 0.3rem;
-  color: color-mix(in srgb, var(--color-header) 72%, transparent);
-  font-size: 0.82rem;
+  margin: 0;
+  color: #291435;
+  font-size: 0.9375rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.081;
 }
 
 .pic-skeleton__comps { display: flex; align-items: center; }
 
 .pic-skeleton__comp {
   flex: 1;
-  height: 1.6rem;
-  border: 1px solid var(--color-schema-line);
+  height: 1.648rem;
+  border: 1px solid #dcbaf6;
   border-radius: 4px;
-  background: var(--color-component);
+  background: #fff;
+  box-shadow: none;
 }
 
-.pic-skeleton__comp--specification { border: 1.5px dashed var(--color-button-outline); background: transparent; box-shadow: none; }
-.pic-skeleton__link { flex: none; width: 1.3rem; height: 4px; background: var(--color-pink); transform-origin: left center; }
+.pic-skeleton__comp--specification { border: 1px dashed #a08f79; background: transparent; }
+.pic-skeleton__link { flex: none; width: 1.339rem; height: 4px; background: var(--color-pink); transform-origin: left center; }
 .pic-skeleton__link--across { align-self: center; width: auto; height: 5px; }
 .pic-skeleton__link--down { justify-self: center; width: 5px; height: auto; transform-origin: center top; }
-.pic-skeleton__layer--row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; padding: 0.4rem 0.5rem; }
-.pic-skeleton__layer--row .pic-skeleton__name { flex: none; width: 4.6rem; margin: 0; }
-.pic-skeleton__layer--row .pic-skeleton__comps { flex: 1; gap: 0.4rem; }
-.pic-skeleton__cross { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin-top: 0.5rem; }
+.pic-skeleton__layer--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.617rem;
+  min-height: 3.438rem;
+  margin-top: 0;
+  padding: 0.412rem 0.515rem;
+  border: 1px solid #dcbaf6;
+  border-radius: 0.423rem;
+  background: #f5e8ff;
+}
+
+.pic-skeleton__layer--row .pic-skeleton__name { flex: none; width: 4.75rem; }
+.pic-skeleton__layer--row .pic-skeleton__comps { flex: 1; gap: 0.412rem; min-width: 0; align-self: stretch; }
+.pic-skeleton__cross { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.412rem; margin-top: 0.412rem; }
 
 .pic-skeleton__cross span {
-  padding: 0.3rem 0.2rem;
-  border-radius: var(--radius-ui-sm);
-  background: var(--color-cross);
-  color: color-mix(in srgb, var(--color-header) 72%, transparent);
-  font-size: 0.82rem;
+  padding: 0.246rem 0.206rem 0.323rem;
+  border-radius: 0.423rem;
+  background: #ecedef;
+  color: rgb(41 20 53 / 0.72);
+  font-size: 0.844rem;
   font-weight: 500;
+  line-height: 1.351;
   text-align: center;
 }
 
-.pic-skeleton .pic__legend { margin-top: 0.8rem; }
+.pic-skeleton .pic__legend {
+  margin-top: 0.62rem;
+  padding-top: 0.31rem;
+  gap: 0.31rem 1.131rem;
+  font-size: 1rem;
+  line-height: 1.3625;
+  color: #544b40;
+}
+
+.pic-skeleton .pic__legend li { gap: 0.411rem; }
+.pic-skeleton .pic__key { width: 1.133rem; height: 0.823rem; border-radius: 3px; }
+.pic-skeleton .pic__key--component { border: 1px solid #d0c2b1; background: #fff; }
+.pic-skeleton .pic__key--specification { border: 1px dashed #a08f79; background: transparent; }
+
+:root[data-theme="dark"] .pic-skeleton__core { border-color: var(--color-component-border); background: var(--color-component); }
+:root[data-theme="dark"] .pic-skeleton__layer,
+:root[data-theme="dark"] .pic-skeleton__layer--row {
+  border-color: var(--color-core-outline);
+  background: var(--color-selected);
+}
+
+:root[data-theme="dark"] .pic-skeleton__comp { border-color: var(--color-schema-line); background: var(--color-component); }
+:root[data-theme="dark"] .pic-skeleton__cross span { background: var(--color-cross); color: color-mix(in srgb, var(--color-header) 72%, transparent); }
+:root[data-theme="dark"] .pic-skeleton .pic__legend { color: var(--color-body); }
+:root[data-theme="dark"] .pic-skeleton .pic__key--component { border-color: var(--color-component-border); background: var(--color-component); }
 
 @media (prefers-reduced-motion: no-preference) {
   .carousel__slide.is-on .pic-skeleton__comp { animation: pic-rise 0.4s ease both; animation-delay: calc(0.5s + var(--n) * 0.16s); }
@@ -1894,15 +2274,13 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   .carousel__slide,
   .carousel__slide.is-on { animation: none; transition: none; }
-  .pic-tools__dot,
+  .pic-tools__pixel,
   .pic-tools__ring { display: none; }
 }
 
 /* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .hello { gap: 1.8rem; padding-top: 0.7rem; }
   .hello .hello__heading { max-width: none; font-size: 2.35rem; }
-  .hello__intro { padding-left: 0; }
   .hello__lead { font-size: 1.05rem; }
   .approach { grid-template-columns: minmax(0, 1fr); }
   .site-footer { align-items: flex-start; }
@@ -1915,10 +2293,13 @@ h1 {
   .pic__label { font-size: 0.66rem; }
   .pic__mark { width: 1.05rem; height: 1.05rem; }
   .pic__tag { font-size: 0.7rem; }
-  .pic-tests .pic__box { padding: 0.6rem 0.7rem; }
-  .pic-tests__row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 0.45rem; }
-  .pic-tests__row--head { padding: 0 0.7rem; }
-  .pic-tests__marks { gap: 0.3rem; }
+  .pic-tests__row:not(.is-selected) { padding: 14px 12px; font-size: 16px; line-height: 1.3; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 8px; }
+  .pic-tests__row.is-selected { font-size: 16px; line-height: 1.3; gap: 8px; padding: 10px 12px; }
+  .pic-tests .pic__label { font-size: 12px; letter-spacing: 0.08em; }
+  .pic-tests__head { max-width: none; padding: 0 12px; }
+  .pic-tests__marks { gap: 4px; }
+  .approach__stage .pic-tests .pic__mark { width: 20px; height: 20px; }
+  .pic-tests .pic__tag { font-size: 12px; line-height: 1.3; }
   .pic-contract { --pad: 0.4rem; }
   .pic-contract__joint .pic__label { right: 0; left: 0; font-size: 0.56rem; letter-spacing: 0.04em; }
   .pic-contract__choice { gap: 0.25rem; padding: 0.4rem 0.45rem; }

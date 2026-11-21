@@ -19,6 +19,7 @@ public/
   js/recipes-data.js                      The recipes. Generated from the stack repository; do not edit
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
+  fonts/DefaultLingo-Regular.otf          "open source" in the Hello World title
   assets/cairn-logo-light.png, cairn-logo-dark.png  Header lockup, one file per theme
   assets/cairn-logo*.svg                  Wordmark used by the previous share card
   assets/og-card.png                      Share card for link previews (supplied image)
