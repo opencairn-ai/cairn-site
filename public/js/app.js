@@ -140,20 +140,43 @@
       );
     }
 
-    // "{mozilla}" and "{mila}" in the footer line become links.
-    const parts = t("footer.collaboration").split(/(\{\w+\})/);
-    document.getElementById("collaboration").replaceChildren(
-      ...parts.map((part) => {
-        const key = (part.match(/^\{(\w+)\}$/) || [])[1];
-        if (!key) return document.createTextNode(part);
-        const link = el("a", "ext-link", t(`footer.${key}.name`));
+    // The footer lockup: "A", the two logos, then "Research collaboration".
+    // The downloaded schema still uses the sentence in footer.collaboration.
+    const brand = document.getElementById("collaboration");
+    if (brand) {
+      const logoLink = (key) => {
+        const link = el("a", "footer-brand__logo");
         link.href = t(`footer.${key}.url`);
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.append(externalIcon());
+        link.setAttribute("aria-label", t(`footer.${key}.name`));
         return link;
-      })
-    );
+      };
+      const image = (file, width, height) => {
+        const img = document.createElement("img");
+        img.src = `assets/hello/${file}`;
+        img.alt = "";
+        img.width = width;
+        img.height = height;
+        return img;
+      };
+      const mozilla = logoLink("mozilla");
+      mozilla.append(image("footer-mozilla.svg", 119.773, 28.6525));
+      const mila = logoLink("mila");
+      mila.classList.add("footer-brand__mila");
+      const mark = image("footer-mila-mark.svg", 26.2001, 25.531);
+      const word = image("footer-mila-word.svg", 57.9405, 25.53);
+      mark.classList.add("footer-brand__mila-mark");
+      word.classList.add("footer-brand__mila-word");
+      mila.append(mark, word);
+      const logos = el("span", "footer-logos");
+      logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
+      brand.replaceChildren(
+        el("span", "footer-brand__a", t("footer.a")),
+        logos,
+        el("span", "footer-brand__role", t("footer.role"))
+      );
+    }
   }
 
   // Marks the current tab and prepares the links between pages (the tabs and the logo).

@@ -39,13 +39,13 @@ window.CAIRN_COPY.en = {
     download: "Download schema",
     downloadBusy: "Preparing schema…",
     downloadFailed: "Download failed. Try again.",
-    github: "Follow us on GitHub",
+    github: "Contribute on GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },
 
   intro: {
     // The title of the Hello World page.
-    title: "Introducing the sovereign, open source AI stack",
+    title: "Introducing the sovereign,\nopen source AI stack",
     // The goal and its three points, on the stack page.
     goal: "Our goal is to define clear interface contracts between every layer and component of the stack, so that you can:",
     points: [
@@ -66,9 +66,8 @@ window.CAIRN_COPY.en = {
 
   // The Hello World page, for business leaders. Its title is `intro.title`.
   hello: {
-    // Under the title: the reason for Cairn. The sentence between the asterisks is in
-    // the highlight color. The three points are in columns beside it.
-    lead: "Your organization must be able to adopt AI on its own terms: safely, easily and cost-effectively. *The models are not the problem. Deploying and running them is.*",
+    // The two lines under the title. The second line is hello.what.title, in magenta.
+    lead: "The models are not the problem. Deploying and running them is.",
     points: [
       {
         title: "Your data and your policies stay on your infrastructure",
@@ -86,30 +85,53 @@ window.CAIRN_COPY.en = {
 
     // What Cairn is, then the link to the stack page and the contact address.
     what: {
-      title: "Cairn is an open source AI stack that an organization installs and operates on infrastructure that it controls.",
-      stack: "Explore _la stack_",
-      contact: "bonjourhi@opencairn.ai",
+      title: "Cairn is an open source AI stack that your organization deploys and runs on infrastructure it controls.",
+      stack: "Explore LaStack",
+      contact: "Drop us a pebble",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
 
     // The carousel shows these four principles, one at a time, each with a picture.
     // The page has four slides: keep four principles, in this order.
+    // tag: the small label on the card. forYou and points show only while the card is open.
     principles: [
       {
+        tag: "Transparency",
         name: "Tested open source components",
-        text: "We specify what each layer must do. We test existing open source components against that specification. Then we select and integrate the best fit.",
+        text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
+        forYou: "For your organization",
+        points: [
+          "Open source, without the assembly work",
+          "Every component open to inspection",
+        ],
       },
       {
+        tag: "Portability",
         name: "Replaceable by contract",
         text: "We publish the interface contracts that each component must satisfy. A component that satisfies them can replace another one without rework.",
+        forYou: "For your organization",
+        points: [
+          "Your choice of components, with no dependence on a single vendor",
+        ],
       },
       {
+        tag: "Sovereignty",
         name: "Your teams keep their tools",
-        text: "Teams keep the chat assistants and coding agents that they use now. They connect these tools to one API, on the compute of your organization.",
+        text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API, on your organization's compute.",
+        forYou: "For your organization",
+        points: [
+          "Your data and your policies stay on your infrastructure",
+          "Owned or shared compute, at a predictable cost",
+        ],
       },
       {
+        tag: "Operations",
         name: "Composition, not creation",
         text: "We write the code that connects components, not new components. Where no suitable open source component exists, we publish a specification.",
+        forYou: "For your organization",
+        points: [
+          "Deployed, upgraded and run from its documentation",
+        ],
       },
     ],
 
@@ -541,6 +563,10 @@ window.CAIRN_COPY.en = {
 
   footer: {
     collaboration: "A research collaboration between {mozilla} and {mila}",
+    a: "A",
+    role: "Research collaboration",
+    report: "Report a vulnerability",
+    reportUrl: "mailto:bonjourhi@opencairn.ai?subject=Vulnerability%20report",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/en-US/" },
     mila: { name: "Mila", url: "https://mila.quebec/en" },
   },

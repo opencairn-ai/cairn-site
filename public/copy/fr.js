@@ -41,12 +41,12 @@ window.CAIRN_COPY.fr = {
     download: "Télécharger le schéma",
     downloadBusy: "Préparation du schéma…",
     downloadFailed: "Échec du téléchargement. Réessayez.",
-    github: "Suivez-nous sur GitHub",
+    github: "Contribuez sur GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },
 
   intro: {
-    title: "Découvrez la pile d’IA souveraine à code source ouvert",
+    title: "Découvrez la pile d’IA souveraine\nà code source ouvert",
     goal: "Notre objectif est de définir des contrats d’interface clairs entre chaque couche et composant de la pile afin que vous puissiez :",
     points: [
       {
@@ -67,7 +67,7 @@ window.CAIRN_COPY.fr = {
   // La page Hello World, pour les gestionnaires et les décideurs. Son titre est `intro.title`.
   hello: {
     // Sous le titre : la raison d’être de Cairn. La phrase entre astérisques est en rose.
-    lead: "Votre organisation doit pouvoir adopter l’IA selon ses propres conditions : de façon sûre, simple et économique. *Les modèles ne sont pas le problème. Les déployer et les exploiter, si.*",
+    lead: "Les modèles ne sont pas le problème. Les déployer et les exploiter, si.",
     // Les trois points, en colonnes à côté du texte.
     points: [
       {
@@ -87,29 +87,51 @@ window.CAIRN_COPY.fr = {
     // Ce qu’est Cairn, puis le lien vers la page de la pile et l’adresse de contact.
     // Les mots entre traits de soulignement sont en italique.
     what: {
-      title: "Cairn est une pile d’IA à code source ouvert qu’une organisation installe et exploite sur une infrastructure qu’elle contrôle.",
-      stack: "Explorez _la pile_",
-      contact: "bonjourhi@opencairn.ai",
+      title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle.",
+      stack: "Explorer LaStack",
+      contact: "Laissez-nous un caillou",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
 
     // Les quatre principes, un à la fois, chacun avec une image. Gardez quatre principes, dans cet ordre.
     principles: [
       {
+        tag: "Transparence",
         name: "Des composants à code source ouvert testés",
-        text: "Nous précisons ce que chaque couche doit faire. Nous testons des composants à code source ouvert existants selon cette spécification. Puis nous choisissons et intégrons le plus adapté.",
+        text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
+        forYou: "Pour votre organisation",
+        points: [
+          "Du code source ouvert, sans le travail d’assemblage",
+          "Chaque composant ouvert à l’inspection",
+        ],
       },
       {
-        name: "Remplaçables par contrat",
-        text: "Nous publions les contrats d’interface que chaque composant doit respecter. Un composant qui les respecte peut en remplacer un autre sans travail supplémentaire.",
+        tag: "Portabilité",
+        name: "Remplaçable par contrat",
+        text: "Nous publions les contrats d’interface que chaque composant doit respecter. Un composant qui les respecte peut en remplacer un autre sans reprise.",
+        forYou: "Pour votre organisation",
+        points: [
+          "Votre choix de composants, sans dépendance à un seul fournisseur",
+        ],
       },
       {
+        tag: "Souveraineté",
         name: "Vos équipes gardent leurs outils",
-        text: "Les équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent déjà. Elles relient ces outils à une seule API, sur les ressources de calcul de votre organisation.",
+        text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à une seule API, sur les ressources de calcul de votre organisation.",
+        forYou: "Pour votre organisation",
+        points: [
+          "Vos données et vos politiques restent sur votre infrastructure",
+          "Du calcul détenu ou partagé, à un coût prévisible",
+        ],
       },
       {
+        tag: "Exploitation",
         name: "Assembler, pas créer",
         text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
+        forYou: "Pour votre organisation",
+        points: [
+          "Déployé, mis à jour et exploité à partir de sa documentation",
+        ],
       },
     ],
 
@@ -534,6 +556,10 @@ window.CAIRN_COPY.fr = {
 
   footer: {
     collaboration: "Une collaboration de recherche entre {mozilla} et {mila}",
+    a: "Une",
+    role: "Collaboration de recherche",
+    report: "Signaler une vulnérabilité",
+    reportUrl: "mailto:bonjourhi@opencairn.ai?subject=Signalement%20de%20vuln%C3%A9rabilit%C3%A9",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/fr/" },
     mila: { name: "Mila", url: "https://mila.quebec/fr" },
   },

@@ -80,6 +80,7 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  background: #120810;
   --color-bg: #291435;               /* Deep purple */
   --color-title: #ffffff;            /* 16.9:1 */
   --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
@@ -130,6 +131,8 @@
 html {
   font-size: clamp(100%, 85% + 0.2vw, 112.5%);
   -webkit-text-size-adjust: 100%;
+  /* The page background stays on the body, so it ends at the footer. */
+  background: #fff;
 }
 
 *,
@@ -140,6 +143,7 @@ body {
   margin: 0;
   min-height: 100vh;
   min-height: 100dvh;
+  overflow-x: hidden;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
@@ -165,6 +169,7 @@ a { color: inherit; }
 /* --- Page frame ---------------------------------------------------------- */
 
 .page {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -174,21 +179,65 @@ a { color: inherit; }
   padding: 0 var(--gutter);
 }
 
+/* Dotted ground on Hello World. The clip ends with the page, so the pattern
+   does not paint past the footer or lengthen the scroll. */
+.hello-ground-clip {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+}
+
+/* The file is portrait; the design turns it on its side. */
+.hello-ground {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 8%;
+  width: 140%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%) rotate(90deg);
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.site-header,
+.hello,
+.site-footer { position: relative; z-index: 1; }
+
 /* Phones: 15px at the default text size of the browser. */
 @media (max-width: 640px) {
   html { font-size: 93.75%; }
 }
 
-/* The header is one row: the codename, the tabs, then the language and theme
-   buttons and the two buttons. A 1px rule goes under the row, and the line of
-   the current tab sits on it. Narrow screens put the tabs in a second row. */
+/* The header is one row: the codename, the tabs, then the two buttons, then
+   the language and theme. The current tab has a 4px magenta line under its
+   label only. Narrow screens put the tabs in a second row. */
 .site-header {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 0 0.6rem;
+  min-height: 4.5rem;
   margin-bottom: 0.35rem;
-  box-shadow: inset 0 -1px 0 var(--color-header-rule);
 }
+
+/* Under the row, from one screen edge to the other. */
+.site-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  background: #d0c2b1;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .site-header::after { background: var(--color-header-rule); }
 
 .codename {
   display: flex;
@@ -261,40 +310,50 @@ a { color: inherit; }
 .lang a[hidden] { display: none; }
 .lang a:hover { background: var(--color-ghost-hover); }
 
-/* The tabs, one per page, after the codename: the nav tab of the design system
-   (cairn-components.css, .navtab). 14px at a 16px root, sentence case, 14px side
-   padding, a 2px gap. The current tab is bold, in the text color, with a 2px
-   Magenta line on the rule of the header. The tabs take the free width, so the
-   buttons go to the right end. */
+/* The tabs, one per page, after the codename. 14px, medium weight, about 24px
+   of side padding. The current tab keeps that weight and adds a 4px magenta
+   line on the beige rule. Roadmap stays grey. The tabs take the free width,
+   so the buttons go to the right end. */
 .site-nav {
   display: flex;
   flex: 1 1 auto;
-  align-items: stretch;
-  gap: 2px;
+  align-items: center;
+  gap: 2.1rem;
   margin-right: auto;
-  font-size: 0.875rem;
+  margin-left: 1.6rem;
+  font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.25;
 }
 
 .site-nav a {
+  position: relative;
   display: inline-flex;
   flex: none;
   align-items: center;
-  padding: 0 0.875rem;
-  border-bottom: 2px solid transparent;
-  color: var(--color-tab);
+  padding: 0.7rem 0 0.85rem;
+  color: var(--color-title);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .site-nav a:hover { color: var(--color-text); }
 
-.site-nav a[aria-current] {
-  border-bottom-color: var(--color-pink);
-  color: var(--color-text);
-  font-weight: 700;
+/* The mark is the width of the label. It hangs down to the header rule,
+   which is the header's min-height, so the pink sits on that line. */
+.site-nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc((100% - 4.5rem) / 2);
+  height: 4px;
+  background: var(--color-pink);
+  z-index: 1;
 }
+
+/* Roadmap stays muted, as in the Hello World frame. The page itself still opens. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]) { color: var(--color-tab-disabled); }
 
 /* The tab of a page to come. */
 .site-nav a[aria-disabled="true"],
@@ -308,6 +367,7 @@ a { color: inherit; }
   .site-header { flex-wrap: wrap; }
   .codename { margin-right: auto; }
   .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -0.875rem; }
+  .site-nav a[aria-current]::after { bottom: 0; }
 }
 
 .btn {
@@ -1006,18 +1066,82 @@ h1 {
 /* --- Footer -------------------------------------------------------------- */
 
 .site-footer {
-  padding: 0.5rem 0 0.6rem;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 12px;
+  /* 64px of the page background between the content and the bar, on every page. */
+  margin: 64px calc(var(--gutter) * -1) 0;
+  padding: 18px var(--gutter);
+  background: #291435;
+  color: #fff;
 }
 
-.site-footer a {
-  color: var(--color-link);
+/* In the dark theme the page is the same purple, so a hairline keeps the bar visible. */
+:root[data-theme="dark"] .site-footer { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16); }
+
+.footer-brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 5.73px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 17.191px;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Mozilla, the x, and Mila sit on one baseline, a little wider apart than the words. */
+.footer-logos {
+  display: flex;
+  align-items: flex-end;
+  gap: 11.461px;
+  height: 28.652px;
+}
+
+.footer-brand__logo {
+  display: inline-flex;
+  align-items: flex-end;
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-brand__logo img { display: block; }
+
+/* The mark and the word are two files, placed as in the logo lockup. */
+.footer-brand__mila {
+  position: relative;
+  width: 99.182px;
+  height: 28.652px;
+  flex: none;
+}
+
+.footer-brand__mila-mark,
+.footer-brand__mila-word { position: absolute; top: 11.14%; }
+
+.footer-brand__mila-mark { left: 5.37%; }
+.footer-brand__mila-word { left: 36.11%; }
+
+.footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+.site-footer .footer-btn {
+  padding: 8.65px 14.42px;
+  border-width: 1px;
+  border-color: transparent;
+  border-radius: 6.76px;
+  background: transparent;
+  color: #fff;
+  font-size: 14.4px;
   font-weight: 500;
-  text-underline-offset: 3px;
+  line-height: 1;
+  gap: 7.2px;
 }
 
-.site-footer a:hover { color: var(--color-link-hover); }
+.footer-btn:hover { background: rgb(255 255 255 / 0.08); }
+.footer-btn img { display: block; }
 
 /* External links show a small arrow-out mark after the text. */
 .ext-link__icon {
@@ -1040,7 +1164,6 @@ h1 {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas: "codename prefs" "actions actions" "nav nav";
-    box-shadow: none;
   }
 
   .codename { grid-area: codename; min-width: 0; margin-right: 0; }
@@ -1048,7 +1171,6 @@ h1 {
     grid-area: nav;
     margin: 0 calc(-1 * var(--gutter));
     padding: 0 calc(var(--gutter) - 0.875rem);
-    box-shadow: inset 0 -1px 0 var(--color-header-rule);
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -1086,8 +1208,8 @@ h1 {
 .hello {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
-  padding: 1.2rem 0 0.4rem;
+  gap: 2.2rem;
+  padding: 1.6rem 0 0;
 }
 
 /* No browser margins on the headings and lists of the page. :where() keeps these
@@ -1097,35 +1219,246 @@ h1 {
 
 .pic-defs { position: absolute; }
 
-/* 1. The title. */
-.hello .hello__heading {
-  margin: 0.5rem 0 -0.6rem;
-  font-size: clamp(2.6rem, 5.4vw, 6.5rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
+/* 1. The title, then the two lines and the buttons, indented as in the design. */
+.hello__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 19px;
 }
-/* 2. The paragraph and its links on the left; the three points on the right, in
-   the columns of the goal of the stack page (a rule over each one). */
-.hello__intro {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 2.8rem;
-  align-items: start;
-  margin: 0;
-}
-.hello__lead { color: var(--color-title); font-size: 1.3rem; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; }
-/* What Cairn is: its lines have equal lengths, so no word is alone on the last line. */
-.hello__lead + .hello__lead { margin-top: 0.8em; text-wrap: balance; }
-.hello .goal__points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; font-size: 0.95rem; line-height: 1.4; }
-.hello .goal__point { padding-top: 0.6rem; }
-.hello .goal__point-title { margin-bottom: 0.25rem; }
 
-.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 1.2rem; }
-/* The button of the header: 14px, a 1px border, the small radius. */
-.what__links .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
-.what__mail { margin-left: 0.4rem; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
-.what__mail:hover { color: var(--color-link-hover); }
+.hello .hello__heading {
+  margin: 0;
+  color: var(--color-title);
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: 0;
+  white-space: pre-line;
+}
+
+.hello__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0;
+  padding-left: 100px;
+}
+
+.hello__deck { display: flex; flex-direction: column; }
+.hello__lead {
+  margin: 0;
+  color: var(--color-title);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.208px;
+}
+.hello__lead--mark { color: var(--color-pink); font-weight: 700; }
+
+.what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+.what__links .btn,
+.what__pebble {
+  gap: 7.2px;
+  padding: 8.652px 14.42px;
+  border-radius: 6.76px;
+  font-size: 14.4px;
+  font-weight: 500;
+  line-height: 14.42px;
+}
+.what__links .btn { border-width: 1px; border-color: var(--color-title); }
+.what__pebble {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-title);
+  text-decoration: none;
+}
+.what__links img { display: block; flex: none; }
+.what__pebble:hover { color: var(--color-link); }
+
+:root[data-theme="dark"] .what__links img { filter: brightness(0) invert(1); }
+
+/* The principles on the left, the picture on the right. */
+.hello__approach-title {
+  margin: 0 0 1.1rem;
+  color: var(--color-title);
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.approach {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+  gap: 15px;
+  align-items: stretch;
+}
+
+.approach__list { display: flex; flex-direction: column; gap: 18px; }
+
+.approach__item {
+  border: 1px solid #d0c2b1;
+  border-radius: 6px;
+  background: var(--color-bg);
+}
+
+.approach__item:not(.is-open) { height: 62px; }
+.approach__item:not(.is-open) .approach__card { height: 100%; min-height: 0; }
+
+.approach__item.is-open {
+  /* Same height whichever card is open, so the list and the schema do not jump.
+     The text is shorter than the box, so the whole block sits in the vertical middle. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 17.5rem;
+  border-color: var(--color-pink);
+  background: #fff;
+}
+
+.approach__card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 3.55rem;
+  padding: 0.7rem 1.1rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-title);
+  font: inherit;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.approach__item.is-open .approach__card {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+.approach__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 6.125rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  border-radius: 3px;
+  background: #a08f79;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.approach__item.is-open .approach__tag { background: var(--color-pink); }
+.approach__item.is-open .approach__name { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+
+.approach__panel { padding: 0 1.1rem 0.7rem; color: var(--color-title); font-size: 1rem; line-height: 1.5; }
+.approach__panel[hidden] { display: none; }
+.approach__for { margin-top: 0.75rem; color: #a08f79; font-weight: 500; }
+.approach__points { margin: 0.15rem 0 0; padding-left: 1.15rem; list-style: disc; }
+.approach__points li { margin: 0; }
+
+.approach__stage {
+  display: grid;
+  position: relative;
+  height: 100%;
+  padding: 2.4rem 1.7rem 2.6rem;
+  overflow: hidden;
+  border: 1px solid #e3d3bc;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* One mark per picture. The current one is magenta. */
+.approach__dots {
+  position: absolute;
+  left: 19px;
+  bottom: 14px;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+}
+
+.approach__dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #d0c2b1;
+}
+
+.approach__dots i.is-on { background: var(--color-pink); }
+
+/* The four pictures share one frame. The open card decides which one shows.
+   The shared slide rule hides a slide's first text block; these slides are pictures. */
+.approach__stage > .carousel__slide {
+  height: 100%;
+  align-content: center;
+}
+.approach__stage .carousel__slide > div:first-child { display: block; }
+
+.approach__stage .pic { max-width: none; }
+
+/* Sovereignty is the size of record. The other three fill that same box. */
+.approach__stage .pic-tests,
+.approach__stage .pic-contract,
+.approach__stage .pic-skeleton {
+  min-height: var(--pic-size, auto);
+}
+
+.approach__stage .pic-tests {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  font-size: 1.2rem;
+}
+
+.approach__stage .pic-tests .pic__box { flex: 1; align-items: center; }
+.approach__stage .pic-tests .pic__mark { width: 1.6rem; height: 1.6rem; }
+
+.approach__stage .pic-contract { display: flex; flex-direction: column; }
+
+.approach__stage .pic-contract__grid {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  grid-template-columns: minmax(0, 1fr) minmax(6rem, 0.55fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(3.2rem, 1fr) minmax(3.2rem, 1fr);
+}
+
+.approach__stage .pic-contract__choice { height: 100%; font-size: 1.15rem; }
+
+.approach__stage .pic-skeleton {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.approach__stage .pic-tools__cairn {
+  border: 2px solid var(--color-pink);
+  border-radius: 12px;
+  background: #f5e8ff;
+}
+.approach__stage .pic-tools__cairn strong { font-size: 1.35rem; }
+.approach__stage .pic-tools__cairn span:last-child { color: #544b40; font-size: 1.15rem; font-weight: 400; }
+
+:root[data-theme="dark"] .approach__item,
+:root[data-theme="dark"] .approach__stage { background: var(--color-component); border-color: var(--color-component-border); }
+:root[data-theme="dark"] .approach__item.is-open { border-color: var(--color-pink); }
+:root[data-theme="dark"] .approach__stage .pic-tools__cairn { background: var(--color-selected); }
+:root[data-theme="dark"] .approach__stage .pic-tools__cairn span:last-child { color: var(--color-body); }
+:root[data-theme="dark"] .hello-ground { opacity: 0.18; }
 
 /* 3. The carousel: the list on the left, the picture on the right. All the slides
    are in the same place, and one shows. The slide that comes in starts a short
@@ -1567,14 +1900,12 @@ h1 {
 
 /* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .hello { gap: 2.4rem; padding-top: 0.7rem; }
-  .hello .hello__heading { margin-bottom: -0.8rem; font-size: 2.35rem; }
-  .hello__intro,
-  .carousel { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .hello__lead { font-size: 1.2rem; }
-  .hello .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
-  .hello .goal__point { padding-top: 0.45rem; }
-  .hello .goal__point-title { margin-bottom: 0; font-size: 1rem; }
+  .hello { gap: 1.8rem; padding-top: 0.7rem; }
+  .hello .hello__heading { max-width: none; font-size: 2.35rem; }
+  .hello__intro { padding-left: 0; }
+  .hello__lead { font-size: 1.05rem; }
+  .approach { grid-template-columns: minmax(0, 1fr); }
+  .site-footer { align-items: flex-start; }
 }
 
 /* Phones: smaller pictures, so each one fits the width of the slide. */
@@ -1990,7 +2321,7 @@ h1 {
    larger text size or browser zoom gives a page that scrolls. */
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 46em) {
   body[data-page="recipes"] .page { height: 100vh; height: 100dvh; min-height: 0; }
-  body[data-page="recipes"] main { min-height: 0; }
+  body[data-page="recipes"] main { flex: 1; min-height: 0; }
   .recipe-intro { margin-bottom: 0.5rem; }
   .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
   .recipe-finder,
@@ -2043,7 +2374,7 @@ h1 {
   grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.15fr) minmax(0, 0.9fr);
   grid-template-rows: min-content repeat(4, auto);
   column-gap: 1.6rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   font-size: 1rem;
   line-height: 1.4;
 }

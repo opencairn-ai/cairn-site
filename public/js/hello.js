@@ -1,16 +1,11 @@
 /*
- * The Hello World page: the carousel of the four principles.
+ * The Hello World page: the four principles, each with its picture.
  *
- * The carousel shows one principle at a time and goes to the next one by itself.
- * It stops when the visitor chooses a principle (a click, or the arrow keys) or
- * uses the pause button, and while the keyboard focus is on it. The pointer
- * alone does not stop it. A visitor who asks the system for reduced motion sees a
- * carousel that does not move, and can start it with the button.
- *
- * css/styles.css draws the slides and the pictures, and moves the parts of the
- * pictures. This script changes the slide that shows and makes the marks under the
- * slides: the list of the principles, with their names and descriptions. It also makes the points that move in the
- * picture of the third principle ("Your teams keep their tools").
+ * One principle is open, and its picture shows on the right. The carousel
+ * moves to the next one by itself. A click, or the arrow keys, opens that
+ * principle and its picture. A visitor who asks for reduced motion gets a
+ * carousel that stays put until they choose a principle.
+ * css/styles.css hides the moving points when the visitor asks for reduced motion.
  */
 (() => {
   "use strict";
@@ -19,16 +14,16 @@
   if (!app) return;
   const { t } = app;
 
-  // The time that one principle stays, in milliseconds.
+  // A point leaves a tool each second. The loop matches the 12 second motion in the design.
+  const FLOW_LOOP = 12;
+  // How long one principle and its picture stay before the next one.
   const SLIDE_TIME = 7000;
-
-  // The picture of the tools: a point leaves a tool each second, and the loop of
-  // the points starts again after this number of seconds. Keep it even, and a
-  // multiple of the number of tools, so the points follow each other without a gap.
-  const FLOW_LOOP = 6;
+  // The principle that is open when the page loads: Portability, as in the design.
+  const OPEN_AT = 1;
 
   setUpFlow();
-  setUpCarousel();
+  setUpPrinciples();
+  fitPictures();
 
   function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -91,99 +86,100 @@
     }
   }
 
-  function setUpCarousel() {
+  function setUpPrinciples() {
     const root = document.getElementById("principles");
     if (!root) return;
-    const slides = [...root.querySelectorAll(".carousel__slide")];
-    const toggle = root.querySelector('[data-carousel="toggle"]');
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const principles = t("hello.principles");
+    if (!Array.isArray(principles)) return;
 
-    let index = 0;
-    let timer = null;
-    // Stopped by the visitor, with the button.
-    let paused = reducedMotion.matches;
-    // Stopped for a moment: the pointer or the keyboard focus is on the carousel.
-    let held = false;
-
-    root.style.setProperty("--carousel-time", `${SLIDE_TIME}ms`);
-
-    // The list of the principles: for each one, a button with its name and the
-    // line that fills with the time, then its description, which shows under the
-    // current principle only. For screen readers, the name of a button is the
-    // position and the name of its principle, for example "2 of 4: Replaceable by
-    // contract". The up and down arrow keys (and left and right) move in the list.
-    const items = slides.map((slide, i) => {
-      const name = slide.querySelector(".carousel__name").textContent;
-      const mark = el("button", "carousel__mark");
-      mark.type = "button";
-      mark.setAttribute(
+    const items = principles.map((principle, i) => {
+      const button = el("button", "approach__card");
+      button.type = "button";
+      button.id = `principle-${i}`;
+      button.setAttribute(
         "aria-label",
-        t("hello.carousel.position").replace("{index}", i + 1).replace("{count}", slides.length).replace("{name}", name)
+        t("hello.carousel.position").replace("{index}", i + 1).replace("{count}", principles.length).replace("{name}", principle.name)
       );
-      const line = el("i");
-      line.append(el("b"));
-      mark.append(el("span", "carousel__mark-name", name), line);
-      // A click on a principle shows it and stops the carousel there; the pause
-      // button starts it again.
-      mark.addEventListener("click", () => { paused = true; show(i); });
-      mark.addEventListener("keydown", (event) => {
+      button.append(el("span", "approach__tag", principle.tag), el("span", "approach__name", principle.name));
+
+      const panel = el("div", "approach__panel");
+      panel.id = `principle-panel-${i}`;
+      button.setAttribute("aria-controls", panel.id);
+      panel.append(el("p", null, principle.text));
+      if (principle.forYou) panel.append(el("p", "approach__for", principle.forYou));
+      if (Array.isArray(principle.points) && principle.points.length) {
+        const list = el("ul", "approach__points");
+        list.append(...principle.points.map((point) => el("li", null, point)));
+        panel.append(list);
+      }
+
+      button.addEventListener("click", () => show(i));
+      button.addEventListener("keydown", (event) => {
         const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
         if (!step) return;
         event.preventDefault();
-        paused = true;
-        show(index + step);
-        marks[index].focus();
+        show(i + step);
+        buttons[(i + step + principles.length) % principles.length].focus();
       });
-      const item = el("li", "carousel__item");
-      item.append(mark, el("p", "carousel__item-text", slide.querySelector(".carousel__text").textContent));
+
+      const item = el("div", "approach__item");
+      item.setAttribute("role", "listitem");
+      item.append(button, panel);
       return item;
     });
-    const marks = items.map((item) => item.querySelector(".carousel__mark"));
-    root.querySelector(".carousel__marks").replaceChildren(...items);
+    const buttons = items.map((item) => item.querySelector(".approach__card"));
+    const pictures = [...document.querySelectorAll(".approach__stage .carousel__slide")];
+    const dots = [...document.querySelectorAll(".approach__dots i")];
+    root.replaceChildren(...items);
 
-    // Starts the time of the slide that shows from zero, or stops it.
-    function run() {
-      clearTimeout(timer);
-      root.classList.remove("is-running");
-      root.classList.toggle("is-paused", paused);
-      toggle.setAttribute("aria-label", t(paused ? "hello.carousel.play" : "hello.carousel.pause"));
-      if (paused || held) return;
-      void root.offsetWidth;   // Starts the line of the mark again.
-      root.classList.add("is-running");
-      timer = setTimeout(() => show(index + 1), SLIDE_TIME);
-    }
+    // Picture order matches the principles: tests, contract, tools, skeleton.
+    let current = 0;
+    let timer = null;
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
     function show(next) {
-      index = (next + slides.length) % slides.length;
-      slides.forEach((slide, i) => {
-        slide.classList.toggle("is-on", i === index);
-        slide.setAttribute("aria-hidden", String(i !== index));
+      current = (next + items.length) % items.length;
+      items.forEach((item, i) => {
+        const open = i === current;
+        item.classList.toggle("is-open", open);
+        buttons[i].setAttribute("aria-expanded", String(open));
+        item.querySelector(".approach__panel").hidden = !open;
       });
-      marks.forEach((mark, i) => mark.setAttribute("aria-current", String(i === index)));
-      items.forEach((item, i) => item.classList.toggle("is-current", i === index));
-      // The moving points of a picture start again with their slide.
-      slides[index].querySelectorAll("svg").forEach((svg) => {
-        if (svg.setCurrentTime) svg.setCurrentTime(0);
-      });
-      run();
+      pictures.forEach((picture, i) => picture.classList.toggle("is-on", i === current));
+      dots.forEach((dot, i) => dot.classList.toggle("is-on", i === current));
+      arm();
     }
 
-    function hold(value) {
-      return () => {
-        held = value;
-        run();
-      };
+    // Moves on after SLIDE_TIME, unless the visitor asked for reduced motion
+    // or the keyboard focus is in the list.
+    function arm() {
+      clearTimeout(timer);
+      if (reducedMotion.matches || root.contains(document.activeElement)) return;
+      timer = setTimeout(() => show(current + 1), SLIDE_TIME);
     }
 
-    toggle.addEventListener("click", () => {
-      paused = !paused;
-      run();
-    });
-    // The pointer does not stop the carousel. The keyboard focus does, so a
-    // keyboard user can read a principle: a focus from a click does not.
-    root.addEventListener("focusin", (event) => { if (event.target.matches(":focus-visible")) hold(true)(); });
-    root.addEventListener("focusout", hold(false));
+    root.addEventListener("focusin", () => clearTimeout(timer));
+    root.addEventListener("focusout", () => arm());
+    reducedMotion.addEventListener("change", () => arm());
 
-    show(0);
+    show(OPEN_AT);
   }
+
+  // Sovereignty sets the height. The other diagrams fill that same box,
+  // including after a resize or when the fonts finish loading.
+  function fitPictures() {
+    const stage = document.querySelector(".approach__stage");
+    const tools = stage && stage.querySelector(".pic-tools");
+    if (!tools) return;
+    const size = tools.getBoundingClientRect().height;
+    if (size > 0) stage.style.setProperty("--pic-size", `${Math.round(size)}px`);
+  }
+
+  const toolsPicture = document.querySelector(".approach__stage .pic-tools");
+  if (toolsPicture && typeof ResizeObserver === "function") {
+    new ResizeObserver(fitPictures).observe(toolsPicture);
+  } else {
+    window.addEventListener("resize", fitPictures);
+  }
+  if (document.fonts) document.fonts.ready.then(fitPictures);
 })();
