@@ -1295,13 +1295,10 @@ h1 {
 .hello {
   display: flex;
   flex-direction: column;
-  /* 42px of cream above the words "Our approach to building Cairn".
-     The line box starts 3px above the letters, so the gap is 45px. */
-  gap: 45px;
-  /* 30px of cream above the word "Introducing". The line height is tighter than
-     the letters, so they rise into the gap: the extra 15px puts the word at 30px.
-     The header's own margin is the rest. */
-  padding: calc(45px - 0.35rem) 0 0;
+  /* Cream above “Our approach to building Cairn” (hero to principles block). */
+  gap: 35px;
+  /* Cream above “Introducing”: tighter now that the title is larger. */
+  padding: calc(30px - 0.35rem) 0 0;
 }
 
 /* No browser margins on the headings and lists of the page. :where() keeps these
@@ -1322,7 +1319,7 @@ h1 {
 .hello .hello__heading {
   margin: 0;
   color: var(--color-title);
-  font-size: 80px;
+  font-size: 82.8px;
   font-weight: 500;
   line-height: 0.9;
   letter-spacing: 0;
@@ -1418,13 +1415,19 @@ h1 {
 }
 
 .approach {
+  --approach-stack-height: calc(60px * 3 + 8px * 3 + 17.5rem);
   display: grid;
   grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
   gap: 15px;
   align-items: stretch;
 }
 
-.approach__list { display: flex; flex-direction: column; gap: 18px; }
+.approach__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: var(--approach-stack-height);
+}
 
 .approach__item {
   border: 1px solid #d0c2b1;
@@ -1432,12 +1435,15 @@ h1 {
   background: var(--color-bg);
 }
 
-.approach__item:not(.is-open) { height: 62px; }
-.approach__item:not(.is-open) .approach__card { height: 100%; min-height: 0; }
+.approach__item:not(.is-open) { height: 60px; }
+.approach__item:not(.is-open) .approach__card {
+  height: 100%;
+  min-height: 0;
+  padding: 0 1.1rem;
+}
 
 .approach__item.is-open {
-  /* Same height whichever card is open, so the list and the schema do not jump.
-     The text is shorter than the box, so the whole block sits in the vertical middle. */
+  /* Fixed block height: the list and graph frame do not jump between principles. */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1501,9 +1507,13 @@ h1 {
 
 .approach__stage {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   position: relative;
-  height: 100%;
+  min-height: var(--approach-stack-height);
+  align-self: stretch;
   padding: 2.4rem 1.7rem 2.6rem;
+  --pic-size: calc(var(--approach-stack-height) - 2.4rem - 2.6rem);
   overflow: hidden;
   border: 1px solid #e3d3bc;
   border-radius: 6px;
@@ -1532,11 +1542,21 @@ h1 {
 /* The four pictures share one frame. The open card decides which one shows.
    The shared slide rule hides a slide's first text block; these slides are pictures. */
 .approach__stage > .carousel__slide {
+  grid-area: 1 / 1;
   height: 100%;
   min-height: 0;
   place-content: center;
+  pointer-events: none;
 }
-.approach__stage .carousel__slide > div:first-child { display: block; }
+
+.approach__stage > .carousel__slide.is-on {
+  z-index: 1;
+  pointer-events: auto;
+}
+.approach__stage .carousel__slide > .pic {
+  display: flex;
+  flex-direction: column;
+}
 
 /* Each diagram shares the tools height and sits in the vertical middle of the card. */
 .approach__stage .pic {
@@ -1548,7 +1568,7 @@ h1 {
 }
 .approach__stage .pic.pic-tests {
   min-height: auto;
-  gap: 20px;
+  gap: 0;
 }
 
 .approach__stage .pic { max-width: none; }
@@ -1806,10 +1826,14 @@ h1 {
 /* 1. Tests, then the selection. The test marks come one at a time, one component
    after the other (`--r` is the row and `--m` is the mark). Then the selected
    component gets its magenta outline and its tag. The other rows stay as they are. */
+/* Figma Graph 1 (28:9601): Transparency tests in the approach carousel. */
 .pic-tests {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0;
+  width: 100%;
+  max-width: 50.4375rem;
+  margin: 0 auto;
   --tests-row-bg: #fff;
   --tests-row-line: #a08f79;
   --tests-ink: #291435;
@@ -1818,20 +1842,25 @@ h1 {
 .pic-tests .pic__label {
   color: #a08f79;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 1.081px;
   line-height: 18.24px;
   text-transform: uppercase;
 }
-/* Labels line up over the name and the marks columns, as in the frame. */
+/* Column labels share the same grid as the rows so “Tests” sits over the marks. */
 .pic-tests__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 631.73px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 95.55px 92.29px;
+  column-gap: 16.48px;
+  align-items: end;
   width: 100%;
-  padding: 0 14px;
+  margin: 0 0 15px;
+  padding: 0 14.008px;
+  box-sizing: border-box;
 }
+
+.pic-tests__head .pic__label:first-child { grid-column: 1; }
+.pic-tests__head .pic__label:last-child { grid-column: 2; justify-self: start; }
 .pic-tests__rows {
   display: flex;
   flex-direction: column;
@@ -1849,6 +1878,8 @@ h1 {
 .pic-tests .pic__box {
   width: 100%;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   border: 1px solid var(--tests-row-line);
   border-radius: 6.76px;
   background: var(--tests-row-bg);
@@ -1872,9 +1903,9 @@ h1 {
   gap: 16.5px;
   min-height: 64px;
   padding: 9px 14.008px;
-  border-color: var(--color-pink);
+  border: 1px solid #fd70f5;
   background: #f5e8ff;
-  box-shadow: inset 0 0 0 2px var(--color-pink);
+  box-shadow: inset 0 0 0 2px #fd70f5;
 }
 .pic-tests__row.is-selected > :first-child {
   flex: 1;
@@ -1899,12 +1930,14 @@ h1 {
 .pic-tests .pic__tag {
   flex: none;
   width: 88px;
-  padding: 3.5px 8.405px;
+  margin: 0;
+  padding: 3.502px 8.405px;
+  border: 0;
   border-radius: 5px;
   background: #291435;
   color: #fff;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 18.91px;
   text-align: center;
 }
@@ -2280,7 +2313,7 @@ h1 {
 
 /* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .hello .hello__heading { max-width: none; font-size: 2.35rem; }
+  .hello .hello__heading { max-width: none; font-size: 2.43rem; }
   .hello__lead { font-size: 1.05rem; }
   .approach { grid-template-columns: minmax(0, 1fr); }
   .site-footer { align-items: flex-start; }

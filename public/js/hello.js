@@ -24,7 +24,6 @@
   shapeTitle();
   setUpFlow();
   setUpPrinciples();
-  fitPictures();
 
   // The English "open source" uses one alternate per letter, as in the frame.
   // A child feature setting replaces the one on the word, so each letter names its own.
@@ -191,21 +190,4 @@
     show(OPEN_AT);
   }
 
-  // Sovereignty sets the height. The other diagrams fill that same box,
-  // including after a resize or when the fonts finish loading.
-  function fitPictures() {
-    const stage = document.querySelector(".approach__stage");
-    const tools = stage && stage.querySelector(".pic-tools");
-    if (!tools) return;
-    const size = tools.getBoundingClientRect().height;
-    if (size > 0) stage.style.setProperty("--pic-size", `${Math.round(size)}px`);
-  }
-
-  const toolsPicture = document.querySelector(".approach__stage .pic-tools");
-  if (toolsPicture && typeof ResizeObserver === "function") {
-    new ResizeObserver(fitPictures).observe(toolsPicture);
-  } else {
-    window.addEventListener("resize", fitPictures);
-  }
-  if (document.fonts) document.fonts.ready.then(fitPictures);
 })();
