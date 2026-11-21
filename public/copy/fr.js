@@ -99,7 +99,7 @@ window.CAIRN_COPY.fr = {
     what: {
       title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle",
       stack: "Explorez la pile",
-      contact: "Faites nous signe",
+      contact: "Faites-nous signe",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
 
@@ -570,7 +570,7 @@ window.CAIRN_COPY.fr = {
     collaboration: "Une collaboration de recherche entre {mozilla} et {mila}",
     a: "Une",
     role: "collaboration de recherche",
-    contact: "Faites nous signe",
+    contact: "Faites-nous signe",
     contactUrl: "mailto:bonjourhi@opencairn.ai",
     report: "Signalez vulnérabilité",
     reportUrl: "mailto:security@opencairn.ai?subject=Signalement%20de%20vuln%C3%A9rabilit%C3%A9",
