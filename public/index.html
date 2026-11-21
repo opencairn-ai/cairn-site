@@ -38,7 +38,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=61">
+<link rel="preload" href="assets/hello/trail-dark-terrain.svg?v=11035" as="image">
+<link rel="stylesheet" href="css/styles.css?v=75">
 </head>
 <body data-page="hello">
 <div class="page">
@@ -80,8 +81,14 @@
 
   <!-- Trail map from the frame, laid on the cream. Clipped so it ends with the footer. -->
   <div class="hello-ground-clip">
-    <div class="hello-ground-stack" aria-hidden="true">
+    <div class="hello-ground__degrade" aria-hidden="true"></div>
+    <div class="hello-ground-stack hello-ground-stack--light" aria-hidden="true">
       <object class="hello-ground hello-ground__dither" type="image/svg+xml" data="assets/hello/trail-dither.svg?v=10292" width="1177" height="1440"></object>
+    </div>
+    <!-- Dark map: Figma 28:11035 terrain (Union halftone) + 28:11503 contour in 28:11033. -->
+    <div class="hello-ground-stack hello-ground-stack--dark" aria-hidden="true">
+      <object class="hello-ground hello-ground__terrain" type="image/svg+xml" data="assets/hello/trail-dark-terrain.svg?v=11035" width="1101" height="1444"></object>
+      <object class="hello-ground hello-ground__contour hello-ground__contour--dark" type="image/svg+xml" data="assets/hello/trail-dark-contour.svg?v=11503" width="1442" height="634"></object>
     </div>
     <object class="hello-ground hello-ground__contour" type="image/svg+xml" data="assets/hello/trail-contour.svg?v=10770" width="1442" height="634" aria-hidden="true"></object>
   </div>

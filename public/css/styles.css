@@ -89,7 +89,7 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  background: #120810;
+  background: #291435;
   --color-bg: #291435;               /* Deep purple */
   --color-title: #ffffff;            /* 16.9:1 */
   --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
@@ -203,16 +203,34 @@ a { color: inherit; }
   pointer-events: none;
 }
 
-/* Portrait slot turned on its side: dither (28:10292) plus stone contour (28:10770). */
+/* Portrait slot turned on its side: light dither (28:10292) or dark union (28:11036). */
 .hello-ground-stack {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(1177 / 1440 * 100%);
-  aspect-ratio: 1177 / 1440;
   max-width: none;
   transform: translate(-50%, -50%) rotate(90deg);
   pointer-events: none;
+}
+
+.hello-ground-stack--light {
+  width: calc(1177 / 1440 * 100%);
+  aspect-ratio: 1177 / 1440;
+}
+
+.hello-ground-stack--dark {
+  display: none;
+  /* Figma 28:11035 terrain export (portrait slot, rotated like the light dither). */
+  width: calc(1101.45 / 1440 * 100%);
+  aspect-ratio: 1101.45 / 1444.17;
+}
+
+/* Dark only: degrade under the halftone union (28:11036). */
+.hello-ground__degrade {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .hello-ground {
@@ -235,6 +253,22 @@ a { color: inherit; }
   top: calc(462 / 1164 * 100%);
   width: calc(1442 / 1440 * 100%);
   height: calc(634 / 1164 * 100%);
+}
+
+/* Figma 28:11503 inside 28:11033 (1164 × 1440 artboard). */
+.hello-ground__contour--dark {
+  display: none;
+  z-index: 1;
+  left: calc(453 / 1164 * 100%);
+  top: calc(806 / 1440 * 100%);
+  width: calc(1442 / 1164 * 100%);
+  height: calc(634 / 1440 * 100%);
+}
+
+.hello-ground__terrain {
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .site-header,
@@ -1608,8 +1642,32 @@ h1 {
   66% { opacity: 0.42; }
 }
 
-:root[data-theme="dark"] .hello-ground__dither,
-:root[data-theme="dark"] .hello-ground__contour { opacity: 0.35; }
+/* Dark Hello World: 28:11031 (#291435) + 28:11033 (28:11035 terrain, 28:11503 contour). */
+:root[data-theme="dark"] .hello-ground-stack--light,
+:root[data-theme="dark"] .hello-ground__contour:not(.hello-ground__contour--dark) {
+  display: none;
+}
+
+/* paint0_linear_0_4 from trail-map-dark 6 (under terrain @ 50%). */
+:root[data-theme="dark"] .hello-ground__degrade {
+  display: block;
+  background-color: #291435;
+  background-image: linear-gradient(128deg, #783a9b 0%, #291435 42%, #291435 100%);
+}
+
+:root[data-theme="dark"] .hello-ground-stack--dark {
+  display: block;
+  z-index: 1;
+}
+
+:root[data-theme="dark"] .hello-ground__contour--dark { display: block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-theme="dark"] .hello-ground__terrain {
+    animation: trail-dither-twinkle 12s ease-in-out infinite;
+  }
+}
+
 
 /* 3. The carousel: the list on the left, the picture on the right. All the slides
    are in the same place, and one shows. The slide that comes in starts a short
