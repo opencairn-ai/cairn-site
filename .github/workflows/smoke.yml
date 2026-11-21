@@ -20,7 +20,7 @@ jobs:
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
 
           for i in $(seq 1 40); do
-            if curl -fsS http://127.0.0.1:8080/ >/dev/null; then break; fi
+            if curl -fsS http://127.0.0.1:8080/ >/dev/null 2>&1; then break; fi
             sleep 0.25
           done
 
@@ -43,27 +43,40 @@ jobs:
 
           CHROME_FLAGS="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage --dump-dom --virtual-time-budget=3000"
 
+          # Use bash string tests: piping to `grep -q` closes the stream early and
+          # trips "Broken pipe" under `set -o pipefail`.
+          has() {
+            if [[ "$1" == *"$2"* ]]; then
+              echo "OK: $3"
+            else
+              echo "MISSING: $2" >&2
+              exit 1
+            fi
+          }
+
           for LANG in fr en; do
             HTML=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/?lang=$LANG" 2>/dev/null)
-            echo "$HTML" | grep -q 'data-theme="dark"'
-            echo "$HTML" | grep -q 'carousel__slide is-on" data-picture="1"'
-            echo "$HTML" | grep -q 'pic-pass-contract.svg'
+            has "$HTML" 'data-theme="dark"' "$LANG dark theme"
+            has "$HTML" 'carousel__slide is-on" data-picture="1"' "$LANG contract graph"
+            has "$HTML" 'pic-pass-contract.svg' "$LANG Figma marks"
             if [ "$LANG" = fr ]; then
-              echo "$HTML" | grep -q 'Faites-nous signe'
-              echo "$HTML" | grep -q 'Signalez vulnérabilité'
+              has "$HTML" 'Faites-nous signe' "FR contact"
+              has "$HTML" 'Signalez vulnérabilité' "FR security"
             else
-              echo "$HTML" | grep -q 'Drop us a pebble'
-              echo "$HTML" | grep -q 'Report a vulnerability'
+              has "$HTML" 'Drop us a pebble' "EN contact"
+              has "$HTML" 'Report a vulnerability' "EN security"
             fi
-            echo "OK: $LANG dark"
           done
 
           LIGHT=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
-          echo "$LIGHT" | grep -q 'data-light="light"'
-          echo "OK: light toggle"
+          has "$LIGHT" 'data-light="light"' "light toggle"
 
           MOBILE=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" --window-size=390,844 "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
-          echo "$MOBILE" | grep -Eq 'data-scale="0\.[0-9]+"'
-          echo "OK: mobile scale"
+          if [[ "$MOBILE" =~ data-scale=\"0\.[0-9]+\" ]]; then
+            echo "OK: mobile scale"
+          else
+            echo "MISSING: mobile scale" >&2
+            exit 1
+          fi
 
           rm -f public/__smoke.html
