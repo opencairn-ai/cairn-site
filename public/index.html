@@ -3,15 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f9f6f1">
+<meta name="theme-color" content="#291435">
 <script>
-  // Sets the theme before the first paint: the visitor's last choice, else the system setting.
-  (function () {
-    var theme;
-    try { theme = localStorage.getItem("cairn-theme"); } catch (e) {}
-    if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
-  })();
+  // The site opens in dark on every page; the header button can switch it.
+  document.documentElement.dataset.theme = "dark";
 </script>
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
@@ -38,8 +33,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/hello/trail-dark-terrain.svg?v=11035" as="image">
-<link rel="stylesheet" href="css/styles.css?v=75">
+<link rel="preload" href="assets/hello/trail-map-dark-landscape.svg?v=11033" as="image">
+<link rel="stylesheet" href="css/styles.css?v=93">
 </head>
 <body data-page="hello">
 <div class="page">
@@ -79,13 +74,15 @@
     </div>
   </header>
 
-  <!-- Trail map from the frame, laid on the cream. Clipped so it ends with the footer. -->
+  <!-- Trail map from the frame: the light dither on cream, or the full dark
+       background exported from frame 28:11033. Clipped so it ends with the footer. -->
   <div class="hello-ground-clip">
     <div class="hello-ground__degrade" aria-hidden="true"></div>
     <div class="hello-ground-stack hello-ground-stack--light" aria-hidden="true">
       <object class="hello-ground hello-ground__dither" type="image/svg+xml" data="assets/hello/trail-dither.svg?v=10292" width="1177" height="1440"></object>
     </div>
-    <!-- Dark map: Figma 28:11035 terrain (Union halftone) + 28:11503 contour in 28:11033. -->
+    <!-- Dark portrait exports, kept for the fallback; the dark theme uses the
+         full landscape background on .hello-ground__degrade instead. -->
     <div class="hello-ground-stack hello-ground-stack--dark" aria-hidden="true">
       <object class="hello-ground hello-ground__terrain" type="image/svg+xml" data="assets/hello/trail-dark-terrain.svg?v=11035" width="1101" height="1444"></object>
       <object class="hello-ground hello-ground__contour hello-ground__contour--dark" type="image/svg+xml" data="assets/hello/trail-dark-contour.svg?v=11503" width="1442" height="634"></object>
@@ -149,6 +146,29 @@
             </div>
           </div>
           <div class="carousel__slide" data-picture="1">
+            <div class="pic pic-contract">
+              <div class="pic-contract__grid">
+                <i class="pic-contract__frame pic-contract__frame--gateway"></i>
+                <i class="pic-contract__frame pic-contract__frame--server"></i>
+                <span class="pic__label pic-contract__name pic-contract__name--gateway" data-text="stack.modelAccess.modelGateway.name"></span>
+                <span class="pic__label pic-contract__name pic-contract__name--server" data-text="stack.modelAccess.modelServer.name"></span>
+                <i class="pic-contract__slot pic-contract__slot--gateway"></i>
+                <i class="pic-contract__slot pic-contract__slot--server"></i>
+                <span class="pic-contract__joint">
+                  <span class="pic__label pic-contract__joint-label">
+                    <span data-text="hello.pictures.contract.interface"></span>
+                    <span data-text="hello.pictures.contract.contractWord"></span>
+                  </span>
+                </span>
+                <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--in">LiteLLM <img class="pic__mark-contract" src="assets/hello/pic-pass-contract.svg" alt="" width="21.42" height="21.42"></span>
+                <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--out">Otari <img class="pic__mark-contract" src="assets/hello/pic-pass-contract.svg" alt="" width="21.42" height="21.42"></span>
+                <span class="pic__box pic-contract__choice pic-contract__choice--server pic-contract__choice--in">vLLM <img class="pic__mark-contract" src="assets/hello/pic-pass-contract.svg" alt="" width="21.42" height="21.42"></span>
+                <span class="pic__box pic-contract__choice pic-contract__choice--server pic-contract__choice--out">SGLang <img class="pic__mark-contract" src="assets/hello/pic-pass-contract.svg" alt="" width="21.42" height="21.42"></span>
+              </div>
+              <ul class="pic__legend"><li><img class="pic__mark-contract" src="assets/hello/pic-pass-contract.svg" alt="" width="21.42" height="21.42"><span data-text="hello.pictures.contract.passed"></span></li></ul>
+            </div>
+          </div>
+          <div class="carousel__slide" data-picture="2">
             <div class="pic pic-tools">
               <div class="pic-tools__tools">
                 <span class="pic__box" data-text="hello.pictures.tools.chat"></span>
@@ -171,29 +191,6 @@
                 <span class="pic__box"><b data-text="hello.pictures.tools.remote"></b><small data-text="hello.pictures.tools.remoteDetail"></small></span>
               </div>
               <p class="pic__label pic-tools__foot" data-text="hello.pictures.tools.compute"></p>
-            </div>
-          </div>
-          <div class="carousel__slide" data-picture="2">
-            <div class="pic pic-contract">
-              <div class="pic-contract__grid">
-                <i class="pic-contract__frame pic-contract__frame--gateway"></i>
-                <i class="pic-contract__frame pic-contract__frame--server"></i>
-                <span class="pic__label pic-contract__name pic-contract__name--gateway" data-text="stack.modelAccess.modelGateway.name"></span>
-                <span class="pic__label pic-contract__name pic-contract__name--server" data-text="stack.modelAccess.modelServer.name"></span>
-                <i class="pic-contract__slot pic-contract__slot--gateway"></i>
-                <i class="pic-contract__slot pic-contract__slot--server"></i>
-                <span class="pic-contract__joint">
-                  <span class="pic__label pic-contract__joint-label">
-                    <span data-text="hello.pictures.contract.interface"></span>
-                    <span data-text="hello.pictures.contract.contractWord"></span>
-                  </span>
-                </span>
-                <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--in">LiteLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
-                <span class="pic__box pic-contract__choice pic-contract__choice--gateway pic-contract__choice--out">Otari <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
-                <span class="pic__box pic-contract__choice pic-contract__choice--server pic-contract__choice--in">vLLM <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
-                <span class="pic__box pic-contract__choice pic-contract__choice--server pic-contract__choice--out">SGLang <svg class="pic__mark"><use href="#pic-pass"/></svg></span>
-              </div>
-              <ul class="pic__legend"><li><svg class="pic__mark"><use href="#pic-pass"/></svg><span data-text="hello.pictures.contract.passed"></span></li></ul>
             </div>
           </div>
           <div class="carousel__slide" data-picture="3">
@@ -228,15 +225,15 @@
     <div class="footer-brand" id="collaboration"></div>
     <div class="footer-actions">
       <a class="btn footer-btn" data-href="footer.reportUrl" data-text="footer.report"></a>
-      <a class="btn footer-btn footer-btn--line" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
+      <a class="btn footer-btn footer-btn--line" data-href="footer.contactUrl" data-text="footer.contact"></a>
     </div>
   </footer>
 
 </div>
 
-<script src="copy/en.js"></script>
-<script src="copy/fr.js"></script>
-<script src="js/app.js"></script>
-<script src="js/hello.js?v=59"></script>
+<script src="copy/en.js?v=84"></script>
+<script src="copy/fr.js?v=84"></script>
+<script src="js/app.js?v=81"></script>
+<script src="js/hello.js?v=61"></script>
 </body>
 </html>

@@ -67,11 +67,13 @@ window.CAIRN_COPY.fr = {
   // La page Hello World, pour les gestionnaires et les décideurs.
   // Le titre affiché est `hello.title`. `intro.title` reste tel quel : le schéma téléchargé l’utilise.
   hello: {
-    // Le titre. `mark` est en Default Lingo, un cran plus grand. `before` et `after` restent en Space Grotesk.
+    // Le titre. Toute la seconde ligne (« à code source ouvert ») est en Default Lingo :
+    // `before` et `after` sont vides et `mark` porte la ligne entière.
+    // js/hello.js place les alternates lettre par lettre, comme dans le frame Figma.
     title: {
       line: "Découvrez la pile d’IA souveraine",
-      before: "à ",
-      mark: "code source ouvert",
+      before: "",
+      mark: "à code source ouvert",
       after: "",
     },
     // Sous le titre : la raison d’être de Cairn. La phrase entre astérisques est en rose.
@@ -96,8 +98,8 @@ window.CAIRN_COPY.fr = {
     // Les mots entre traits de soulignement sont en italique.
     what: {
       title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle",
-      stack: "Explorer LaStack",
-      contact: "Laissez-nous un caillou",
+      stack: "Explorez la pile",
+      contact: "Faites nous signe",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
 
@@ -107,7 +109,7 @@ window.CAIRN_COPY.fr = {
         tag: "Transparence",
         name: "Des composants à code source ouvert testés",
         text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
-        forYou: "Pour votre organisation",
+        forYou: "Pour votre organisation :",
         points: [
           "Du code source ouvert, sans le travail d’assemblage",
           "Chaque composant ouvert à l’inspection",
@@ -117,7 +119,7 @@ window.CAIRN_COPY.fr = {
         tag: "Portabilité",
         name: "Remplaçable par contrat",
         text: "Nous définissons ce que chaque couche doit faire. Puis nous testons des composants à code source ouvert existants selon cette spécification et choisissons le plus adapté.",
-        forYou: "Pour votre organisation",
+        forYou: "Pour votre organisation :",
         points: [
           "Du code source ouvert, sans le travail d’assemblage",
           "Chaque composant ouvert à l’inspection",
@@ -127,7 +129,7 @@ window.CAIRN_COPY.fr = {
         tag: "Souveraineté",
         name: "Vos équipes gardent leurs outils",
         text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à une seule API, sur les ressources de calcul de votre organisation.",
-        forYou: "Pour votre organisation",
+        forYou: "Pour votre organisation :",
         points: [
           "Vos données et vos politiques restent sur votre infrastructure",
           "Du calcul détenu ou partagé, à un coût prévisible",
@@ -137,7 +139,7 @@ window.CAIRN_COPY.fr = {
         tag: "Exploitation",
         name: "Assembler, pas créer",
         text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
-        forYou: "Pour votre organisation",
+        forYou: "Pour votre organisation :",
         points: [
           "Déployé, mis à jour et exploité à partir de sa documentation",
         ],
@@ -567,9 +569,11 @@ window.CAIRN_COPY.fr = {
   footer: {
     collaboration: "Une collaboration de recherche entre {mozilla} et {mila}",
     a: "Une",
-    role: "Collaboration de recherche",
-    report: "Signaler une vulnérabilité",
-    reportUrl: "mailto:bonjourhi@opencairn.ai?subject=Signalement%20de%20vuln%C3%A9rabilit%C3%A9",
+    role: "collaboration de recherche",
+    contact: "Faites nous signe",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
+    report: "Signalez vulnérabilité",
+    reportUrl: "mailto:security@opencairn.ai?subject=Signalement%20de%20vuln%C3%A9rabilit%C3%A9",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/fr/" },
     mila: { name: "Mila", url: "https://mila.quebec/fr" },
   },

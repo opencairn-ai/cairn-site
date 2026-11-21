@@ -107,7 +107,7 @@ window.CAIRN_COPY.en = {
         tag: "Transparency",
         name: "Tested open source components",
         text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
-        forYou: "For your organization",
+        forYou: "For your organization :",
         points: [
           "Open source, without the assembly work",
           "Every component open to inspection",
@@ -117,7 +117,7 @@ window.CAIRN_COPY.en = {
         tag: "Portability",
         name: "Replaceable by contract",
         text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
-        forYou: "For your organization",
+        forYou: "For your organization :",
         points: [
           "Open source, without the assembly work",
           "Every component open to inspection",
@@ -127,7 +127,7 @@ window.CAIRN_COPY.en = {
         tag: "Sovereignty",
         name: "Your teams keep their tools",
         text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API, on your organization's compute.",
-        forYou: "For your organization",
+        forYou: "For your organization :",
         points: [
           "Your data and your policies stay on your infrastructure",
           "Owned or shared compute, at a predictable cost",
@@ -137,7 +137,7 @@ window.CAIRN_COPY.en = {
         tag: "Operations",
         name: "Composition, not creation",
         text: "We write the code that connects components, not new components. Where no suitable open source component exists, we publish a specification.",
-        forYou: "For your organization",
+        forYou: "For your organization :",
         points: [
           "Deployed, upgraded and run from its documentation",
         ],
@@ -575,8 +575,10 @@ window.CAIRN_COPY.en = {
     collaboration: "A research collaboration between {mozilla} and {mila}",
     a: "A",
     role: "Research collaboration",
-    report: "Report a vulnerability",
-    reportUrl: "mailto:bonjourhi@opencairn.ai?subject=Vulnerability%20report",
+    contact: "Faites nous signe",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
+    report: "Signalez vulnérabilité",
+    reportUrl: "mailto:security@opencairn.ai?subject=Vulnerability%20report",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/en-US/" },
     mila: { name: "Mila", url: "https://mila.quebec/en" },
   },

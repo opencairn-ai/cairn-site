@@ -24,12 +24,18 @@
   shapeTitle();
   setUpFlow();
   setUpPrinciples();
+  setUpContractScale();
 
-  // The English "open source" uses one alternate per letter, as in the frame.
+  // The default-lingo line uses one alternate per letter, as in the frame.
   // A child feature setting replaces the one on the word, so each letter names its own.
   function shapeTitle() {
     const mark = document.querySelector(".hello__title-mark");
-    if (!mark || mark.textContent !== "open source") return;
+    if (!mark) return;
+    if (mark.textContent === "open source") shapeEnglish(mark);
+    if (mark.textContent === "à code source ouvert") shapeFrench(mark);
+  }
+
+  function shapeEnglish(mark) {
     mark.replaceChildren(
       el("span", "salt", "o"),
       el("span", "plain", "p"),
@@ -45,6 +51,29 @@
     if (!rest || !rest.textContent.endsWith("stack")) return;
     const prefix = rest.textContent.slice(0, -5);
     rest.replaceChildren(prefix, "st", el("span", "kern-a", "a"), el("span", "kern-c", "c"), "k");
+  }
+
+  // The French line is all Default Lingo. The space before "ouvert" is set at
+  // the 80px of the first line, and "r" / "t" are pulled in as in the frame.
+  function shapeFrench(mark) {
+    mark.replaceChildren(
+      el("span", "plain", "à c"),
+      el("span", "salt", "o"),
+      el("span", "plain", "d"),
+      el("span", "salt", "e"),
+      el("span", "ss02", " "),
+      el("span", "plain", "s"),
+      el("span", "salt", "our"),
+      el("span", "plain", "c"),
+      el("span", "salt", "e"),
+      el("span", "space-base plain", " "),
+      el("span", "salt", "o"),
+      el("span", "plain", "u"),
+      el("span", "plain", "v"),
+      el("span", "plain", "e"),
+      el("span", "kern-r plain", "r"),
+      el("span", "kern-t ss02", "t"),
+    );
   }
 
   function el(tag, className, text) {
@@ -157,7 +186,7 @@
     const dots = [...document.querySelectorAll(".approach__dots i")];
     root.replaceChildren(...items);
 
-    // Picture order matches Figma Hello World (24:5409): tests, tools, contract, skeleton.
+    // Picture order matches the four principles: tests, contract, tools, skeleton.
     let current = 0;
     let timer = null;
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -188,6 +217,21 @@
     reducedMotion.addEventListener("change", () => arm());
 
     show(OPEN_AT);
+  }
+
+  // Figma draws the contract graph in an 865px frame. Keep that geometry and
+  // scale it down with the stage, so the frame stays centred on every width.
+  function setUpContractScale() {
+    const stage = document.querySelector(".approach__stage");
+    if (!stage || !stage.querySelector(".pic-contract")) return;
+
+    const update = () => {
+      const scale = Math.min(1, stage.clientWidth / 865);
+      stage.style.setProperty("--contract-scale", scale.toFixed(4));
+    };
+    update();
+    if (window.ResizeObserver) new ResizeObserver(update).observe(stage);
+    else window.addEventListener("resize", update);
   }
 
 })();

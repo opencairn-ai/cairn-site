@@ -14,8 +14,6 @@
   const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
   const LANGUAGE_KEY = "cairn-language";
-  // Also read by the script in the page head, which sets the theme before the first paint.
-  const THEME_KEY = "cairn-theme";
   // The pages that have no content yet. Each link to one of them (its tab, a button)
   // shows as disabled and does not open the page. Remove a name to open its page.
   const PAGES_TO_COME = [];
@@ -140,7 +138,7 @@
       );
     }
 
-    // Footer lockup (Figma 28:10323 / 28:10889): SVG marks in a fixed research-collab slot.
+    // Footer lockup (Figma 28:11885 / 28:12003): text and SVG marks on one row.
     const brand = document.getElementById("collaboration");
     if (brand) {
       const logoLink = (key) => {
@@ -160,40 +158,27 @@
         return img;
       };
       const mozilla = logoLink("mozilla");
-      mozilla.classList.add("footer-lockup__mozilla");
+      mozilla.classList.add("footer-brand__mozilla");
       mozilla.append(image("footer-mozilla.svg", 119.773, 28.6525));
       const mila = logoLink("mila");
-      mila.classList.add("footer-brand__mila", "footer-lockup__mila");
+      mila.classList.add("footer-brand__mila");
       const mark = image("footer-mila-mark.svg", 26.2001, 25.531);
       const word = image("footer-mila-word.svg", 57.9405, 25.53);
       mark.classList.add("footer-brand__mila-mark");
       word.classList.add("footer-brand__mila-word");
       mila.append(mark, word);
 
-      if (lang === "en") {
-        brand.className = "footer-brand footer-lockup";
-        brand.setAttribute("role", "group");
-        brand.setAttribute("aria-label", t("footer.collaboration"));
-        brand.replaceChildren(
-          image("footer-a.svg", 8.596, 12.55),
-          mozilla,
-          image("footer-x.svg", 8.596, 9.455),
-          mila,
-          image("footer-role-en.svg", 223.658, 13.53)
-        );
-        brand.firstChild.classList.add("footer-lockup__a");
-        brand.children[2].classList.add("footer-lockup__x");
-        brand.lastChild.classList.add("footer-lockup__role");
-      } else {
-        brand.className = "footer-brand";
-        const logos = el("span", "footer-logos");
-        logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
-        brand.replaceChildren(
-          el("span", "footer-brand__a", t("footer.a")),
-          logos,
-          el("span", "footer-brand__role", t("footer.role"))
-        );
-      }
+      const logos = el("span", "footer-logos");
+      logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
+
+      brand.className = `footer-brand footer-brand--${lang}`;
+      brand.setAttribute("role", "group");
+      brand.setAttribute("aria-label", t("footer.collaboration"));
+      brand.replaceChildren(
+        el("span", "footer-brand__a", t("footer.a")),
+        logos,
+        el("span", "footer-brand__role", t("footer.role"))
+      );
     }
   }
 
@@ -251,11 +236,10 @@
 
   // --- Theme ---------------------------------------------------------------
 
-  // The header button switches theme and remembers the choice; until a visitor
-  // makes one, the page follows the system setting, even while open.
+  // The page opens in dark (set in the head). The header button switches theme
+  // for the current visit; it no longer remembers a choice or follows the system.
   function setUpTheme() {
     const button = document.getElementById("theme-toggle");
-    const system = matchMedia("(prefers-color-scheme: dark)");
     const themeColor = document.querySelector('meta[name="theme-color"]');
 
     function apply(theme) {
@@ -269,11 +253,7 @@
     apply(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
     button.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-      remember(THEME_KEY, next);
       apply(next);
-    });
-    system.addEventListener("change", (event) => {
-      if (!recall(THEME_KEY)) apply(event.matches ? "dark" : "light");
     });
   }
 

@@ -3,15 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f9f6f1">
+<meta name="theme-color" content="#291435">
 <script>
-  // Sets the theme before the first paint: the visitor's last choice, else the system setting.
-  (function () {
-    var theme;
-    try { theme = localStorage.getItem("cairn-theme"); } catch (e) {}
-    if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = theme;
-  })();
+  // The site opens in dark on every page; the header button can switch it.
+  document.documentElement.dataset.theme = "dark";
 </script>
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
@@ -38,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=48">
+<link rel="stylesheet" href="css/styles.css?v=93">
 </head>
 <body data-page="stack">
 <div class="page">
@@ -208,7 +203,7 @@
     <div class="footer-brand" id="collaboration"></div>
     <div class="footer-actions">
       <a class="btn footer-btn" data-href="footer.reportUrl" data-text="footer.report"></a>
-      <a class="btn footer-btn footer-btn--line" data-href="hello.what.contactUrl" data-text="hello.what.contact"></a>
+      <a class="btn footer-btn footer-btn--line" data-href="footer.contactUrl" data-text="footer.contact"></a>
     </div>
   </footer>
 
@@ -226,9 +221,9 @@
 
 <noscript><p class="noscript">This page needs JavaScript to display the architecture. · Cette page nécessite JavaScript pour afficher l’architecture.</p></noscript>
 
-<script src="copy/en.js"></script>
-<script src="copy/fr.js"></script>
-<script src="js/app.js"></script>
+<script src="copy/en.js?v=84"></script>
+<script src="copy/fr.js?v=84"></script>
+<script src="js/app.js?v=81"></script>
 <script src="js/stack.js"></script>
 
 </body>

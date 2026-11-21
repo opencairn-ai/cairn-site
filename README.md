@@ -20,7 +20,9 @@ public/
   vendor/html-to-image.min.js             Renders the diagram to PNG (MIT, loaded on click)
   fonts/SpaceGrotesk-Variable.woff2       Brand typeface, from the design system (OFL)
   fonts/DefaultLingo-Regular.otf          "open source" in the Hello World title
+  fonts/JetBrainsMono-Medium.woff2        Mono label of the approach cards (Figma 28:10391)
   assets/cairn-logo-light.png, cairn-logo-dark.png  Header lockup, one file per theme
+  assets/hello/trail-map-dark-landscape.svg  Full dark background exported from frame 28:11033
   assets/cairn-logo*.svg                  Wordmark used by the previous share card
   assets/og-card.png                      Share card for link previews (supplied image)
   site.webmanifest, robots.txt, sitemap.xml
@@ -124,6 +126,9 @@ of its pop-up, lives in `public/copy/en.js` (English) and `public/copy/fr.js`
 (French). Both files share the same structure and list the diagram in reading
 order. Edit the text between the quotes. Each file explains the few rules at its
 top.
+
+The pages open in dark. The header button switches theme for the current visit
+only; no choice is saved and the system setting is not followed.
 
 - French (Canada) is served at `/?lang=fr` and follows OQLF recommendations.
   Without `?lang=`, visitors get their last choice or their browser's language.
