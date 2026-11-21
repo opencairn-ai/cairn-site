@@ -1,6 +1,9 @@
 /*
- * Fills the page with the copy from copy/en.js or copy/fr.js, shows the
- * architecture pop-ups, and downloads the diagram as a PNG.
+ * Fills each page with the copy from copy/en.js or copy/fr.js and marks the
+ * current tab. On every page, the download button saves the diagram of the stack
+ * page as a PNG. On the stack page, it also shows the architecture pop-ups. The Hello World page and the Recipes page have
+ * their own scripts (js/hello.js, js/recipes.js), which use the copy lookup that
+ * this script shares.
  */
 (() => {
   "use strict";
@@ -11,8 +14,9 @@
   const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
   const LANGUAGE_KEY = "cairn-language";
-  // Also read by the script in the page head, which sets the theme before the first paint.
-  const THEME_KEY = "cairn-theme";
+  // The pages that have no content yet. Each link to one of them (its tab, a button)
+  // shows as disabled and does not open the page. Remove a name to open its page.
+  const PAGES_TO_COME = [];
 
   const lang = pickLanguage();
   const copy = ALL_COPY[lang] || ALL_COPY[DEFAULT_LANGUAGE];
@@ -21,14 +25,29 @@
     return;
   }
 
-  const diagram = document.getElementById("architecture");
+  // The page's tab: the data-page value on <body>, which is also its key under `nav`.
+  const page = document.body.dataset.page;
+  // Only the stack page has the diagram. On another page, the download button
+  // gets the diagram from the stack page (see ensureDiagram).
+  let diagram = document.getElementById("architecture");
   const entries = new Map();
 
+  // For the script of a single page (js/hello.js, js/recipes.js): the copy lookup, the
+  // language tag of the page, and the mark of an external link.
+  // The stack page shows the selected box in a sheet beside the schema on a wide
+  // screen (js/stack.js). Then the pop-ups of the schema stay off.
+  const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
+  const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
+
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
+
   renderPage();
-  renderDiagram();
   setUpTheme();
-  setUpTooltips();
-  setUpDownload();
+  if (diagram) {
+    renderDiagram();
+    setUpTooltips();
+  }
+  if (document.getElementById("download")) setUpDownload();
 
   // --- Language ------------------------------------------------------------
 
@@ -80,13 +99,19 @@
 
   function renderPage() {
     document.documentElement.lang = LOCALES[lang];
-    document.title = t("meta.title");
+    // The stack page has its own title. The other pages use the name of their tab.
+    const title = page === "stack" ? t("meta.title") : t("meta.pageTitle").replace("{page}", t(`nav.${page}`));
+    document.title = title;
     setContent('meta[name="description"]', t("meta.description"));
-    setContent('meta[property="og:title"]', t("meta.title"));
+    setContent('meta[property="og:title"]', title);
     setContent('meta[property="og:description"]', t("meta.description"));
 
     const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.href = new URL(lang === DEFAULT_LANGUAGE ? "/" : `/?lang=${lang}`, canonical.href).href;
+    if (canonical && lang !== DEFAULT_LANGUAGE) {
+      const url = new URL(canonical.href);
+      url.searchParams.set("lang", lang);
+      canonical.href = url.href;
+    }
 
     for (const node of document.querySelectorAll("[data-text]")) setText(node, t(node.dataset.text));
     for (const node of document.querySelectorAll("[data-href]")) node.href = t(node.dataset.href);
@@ -94,36 +119,110 @@
       node.setAttribute("aria-label", t(node.dataset.ariaLabel));
     }
 
-    for (const link of document.querySelectorAll(".lang a")) {
-      if (link.hreflang === LOCALES[lang]) link.setAttribute("aria-current", "true");
+    // One language button: only the link to the other language shows.
+    for (const link of document.querySelectorAll(".lang a")) link.hidden = link.hreflang === LOCALES[lang];
+
+    renderNav();
+
+    // The three points under the title: the goal on the stack page (`intro.points`),
+    // or the copy that the page names in data-points.
+    const goalPoints = document.getElementById("goal-points");
+    if (goalPoints) {
+      goalPoints.replaceChildren(
+        ...(t(goalPoints.dataset.points || "intro.points") || []).map((point) =>
+          el("li", "goal__point", [
+            el("span", "goal__point-title", point.title),
+            el("span", "goal__point-text", point.text),
+          ])
+        )
+      );
     }
 
-    const points = t("intro.points") || [];
-    document.getElementById("goal-points").replaceChildren(
-      ...points.map((point) =>
-        el("li", "goal__point", [
-          el("span", "goal__point-title", point.title),
-          el("span", "goal__point-text", point.text),
-        ])
-      )
-    );
-
-    // "{mozilla}" and "{mila}" in the footer line become links.
-    const parts = t("footer.collaboration").split(/(\{\w+\})/);
-    document.getElementById("collaboration").replaceChildren(
-      ...parts.map((part) => {
-        const key = (part.match(/^\{(\w+)\}$/) || [])[1];
-        if (!key) return document.createTextNode(part);
-        const link = el("a", null, t(`footer.${key}.name`));
+    // Footer lockup (Figma 28:11885 / 28:12003): text and SVG marks on one row.
+    const brand = document.getElementById("collaboration");
+    if (brand) {
+      const logoLink = (key) => {
+        const link = el("a", "footer-brand__logo");
         link.href = t(`footer.${key}.url`);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.setAttribute("aria-label", t(`footer.${key}.name`));
         return link;
-      })
-    );
+      };
+      const image = (file, width, height) => {
+        const img = document.createElement("img");
+        img.src = `assets/hello/${file}`;
+        img.alt = "";
+        img.width = width;
+        img.height = height;
+        return img;
+      };
+      const mozilla = logoLink("mozilla");
+      mozilla.classList.add("footer-brand__mozilla");
+      mozilla.append(image("footer-mozilla.svg", 119.773, 28.6525));
+      const mila = logoLink("mila");
+      mila.classList.add("footer-brand__mila");
+      const mark = image("footer-mila-mark.svg", 26.2001, 25.531);
+      const word = image("footer-mila-word.svg", 57.9405, 25.53);
+      mark.classList.add("footer-brand__mila-mark");
+      word.classList.add("footer-brand__mila-word");
+      mila.append(mark, word);
+
+      const logos = el("span", "footer-logos");
+      logos.append(mozilla, el("span", "footer-brand__x", "x"), mila);
+
+      brand.className = `footer-brand footer-brand--${lang}`;
+      brand.setAttribute("role", "group");
+      brand.setAttribute("aria-label", t("footer.collaboration"));
+      brand.replaceChildren(
+        el("span", "footer-brand__a", t("footer.a")),
+        logos,
+        el("span", "footer-brand__role", t("footer.role"))
+      );
+    }
+  }
+
+  // Marks the current tab and prepares the links between pages (the tabs and the logo).
+  function renderNav() {
+    const nav = document.querySelector(".site-nav");
+    const explicit = new URLSearchParams(location.search).has("lang");
+    for (const link of document.querySelectorAll("a[data-page]")) {
+      // A page to come: the link keeps its name, but has no address, so it does not
+      // take a click or the keyboard focus. The page itself keeps its tab.
+      if (PAGES_TO_COME.includes(link.dataset.page) && link.dataset.page !== page) {
+        link.removeAttribute("href");
+        link.setAttribute("role", "link");
+        link.setAttribute("aria-disabled", "true");
+        continue;
+      }
+      let href = link.getAttribute("href");
+      // A page opened from disk has no server to turn "./" into index.html.
+      if (href === "./" && location.protocol === "file:") href = "index.html";
+      // A language chosen in the address stays in the address on the next page.
+      if (explicit) href += `?lang=${lang}`;
+      link.setAttribute("href", href);
+    }
+    if (!nav) return;
+    const current = nav.querySelector(`a[data-page="${page}"]`);
+    if (!current) return;
+    current.setAttribute("aria-current", "page");
+    // On a phone the tabs scroll sideways: bring the current tab into view, and
+    // again when the web font arrives, because it changes the width of the tabs.
+    const reveal = () => {
+      const tab = current.getBoundingClientRect();
+      const row = nav.getBoundingClientRect();
+      const gutter = parseFloat(getComputedStyle(nav).paddingRight);
+      nav.scrollLeft += Math.max(0, tab.right - row.right + gutter);
+    };
+    reveal();
+    if (document.fonts) document.fonts.ready.then(reveal);
   }
 
   // Words wrapped in *asterisks* in the copy become a pink highlight.
+  // Words wrapped in _underscores_ are in italic.
   function setText(node, text) {
-    node.replaceChildren(...text.split(/\*([^*]+)\*/).map((part, i) => (i % 2 ? el("mark", "hl", part) : part)));
+    const italic = (part) => part.split(/_([^_]+)_/).map((piece, i) => (i % 2 ? el("em", null, piece) : piece));
+    node.replaceChildren(...text.split(/\*([^*]+)\*/).flatMap((part, i) => (i % 2 ? [el("mark", "hl", part)] : italic(part))));
   }
 
   function setContent(selector, value) {
@@ -137,11 +236,10 @@
 
   // --- Theme ---------------------------------------------------------------
 
-  // The header button switches theme and remembers the choice; until a visitor
-  // makes one, the page follows the system setting, even while open.
+  // The page opens in dark (set in the head). The header button switches theme
+  // for the current visit; it no longer remembers a choice or follows the system.
   function setUpTheme() {
     const button = document.getElementById("theme-toggle");
-    const system = matchMedia("(prefers-color-scheme: dark)");
     const themeColor = document.querySelector('meta[name="theme-color"]');
 
     function apply(theme) {
@@ -155,17 +253,18 @@
     apply(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
     button.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-      remember(THEME_KEY, next);
       apply(next);
-    });
-    system.addEventListener("change", (event) => {
-      if (!recall(THEME_KEY)) apply(event.matches ? "dark" : "light");
     });
   }
 
   // --- Diagram -------------------------------------------------------------
 
   function renderDiagram() {
+    // A layer gets the Alpha mark when one of its components has it.
+    for (const layer of diagram.querySelectorAll(".layer")) {
+      if (layer.querySelector('.comp[data-status="alpha"]')) layer.dataset.status = "alpha";
+    }
+
     for (const node of diagram.querySelectorAll("[data-copy]")) {
       const key = `stack.${node.dataset.copy}`;
       const entry = {
@@ -173,20 +272,49 @@
         name: t(`${key}.name`),
         detail: t(`${key}.detail`, { optional: true }),
         tooltip: t(`${key}.tooltip`),
+        status: node.dataset.status,
       };
 
-      // Screen readers get the pop-up text inline, right after the name.
-      const label = el("span", "label", [el("span", "label__name", entry.name)]);
+      // Screen readers get the status and the pop-up text inline, right after the name.
+      const name = entry.status ? nameWithMark(entry.name, entry.status) : entry.name;
+      const label = el("span", "label", [el("span", "label__name", name)]);
       if (entry.detail) label.append(el("span", "label__detail", entry.detail));
-      label.append(el("span", "sr-only", `. ${entry.tooltip}`));
+      const status = entry.status ? `. ${t(`diagram.status.${entry.status}`)}` : "";
+      label.append(el("span", "sr-only", `${status}. ${entry.tooltip}`));
 
       node.prepend(label);
       node.tabIndex = 0;
       entries.set(node, entry);
     }
+
+    // The legend above the schema is on the stack page only.
+    const legend = document.getElementById("status-legend");
+    if (legend) legend.replaceChildren(...statusLegend());
+  }
+
+  // One item per status shown on the diagram: its mark and its label. Empty when
+  // no box has a status. Also used in the downloaded image.
+  function statusLegend() {
+    const statuses = new Set([...entries.values()].map((entry) => entry.status).filter(Boolean));
+    return [...statuses].map((status) => el("li", null, [statusMark(status), t(`diagram.status.${status}`)]));
+  }
+
+  // Joins the mark to the last word of the name, so a line break cannot leave
+  // the mark alone on a line.
+  function nameWithMark(name, status) {
+    const at = name.lastIndexOf(" ") + 1;
+    return [name.slice(0, at), el("span", "label__tail", [name.slice(at), statusMark(status)])];
+  }
+
+  function statusMark(status) {
+    const mark = el("span", "status-mark");
+    mark.dataset.status = status;
+    mark.setAttribute("aria-hidden", "true");
+    return mark;
   }
 
   function kindOf(node) {
+    if (node.classList.contains("local-api")) return "endpoint";
     if (node.classList.contains("comp")) return "component";
     if (node.classList.contains("layer--cross")) return "crossCutting";
     if (node.classList.contains("layer")) return "layer";
@@ -200,6 +328,8 @@
     const tipKind = tip.querySelector(".tip__kind");
     const tipName = tip.querySelector(".tip__name");
     const tipText = tip.querySelector(".tip__text");
+    const tipStatus = tip.querySelector(".tip__status");
+    const tipBadge = tipStatus.querySelector(".pill");
     let active = null;
 
     // Phones show the pop-up as a panel along the bottom of the screen (.tip--sheet).
@@ -209,6 +339,7 @@
     const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
 
     function show(node) {
+      if (usesSheet()) return hide();
       if (!node) return hide();
       if (node === active) return;
       if (active) active.classList.remove("is-active");
@@ -219,6 +350,11 @@
       tipKind.textContent = t(`diagram.kinds.${entry.kind}`);
       tipName.textContent = entry.name;
       tipText.textContent = entry.tooltip;
+      tipStatus.hidden = !entry.status;
+      if (entry.status) {
+        tipBadge.dataset.status = entry.status;
+        tipBadge.textContent = t(`diagram.status.${entry.status}`);
+      }
       place(node);
       tip.classList.add("is-visible");
     }
@@ -325,6 +461,7 @@
       label.textContent = t("header.downloadBusy");
 
       try {
+        await ensureDiagram();
         await loadScript("vendor/html-to-image.min.js");
         const blob = await renderImage();
         saveFile(blob, `${t("image.fileName")}-${lang}.png`);
@@ -343,13 +480,37 @@
     });
   }
 
+  // The diagram is on the stack page. The other pages have the same download
+  // button: they get the diagram from the stack page only when a visitor clicks
+  // the button, and keep it hidden.
+  async function ensureDiagram() {
+    if (diagram) return;
+    const response = await fetch(new URL("stack.html", location.href));
+    if (!response.ok) throw new Error("The stack page could not be loaded.");
+    const stackPage = new DOMParser().parseFromString(await response.text(), "text/html");
+    const source = stackPage.getElementById("architecture");
+    if (!source) throw new Error("The diagram is missing from the stack page.");
+    const host = el("div", "diagram-source");
+    host.hidden = true;
+    host.append(document.importNode(source, true));
+    document.body.append(host);
+    diagram = host.firstElementChild;
+    // The texts that the stack page fills when it loads.
+    for (const node of diagram.querySelectorAll("[data-text]")) setText(node, t(node.dataset.text));
+    for (const node of diagram.querySelectorAll("[data-aria-label]")) {
+      node.setAttribute("aria-label", t(node.dataset.ariaLabel));
+    }
+    renderDiagram();
+  }
+
   // Clones the diagram into an off-screen 16:9 slide with a title, a legend that
   // describes every layer and component, and the credits, so every download looks
   // the same whatever the screen size.
   async function renderImage() {
     const clone = diagram.cloneNode(true);
     clone.removeAttribute("id");
-    for (const node of clone.querySelectorAll(".is-active")) node.classList.remove("is-active");
+    // The image shows the schema at rest: no hover, no selection.
+    for (const node of clone.querySelectorAll(".is-active, .is-selected, .is-hovered")) node.classList.remove("is-active", "is-selected", "is-hovered");
 
     const groups = legendGroups();
     const legend = el("div", "export-legend");
@@ -360,7 +521,10 @@
       ]),
       clone,
       legend,
-      el("p", "export-sheet__foot", footerText()),
+      el("div", "export-sheet__foot", [
+        el("ul", "legend", statusLegend()),
+        el("p", null, footerText()),
+      ]),
     ]);
     const stage = el("div", "export-stage", sheet);
     stage.setAttribute("aria-hidden", "true");
@@ -391,7 +555,7 @@
   }
 
   // One group per layer, in reading order: the layer, then each of its components,
-  // with the same text as the pop-ups. Local and Server follow the SDK row.
+  // with the same text as the pop-ups. Local and Server follow the client row.
   function legendGroups() {
     const item = (node) => {
       const entry = entries.get(node);
@@ -405,7 +569,12 @@
         el("p", "export-legend__about", entry.tooltip),
         ...[...layer.querySelectorAll(".comp")].map(item),
       ]));
-      if (layer.dataset.copy === "sdk") {
+      if (layer.dataset.copy === "application") {
+        const api = diagram.querySelector(".local-api");
+        if (api) groups.push(el("section", "export-legend__group", [
+          el("h3", null, entries.get(api).name),
+          el("p", "export-legend__about", entries.get(api).tooltip),
+        ]));
         const sides = [...diagram.querySelectorAll(".boundary__label")];
         groups.push(el("section", "export-legend__group", [
           el("h3", null, sides.map((node) => entries.get(node).name).join(" / ")),
@@ -492,5 +661,25 @@
     if (className) node.className = className;
     if (children != null) node.append(...[].concat(children));
     return node;
+  }
+
+  // Small arrow-out mark shown after external links.
+  function externalIcon() {
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("class", "ext-link__icon");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.setAttribute("aria-hidden", "true");
+    for (const d of ["M7 17 17 7", "M7 7h10v10"]) {
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", d);
+      svg.append(path);
+    }
+    return svg;
   }
 })();

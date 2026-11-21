@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#291435">
+<script>
+  // The site opens in dark on every page; the header button can switch it.
+  document.documentElement.dataset.theme = "dark";
+</script>
+<!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
+     the English values here serve link previews and crawlers that do not run scripts. -->
+<title>Cairn: Recipes</title>
+<meta name="description" content="An open architecture to run AI models and agents on infrastructure that your organization controls. Components follow clear interface contracts, so you do not depend on one project or vendor. A Mozilla × Mila research collaboration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cairn: Recipes">
+<meta property="og:description" content="An open architecture to run AI models and agents on infrastructure that your organization controls. Components follow clear interface contracts, so you do not depend on one project or vendor. A Mozilla × Mila research collaboration.">
+<meta property="og:url" content="https://opencairn.ai/recipes.html">
+<!-- Share card: supplied image at public/assets/og-card.png. The HTML in reference/og-card/ is the previous card. -->
+<meta property="og:image" content="https://opencairn.ai/assets/og-card.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="537">
+<meta property="og:image:alt" content="The sovereign, open source AI stack. A Mozilla × Mila research collaboration.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://opencairn.ai/assets/og-card.png">
+<link rel="canonical" href="https://opencairn.ai/recipes.html">
+<link rel="alternate" hreflang="en" href="https://opencairn.ai/recipes.html?lang=en">
+<link rel="alternate" hreflang="fr-CA" href="https://opencairn.ai/recipes.html?lang=fr">
+<link rel="alternate" hreflang="x-default" href="https://opencairn.ai/recipes.html">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/styles.css?v=93">
+</head>
+<body data-page="recipes">
+<div class="page">
+
+  <header class="site-header">
+    <a class="codename" href="./" data-page="hello"><img class="logo--light" src="assets/cairn-logo-light.png" alt="Codename: Cairn" width="846" height="104"><img class="logo--dark" src="assets/cairn-logo-dark.png" alt="Codename: Cairn" width="846" height="104"></a>
+    <!-- The tabs, in the header row after the logo: the same four links on every
+         page. The script marks the current one. -->
+    <nav class="site-nav" data-aria-label="nav.label">
+      <a href="./" data-page="hello" data-text="nav.hello"></a>
+      <a href="stack.html" data-page="stack" data-text="nav.stack"></a>
+      <a href="recipes.html" data-page="recipes" data-text="nav.recipes"></a>
+      <a href="roadmap.html" data-page="roadmap" data-text="nav.roadmap"></a>
+    </nav>
+    <div class="header-actions">
+      <button type="button" class="btn" id="download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span data-text="header.download"></span>
+      </button>
+      <a class="btn btn--primary" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+        <span data-text="header.github"></span>
+      </a>
+    </div>
+    <div class="prefs">
+      <!-- One language button: the script hides the link to the current language,
+           so the button shows the language a click switches to. -->
+      <nav class="lang" data-aria-label="header.languageLabel">
+        <a href="?lang=en" hreflang="en" lang="en" title="English">EN</a>
+        <a href="?lang=fr" hreflang="fr-CA" lang="fr-CA" title="Français">FR</a>
+      </nav>
+      <button type="button" class="theme-toggle" id="theme-toggle">
+        <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- The list and the sheet are filled by js/recipes.js from js/recipes-data.js. -->
+  <main>
+    <section class="recipe-intro">
+      <h1 data-text="recipes.title"></h1>
+      <p class="recipe-intro__lead" data-text="recipes.lead"></p>
+      <p class="recipe-intro__lead" data-text="recipes.limit"></p>
+    </section>
+
+    <p class="hint recipe-hint" data-text="recipes.hint"></p>
+
+    <div class="recipe-body">
+      <!-- The filters: one row. Then the table of the recipes, which scrolls inside its box. -->
+      <div class="recipe-finder">
+        <div class="recipe-filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
+        <section class="recipe-panel recipe-list" aria-labelledby="recipe-list-name">
+          <!-- The name of the list is for screen readers only. -->
+          <h2 class="sr-only" id="recipe-list-name" data-text="recipes.listLabel"></h2>
+          <div class="recipe-scroll">
+            <table class="recipe-table">
+              <thead id="recipe-columns"></thead>
+              <tbody id="recipe-results"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <!-- The selected recipe. -->
+      <article class="recipe-sheet" id="recipe-sheet" data-aria-label="recipes.sheet.label" aria-live="polite"></article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand" id="collaboration"></div>
+    <div class="footer-actions">
+      <a class="btn footer-btn" data-href="footer.reportUrl" data-text="footer.report"></a>
+      <a class="btn footer-btn footer-btn--line" data-href="footer.contactUrl" data-text="footer.contact"></a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- The pop-up of a tag, as on the stack page. Screen readers do not get it. -->
+<div class="tip" id="tip" aria-hidden="true">
+  <p class="tip__kind"></p>
+  <p class="tip__name"></p>
+  <p class="tip__text"></p>
+</div>
+
+<script src="copy/en.js?v=89"></script>
+<script src="copy/fr.js?v=89"></script>
+<script src="js/app.js?v=81"></script>
+<!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
+<script src="js/recipes-data.js"></script>
+<script src="js/recipes.js"></script>
+</body>
+</html>
