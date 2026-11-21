@@ -107,7 +107,7 @@ window.CAIRN_COPY.fr = {
     principles: [
       {
         tag: "Transparence",
-        name: "Composants à code source ouvert testés",
+        name: "Des composants ouverts testés",
         text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
         forYou: "Pour votre organisation :",
         points: [
