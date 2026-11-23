@@ -470,13 +470,23 @@ a { color: inherit; }
 
 /* Narrow and portrait screens: the codename and the buttons in the first row,
    the tabs in a second row on the rule. The first tab lines up with the codename.
-   One row needs about 1170px in English and 1220px in French at a 16px text size.
-   The limit is in em, so a larger text size or browser zoom moves it with the text. */
-@media (max-width: 77.5em), (max-aspect-ratio: 1/1) {
+   One row, with the buttons on one line each, needs about 1390px in English and
+   1525px in French at a 16px text size. The limits are in em, so a larger text
+   size or browser zoom moves them with the text. Change them with the tab or
+   button labels. */
+@media (max-width: 88em), (max-aspect-ratio: 1/1) {
   .site-header { flex-wrap: wrap; }
   .codename { margin-right: auto; }
   .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -1.5rem; }
   .site-nav a { height: 2.6rem; padding-top: 0; }
+}
+/* The same two rows, up to the wider limit of the French labels. Phones keep
+   their own three rows (max-width: 640px, further down). */
+@media (min-width: 640.02px) and (max-width: 96em) {
+  :root:lang(fr) .site-header { flex-wrap: wrap; }
+  :root:lang(fr) .codename { margin-right: auto; }
+  :root:lang(fr) .site-nav { order: 3; flex: 1 0 100%; height: 2.6rem; margin: 0 0 0 -1.5rem; }
+  :root:lang(fr) .site-nav a { height: 2.6rem; padding-top: 0; }
 }
 
 .btn {
