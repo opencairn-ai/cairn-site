@@ -98,7 +98,7 @@ window.CAIRN_COPY.fr = {
     // Les mots entre traits de soulignement sont en italique.
     what: {
       title: "Cairn est une pile d’IA à code source ouvert que votre organisation déploie et exploite sur une infrastructure qu’elle contrôle",
-      stack: "Explorez la pile",
+      stack: "Explorez LaStack",
       contact: "Faites-nous signe",
       contactUrl: "mailto:bonjourhi@opencairn.ai",
     },
