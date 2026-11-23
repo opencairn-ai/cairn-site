@@ -172,6 +172,11 @@
 html {
   font-size: clamp(100%, 85% + 0.2vw, 112.5%);
   -webkit-text-size-adjust: 100%;
+  /* The full-width tricks (the rule under the header, the footer bar, the trail clip)
+     use 100vw, which includes the scrollbar: the page could be nudged sideways by 8 to
+     37 px. `clip` cuts that without turning the page into a scroll container, which
+     `hidden` on html would do. */
+  overflow-x: clip;
   /* The page background stays on the body, so it ends at the footer. */
   background: #fff;
 }
@@ -1174,36 +1179,56 @@ h1 {
 .site-footer {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  /* On the text baseline, not on the boxes: the brand line is a 21px row of 12px mono,
+     the buttons are 34px chips with 14.4px labels. Box alignment (center) put the
+     sentence 6px under the button labels; the design lines the two up by their text
+     (both slots are 20px tall, text bottom-aligned). */
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem 12px;
   /* 64px of the page background between the content and the bar, on every page. */
   margin: 64px calc(var(--gutter) * -1) 0;
   /* Figma 28:10323: 18px × 20px inset on the deep purple bar. */
   padding: 18px 20px;
-  background: #291435;
   color: #fff;
 }
 
+/* The bar runs from one screen edge to the other, like the rule under the header
+   (.site-header::after): the negative margin alone only cancels the gutter, so past the
+   120rem page column the bar stopped short, 200px at each side on a 2560 screen. The
+   colour goes on a full-width layer behind the row; the row itself stays in the column,
+   which is how the header behaves. */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto 0 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: #291435;
+}
+
 /* In the dark theme the page is the same purple, so a hairline keeps the bar visible. */
-:root[data-theme="dark"] .site-footer { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16); }
+:root[data-theme="dark"] .site-footer::before { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16); }
 
 .footer-brand {
   display: flex;
   flex: none;
   align-items: flex-end;
-  gap: 5.73px;
-  height: 28.652px;
+  gap: 4.21px;
+  height: 21.05px;
   margin: 0;
   font-family: "JetBrains Mono", var(--font-mono);
-  font-size: 17.191px;
+  font-size: 12px;
   font-weight: 400;
   white-space: nowrap;
 }
 
-/* Figma 28:11885 / 28:12003: the left slot is 505px in English, 562px in French. */
-.footer-brand--en { width: 505px; }
-.footer-brand--fr { width: 562px; }
+/* Figma 28:11885 / 28:12003: the left slot is 482px in English, 556px in French. The two
+   frames disagree on the lockup size (the French one is 4.6% smaller); the English size
+   is used for both so the marks do not change size when the reader switches language. */
+.footer-brand--en { width: 482px; }
+.footer-brand--fr { width: 556px; gap: 4.017px; }
 
 .footer-brand__a,
 .footer-brand__x,
@@ -1212,26 +1237,34 @@ h1 {
   flex: none;
   flex-direction: column;
   justify-content: flex-end;
-  height: 28.652px;
+  height: 21.05px;
   color: #fff;
   word-break: break-word;
 }
 
-.footer-brand__a { width: 15.281px; line-height: 13.371px; }
-.footer-brand--fr .footer-brand__a { width: 31px; }
-.footer-brand__x { width: 8.596px; line-height: 13.371px; }
-.footer-brand__role { width: 232.085px; line-height: 11.461px; }
-.footer-brand--fr .footer-brand__role { width: 276px; }
+.footer-brand__a { width: 11.226px; line-height: 9.823px; }
+.footer-brand--fr .footer-brand__a { width: 21.87px; }
+.footer-brand__x { width: 6.315px; line-height: 9.823px; }
+.footer-brand--fr .footer-brand__x { width: 6.026px; }
+.footer-brand__role { width: 278px; line-height: 8.42px; }
+.footer-brand--fr .footer-brand__role { width: 350px; }
 
-/* Mozilla, the x, and Mila sit on one baseline, a little wider apart than the words. */
+/* Mozilla, the x, and Mila sit on one baseline, a little wider apart than the words.
+   The slot is pinned so the sentence after it lands where the design puts it. */
 .footer-logos {
   display: flex;
   flex: none;
   align-items: flex-start;
-  gap: 11.461px;
-  width: 251.187px;
-  height: 28.652px;
+  gap: 8.42px;
+  width: 184.535px;
+  height: 21.05px;
 }
+
+/* 176.099 in the French frame, but that value assumes its smaller lockup. With one lockup
+   size for both languages the English width is what keeps the sentence's air (measured:
+   2px of clearance instead of the design's 10). The row then runs 8px past the 556 slot,
+   into empty space: the buttons stay pinned to the right edge either way. */
+.footer-brand--fr .footer-logos { width: 184.535px; }
 
 .footer-brand__logo {
   display: block;
@@ -1241,13 +1274,13 @@ h1 {
 }
 
 .footer-brand__logo img { display: block; max-width: none; }
-.footer-brand__mozilla { width: 119.773px; height: 28.652px; }
+.footer-brand__mozilla { width: 87.992px; height: 21.05px; }
 
 /* The mark and the word are two files, placed as in the logo lockup. */
 .footer-brand__mila {
   position: relative;
-  width: 99.182px;
-  height: 28.652px;
+  width: 72.864px;
+  height: 21.05px;
 }
 
 .footer-brand__mila-mark,
@@ -1256,7 +1289,7 @@ h1 {
 .footer-brand__mila-mark { left: 5.37%; }
 .footer-brand__mila-word { left: 36.11%; }
 
-.footer-actions { display: flex; flex: none; align-items: flex-start; gap: 12px; }
+.footer-actions { display: flex; flex: none; align-items: flex-start; gap: 24px; }
 
 .site-footer .footer-btn {
   height: 34.304px;
@@ -1273,8 +1306,14 @@ h1 {
   white-space: nowrap;
 }
 
-.footer-actions .footer-btn:first-child { width: 177.84px; }
-.footer-actions .footer-btn:last-child { width: 140.84px; }
+/* Figma 37:114 / 28:12003 pin the buttons at 150px and 140px, with a 24px gap. The pins
+   are narrower than the copy: "Signalez vulnerabilite" needs 179px, "Report a
+   vulnerability" 181. In Figma the overflow is invisible because the border is the colour
+   of the bar, but on the site it would cut the hover fill mid-word and leave the end of
+   the label outside the link. min-width keeps the designed box for short labels and lets
+   a long one grow. */
+.footer-actions .footer-btn:first-child { min-width: 150px; }
+.footer-actions .footer-btn:last-child { min-width: 140px; }
 
 .footer-btn:hover { background: rgb(255 255 255 / 0.08); }
 .footer-btn img { display: block; }
@@ -1711,20 +1750,77 @@ h1 {
 }
 
 /* Dark Hello World: the whole background of frame 28:11033, exported from Figma
-   as trail-map-dark-landscape.svg (base #291435, terrain and contour on gradients).
-   It already contains every dark layer, so the portrait exports are hidden. */
+   (base #291435, terrain and contour on gradients). It already contains every dark
+   layer, so the portrait exports are hidden. */
 :root[data-theme="dark"] .hello-ground-stack,
 :root[data-theme="dark"] .hello-ground__contour {
   display: none;
 }
 
-:root[data-theme="dark"] .hello-ground__degrade {
-  display: block;
+/* The map covers the window, not the page. Laid on the page it painted a band as tall
+   as the content was wide, so a tall page fell back to flat #291435 under it: 63% of a
+   narrow window, 82% of a phone. On a fixed layer it covers every screen at any size,
+   and no scrolling can uncover it. `cover` crops the edges of the composition, so keep
+   nothing important in the outer margin of the exports.
+   The exports are drawn at 1920 wide, so `cover` only ever shrinks them on a real
+   screen: the halftone keeps its 3.07 grid at 1920 and gets finer below, never fatter.
+   A smaller export (1140) upscaled 1.26x at 1440 and 1.68x at 1920, which read as a
+   coarse grain. */
+:root[data-theme="dark"] body[data-page="hello"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  /* Not -1: a negative z-index child is painted before the in-flow backgrounds of
+     body, so `body { background: var(--color-bg) }` would cover the whole map. At 0 the
+     map lands above that colour and below the page, which is lifted to 1. */
+  z-index: 0;
   background-color: #291435;
-  background-image: url("../assets/hello/trail-map-dark-landscape.svg?v=11033");
+  background-image: url("../assets/hello/hello-bg-dark-desktop.svg?v=3526");
   background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% auto;
+  background-position: center;
+  background-size: cover;
+}
+
+:root[data-theme="dark"] body[data-page="hello"] .page { z-index: 1; }
+
+/* A phone window is taller than the landscape export: covering it would show about a
+   quarter of the map, so the portrait export (430 x 932, Figma 34:18) takes over. The
+   line sits at 30rem because the landscape art shrinks cleanly from there up, while the
+   portrait art would still be upscaling between 480 and 768. */
+@media (max-width: 30rem) {
+  :root[data-theme="dark"] body[data-page="hello"]::before {
+    background-image: url("../assets/hello/hello-bg-dark-mobile.svg?v=3418");
+  }
+}
+
+/* Light Hello World: the same fixed layer with the light export. Same composition as the
+   dark one (2 paths, 2 gradients, the 3.07 halftone grid), recoloured: ground #F2EAE1,
+   which is --color-bg, so Hello World opens on the same cream as the three other pages;
+   the halftone runs #E3D3BC into #D0C2B1 (Sand and Stone). The contour is inside the
+   export, so the rotated portrait slot and the contour element are hidden, as in dark. */
+:root[data-theme="light"] .hello-ground-stack,
+:root[data-theme="light"] .hello-ground__contour {
+  display: none;
+}
+
+:root[data-theme="light"] body[data-page="hello"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: #f2eae1;
+  background-image: url("../assets/hello/hello-bg-light-desktop.svg?v=2");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+:root[data-theme="light"] body[data-page="hello"] .page { z-index: 1; }
+
+@media (max-width: 30rem) {
+  :root[data-theme="light"] body[data-page="hello"]::before {
+    background-image: url("../assets/hello/hello-bg-light-mobile.svg?v=2");
+  }
 }
 
 
@@ -2663,7 +2759,10 @@ h1 {
   .hello .hello__heading { max-width: none; font-size: 2.43rem; }
   .hello__lead { font-size: 1.05rem; }
   .approach { grid-template-columns: minmax(0, 1fr); }
-  .site-footer { align-items: flex-start; }
+  /* The footer keeps its baseline alignment here. It used to be switched to flex-start
+     for the stacked layout, but baseline has no effect on a wrapped line (one item per
+     line), and the rule also caught tall desktop windows through max-aspect-ratio, which
+     brought back the 6px gap between the sentence and the buttons. */
 }
 
 /* Phones: smaller pictures, so each one fits the width of the slide. */

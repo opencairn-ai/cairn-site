@@ -159,11 +159,11 @@
       };
       const mozilla = logoLink("mozilla");
       mozilla.classList.add("footer-brand__mozilla");
-      mozilla.append(image("footer-mozilla.svg", 119.773, 28.6525));
+      mozilla.append(image("footer-mozilla.svg", 87.992, 21.05));
       const mila = logoLink("mila");
       mila.classList.add("footer-brand__mila");
-      const mark = image("footer-mila-mark.svg", 26.2001, 25.531);
-      const word = image("footer-mila-word.svg", 57.9405, 25.53);
+      const mark = image("footer-mila-mark.svg", 19.249, 18.756);
+      const word = image("footer-mila-word.svg", 42.568, 18.755);
       mark.classList.add("footer-brand__mila-mark");
       word.classList.add("footer-brand__mila-word");
       mila.append(mark, word);
