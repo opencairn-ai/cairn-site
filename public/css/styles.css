@@ -441,18 +441,16 @@ a { color: inherit; }
 
 .site-nav a:hover { color: var(--color-text); }
 
-.site-nav a[aria-current="page"] {
-  padding-left: 1.5rem;
-  padding-right: 1.4375rem;
-  font-weight: 700;
-}
+/* Same padding as the other tabs, so the labels stay put when the page changes. */
+.site-nav a[aria-current="page"] { font-weight: 700; }
 
-/* The line is as wide as the tab, padding included, and sits on the header rule. */
+/* The line keeps the Figma width (24px and 23px of side padding): it is inset
+   in the tab instead of the tab getting narrower. It sits on the header rule. */
 .site-nav a[aria-current="page"]::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0.25rem;
+  right: 0.3125rem;
   bottom: 0;
   height: 4px;
   background: var(--color-pink);
