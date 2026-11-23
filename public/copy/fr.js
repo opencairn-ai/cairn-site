@@ -109,40 +109,21 @@ window.CAIRN_COPY.fr = {
         tag: "Transparence",
         name: "Des composants ouverts testés",
         text: "Nous testons des projets à code source ouvert par rapport à chaque contrat. Notre implémentation de référence utilise le meilleur pour chaque couche.",
-        forYou: "Pour votre organisation :",
-        points: [
-          "Le meilleur de l’open source, couche par couche",
-          "Chaque composant ouvert à l’inspection",
-        ],
       },
       {
         tag: "Portabilité",
         name: "Remplaçable par contrat",
         text: "Tout ce qui respecte le même contrat peut le remplacer. Le reste de la pile ne change pas.",
-        forYou: "Pour votre organisation :",
-        points: [
-          "Aucun code d’intégration sur mesure",
-          "Aucun projet ni fournisseur imposé",
-        ],
       },
       {
         tag: "Souveraineté",
         name: "Vos équipes gardent leurs outils",
         text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à un seul point de terminaison d’API, sur les ressources de calcul de votre organisation.",
-        forYou: "Pour votre organisation :",
-        points: [
-          "Vos données et vos politiques restent sur votre infrastructure",
-          "Du calcul détenu ou partagé, à un coût prévisible",
-        ],
       },
       {
         tag: "Exploitation",
         name: "Assembler, pas créer",
         text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
-        forYou: "Pour votre organisation :",
-        points: [
-          "Déployé, mis à jour et exploité à partir de sa documentation",
-        ],
       },
     ],
 

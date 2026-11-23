@@ -101,46 +101,27 @@ window.CAIRN_COPY.en = {
 
     // The carousel shows these four principles, one at a time, each with a picture.
     // The page has four slides: keep four principles, in this order.
-    // tag: the small label on the card. forYou and points show only while the card is open.
+    // tag: the small label on the card. The text shows only while the card is open.
     principles: [
       {
         tag: "Transparency",
         name: "Tested open source components",
         text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
-        forYou: "For your organization :",
-        points: [
-          "Open source, without the assembly work",
-          "Every component open to inspection",
-        ],
       },
       {
         tag: "Portability",
         name: "Replaceable by contract",
         text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
-        forYou: "For your organization :",
-        points: [
-          "Open source, without the assembly work",
-          "Every component open to inspection",
-        ],
       },
       {
         tag: "Sovereignty",
         name: "Your teams keep their tools",
         text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API endpoint, on your organization's compute.",
-        forYou: "For your organization :",
-        points: [
-          "Your data and your policies stay on your infrastructure",
-          "Owned or shared compute, at a predictable cost",
-        ],
       },
       {
         tag: "Operations",
         name: "Composition, not creation",
         text: "We write the code that connects components, not new components. Where no suitable open source component exists, we publish a specification.",
-        forYou: "For your organization :",
-        points: [
-          "Deployed, upgraded and run from its documentation",
-        ],
       },
     ],
 

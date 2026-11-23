@@ -160,12 +160,6 @@
       panel.id = `principle-panel-${i}`;
       button.setAttribute("aria-controls", panel.id);
       panel.append(el("p", null, principle.text));
-      if (principle.forYou) panel.append(el("p", "approach__for", principle.forYou));
-      if (Array.isArray(principle.points) && principle.points.length) {
-        const list = el("ul", "approach__points");
-        list.append(...principle.points.map((point) => el("li", null, point)));
-        panel.append(list);
-      }
 
       button.addEventListener("click", () => show(i));
       button.addEventListener("keydown", (event) => {

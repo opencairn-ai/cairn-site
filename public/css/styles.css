@@ -90,7 +90,6 @@
   --approach-card-ink: #291435;      /* Deep purple */
   --approach-tag-bg: #a08f79;        /* Stone */
   --approach-open-bg: #ffffff;
-  --approach-for-ink: #a08f79;       /* Stone */
   --color-error: #b2364a;            /* Red, 5.0:1 */
   --color-disabled-bg: #f4f5f6;
   --color-disabled-ink: #aeb8be;
@@ -155,7 +154,6 @@
   --approach-card-ink: #ffffff;
   --approach-tag-bg: #291435;        /* Deep purple */
   --approach-open-bg: #402c4c;
-  --approach-for-ink: #dcbaf6;       /* Pale purple */
   --color-error: #fe7a8b;            /* Rose, 6.7:1 */
   --color-disabled-bg: #ffffff;
   --color-disabled-ink: #291435;
@@ -1645,10 +1643,7 @@ h1 {
   line-height: 24px;
 }
 .approach__panel[hidden] { display: none; }
-.approach__panel > p:first-child { width: 424px; max-width: 100%; min-height: 72px; margin: 0 0 8px; }
-.approach__for { margin: 0; color: var(--approach-for-ink); font-weight: 500; }
-.approach__points { width: 424px; max-width: 100%; margin: 0; padding-left: 1.5rem; list-style: disc; }
-.approach__points li { margin: 0; line-height: 24px; }
+.approach__panel > p:first-child { width: 424px; max-width: 100%; min-height: 72px; margin: 0; }
 
 .approach__stage {
   display: grid;
