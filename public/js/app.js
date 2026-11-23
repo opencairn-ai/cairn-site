@@ -188,8 +188,9 @@
     const explicit = new URLSearchParams(location.search).has("lang");
     for (const link of document.querySelectorAll("a[data-page]")) {
       // A page to come: the link keeps its name, but has no address, so it does not
-      // take a click or the keyboard focus. The page itself keeps its tab.
-      if (PAGES_TO_COME.includes(link.dataset.page) && link.dataset.page !== page) {
+      // take a click or the keyboard focus. Its tab is disabled on every page,
+      // its own page included.
+      if (PAGES_TO_COME.includes(link.dataset.page)) {
         link.removeAttribute("href");
         link.setAttribute("role", "link");
         link.setAttribute("aria-disabled", "true");
@@ -203,7 +204,8 @@
       link.setAttribute("href", href);
     }
     if (!nav) return;
-    const current = nav.querySelector(`a[data-page="${page}"]`);
+    // A disabled tab is never the current one, not even on its own page.
+    const current = nav.querySelector(`a[data-page="${page}"]:not([aria-disabled="true"])`);
     if (!current) return;
     current.setAttribute("aria-current", "page");
     // On a phone the tabs scroll sideways: bring the current tab into view, and
