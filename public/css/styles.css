@@ -1794,10 +1794,10 @@ h1 {
 }
 
 /* Light Hello World: the same fixed layer with the light export. Same composition as the
-   dark one (2 paths, 2 gradients, the 3.07 halftone grid), recoloured: ground #E3D3BC,
-   which is --color-layer (Sand), so the ground of the page is the sand the other pages
-   already use; gradient #A08F79 into #E3D3BC. The contour is inside the export, so the
-   rotated portrait slot and the contour element are hidden, as in the dark theme. */
+   dark one (2 paths, 2 gradients, the 3.07 halftone grid), recoloured: ground #F2EAE1,
+   which is --color-bg, so Hello World opens on the same cream as the three other pages;
+   the halftone runs #E3D3BC into #D0C2B1 (Sand and Stone). The contour is inside the
+   export, so the rotated portrait slot and the contour element are hidden, as in dark. */
 :root[data-theme="light"] .hello-ground-stack,
 :root[data-theme="light"] .hello-ground__contour {
   display: none;
@@ -1808,8 +1808,8 @@ h1 {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-color: #e3d3bc;
-  background-image: url("../assets/hello/hello-bg-light-desktop.svg?v=1");
+  background-color: #f2eae1;
+  background-image: url("../assets/hello/hello-bg-light-desktop.svg?v=2");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -1819,7 +1819,7 @@ h1 {
 
 @media (max-width: 30rem) {
   :root[data-theme="light"] body[data-page="hello"]::before {
-    background-image: url("../assets/hello/hello-bg-light-mobile.svg?v=1");
+    background-image: url("../assets/hello/hello-bg-light-mobile.svg?v=2");
   }
 }
 
