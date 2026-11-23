@@ -61,7 +61,7 @@ jobs:
             has "$HTML" 'pic-pass-contract.svg' "$LANG Figma marks"
             if [ "$LANG" = fr ]; then
               has "$HTML" 'Faites-nous signe' "FR contact"
-              has "$HTML" 'Signalez vulnérabilité' "FR security"
+              has "$HTML" 'Signalez une vulnérabilité' "FR security"
             else
               has "$HTML" 'Drop us a pebble' "EN contact"
               has "$HTML" 'Report a vulnerability' "EN security"

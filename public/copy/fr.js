@@ -572,7 +572,7 @@ window.CAIRN_COPY.fr = {
     role: "collaboration de recherche",
     contact: "Faites-nous signe",
     contactUrl: "mailto:bonjourhi@opencairn.ai",
-    report: "Signalez vulnérabilité",
+    report: "Signalez une vulnérabilité",
     reportUrl: "mailto:security@opencairn.ai?subject=Signalement%20de%20vuln%C3%A9rabilit%C3%A9",
     mozilla: { name: "Mozilla", url: "https://www.mozilla.org/fr/" },
     mila: { name: "Mila", url: "https://mila.quebec/fr" },
