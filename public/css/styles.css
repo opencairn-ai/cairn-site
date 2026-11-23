@@ -1559,7 +1559,8 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 8px;
+  /* Space between the title and the text. */
+  gap: 16px;
   /* 248px is the Figma size. A longer text (French, or a narrow screen) needs
      more lines: js/hello.js gives every open card the height of the tallest one,
      so the list and the picture frame keep one size from principle to principle. */
@@ -1589,15 +1590,15 @@ h1 {
   cursor: pointer;
 }
 
-/* The open card's header is the 98 × 24 chip above a 24px bold name. It is
-   54px for one line, but grows when a French name wraps onto two lines so the
-   title never spills over the text below. */
+/* The open card's header is the 98 × 24 chip, 12px above a 24px bold name. It
+   is 60px for one line, but grows when a French name wraps onto two lines so
+   the title never spills over the text below. */
 .approach__item.is-open .approach__card {
   flex: none;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
-  min-height: 54px;
+  gap: 12px;
+  min-height: 60px;
   height: auto;
   padding: 0;
 }
