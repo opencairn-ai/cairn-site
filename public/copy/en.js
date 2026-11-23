@@ -126,7 +126,7 @@ window.CAIRN_COPY.en = {
       {
         tag: "Sovereignty",
         name: "Your teams keep their tools",
-        text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API, on your organization's compute.",
+        text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API endpoint, on your organization's compute.",
         forYou: "For your organization :",
         points: [
           "Your data and your policies stay on your infrastructure",

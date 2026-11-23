@@ -128,7 +128,7 @@ window.CAIRN_COPY.fr = {
       {
         tag: "Souveraineté",
         name: "Vos équipes gardent leurs outils",
-        text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à une seule API, sur les ressources de calcul de votre organisation.",
+        text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à un seul point de terminaison d’API, sur les ressources de calcul de votre organisation.",
         forYou: "Pour votre organisation :",
         points: [
           "Vos données et vos politiques restent sur votre infrastructure",
