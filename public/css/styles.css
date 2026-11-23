@@ -1625,7 +1625,8 @@ h1 {
   background: #fff;
 }
 
-/* One mark per picture. The current one is magenta. */
+/* One mark per picture. The current one is magenta. The marks stay in the top
+   right corner of the frame, the same size, whichever picture is open. */
 .approach__dots {
   position: absolute;
   top: 22px;
@@ -2135,18 +2136,6 @@ h1 {
   max-width: none;
   margin: 0;
   padding: 0;
-}
-
-/* With the contract open, the shared dots follow the scaled Figma frame. */
-.approach__stage:has(.carousel__slide[data-picture="1"].is-on) .approach__dots {
-  top: calc(50% - 204px * var(--contract-scale, 1));
-  right: calc(50% - 410.5px * var(--contract-scale, 1));
-  width: calc(66px * var(--contract-scale, 1));
-  gap: calc(6px * var(--contract-scale, 1));
-}
-.approach__stage:has(.carousel__slide[data-picture="1"].is-on) .approach__dots i {
-  width: calc(12px * var(--contract-scale, 1));
-  height: calc(12px * var(--contract-scale, 1));
 }
 
 .pic-contract__frame {
