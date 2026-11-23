@@ -176,7 +176,7 @@ window.CAIRN_COPY.en = {
         chat: "Chat assistant",
         coding: "Coding agent",
         applications: "Your applications",
-        api: "One API",
+        api: "One API endpoint",
         cairn: "Cairn",
         where: "On your infrastructure",
         local: "Local compute",

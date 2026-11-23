@@ -177,7 +177,7 @@ window.CAIRN_COPY.fr = {
         chat: "Assistant de conversation",
         coding: "Agent de programmation",
         applications: "Vos applications",
-        api: "Une seule API",
+        api: "Un seul point de terminaison d’API",
         cairn: "Cairn",
         where: "Sur votre infrastructure",
         local: "Calcul local",
