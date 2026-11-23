@@ -457,8 +457,9 @@ a { color: inherit; }
   z-index: 1;
 }
 
-/* Roadmap stays Stone, as in the header frame. The page itself still opens. */
-.site-nav a[data-page="roadmap"]:not([aria-current="page"]) { color: #a08f79; }
+/* Roadmap stays Stone, as in the header frame, while its page opens. As a page
+   to come, it takes the disabled color below instead. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]):not([aria-disabled="true"]) { color: #a08f79; }
 
 /* The tab of a page to come. */
 .site-nav a[aria-disabled="true"],
