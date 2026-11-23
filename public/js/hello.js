@@ -217,6 +217,43 @@
     reducedMotion.addEventListener("change", () => arm());
 
     show(OPEN_AT);
+    holdHeight(items);
+  }
+
+  // Every open card takes the height of the tallest one, so the list and the
+  // picture frame next to it keep one size whichever principle is open. The
+  // tallest depends on the language, the width and the web fonts: measure again
+  // when the width changes and when the fonts arrive.
+  function holdHeight(items) {
+    const list = items[0] && items[0].parentElement;
+    if (!list) return;
+
+    const measure = () => {
+      list.style.removeProperty("--approach-open-h");
+      let tallest = 0;
+      for (const item of items) {
+        const panel = item.querySelector(".approach__panel");
+        const wasOpen = item.classList.contains("is-open");
+        // Open each card for the measure only; nothing paints in between.
+        item.classList.add("is-open");
+        panel.hidden = false;
+        tallest = Math.max(tallest, item.getBoundingClientRect().height);
+        item.classList.toggle("is-open", wasOpen);
+        panel.hidden = !wasOpen;
+      }
+      list.style.setProperty("--approach-open-h", `${Math.ceil(tallest)}px`);
+    };
+
+    measure();
+    if (document.fonts) document.fonts.ready.then(measure);
+    let width = list.clientWidth;
+    const onResize = () => {
+      if (list.clientWidth === width) return;
+      width = list.clientWidth;
+      measure();
+    };
+    if (window.ResizeObserver) new ResizeObserver(onResize).observe(list);
+    else window.addEventListener("resize", onResize);
   }
 
   // Figma draws the contract graph in an 865px frame. Keep that geometry and

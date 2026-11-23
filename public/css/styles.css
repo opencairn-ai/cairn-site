@@ -1523,9 +1523,10 @@ h1 {
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
-  /* 248px is the Figma size. French wraps one bullet onto a second line, so the
-     card grows by a line when it needs to; the graph box stretches with it. */
-  min-height: 248px;
+  /* 248px is the Figma size. A longer text (French, or a narrow screen) needs
+     more lines: js/hello.js gives every open card the height of the tallest one,
+     so the list and the picture frame keep one size from principle to principle. */
+  min-height: max(248px, var(--approach-open-h, 0px));
   padding: 16px;
   border-color: var(--color-pink);
   background: var(--approach-open-bg);
