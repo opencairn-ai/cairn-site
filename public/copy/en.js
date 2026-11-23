@@ -111,7 +111,7 @@ window.CAIRN_COPY.en = {
       {
         tag: "Portability",
         name: "Replaceable by contract",
-        text: "We define what each layer must do. Then we test existing open source components against that specification and select the best fit.",
+        text: "We publish the interface contracts that each component must satisfy. A component that satisfies them can replace another one without rework.",
       },
       {
         tag: "Sovereignty",
