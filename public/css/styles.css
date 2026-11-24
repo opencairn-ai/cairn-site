@@ -1672,24 +1672,36 @@ h1 {
 }
 
 /* One mark per picture. The current one is magenta. The marks stay in the top
-   right corner of the frame, the same size, whichever picture is open. */
+   right corner of the frame, the same size, whichever picture is open. A click
+   on a mark opens its principle (js/hello.js). */
 .approach__dots {
   position: absolute;
   top: 22px;
   right: 22px;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   gap: 6px;
 }
 
 .approach__dots i {
+  position: relative;
   width: 12px;
   height: 12px;
   border-radius: 2px;
   background: #d0c2b1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.approach__dots i.is-on { background: var(--color-pink); }
+/* A larger target than the 12px mark: it reaches halfway into the gaps. */
+.approach__dots i::after {
+  content: "";
+  position: absolute;
+  inset: -8px -3px;
+}
+
+.approach__dots i:hover { background: #a08f79; }
+.approach__dots i.is-on { background: var(--color-pink); cursor: default; }
 
 /* The four pictures share one frame. The open card decides which one shows.
    The shared slide rule hides a slide's first text block; these slides are pictures. */
@@ -2161,6 +2173,7 @@ h1 {
 }
 :root[data-theme="dark"] .pic-tests .pic__label { color: #dcbaf6; }
 :root[data-theme="dark"] .approach__dots i { background: #734c90; }
+:root[data-theme="dark"] .approach__dots i:hover { background: #a07cbd; }
 :root[data-theme="dark"] .approach__dots i.is-on { background: var(--color-pink); }
 :root[data-theme="dark"] .pic-tests__row.is-selected {
   background: #734c90;

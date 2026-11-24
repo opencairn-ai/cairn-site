@@ -206,6 +206,11 @@
       timer = setTimeout(() => show(current + 1), SLIDE_TIME);
     }
 
+    // A click on a mark in the corner of the frame opens its principle. The marks
+    // stay out of the tab order and hidden from screen readers: the cards already
+    // do the same for the keyboard.
+    dots.forEach((dot, i) => dot.addEventListener("click", () => { if (i !== current) show(i); }));
+
     root.addEventListener("focusin", () => clearTimeout(timer));
     root.addEventListener("focusout", () => arm());
     reducedMotion.addEventListener("change", () => arm());
