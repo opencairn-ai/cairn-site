@@ -2608,6 +2608,10 @@ h1 {
   justify-self: center;
   align-self: center;
   justify-content: flex-start;
+  /* The Figma frame is 865px wide, like the contract graph: scale it down with
+     the stage (js/hello.js), so a narrower card does not crop its sides. */
+  transform: scale(var(--contract-scale, 1));
+  transform-origin: center;
 }
 
 :root[data-theme="dark"] .pic-skeleton__core {
@@ -2801,7 +2805,7 @@ h1 {
   .pic-skeleton__layer--row .pic-skeleton__name { width: 3.8rem; }
   /* Keep the dark Figma colours, but let the fixed desktop diagram reflow. */
   :root[data-theme="dark"] .approach__stage > .carousel__slide[data-picture="3"] { top: -2.4rem; left: -1.7rem; right: 0; bottom: 0; }
-  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: calc(100% - 3.4rem); height: auto; margin: 0; justify-self: center; align-self: center; }
+  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: calc(100% - 3.4rem); height: auto; margin: 0; justify-self: center; align-self: center; transform: none; }
   :root[data-theme="dark"] .pic-skeleton__core { width: 100%; height: auto; margin-top: 0; padding: 0.75rem; gap: 0.515rem; }
   :root[data-theme="dark"] .pic-skeleton__matrix { height: auto; grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr); grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto); }
   :root[data-theme="dark"] .pic-skeleton__matrix > .pic-skeleton__layer { height: auto; padding: 0.349rem 0.515rem 0.515rem; gap: 0.308rem; }
