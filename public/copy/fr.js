@@ -132,6 +132,9 @@ window.CAIRN_COPY.fr = {
       label: "Notre approche pour bâtir Cairn",
       pause: "Mettre le carrousel en pause",
       play: "Lancer le carrousel",
+      // Les boutons sous l’image sur un téléphone.
+      previous: "Principe précédent",
+      next: "Principe suivant",
       // Le nom d’un principe de la liste pour les lecteurs d’écran, par exemple « 2 sur 4 : Remplaçables par contrat ».
       position: "{index} sur {count} : {name}",
     },
