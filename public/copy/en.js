@@ -119,7 +119,7 @@ window.CAIRN_COPY.en = {
         text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API endpoint, on your organization's compute.",
       },
       {
-        tag: "Operations",
+        tag: "Philosophy",
         name: "Composition, not creation",
         text: "We write the code that connects components, not new components. Where no suitable open source component exists, we publish a specification.",
       },

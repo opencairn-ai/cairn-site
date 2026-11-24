@@ -121,7 +121,7 @@ window.CAIRN_COPY.fr = {
         text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à un seul point de terminaison d’API, sur les ressources de calcul de votre organisation.",
       },
       {
-        tag: "Exploitation",
+        tag: "Philosophie",
         name: "Assembler, pas créer",
         text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
       },
