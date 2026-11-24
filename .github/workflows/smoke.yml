@@ -1,0 +1,82 @@
+name: Smoke test
+
+on:
+  pull_request:
+  push:
+    branches: [main, hello-world-improvement]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run headless checks
+        run: |
+          set -euo pipefail
+
+          python3 -m http.server 8080 --directory public >/tmp/cairn-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8080/ >/dev/null 2>&1; then break; fi
+            sleep 0.25
+          done
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          source = Path("public/index.html").read_text()
+          probe = """<script>
+          document.fonts.ready.then(function () {
+            setTimeout(function () {
+              var stage = document.querySelector('.approach__stage');
+              document.body.setAttribute('data-scale', getComputedStyle(stage).getPropertyValue('--contract-scale').trim());
+              document.getElementById('theme-toggle').click();
+              document.body.setAttribute('data-light', document.documentElement.dataset.theme);
+            }, 300);
+          });
+          </script>"""
+          Path("public/__smoke.html").write_text(source.replace("</body>", probe + "</body>"))
+          PY
+
+          CHROME_FLAGS="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage --dump-dom --virtual-time-budget=3000"
+
+          # Use bash string tests: piping to `grep -q` closes the stream early and
+          # trips "Broken pipe" under `set -o pipefail`.
+          has() {
+            if [[ "$1" == *"$2"* ]]; then
+              echo "OK: $3"
+            else
+              echo "MISSING: $2" >&2
+              exit 1
+            fi
+          }
+
+          for LANG in fr en; do
+            HTML=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/?lang=$LANG" 2>/dev/null)
+            has "$HTML" 'data-theme="dark"' "$LANG dark theme"
+            has "$HTML" 'carousel__slide is-on" data-picture="1"' "$LANG contract graph"
+            has "$HTML" 'pic-pass-contract.svg' "$LANG Figma marks"
+            if [ "$LANG" = fr ]; then
+              has "$HTML" 'Faites-nous signe' "FR contact"
+              has "$HTML" 'Signalez une vulnérabilité' "FR security"
+            else
+              has "$HTML" 'Drop us a pebble' "EN contact"
+              has "$HTML" 'Report a vulnerability' "EN security"
+            fi
+          done
+
+          LIGHT=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
+          has "$LIGHT" 'data-light="light"' "light toggle"
+
+          MOBILE=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" --window-size=390,844 "http://127.0.0.1:8080/__smoke.html?lang=fr" 2>/dev/null)
+          if [[ "$MOBILE" =~ data-scale=\"0\.[0-9]+\" ]]; then
+            echo "OK: mobile scale"
+          else
+            echo "MISSING: mobile scale" >&2
+            exit 1
+          fi
+
+          rm -f public/__smoke.html
