@@ -3,8 +3,9 @@
  *
  * A wide screen shows the sheet; a narrow screen keeps the pop-ups of the schema
  * (js/app.js). On a wide screen the sheet is hidden at first; a click, or Enter
- * and Space, selects a box and opens the sheet, and Escape closes it. The sheet shows its
- * kind, its name and its description, then its facts: the layer of a component
+ * and Space, selects a box and opens the sheet. The same again on the open box,
+ * or Escape, closes it. The sheet shows its kind, its name and its description,
+ * then its facts: the layer of a component
  * and the other components of that layer, or the components of a layer. The
  * names in the facts are links to their boxes. The address names the selected
  * box: stack.html#modelAccess.modelGateway.
@@ -109,7 +110,9 @@
   const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
   const wide = () => app.sheetQuery.matches;
 
+  // A second click (or Enter and Space) on the open box closes its details.
   function open(node) {
+    if (node === selected && shown()) return setShown(false);
     select(node);
     setShown(true);
   }

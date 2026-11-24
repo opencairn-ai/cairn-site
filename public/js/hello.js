@@ -18,8 +18,8 @@
   const FLOW_LOOP = 12;
   // How long one principle and its picture stay before the next one.
   const SLIDE_TIME = 7000;
-  // The principle that is open when the page loads: Portability, as in the design.
-  const OPEN_AT = 1;
+  // The principle that is open when the page loads: the first one, Transparency.
+  const OPEN_AT = 0;
 
   shapeTitle();
   setUpFlow();
@@ -205,6 +205,11 @@
       if (reducedMotion.matches || root.contains(document.activeElement)) return;
       timer = setTimeout(() => show(current + 1), SLIDE_TIME);
     }
+
+    // A click on a mark in the corner of the frame opens its principle. The marks
+    // stay out of the tab order and hidden from screen readers: the cards already
+    // do the same for the keyboard.
+    dots.forEach((dot, i) => dot.addEventListener("click", () => { if (i !== current) show(i); }));
 
     root.addEventListener("focusin", () => clearTimeout(timer));
     root.addEventListener("focusout", () => arm());

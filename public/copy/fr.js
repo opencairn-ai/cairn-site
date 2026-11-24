@@ -118,10 +118,10 @@ window.CAIRN_COPY.fr = {
       {
         tag: "Souveraineté",
         name: "Vos équipes gardent leurs outils",
-        text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à un seul point de terminaison d’API, sur les ressources de calcul de votre organisation.",
+        text: "Vos équipes gardent les assistants de conversation et les agents de programmation qu’elles utilisent aujourd’hui. Elles les relient à un seul point d’entrée, sur les ressources de calcul de votre organisation.",
       },
       {
-        tag: "Exploitation",
+        tag: "Philosophie",
         name: "Assembler, pas créer",
         text: "Nous écrivons le code qui relie les composants, pas de nouveaux composants. Là où aucun composant à code source ouvert ne convient, nous publions une spécification.",
       },
@@ -158,7 +158,7 @@ window.CAIRN_COPY.fr = {
         chat: "Assistant de conversation",
         coding: "Agent de programmation",
         applications: "Vos applications",
-        api: "Un seul point de terminaison d’API",
+        api: "Un seul point d’entrée",
         cairn: "Cairn",
         where: "Sur votre infrastructure",
         local: "Calcul local",

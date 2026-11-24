@@ -1365,10 +1365,15 @@ h1 {
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
   .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
 
-  /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. */
-  .footer-brand { width: auto; max-width: 100%; flex-wrap: wrap; }
-  .footer-brand .footer-brand__role { width: auto; }
-  .footer-actions { width: 100%; flex-wrap: wrap; }
+  /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. The
+     sentence takes its own line under the logos. The lockup's fixed 21px height has to go
+     with it, or the second line hangs out of the box and lands on the buttons. */
+  .footer-brand { width: auto; max-width: 100%; height: auto; flex-wrap: wrap; row-gap: 10px; }
+  .footer-brand .footer-brand__role { width: 100%; height: auto; line-height: 1.4; }
+  /* Stacked under the lockup, the labels line up with its left edge: the buttons' border
+     is the colour of the bar, so only their 14.42px inset showed, as an indent. The row
+     moves out by that inset; the hover fill still lands inside the bar's 20px padding. */
+  .footer-actions { width: calc(100% + 14.42px); margin-left: -14.42px; flex-wrap: wrap; }
 }
 
 /* Intro on narrower screens. */
@@ -1672,24 +1677,36 @@ h1 {
 }
 
 /* One mark per picture. The current one is magenta. The marks stay in the top
-   right corner of the frame, the same size, whichever picture is open. */
+   right corner of the frame, the same size, whichever picture is open. A click
+   on a mark opens its principle (js/hello.js). */
 .approach__dots {
   position: absolute;
   top: 22px;
   right: 22px;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   gap: 6px;
 }
 
 .approach__dots i {
+  position: relative;
   width: 12px;
   height: 12px;
   border-radius: 2px;
   background: #d0c2b1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.approach__dots i.is-on { background: var(--color-pink); }
+/* A larger target than the 12px mark: it reaches halfway into the gaps. */
+.approach__dots i::after {
+  content: "";
+  position: absolute;
+  inset: -8px -3px;
+}
+
+.approach__dots i:hover { background: #a08f79; }
+.approach__dots i.is-on { background: var(--color-pink); cursor: default; }
 
 /* The four pictures share one frame. The open card decides which one shows.
    The shared slide rule hides a slide's first text block; these slides are pictures. */
@@ -2161,6 +2178,7 @@ h1 {
 }
 :root[data-theme="dark"] .pic-tests .pic__label { color: #dcbaf6; }
 :root[data-theme="dark"] .approach__dots i { background: #734c90; }
+:root[data-theme="dark"] .approach__dots i:hover { background: #a07cbd; }
 :root[data-theme="dark"] .approach__dots i.is-on { background: var(--color-pink); }
 :root[data-theme="dark"] .pic-tests__row.is-selected {
   background: #734c90;
@@ -2608,6 +2626,10 @@ h1 {
   justify-self: center;
   align-self: center;
   justify-content: flex-start;
+  /* The Figma frame is 865px wide, like the contract graph: scale it down with
+     the stage (js/hello.js), so a narrower card does not crop its sides. */
+  transform: scale(var(--contract-scale, 1));
+  transform-origin: center;
 }
 
 :root[data-theme="dark"] .pic-skeleton__core {
@@ -2801,7 +2823,7 @@ h1 {
   .pic-skeleton__layer--row .pic-skeleton__name { width: 3.8rem; }
   /* Keep the dark Figma colours, but let the fixed desktop diagram reflow. */
   :root[data-theme="dark"] .approach__stage > .carousel__slide[data-picture="3"] { top: -2.4rem; left: -1.7rem; right: 0; bottom: 0; }
-  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: calc(100% - 3.4rem); height: auto; margin: 0; justify-self: center; align-self: center; }
+  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: calc(100% - 3.4rem); height: auto; margin: 0; justify-self: center; align-self: center; transform: none; }
   :root[data-theme="dark"] .pic-skeleton__core { width: 100%; height: auto; margin-top: 0; padding: 0.75rem; gap: 0.515rem; }
   :root[data-theme="dark"] .pic-skeleton__matrix { height: auto; grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr); grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto); }
   :root[data-theme="dark"] .pic-skeleton__matrix > .pic-skeleton__layer { height: auto; padding: 0.349rem 0.515rem 0.515rem; gap: 0.308rem; }
