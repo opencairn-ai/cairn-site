@@ -2836,6 +2836,79 @@ h1 {
   :root[data-theme="dark"] .pic-skeleton .pic__key--link { width: 1.133rem; }
 }
 
+/* Phones: one principle at a time, with its picture right under it, so the two
+   stay on screen together. Below the picture, the previous and next buttons and
+   one mark per principle, each a 44px target; a swipe moves too (js/hello.js).
+   The marks in the corner of the frame give way to that row. */
+.approach__pager { display: none; }
+
+@media (max-width: 640px) {
+  .approach { touch-action: pan-y; }
+  .approach__list { min-height: 0; }
+  .approach__item:not(.is-open) { display: none; }
+  /* The open card takes the height of the longest text only, not the 248px of
+     the desktop list (js/hello.js measures it). */
+  .approach__item.is-open { min-height: var(--approach-open-h, 0px); }
+  .approach__dots { display: none; }
+
+  /* The frame takes the height of its tallest picture rather than the height of
+     the desktop list, and no longer leaves room for the marks in its corner. The
+     dark skeleton comes back into the flow so that it counts in that height. */
+  .approach__stage { min-height: 0; padding: 1.25rem 1rem; --pic-size: auto; }
+  :root[data-theme="dark"] .approach__stage > .carousel__slide[data-picture="3"] { position: static; height: auto; }
+  :root[data-theme="dark"] .approach__stage .pic-skeleton { width: 100%; }
+  /* The connection code key is a line, as on a wide screen. */
+  :root[data-theme="dark"] .pic-skeleton .pic__key--link { height: 4px; }
+
+  .approach__pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .approach__pages { display: flex; }
+
+  .approach__page,
+  .approach__step {
+    display: grid;
+    place-items: center;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--approach-card-ink);
+    cursor: pointer;
+  }
+  .approach__page { width: 30px; }
+  .approach__page::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: #d0c2b1;
+  }
+  .approach__page[aria-current="true"]::before { background: var(--color-pink); }
+  :root[data-theme="dark"] .approach__page:not([aria-current="true"])::before { background: #734c90; }
+
+  .approach__step {
+    width: 44px;
+    border: 1px solid var(--approach-card-border);
+    border-radius: 6px;
+    background: var(--approach-card-bg);
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .approach__item.is-open { animation: carousel-in 0.45s ease; }
+  .approach[data-direction="back"] .approach__item.is-open,
+  .approach[data-direction="back"] .carousel__slide.is-on { animation-name: carousel-in-back; }
+}
+
+@keyframes carousel-in-back {
+  from { transform: translateX(-1.5rem); }
+  to { transform: none; }
+}
+
 /* --- Recipes page ---------------------------------------------------------
    Filters, a table of the recipes, and a sheet with the facts and the files of
    the selected recipe. The script (js/recipes.js) fills them from

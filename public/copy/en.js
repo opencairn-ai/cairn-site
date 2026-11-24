@@ -130,6 +130,9 @@ window.CAIRN_COPY.en = {
       label: "Our approach to building Cairn",
       pause: "Pause the carousel",
       play: "Play the carousel",
+      // The buttons under the picture on a phone.
+      previous: "Previous principle",
+      next: "Next principle",
       // The name of a principle of the list for screen readers, for example "2 of 4: Replaceable by contract".
       position: "{index} of {count}: {name}",
     },

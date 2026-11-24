@@ -5,6 +5,9 @@
  * moves to the next one by itself. A click, or the arrow keys, opens that
  * principle and its picture. A visitor who asks for reduced motion gets a
  * carousel that stays put until they choose a principle.
+ * On a phone, the open principle shows alone with its picture under it. The
+ * carousel stays put; a swipe, the previous and next buttons, or the page
+ * marks move to another principle.
  * css/styles.css hides the moving points when the visitor asks for reduced motion.
  */
 (() => {
@@ -184,8 +187,14 @@
     let current = 0;
     let timer = null;
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    // Phones show one principle at a time, with its picture under it (css/styles.css).
+    const phone = matchMedia("(max-width: 640px)");
+    const approach = root.closest(".approach");
+    const pager = setUpPager();
 
     function show(next) {
+      // The next picture slides in from the side it comes from.
+      if (approach) approach.dataset.direction = next < current ? "back" : "forward";
       current = (next + items.length) % items.length;
       items.forEach((item, i) => {
         const open = i === current;
@@ -195,15 +204,78 @@
       });
       pictures.forEach((picture, i) => picture.classList.toggle("is-on", i === current));
       dots.forEach((dot, i) => dot.classList.toggle("is-on", i === current));
+      pager.pages.forEach((page, i) => {
+        if (i === current) page.setAttribute("aria-current", "true");
+        else page.removeAttribute("aria-current");
+      });
       arm();
     }
 
-    // Moves on after SLIDE_TIME, unless the visitor asked for reduced motion
-    // or the keyboard focus is in the list.
+    // Moves on after SLIDE_TIME, unless the visitor asked for reduced motion,
+    // the keyboard focus is in the list, or the screen is a phone's: there the
+    // text would change while the visitor reads it, and a swipe moves on instead.
     function arm() {
       clearTimeout(timer);
-      if (reducedMotion.matches || root.contains(document.activeElement)) return;
+      if (reducedMotion.matches || phone.matches || root.contains(document.activeElement)) return;
       timer = setTimeout(() => show(current + 1), SLIDE_TIME);
+    }
+
+    // Phones: below the picture, the previous and next buttons, and one page
+    // mark per principle. css/styles.css shows the row on phones only.
+    function setUpPager() {
+      const nav = el("div", "approach__pager");
+      nav.setAttribute("role", "group");
+      nav.setAttribute("aria-label", t("hello.carousel.label"));
+      const step = (by, label, path) => {
+        const button = el("button", `approach__step approach__step--${by < 0 ? "back" : "forward"}`);
+        button.type = "button";
+        button.setAttribute("aria-label", label);
+        const icon = svgEl("svg", { viewBox: "0 0 16 16", width: "16", height: "16", "aria-hidden": "true" });
+        icon.append(svgEl("path", { d: path, fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "square" }));
+        button.append(icon);
+        button.addEventListener("click", () => show(current + by));
+        return button;
+      };
+      const pages = principles.map((principle, i) => {
+        const page = el("button", "approach__page");
+        page.type = "button";
+        page.setAttribute("aria-label", buttons[i].getAttribute("aria-label"));
+        page.addEventListener("click", () => show(i));
+        return page;
+      });
+      const marks = el("div", "approach__pages");
+      marks.append(...pages);
+      nav.append(step(-1, t("hello.carousel.previous"), "M10 3 5 8l5 5"), marks, step(1, t("hello.carousel.next"), "M6 3l5 5-5 5"));
+      if (approach) approach.after(nav);
+      return { pages };
+    }
+
+    // Phones: a swipe to the left opens the next principle, to the right the
+    // previous one. A vertical move still scrolls the page (touch-action: pan-y),
+    // and the click that can follow a swipe on a card is dropped.
+    if (approach) {
+      let start = null;
+      let swiped = false;
+      approach.addEventListener("pointerdown", (event) => {
+        swiped = false;
+        start = phone.matches && event.pointerType !== "mouse" ? { x: event.clientX, y: event.clientY } : null;
+      });
+      approach.addEventListener("pointercancel", () => { start = null; });
+      approach.addEventListener("pointerup", (event) => {
+        if (!start) return;
+        const dx = event.clientX - start.x;
+        const dy = event.clientY - start.y;
+        start = null;
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        swiped = true;
+        show(current + (dx < 0 ? 1 : -1));
+      });
+      approach.addEventListener("click", (event) => {
+        if (!swiped) return;
+        swiped = false;
+        event.stopPropagation();
+        event.preventDefault();
+      }, true);
     }
 
     // A click on a mark in the corner of the frame opens its principle. The marks
@@ -214,6 +286,7 @@
     root.addEventListener("focusin", () => clearTimeout(timer));
     root.addEventListener("focusout", () => arm());
     reducedMotion.addEventListener("change", () => arm());
+    phone.addEventListener("change", () => arm());
 
     show(OPEN_AT);
     holdHeight(items);
