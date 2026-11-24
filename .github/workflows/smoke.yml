@@ -57,7 +57,7 @@ jobs:
           for LANG in fr en; do
             HTML=$(google-chrome $CHROME_FLAGS --user-data-dir="$(mktemp -d)" "http://127.0.0.1:8080/?lang=$LANG" 2>/dev/null)
             has "$HTML" 'data-theme="dark"' "$LANG dark theme"
-            has "$HTML" 'carousel__slide is-on" data-picture="1"' "$LANG contract graph"
+            has "$HTML" 'carousel__slide is-on" data-picture="0"' "$LANG first principle open"
             has "$HTML" 'pic-pass-contract.svg' "$LANG Figma marks"
             if [ "$LANG" = fr ]; then
               has "$HTML" 'Faites-nous signe' "FR contact"

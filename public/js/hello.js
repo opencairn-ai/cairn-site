@@ -18,8 +18,8 @@
   const FLOW_LOOP = 12;
   // How long one principle and its picture stay before the next one.
   const SLIDE_TIME = 7000;
-  // The principle that is open when the page loads: Portability, as in the design.
-  const OPEN_AT = 1;
+  // The principle that is open when the page loads: the first one, Transparency.
+  const OPEN_AT = 0;
 
   shapeTitle();
   setUpFlow();
