@@ -1365,10 +1365,15 @@ h1 {
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
   .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
 
-  /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. */
-  .footer-brand { width: auto; max-width: 100%; flex-wrap: wrap; }
-  .footer-brand .footer-brand__role { width: auto; }
-  .footer-actions { width: 100%; flex-wrap: wrap; }
+  /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. The
+     sentence takes its own line under the logos. The lockup's fixed 21px height has to go
+     with it, or the second line hangs out of the box and lands on the buttons. */
+  .footer-brand { width: auto; max-width: 100%; height: auto; flex-wrap: wrap; row-gap: 10px; }
+  .footer-brand .footer-brand__role { width: 100%; height: auto; line-height: 1.4; }
+  /* Stacked under the lockup, the labels line up with its left edge: the buttons' border
+     is the colour of the bar, so only their 14.42px inset showed, as an indent. The row
+     moves out by that inset; the hover fill still lands inside the bar's 20px padding. */
+  .footer-actions { width: calc(100% + 14.42px); margin-left: -14.42px; flex-wrap: wrap; }
 }
 
 /* Intro on narrower screens. */
