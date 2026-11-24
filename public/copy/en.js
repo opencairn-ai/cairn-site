@@ -116,7 +116,7 @@ window.CAIRN_COPY.en = {
       {
         tag: "Sovereignty",
         name: "Your teams keep their tools",
-        text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one API endpoint, on your organization's compute.",
+        text: "Your teams keep the chat assistants and coding agents they use today. They connect them to one point of entry, on your organization's compute.",
       },
       {
         tag: "Philosophy",
@@ -157,7 +157,7 @@ window.CAIRN_COPY.en = {
         chat: "Chat assistant",
         coding: "Coding agent",
         applications: "Your applications",
-        api: "One API endpoint",
+        api: "One point of entry",
         cairn: "Cairn",
         where: "On your infrastructure",
         local: "Local compute",
