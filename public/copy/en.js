@@ -192,10 +192,9 @@ window.CAIRN_COPY.en = {
       alsoInLayer: "Also in this layer",
       appliesTo: "Applies to",
       allLayers: "All layers",
-      // The button above the sheet. The sheet is hidden at first: the schema takes
-      // the full width. A click on a box opens the sheet; Escape closes it.
-      hide: "Hide details",
-      show: "Show details",
+      // The button above the sheet, with an arrow. The sheet is hidden at first: the
+      // schema takes the full width. A click on a box opens the sheet; Escape closes it.
+      title: "Component card",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "Applies to all layers",
@@ -450,6 +449,9 @@ window.CAIRN_COPY.en = {
     sheet: {
       // The name of the sheet for screen readers.
       label: "Selected recipe",
+      // The button above the sheet, with an arrow, as on the stack page. The sheet is
+      // open at first; the button closes it and the table takes the full width.
+      title: "Deployment card",
       files: "Recipe files",
       copy: "Copy",
       copied: "Copied",

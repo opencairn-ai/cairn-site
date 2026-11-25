@@ -193,10 +193,9 @@ window.CAIRN_COPY.fr = {
       alsoInLayer: "Aussi dans cette couche",
       appliesTo: "S’applique à",
       allLayers: "Toutes les couches",
-      // Le bouton au-dessus de la fiche. La fiche est masquée au départ : le schéma prend
-      // toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
-      hide: "Masquer les détails",
-      show: "Afficher les détails",
+      // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :
+      // le schéma prend toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
+      title: "Fiche composantes",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "S’applique à toutes les couches",
@@ -453,6 +452,9 @@ window.CAIRN_COPY.fr = {
     sheet: {
       // Le nom de la fiche, pour les lecteurs d’écran.
       label: "Recette sélectionnée",
+      // Le bouton au-dessus de la fiche, avec une flèche, comme sur la page de la pile.
+      // La fiche est ouverte au départ ; le bouton la ferme et le tableau prend toute la largeur.
+      title: "Fiche de déploiement",
       files: "Fichiers de la recette",
       copy: "Copier",
       copied: "Copié",

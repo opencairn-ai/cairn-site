@@ -3497,7 +3497,33 @@ h1 {
   cursor: pointer;
 }
 .sheet-toggle:hover { border-color: var(--color-header-rule); }
-.sheet-toggle svg { width: 1.15em; height: 1.15em; }
+/* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
+   text color. Replace that file to change the arrow. It points right when the card
+   is closed and turns down when it is open. */
+.sheet-toggle__chevron {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  -webkit-mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  transition: transform 0.2s ease;
+}
+.sheet-toggle[aria-expanded="true"] .sheet-toggle__chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .sheet-toggle__chevron { transition: none; } }
+
+/* Recipes: the hint on the left, the same button on the right, above the sheet.
+   Closed, the table takes the full width (wide screens only; a narrow screen keeps
+   the sheet under the table and has no button). */
+.recipe-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 0.9rem; }
+.recipe-caption .recipe-hint { margin-bottom: 0; }
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .recipe-sheet-hidden .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-sheet-hidden .recipe-sheet { display: none; }
+}
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-caption .sheet-toggle { display: none; }
+}
 
 /* The sheet: a strong rule over it, then the kind, the name, the description,
    and the facts as label | value rows. Names in the facts are links to their boxes. */

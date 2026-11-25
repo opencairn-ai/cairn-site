@@ -89,21 +89,19 @@
   function setShown(show) {
     document.documentElement.classList.toggle("stack-sheet-hidden", !show);
     sheet.hidden = !show;
-    if (toggle) {
-      toggle.querySelector(".sheet-toggle__label").textContent = t(show ? "diagram.sheet.hide" : "diagram.sheet.show");
-      toggle.setAttribute("aria-expanded", String(show));
-    }
+    // The label of the button stays the same; the arrow turns (CSS, aria-expanded).
+    if (toggle) toggle.setAttribute("aria-expanded", String(show));
     if (selected) selected.classList.toggle("is-selected", show);
     // Closed details: the address no longer names a box.
     if (!show && location.hash) history.replaceState(null, "", location.pathname + location.search);
   }
   if (toggle) toggle.addEventListener("click", () => setShown(!shown()));
 
-  // Start: the box in the address, with its details; else the Model Access
-  // layer, with the details hidden.
+  // Start: the box in the address, with its details; else Model Server, with the
+  // details hidden. The button then opens the details on Model Server.
   const fromAddress = () => byKey.get(decodeURIComponent(location.hash.slice(1)));
   const start = fromAddress();
-  select(start || byKey.get("modelAccess"), { address: false });
+  select(start || byKey.get("modelAccess.modelServer"), { address: false });
   setShown(Boolean(start));
   window.addEventListener("hashchange", () => { const node = fromAddress(); if (node) { select(node, { address: false }); setShown(true); } });
 

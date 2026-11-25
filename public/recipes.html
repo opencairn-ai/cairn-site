@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=110">
+<link rel="stylesheet" href="css/styles.css?v=111">
 </head>
 <body data-page="recipes">
 <div class="page">
@@ -78,7 +78,15 @@
       <p class="recipe-intro__lead" data-text="recipes.limit"></p>
     </section>
 
-    <p class="hint recipe-hint" data-text="recipes.hint"></p>
+    <!-- The hint on the left, the button of the sheet on the right, above the sheet:
+         the same button as on the stack page, but the sheet is open at first. -->
+    <div class="recipe-caption">
+      <p class="hint recipe-hint" data-text="recipes.hint"></p>
+      <button type="button" class="sheet-toggle" id="recipe-sheet-toggle" aria-controls="recipe-sheet" aria-expanded="true">
+        <span class="sheet-toggle__label" data-text="recipes.sheet.title"></span>
+        <span class="sheet-toggle__chevron" aria-hidden="true"></span>
+      </button>
+    </div>
 
     <div class="recipe-body">
       <!-- The filters: one row. Then the table of the recipes, which scrolls inside its box. -->
@@ -117,11 +125,11 @@
   <p class="tip__text"></p>
 </div>
 
-<script src="copy/en.js?v=97"></script>
-<script src="copy/fr.js?v=98"></script>
+<script src="copy/en.js?v=98"></script>
+<script src="copy/fr.js?v=99"></script>
 <script src="js/app.js?v=84"></script>
 <!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
 <script src="js/recipes-data.js"></script>
-<script src="js/recipes.js"></script>
+<script src="js/recipes.js?v=2"></script>
 </body>
 </html>
