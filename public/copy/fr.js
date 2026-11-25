@@ -41,6 +41,8 @@ window.CAIRN_COPY.fr = {
     download: "Télécharger le schéma",
     downloadBusy: "Préparation du schéma…",
     downloadFailed: "Échec du téléchargement. Réessayez.",
+    contact: "Faites-nous signe",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
     github: "Contribuez sur GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },

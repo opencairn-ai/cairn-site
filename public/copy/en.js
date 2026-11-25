@@ -39,6 +39,8 @@ window.CAIRN_COPY.en = {
     download: "Download schema",
     downloadBusy: "Preparing schema…",
     downloadFailed: "Download failed. Try again.",
+    contact: "Drop us a pebble",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
     github: "Contribute on GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },

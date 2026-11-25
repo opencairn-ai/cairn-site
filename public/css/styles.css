@@ -529,7 +529,11 @@ a { color: inherit; }
 /* The two buttons of the header: 14px at a 16px root, a 1px border in the text
    color, and the 6px corners of the design system's small radius. */
 .site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
-.site-header .btn:not(.btn--primary):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
+.site-header .btn:not(.btn--primary):not(.btn--ghost):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
+
+/* A button with no border: the contact link of the header. The border stays,
+   transparent, so it keeps the height of the other buttons. */
+.btn--ghost { border-color: transparent; }
 
 :focus-visible {
   outline: 3px solid var(--color-focus);
