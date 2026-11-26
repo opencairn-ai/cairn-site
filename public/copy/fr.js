@@ -197,7 +197,7 @@ window.CAIRN_COPY.fr = {
       allLayers: "Toutes les couches",
       // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :
       // le schéma prend toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
-      title: "Fiche composantes",
+      title: "Fiche composant",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "S’applique à toutes les couches",
