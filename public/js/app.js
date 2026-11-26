@@ -39,7 +39,26 @@
   const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
   const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
 
-  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
+  // The description card of the stack and Recipes pages (class .card): the × in its
+  // top right corner, and a live region for its content. The × stays outside the
+  // live region, so a screen reader reads the new content, not the name of the ×.
+  // Each page fills the content and decides what closing does.
+  function setUpCard(card, { closeLabel, onClose }) {
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "card__close";
+    close.setAttribute("aria-label", closeLabel);
+    close.title = closeLabel;
+    close.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg>';
+    close.addEventListener("click", onClose);
+    const content = document.createElement("div");
+    content.className = "card__content";
+    content.setAttribute("aria-live", "polite");
+    card.replaceChildren(close, content);
+    return content;
+  }
+
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY, setUpCard };
 
   renderPage();
   setUpTheme();

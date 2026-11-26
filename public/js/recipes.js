@@ -77,6 +77,20 @@
   if (sheetToggle) {
     sheetToggle.addEventListener("click", () => setSheetShown(sheetToggle.getAttribute("aria-expanded") !== "true"));
   }
+  const sheetShown = () => !document.documentElement.classList.contains("recipe-sheet-hidden");
+
+  // The description card (js/app.js, setUpCard), as on the stack page. On a wide
+  // screen its × and Escape close it, and the focus goes back to the card button.
+  // A narrow screen keeps the card under the table: there the × is hidden (CSS).
+  const sheetContent = app.setUpCard(sheet, {
+    closeLabel: text("sheet.close"),
+    onClose: () => { setSheetShown(false); if (sheetToggle) sheetToggle.focus(); },
+  });
+  document.addEventListener("keydown", (event) => {
+    // A menu or a pop-up that handles Escape first keeps it.
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if (app.sheetQuery.matches && sheetShown()) setSheetShown(false);
+  });
 
   window.addEventListener("hashchange", () => {
     const id = fromAddress();
@@ -437,7 +451,7 @@
     // The address follows the selected recipe, so a visitor can share it.
     history.replaceState(null, "", r ? `#${r.id}` : location.pathname + location.search);
     if (!r) {
-      sheet.replaceChildren(el("p", "recipe-empty", [text("noSelection")]));
+      sheetContent.replaceChildren(el("p", "recipe-empty", [text("noSelection")]));
       return;
     }
 
@@ -451,10 +465,14 @@
       return tab;
     }));
 
-    // The facts of the recipe: two columns on a wide sheet. A wide fact takes the full width.
-    const fact = (label, value, wide) => [el("dt", wide ? "is-wide" : null, [label]), el("dd", wide ? "is-wide" : null, [value])];
-    const list = el("dl", "recipe-facts", [
+    // The facts of the recipe, in the shared card layout: each label above its value,
+    // in two columns. A wide fact takes the full width.
+    const fact = (label, value, wide) => [el("div", wide ? "card__fact is-wide" : "card__fact", [el("dt", null, [label]), el("dd", null, [value])])];
+    const list = el("dl", "card__facts card__facts--two", [
       // Short facts in pairs; long facts (the image, the use cases) on a full row.
+      // The publisher first, with the model card, since the title is the model alone.
+      ...fact(text("facts.publisher"), r.publisher),
+      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`)),
       ...fact(text("columns.hardware"), r.hardwareLabel),
       ...fact(text("columns.server"), r.serverLabel),
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
@@ -462,14 +480,15 @@
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
       ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
       ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
-      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`)),
     ]);
 
-    sheet.replaceChildren(...[
-      // The model with its publisher, then the server and the hardware, then the facts.
+    sheetContent.replaceChildren(...[
+      // The card head, as on the stack page: the kind, the model, the server and the
+      // hardware in one sentence, then the facts.
       el("div", "recipe-sheet__head", [
-        el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
-        el("p", "recipe-sheet__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
+        el("p", "card__kind", [text("sheet.kind")]),
+        el("h2", "card__title", [r.model]),
+        el("p", "card__text", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
         list,
       ]),
 

@@ -385,6 +385,8 @@ window.CAIRN_COPY.fr = {
     lead: "Une recette contient la configuration pour servir un modèle. Elle utilise un serveur de modèles et s’exécute sur un type de matériel.",
     limit: "Pour l’instant, les recettes visent seulement les installations sur un seul nœud.",
     // L’indication au-dessus des filtres.
+    // Le titre au-dessus du tableau, dans la barre avec la consigne et le bouton de la fiche.
+    heading: "Trouvez une recette pour votre matériel",
     hint: "Sélectionnez une recette pour voir ses fichiers.",
     // Le nom de la liste, pour les lecteurs d’écran.
     listLabel: "Recettes",
@@ -419,6 +421,7 @@ window.CAIRN_COPY.fr = {
       context: "{count} jetons",
       contextDefault: "Valeur par défaut du serveur de modèles",
       model: "Modèle",
+      publisher: "Éditeur",
       yes: "Oui",
       no: "Non",
     },
@@ -462,6 +465,10 @@ window.CAIRN_COPY.fr = {
       // Le bouton au-dessus de la fiche, avec une flèche, comme sur la page de la pile.
       // La fiche est ouverte au départ ; le bouton la ferme et le tableau prend toute la largeur.
       title: "Fiche de déploiement",
+      // La petite étiquette au-dessus du nom du modèle, comme « Composant » sur la page de la pile.
+      kind: "Recette",
+      // Le nom du × en haut à droite de la fiche.
+      close: "Fermer la fiche",
       files: "Fichiers de la recette",
       copy: "Copier",
       copied: "Copié",

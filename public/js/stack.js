@@ -36,7 +36,7 @@
   // or focusing it with the keyboard, gives its box the hover border in the schema,
   // so the reader sees where the link goes before clicking (linked views).
   function boxLink(node) {
-    const button = el("button", "stack-sheet__link", [entries.get(node).name]);
+    const button = el("button", "card__link", [entries.get(node).name]);
     button.type = "button";
     button.addEventListener("click", () => { hover(null); select(node); node.focus({ preventScroll: true }); });
     button.addEventListener("pointerenter", () => hover(node));
@@ -46,32 +46,21 @@
     return button;
   }
 
-  // The × in the top right corner of the sheet: it closes the sheet and gives the
-  // focus back to the selected box. The cross is the one of the phone pop-up.
-  function closeButton() {
-    const button = el("button", "stack-sheet__close");
-    button.type = "button";
-    button.setAttribute("aria-label", t("diagram.sheet.close"));
-    button.title = t("diagram.sheet.close");
-    button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg>';
-    button.addEventListener("click", () => {
+  // The description card (js/app.js, setUpCard): its × closes the sheet and gives
+  // the focus back to the selected box.
+  const sheetContent = app.setUpCard(sheet, {
+    closeLabel: t("diagram.sheet.close"),
+    onClose: () => {
       setShown(false);
       if (selected) selected.focus({ preventScroll: true });
-    });
-    return button;
-  }
-
-  // The sheet holds the × once, then the content of the selected box. Only the
-  // content is a live region, so a screen reader reads the new box and not the
-  // name of the × each time the selection changes.
-  const sheetContent = el("div", "stack-sheet__content");
-  sheetContent.setAttribute("aria-live", "polite");
-  sheet.replaceChildren(closeButton(), sheetContent);
+    },
+  });
 
   function render(node, step) {
     const entry = entries.get(node);
     const facts = [];
-    const fact = (label, value, className) => facts.push(el("dt", className, [label]), el("dd", className, [value]));
+    // One fact: its label above its value, in the shared card layout (.card__fact).
+    const fact = (label, value, className) => facts.push(el("div", className ? `card__fact ${className}` : "card__fact", [el("dt", null, [label]), el("dd", null, [value])]));
 
     if (step) {
       fact(t("diagram.sheet.inRequest"), el("span", null, [el("code", null, [step.service]), " ", step.text]), "is-step");
@@ -80,27 +69,27 @@
       const layer = node.closest(".layer");
       if (layer && entries.has(layer) && !layer.classList.contains("is-out-of-scope")) {
         // The branch with a dot before the label says "part of", as in a file tree.
-        const branch = el("span", "stack-sheet__branch");
+        const branch = el("span", "card__branch");
         branch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5v9a3 3 0 0 0 3 3h6"/><circle cx="18" cy="17" r="2" fill="currentColor"/></svg>';
         fact(el("span", null, [branch, t("diagram.sheet.layer")]), boxLink(layer), "is-part-of");
         const others = [...layer.querySelectorAll(".comp")].filter((comp) => comp !== node);
         // One other component: singular, no count. Two or more: plural, with the count.
         const othersLabel = others.length === 1 ? t("diagram.sheet.alsoInLayerOne") : `${t("diagram.sheet.alsoInLayer")} (${others.length})`;
-        if (others.length) fact(othersLabel, el("span", "stack-sheet__links", others.map(boxLink)));
+        if (others.length) fact(othersLabel, el("span", "card__links", others.map(boxLink)));
       }
     }
     if (entry.kind === "layer" || entry.kind === "crossCutting") {
       const comps = [...node.querySelectorAll(".comp")];
       // The label carries the count: "Components (4)".
-      if (comps.length) fact(`${t("diagram.sheet.components")} (${comps.length})`, el("span", "stack-sheet__links", comps.map(boxLink)));
+      if (comps.length) fact(`${t("diagram.sheet.components")} (${comps.length})`, el("span", "card__links", comps.map(boxLink)));
       if (entry.kind === "crossCutting") fact(t("diagram.sheet.appliesTo"), t("diagram.sheet.allLayers"));
     }
 
     sheetContent.replaceChildren(...[
-      el("p", "stack-sheet__kind", [t(`diagram.kinds.${entry.kind}`)]),
-      el("h2", "stack-sheet__name", [entry.name]),
-      el("p", "stack-sheet__text", [entry.tooltip]),
-      facts.length && el("dl", "stack-sheet__facts", facts),
+      el("p", "card__kind", [t(`diagram.kinds.${entry.kind}`)]),
+      el("h2", "card__title", [entry.name]),
+      el("p", "card__text", [entry.tooltip]),
+      facts.length && el("dl", "card__facts", facts),
     ].filter(Boolean));
   }
 

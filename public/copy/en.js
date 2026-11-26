@@ -383,6 +383,8 @@ window.CAIRN_COPY.en = {
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
     limit: "At the moment, the recipes are for single-node setups only.",
     // The hint above the filters.
+    // The heading above the table, in the bar with the hint and the card button.
+    heading: "Find a recipe for your hardware",
     hint: "Select a recipe to see its files.",
     // The name of the list panel.
     listLabel: "Recipes",
@@ -416,6 +418,7 @@ window.CAIRN_COPY.en = {
       context: "{count} tokens",
       contextDefault: "Model server default",
       model: "Model",
+      publisher: "Publisher",
       yes: "Yes",
       no: "No",
     },
@@ -459,6 +462,10 @@ window.CAIRN_COPY.en = {
       // The button above the sheet, with an arrow, as on the stack page. The sheet is
       // open at first; the button closes it and the table takes the full width.
       title: "Deployment card",
+      // The small label above the model name in the card, as "Component" on the stack page.
+      kind: "Recipe",
+      // The name of the × in the top right corner of the card.
+      close: "Close the card",
       files: "Recipe files",
       copy: "Copy",
       copied: "Copied",

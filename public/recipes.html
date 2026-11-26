@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=150">
+<link rel="stylesheet" href="css/styles.css?v=152">
 </head>
 <body data-page="recipes">
 <div class="page">
@@ -72,16 +72,19 @@
 
   <!-- The list and the sheet are filled by js/recipes.js from js/recipes-data.js. -->
   <main>
-    <section class="recipe-intro">
+    <section class="intro recipe-intro">
       <h1 data-text="recipes.title"></h1>
-      <p class="recipe-intro__lead" data-text="recipes.lead"></p>
-      <p class="recipe-intro__lead" data-text="recipes.limit"></p>
+      <p class="page-lead" data-text="recipes.lead"></p>
+      <p class="page-lead" data-text="recipes.limit"></p>
     </section>
 
-    <!-- The hint on the left, the button of the sheet on the right, above the sheet:
-         the same button as on the stack page, but the sheet is open at first. -->
-    <div class="recipe-caption">
-      <p class="hint recipe-hint" data-text="recipes.hint"></p>
+    <!-- The section bar (shared with the stack page): the heading and the hint on
+         the left, the button of the card on the right. The card is open at first. -->
+    <div class="section-bar">
+      <div class="section-bar__text">
+        <h2 class="section-heading" data-text="recipes.heading"></h2>
+        <p class="hint recipe-hint" data-text="recipes.hint"></p>
+      </div>
       <button type="button" class="sheet-toggle" id="recipe-sheet-toggle" aria-controls="recipe-sheet" aria-expanded="true">
         <span class="sheet-toggle__label" data-text="recipes.sheet.title"></span>
         <span class="sheet-toggle__chevron" aria-hidden="true"></span>
@@ -103,8 +106,9 @@
           </div>
         </section>
       </div>
-      <!-- The selected recipe. -->
-      <article class="recipe-sheet" id="recipe-sheet" data-aria-label="recipes.sheet.label" aria-live="polite"></article>
+      <!-- The description card of the selected recipe (shared with the stack page).
+           The script puts the × and a live region for the content in it. -->
+      <article class="recipe-sheet card" id="recipe-sheet" data-aria-label="recipes.sheet.label"></article>
     </div>
   </main>
 
@@ -125,11 +129,11 @@
   <p class="tip__text"></p>
 </div>
 
-<script src="copy/en.js?v=105"></script>
-<script src="copy/fr.js?v=106"></script>
-<script src="js/app.js?v=84"></script>
+<script src="copy/en.js?v=106"></script>
+<script src="copy/fr.js?v=107"></script>
+<script src="js/app.js?v=85"></script>
 <!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
 <script src="js/recipes-data.js"></script>
-<script src="js/recipes.js?v=3"></script>
+<script src="js/recipes.js?v=4"></script>
 </body>
 </html>
