@@ -522,9 +522,14 @@ a { color: inherit; }
 .btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }
 
-/* The two buttons of the header: 14px at a 16px root, a 1px border in the text
-   color, and the 6px corners of the design system's small radius. */
-.site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
+/* One button format for the whole site, in whole pixels: 14px medium text on a
+   16px line, 16px icons, 8px x 14px padding, a 1px border and 6px corners, so
+   every button is 34px high. The header buttons, "Explore LaStack" and its
+   contact link on Hello World, the card buttons of LaStack and Model Recipes, and
+   the footer buttons use it. */
+.site-header .btn { gap: 8px; padding: 8px 14px; border-width: 1px; border-radius: 6px; font-size: 14px; line-height: 16px; }
+.site-header .btn svg,
+.site-header .btn img { width: 16px; height: 16px; }
 .site-header .btn:not(.btn--primary):not(.btn--ghost):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
 
 /* A button with no border: the contact link of the header. The border stays,
@@ -1308,17 +1313,17 @@ h1 {
 .footer-actions { display: flex; flex: none; align-items: flex-start; gap: 24px; }
 
 .site-footer .footer-btn {
-  height: 34.304px;
-  padding: 8.652px 14.42px;
+  height: 34px;
+  padding: 8px 14px;
   border-width: 1px;
   border-color: #291435;
-  border-radius: 6.76px;
+  border-radius: 6px;
   background: transparent;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
-  line-height: 14.42px;
-  gap: 7.2px;
+  line-height: 16px;
+  gap: 8px;
   white-space: nowrap;
 }
 
@@ -1371,7 +1376,7 @@ h1 {
   .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
   .prefs { grid-area: prefs; margin-right: 0; padding: 0.7rem 0; }
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
-  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.75rem; white-space: nowrap; }
+  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 8px; font-size: 12px; white-space: nowrap; }
 
   /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. The
      sentence takes its own line under the logos. The lockup's fixed 21px height has to go
@@ -1379,9 +1384,9 @@ h1 {
   .footer-brand { width: auto; max-width: 100%; height: auto; flex-wrap: wrap; row-gap: 10px; }
   .footer-brand .footer-brand__role { width: 100%; height: auto; line-height: 1.4; }
   /* Stacked under the lockup, the labels line up with its left edge: the buttons' border
-     is the colour of the bar, so only their 14.42px inset showed, as an indent. The row
+     is the colour of the bar, so only their 14px inset showed, as an indent. The row
      moves out by that inset; the hover fill still lands inside the bar's 20px padding. */
-  .footer-actions { width: calc(100% + 14.42px); margin-left: -14.42px; flex-wrap: wrap; }
+  .footer-actions { width: calc(100% + 14px); margin-left: -14px; flex-wrap: wrap; }
 }
 
 /* Intro on narrower screens. */
@@ -1506,21 +1511,22 @@ h1 {
 .what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
 .what__links .btn,
 .what__pebble {
-  gap: 7.2px;
-  padding: 8.652px 14.42px;
-  border-radius: 6.76px;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  line-height: 14.42px;
+  line-height: 16px;
 }
 .what__links .btn { border-width: 1px; border-color: var(--color-title); }
 .what__pebble {
   display: inline-flex;
   align-items: center;
+  border: 1px solid transparent;
   color: var(--color-title);
   text-decoration: none;
 }
-.what__links img { display: block; flex: none; }
+.what__links img { display: block; flex: none; width: 16px; height: 16px; }
 .what__pebble:hover { color: var(--color-link); }
 
 :root[data-theme="dark"] .what__links img { filter: brightness(0) invert(1); }
@@ -1533,7 +1539,7 @@ h1 {
   margin: 0 0 1.1rem;
   color: var(--color-title);
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -3489,39 +3495,42 @@ h1 {
 /* The bar above the schema: the heading with the hint under it on the left, the
    button of the sheet on the right, centered on them. 48px above it, so it reads
    apart from the goals; 4px between the heading and the hint; 16px to the schema. */
-.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 3rem; }
+.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 2rem; }
 .stack-caption__text { min-width: 0; }
 .stack-caption .stack-heading { margin: 0 0 0.25rem; }
 .stack-caption .hint { margin-bottom: 0; }
 .arch-caption { margin-bottom: 1rem; }
+/* The button format of the site (see .site-header .btn), outlined as "Explore
+   LaStack" on Hello World: a 1px border in the title ink. */
 .sheet-toggle {
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: 0.45em;
-  padding: 0.35em 0.7em;
-  border: 1px solid var(--color-schema-line);
-  border-radius: var(--radius-ui-sm);
-  background: none;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-title);
+  border-radius: 6px;
+  background: transparent;
   color: var(--color-text);
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 16px;
   cursor: pointer;
 }
-.sheet-toggle:hover { border-color: var(--color-header-rule); }
+.sheet-toggle:hover { background: var(--color-button-hover); }
 /* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
    after the one above, which would otherwise show the button again. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
   .stack-caption .sheet-toggle { display: none; }
 }
 /* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
-   text color. Replace that file to change the arrow. It points right when the card
+   text color, 16px as the other button icons. Replace that file to change the arrow. It points right when the card
    is closed and turns down when it is open. */
 .sheet-toggle__chevron {
   flex: none;
-  width: 1em;
-  height: 1em;
+  width: 16px;
+  height: 16px;
   background: currentColor;
   -webkit-mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
   mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
