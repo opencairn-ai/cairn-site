@@ -844,6 +844,10 @@ h1 {
 
 /* At rest the 2px border matches the gray ground, so it stays invisible until hover. */
 .layer.is-out-of-scope { border-color: #e6e8ea; }
+/* Light: a 0.5px grey stroke around the "Bring-Your-Own Application" row, so it
+   holds its shape on the cream page. Drawn as a shadow, outside the 2px hover
+   border, so it never shifts the box. */
+:root:not([data-theme="dark"]) .layer--client { box-shadow: 0 0 0 0.5px #aeb8be; }
 
 :root[data-theme="dark"] .is-out-of-scope { background: #3a3840; }
 :root[data-theme="dark"] .is-out-of-scope > .label .label__name { color: #b7b3ae; }
