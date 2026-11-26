@@ -3278,9 +3278,10 @@ h1 {
    - Later (the direction): the title in the quiet gray.
    The layer of an item is a link to its box on the stack page.               */
 
-.roadmap-intro { margin-bottom: 2rem; }
-.roadmap-intro h1 { margin-bottom: 0.6rem; }
-.roadmap-intro__lead { color: var(--color-title); font-size: 1rem; }
+/* The intro uses the page templates (.intro, .page-lead), as on the stack and
+   Recipes pages. No section bar: the table keeps the 42px that the section bar
+   keeps above it on the other pages. */
+.roadmap-intro + .roadmap { margin-top: 42px; }
 
 .roadmap {
   display: grid;
