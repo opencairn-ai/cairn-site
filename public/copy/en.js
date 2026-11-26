@@ -183,7 +183,9 @@ window.CAIRN_COPY.en = {
     label: "Architecture of the open source AI inference stack",
     // The line above the schema. A wide screen shows the selected box in the sheet
     // beside the schema; a narrow screen shows it in a pop-up.
-    hint: "Select a layer or component to see what it does.",
+    // The heading above the schema.
+    heading: "LaStack, layer by layer",
+    hint: "Select any box to see what it does.",
     // The sheet beside the schema: the facts under the description of the selected box.
     // The names of layers and components in these facts are links to their boxes.
     sheet: {

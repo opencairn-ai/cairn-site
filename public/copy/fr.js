@@ -184,7 +184,9 @@ window.CAIRN_COPY.fr = {
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     // La ligne au-dessus du schéma. Un grand écran montre la case sélectionnée dans la
     // fiche à côté du schéma ; un petit écran la montre dans une infobulle.
-    hint: "Sélectionnez une couche ou un composant pour découvrir son rôle.",
+    // Le titre au-dessus du schéma.
+    heading: "LaStack, couche par couche",
+    hint: "Sélectionnez une case pour voir son rôle.",
     // La fiche à côté du schéma : les faits sous la description de la case sélectionnée.
     // Les noms de couches et de composants dans ces faits sont des liens vers leurs cases.
     sheet: {
