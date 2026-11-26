@@ -14,6 +14,9 @@
   // repository is public, the sheet does not tell the visitor how to install a
   // recipe and does not link to the repository. Set to true when it is public.
   const STACK_IS_PUBLIC = false;
+  // The search on the model name, after the two filter menus. Hidden for now: set
+  // to true to show it again (its code and copy stay in place).
+  const SHOW_MODEL_SEARCH = false;
 
   const app = window.CAIRN_APP;
   const data = window.CAIRN_RECIPES;
@@ -108,7 +111,7 @@
   // on the model name. A menu takes the same space for 5 choices or for 50.
   function renderFilters() {
     // The search field stays in place while the menu is drawn again, so it keeps its text.
-    const search = filters.querySelector(".recipe-search") || searchField();
+    const search = SHOW_MODEL_SEARCH && (filters.querySelector(".recipe-search") || searchField());
     filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
       USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
