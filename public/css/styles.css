@@ -920,7 +920,7 @@ h1 {
   mask-position: center top;
 }
 
-/* The endpoint color, so the moving point matches the API Endpoint name. */
+/* The moving point: a small Pink square, travelling along the dotted line. */
 .api-bridge__pulse {
   position: absolute;
   left: 50%;
@@ -928,8 +928,8 @@ h1 {
   top: 0;
   width: 5px;
   height: 5px;
-  border-radius: 50%;
-  background: var(--color-boundary);
+  border-radius: 0;
+  background: var(--color-pink);
   transform: translateX(-50%);
   animation: api-flow 2.8s ease-in-out infinite alternate;
 }
