@@ -3590,8 +3590,17 @@ h1 {
 /* Each label sits above its value, so the long labels ("Part of the layer") leave
    the full width to the names. One rule between two facts. */
 .stack-sheet__facts { grid-template-columns: minmax(0, 1fr); }
-.stack-sheet__facts dt { padding-bottom: 0.15em; }
+.stack-sheet__facts dt { padding-bottom: 0; }
 .stack-sheet__facts dd { padding-top: 0; border-top: 0; }
+/* Two parts: the layer of the component, then the other components, with more
+   room above the rule between them. */
+.stack-sheet__facts dt:not(:first-child) { margin-top: 0.5rem; padding-top: 0.75rem; }
+/* "Part of the layer": the branch icon before the label, and the layer name
+   lined up with the label, after the icon. */
+.stack-sheet__facts dt.is-part-of > span { display: flex; align-items: center; gap: 0.375rem; }
+.stack-sheet__branch { display: inline-grid; flex: none; }
+.stack-sheet__branch svg { width: 18px; height: 18px; }
+.stack-sheet__facts dd.is-part-of { padding-left: calc(18px + 0.375rem); }
 /* Dark: the links in Pink. On Cream, Pink is 2.0:1, so light keeps Mid purple. */
 :root[data-theme="dark"] .stack-sheet__link { color: var(--color-pink); }
 :root[data-theme="dark"] .stack-sheet__link:hover { color: var(--color-link-hover); }

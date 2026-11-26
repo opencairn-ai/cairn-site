@@ -192,6 +192,9 @@ window.CAIRN_COPY.fr = {
     sheet: {
       components: "Composants",
       layer: "Fait partie de la couche",
+      // Un seul autre composant : au singulier, sans nombre. Deux ou plus : au pluriel,
+      // et le script ajoute le nombre, « Autres composants de cette couche (2) ».
+      alsoInLayerOne: "Autre composant de cette couche",
       alsoInLayer: "Autres composants de cette couche",
       appliesTo: "S’applique à",
       allLayers: "Toutes les couches",

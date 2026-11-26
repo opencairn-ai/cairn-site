@@ -191,6 +191,9 @@ window.CAIRN_COPY.en = {
     sheet: {
       components: "Components",
       layer: "Part of the layer",
+      // One other component: singular, no count. Two or more: plural, and the script
+      // adds the count, "Other components in this layer (2)".
+      alsoInLayerOne: "Other component in this layer",
       alsoInLayer: "Other components in this layer",
       appliesTo: "Applies to",
       allLayers: "All layers",

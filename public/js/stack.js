@@ -72,9 +72,14 @@
     if (entry.kind === "component") {
       const layer = node.closest(".layer");
       if (layer && entries.has(layer) && !layer.classList.contains("is-out-of-scope")) {
-        fact(t("diagram.sheet.layer"), boxLink(layer));
+        // The branch with a dot before the label says "part of", as in a file tree.
+        const branch = el("span", "stack-sheet__branch");
+        branch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5v9a3 3 0 0 0 3 3h6"/><circle cx="18" cy="17" r="2" fill="currentColor"/></svg>';
+        fact(el("span", null, [branch, t("diagram.sheet.layer")]), boxLink(layer), "is-part-of");
         const others = [...layer.querySelectorAll(".comp")].filter((comp) => comp !== node);
-        if (others.length) fact(t("diagram.sheet.alsoInLayer"), el("span", "stack-sheet__links", others.map(boxLink)));
+        // One other component: singular, no count. Two or more: plural, with the count.
+        const othersLabel = others.length === 1 ? t("diagram.sheet.alsoInLayerOne") : `${t("diagram.sheet.alsoInLayer")} (${others.length})`;
+        if (others.length) fact(othersLabel, el("span", "stack-sheet__links", others.map(boxLink)));
       }
     }
     if (entry.kind === "layer" || entry.kind === "crossCutting") {
