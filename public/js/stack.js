@@ -61,6 +61,13 @@
     return button;
   }
 
+  // The sheet holds the × once, then the content of the selected box. Only the
+  // content is a live region, so a screen reader reads the new box and not the
+  // name of the × each time the selection changes.
+  const sheetContent = el("div", "stack-sheet__content");
+  sheetContent.setAttribute("aria-live", "polite");
+  sheet.replaceChildren(closeButton(), sheetContent);
+
   function render(node, step) {
     const entry = entries.get(node);
     const facts = [];
@@ -89,8 +96,7 @@
       if (entry.kind === "crossCutting") fact(t("diagram.sheet.appliesTo"), t("diagram.sheet.allLayers"));
     }
 
-    sheet.replaceChildren(...[
-      closeButton(),
+    sheetContent.replaceChildren(...[
       el("p", "stack-sheet__kind", [t(`diagram.kinds.${entry.kind}`)]),
       el("h2", "stack-sheet__name", [entry.name]),
       el("p", "stack-sheet__text", [entry.tooltip]),

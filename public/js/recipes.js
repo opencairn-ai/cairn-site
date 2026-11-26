@@ -80,7 +80,8 @@
 
   window.addEventListener("hashchange", () => {
     const id = fromAddress();
-    if (id && id !== state.selected) { state.selected = id; renderResults(); }
+    // Back and Forward select a recipe as a click does: they open the sheet again.
+    if (id && id !== state.selected) { state.selected = id; setSheetShown(true); renderResults(); }
   });
 
   renderColumns();
