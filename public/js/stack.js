@@ -64,7 +64,8 @@
     }
     if (entry.kind === "layer" || entry.kind === "crossCutting") {
       const comps = [...node.querySelectorAll(".comp")];
-      if (comps.length) fact(t("diagram.sheet.components"), el("span", "stack-sheet__links", comps.map(boxLink)));
+      // The label carries the count: "Components (4)".
+      if (comps.length) fact(`${t("diagram.sheet.components")} (${comps.length})`, el("span", "stack-sheet__links", comps.map(boxLink)));
       if (entry.kind === "crossCutting") fact(t("diagram.sheet.appliesTo"), t("diagram.sheet.allLayers"));
     }
 
