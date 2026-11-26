@@ -821,6 +821,9 @@ h1 {
 :root:not([data-theme="dark"]) .boundary__label.is-out-of-scope .boundary__arrow { color: #5c6770; }
 .boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 6px)); }
 .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 6px)); }
+/* Light: "Server side" in Stone, by choice. It is 2.9:1 on Cream, under the 4.5:1
+   of WCAG AA for text of this size. */
+:root:not([data-theme="dark"]) .boundary__label[data-copy="server"]:not(.is-out-of-scope) { color: #a08f79; }
 
 /* On dark, the same labels switch to italic lavender. */
 :root[data-theme="dark"] .boundary__label {
