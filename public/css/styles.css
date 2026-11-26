@@ -573,11 +573,14 @@ h1 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   gap: 1.5rem;
-  font-size: 0.875rem;
+  /* The body type of the Hello World principles: 16px on 24px, regular. */
+  font-size: 1rem;
+  letter-spacing: -0.011em;
+  line-height: 1.5;
 }
 
 /* Same ink as the page title (h1), light and dark. */
-.goal__lead { color: var(--color-title); font-weight: 500; }
+.goal__lead { color: var(--color-title); font-weight: 400; }
 
 /* Words wrapped in *asterisks* in the copy files. Semibold so the pink reads the
    same as the label next to the ink text. */
@@ -600,7 +603,8 @@ h1 {
 .goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
 /* Dark: the three goal titles match the page title. */
 :root[data-theme="dark"] .goal__point-title { color: var(--color-title); }
-.goal__point-text { display: block; color: var(--color-body); }
+/* The ink of the Hello World principles, which is the ink of the page title. */
+.goal__point-text { display: block; color: var(--color-title); }
 
 /* --- Architecture diagram -----------------------------------------------
    Sized in em so the downloaded image can render it at a fixed size.       */
