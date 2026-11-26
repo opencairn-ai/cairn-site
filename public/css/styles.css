@@ -3525,6 +3525,9 @@ h1 {
 :root[data-theme="dark"] .btn:not(.footer-btn):not(.is-error):hover,
 :root[data-theme="dark"] .sheet-toggle:hover { border-color: #734c90; color: #291435; }
 :root[data-theme="dark"] .btn--primary:hover { background: var(--color-button-hover); opacity: 1; }
+/* Light: the primary button fills with a dark warm grey on hover, and its white
+   label and icon stay white (4.8:1). */
+:root:not([data-theme="dark"]) .btn--primary:hover { border-color: #7d705f; background: #7d705f; opacity: 1; }
 :root[data-theme="dark"] .what__links .btn:hover img { filter: none; }
 /* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
    after the one above, which would otherwise show the button again. */
