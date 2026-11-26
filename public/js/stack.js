@@ -32,11 +32,17 @@
     return node;
   }
 
-  // A link to another box of the schema: it selects that box.
+  // A link to another box of the schema: it selects that box. Pointing at the link,
+  // or focusing it with the keyboard, gives its box the hover border in the schema,
+  // so the reader sees where the link goes before clicking (linked views).
   function boxLink(node) {
     const button = el("button", "stack-sheet__link", [entries.get(node).name]);
     button.type = "button";
-    button.addEventListener("click", () => { select(node); node.focus({ preventScroll: true }); });
+    button.addEventListener("click", () => { hover(null); select(node); node.focus({ preventScroll: true }); });
+    button.addEventListener("pointerenter", () => hover(node));
+    button.addEventListener("pointerleave", () => hover(null));
+    button.addEventListener("focus", () => hover(node));
+    button.addEventListener("blur", () => hover(null));
     return button;
   }
 

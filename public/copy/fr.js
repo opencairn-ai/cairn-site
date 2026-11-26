@@ -191,8 +191,8 @@ window.CAIRN_COPY.fr = {
     // Les noms de couches et de composants dans ces faits sont des liens vers leurs cases.
     sheet: {
       components: "Composants",
-      layer: "Couche",
-      alsoInLayer: "Aussi dans cette couche",
+      layer: "Fait partie de la couche",
+      alsoInLayer: "Autres composants de cette couche",
       appliesTo: "S’applique à",
       allLayers: "Toutes les couches",
       // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :

@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=120">
+<link rel="stylesheet" href="css/styles.css?v=129">
 </head>
 <body data-page="stack">
 <div class="page">
@@ -82,10 +82,13 @@
 
     <figure class="arch-figure">
       <figcaption class="arch-caption">
-        <h2 class="stack-heading" data-text="diagram.heading"></h2>
-        <!-- The hint, and on wide screens the button that hides or shows the sheet. -->
+        <!-- The bar above the schema: the heading and the hint on the left, and on
+             wide screens the button that hides or shows the sheet on the right. -->
         <div class="stack-caption">
-          <p class="hint stack-hint" data-text="diagram.hint"></p>
+          <div class="stack-caption__text">
+            <h2 class="stack-heading" data-text="diagram.heading"></h2>
+            <p class="hint stack-hint" data-text="diagram.hint"></p>
+          </div>
           <button type="button" class="sheet-toggle" id="sheet-toggle" aria-controls="stack-sheet" aria-expanded="true">
             <span class="sheet-toggle__label" data-text="diagram.sheet.title"></span>
             <span class="sheet-toggle__chevron" aria-hidden="true"></span>
@@ -220,10 +223,10 @@
 
 <noscript><p class="noscript">This page needs JavaScript to display the architecture. · Cette page nécessite JavaScript pour afficher l’architecture.</p></noscript>
 
-<script src="copy/en.js?v=99"></script>
-<script src="copy/fr.js?v=101"></script>
+<script src="copy/en.js?v=100"></script>
+<script src="copy/fr.js?v=102"></script>
 <script src="js/app.js?v=84"></script>
-<script src="js/stack.js?v=3"></script>
+<script src="js/stack.js?v=4"></script>
 
 </body>
 </html>

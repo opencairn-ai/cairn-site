@@ -190,8 +190,8 @@ window.CAIRN_COPY.en = {
     // The names of layers and components in these facts are links to their boxes.
     sheet: {
       components: "Components",
-      layer: "Layer",
-      alsoInLayer: "Also in this layer",
+      layer: "Part of the layer",
+      alsoInLayer: "Other components in this layer",
       appliesTo: "Applies to",
       allLayers: "All layers",
       // The button above the sheet, with an arrow. The sheet is hidden at first: the

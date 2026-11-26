@@ -116,10 +116,10 @@
   background: #291435;
   --color-bg: #291435;               /* Deep purple */
   --color-title: #ffffff;            /* 16.9:1 */
-  --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
+  --color-header: #ffffff;           /* White, as the titles: no beige text */
   --color-body: #f2eae1;             /* Cream, 14.2:1 */
   --color-text: #f2eae1;
-  --color-text-muted: #a08f79;       /* Stone, 5.4:1 */
+  --color-text-muted: #b7b3ae;       /* Neutral grey, 8.1:1: no beige text */
   --color-layer: #321d3e;            /* Marshmallow 5% over Deep purple */
   --color-cross: #372343;            /* 8% */
   --color-control: #372343;
@@ -412,7 +412,7 @@ a { color: inherit; }
 /* The tabs, one per page, 60px after the lockup. 14.4px type, line 18px.
    Each tab is the 65px height of the bar. Side padding is the width of the
    pink line, not a gap between labels. The current tab is Bold. The others
-   stay Medium. Roadmap is Stone until it is the current page. The tabs take
+   stay Medium. Roadmap is in the caption color until it is the current page. The tabs take
    the free width, so the buttons go to the right end. */
 .site-nav {
   display: flex;
@@ -456,9 +456,9 @@ a { color: inherit; }
   z-index: 1;
 }
 
-/* Roadmap stays Stone, as in the header frame, while its page opens. As a page
-   to come, it takes the disabled color below instead. */
-.site-nav a[data-page="roadmap"]:not([aria-current="page"]):not([aria-disabled="true"]) { color: #a08f79; }
+/* Roadmap reads as a caption while its page opens. As a page to come, it takes
+   the disabled color below instead. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]):not([aria-disabled="true"]) { color: var(--color-text-muted); }
 
 /* The tab of a page to come. */
 .site-nav a[aria-disabled="true"],
@@ -599,6 +599,8 @@ h1 {
   padding-top: 0.45rem;
   border-top: 1.5px solid var(--color-header);
 }
+/* Dark: the rule stays Beige. It is a line, not text. */
+:root[data-theme="dark"] .goal__point { border-top-color: #d0c2b1; }
 
 .goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
 /* Dark: the three goal titles match the page title. */
@@ -626,7 +628,8 @@ h1 {
   gap: 0.3rem 1.5rem;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
-  font-size: 0.75rem;
+  /* The size of the Client side / Server side labels of the schema, in regular. */
+  font-size: 0.875rem;
 }
 
 .legend {
@@ -789,7 +792,7 @@ h1 {
   opacity: 0.65;
 }
 
-/* On light, the Local / Server labels read in italic stone.
+/* On light, the Local / Server labels read in italic slate, the caption color.
    The line row is tall so the API has room. Pull the words back to the stroke. */
 .boundary__label {
   position: relative;
@@ -798,7 +801,7 @@ h1 {
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
   line-height: 1.1;
-  color: #a08f79;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 /* An arrow left of each name: up to the local side, down to the server side.
@@ -899,7 +902,7 @@ h1 {
 .api-bridge__dots {
   position: absolute;
   inset: 0;
-  /* Stone, the dark beige already used for the Local / Server labels. */
+  /* Stone, the dark beige of the diagram lines (a dot pattern, not text). */
   background-color: #a08f79;
   /* 10% smaller than the 2.56px circles, on a shorter step so they sit closer. */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4.5' viewBox='0 0 4 4.5'%3E%3Ccircle cx='2' cy='2.25' r='1.15' fill='%23000'/%3E%3C/svg%3E");
@@ -969,7 +972,7 @@ h1 {
 }
 
 /* The group name: the same type as the Client side / Server side labels, in the
-   color of the hint line above the schema (5.7:1 on Cream, 5.4:1 on Deep purple). */
+   color of the hint line above the schema (5.7:1 on Cream, 8.1:1 on Deep purple). */
 .cross-label {
   padding: 0 0.2em;
   color: var(--color-text-muted);
@@ -2087,7 +2090,7 @@ h1 {
 .approach__stage .pic.pic-tests { max-width: 807px; margin: 0 auto; }
 
 .pic-tests .pic__label {
-  color: #a08f79;
+  color: var(--color-text-muted);
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1.081px;
@@ -2288,7 +2291,7 @@ h1 {
   width: 307.88px;
   height: 19.23px;
   margin: 0;
-  color: #a08f79;
+  color: var(--color-text-muted);
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1.081px;
@@ -2415,7 +2418,6 @@ h1 {
 
 :root[data-theme="dark"] .pic-contract__joint-label { color: var(--color-pink); }
 
-:root[data-theme="dark"] .pic-contract__name { color: var(--color-text-muted); }
 
 :root[data-theme="dark"] .pic-contract .pic__legend { color: var(--color-body); }
 
@@ -3190,13 +3192,13 @@ h1 {
 .recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); }
 
 /* A file, or a command: the dark panel, with the Copy button in the corner. YAML
-   keys in River and comments in Stone, the colors of technical text on dark. */
+   keys in River and comments in neutral grey, the colors of technical text on dark. */
 .recipe-code { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--recipe-code-bg); color: #f5e8ff; }
 .recipe-files .recipe-code { margin-top: 1rem; }
 .recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
 .recipe-code--file pre { max-height: 26rem; }
 .recipe-code__key { color: #63bcc1; }
-.recipe-code__comment { color: #a08f79; }
+.recipe-code__comment { color: #b7b3ae; }
 
 .recipe-copy {
   position: absolute;
@@ -3484,13 +3486,14 @@ h1 {
 .is-out-of-scope .comp.is-hovered:not(.is-selected),
 .layer.is-out-of-scope.is-hovered { border-color: #8b939a; }
 
-/* The hint on the left, the button of the sheet on the right, above the sheet. */
-/* Room above it, so the hint does not sit against the goals. */
-/* The heading takes the space above the schema block; the hint sits right under it. */
-.stack-heading { margin: 1.75rem 0 0.4rem; }
-.stack-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+/* The bar above the schema: the heading with the hint under it on the left, the
+   button of the sheet on the right, centered on them. 48px above it, so it reads
+   apart from the goals; 4px between the heading and the hint; 16px to the schema. */
+.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 3rem; }
+.stack-caption__text { min-width: 0; }
+.stack-caption .stack-heading { margin: 0 0 0.25rem; }
 .stack-caption .hint { margin-bottom: 0; }
-.arch-caption { margin-bottom: 0.6rem; }
+.arch-caption { margin-bottom: 1rem; }
 .sheet-toggle {
   display: inline-flex;
   flex: none;
@@ -3507,6 +3510,11 @@ h1 {
   cursor: pointer;
 }
 .sheet-toggle:hover { border-color: var(--color-header-rule); }
+/* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
+   after the one above, which would otherwise show the button again. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .stack-caption .sheet-toggle { display: none; }
+}
 /* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
    text color. Replace that file to change the arrow. It points right when the card
    is closed and turns down when it is open. */
@@ -3540,7 +3548,11 @@ h1 {
 .stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 1rem; }
 .stack-sheet__kind { color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
 .stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
-.stack-sheet__text { margin-top: 0.7rem; color: var(--color-body); line-height: 1.45; }
+/* The type and ink of the goal lead at the top of the page (16px, regular). */
+.stack-sheet__text { margin-top: 0.7rem; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
+/* Dark: the rule above the sheet and the "Component" label in Pale purple. */
+:root[data-theme="dark"] .stack-sheet { border-top-color: #dcbaf6; }
+:root[data-theme="dark"] .stack-sheet__kind { color: #dcbaf6; }
 .stack-sheet__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.2em; margin: 1.1rem 0 0; font-size: 0.875rem; }
 .stack-sheet__facts dt,
 .stack-sheet__facts dd { margin: 0; padding: 0.5em 0; border-top: 1px solid var(--color-schema-line); }
@@ -3549,3 +3561,13 @@ h1 {
 .stack-sheet__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
 .stack-sheet__link { padding: 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: 500; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .stack-sheet__link:hover { color: var(--color-link-hover); }
+/* No rule between the description and the first fact. */
+.stack-sheet__facts > :nth-child(-n + 2) { border-top: 0; }
+/* Each label sits above its value, so the long labels ("Part of the layer") leave
+   the full width to the names. One rule between two facts. */
+.stack-sheet__facts { grid-template-columns: minmax(0, 1fr); }
+.stack-sheet__facts dt { padding-bottom: 0.15em; }
+.stack-sheet__facts dd { padding-top: 0; border-top: 0; }
+/* Dark: the links in Pink. On Cream, Pink is 2.0:1, so light keeps Mid purple. */
+:root[data-theme="dark"] .stack-sheet__link { color: var(--color-pink); }
+:root[data-theme="dark"] .stack-sheet__link:hover { color: var(--color-link-hover); }
