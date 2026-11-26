@@ -611,7 +611,7 @@ h1 {
 /* Dark: the three goal titles match the page title. */
 :root[data-theme="dark"] .goal__point-title { color: var(--color-title); }
 /* The ink of the Hello World principles, which is the ink of the page title. */
-.goal__point-text { display: block; color: var(--color-title); }
+.goal__point-text { display: block; margin-top: 6px; color: var(--color-title); }
 
 /* --- Architecture diagram -----------------------------------------------
    Sized in em so the downloaded image can render it at a fixed size.       */
@@ -3495,7 +3495,7 @@ h1 {
 /* The bar above the schema: the heading with the hint under it on the left, the
    button of the sheet on the right, centered on them. 48px above it, so it reads
    apart from the goals; 4px between the heading and the hint; 16px to the schema. */
-.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 2rem; }
+.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 42px; }
 .stack-caption__text { min-width: 0; }
 .stack-caption .stack-heading { margin: 0 0 0.25rem; }
 .stack-caption .hint { margin-bottom: 0; }

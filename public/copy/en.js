@@ -184,7 +184,7 @@ window.CAIRN_COPY.en = {
     // The line above the schema. A wide screen shows the selected box in the sheet
     // beside the schema; a narrow screen shows it in a pop-up.
     // The heading above the schema.
-    heading: "LaStack, layer by layer",
+    heading: "LaStack, layer by layer, component by component",
     hint: "Select any box to see what it does.",
     // The sheet beside the schema: the facts under the description of the selected box.
     // The names of layers and components in these facts are links to their boxes.
@@ -199,7 +199,7 @@ window.CAIRN_COPY.en = {
       allLayers: "All layers",
       // The button above the sheet, with an arrow. The sheet is hidden at first: the
       // schema takes the full width. A click on a box opens the sheet; Escape closes it.
-      title: "Component card",
+      title: "Description card",
       // The name of the × in the top right corner of the sheet, for screen readers and on hover.
       close: "Close the card",
     },

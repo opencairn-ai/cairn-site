@@ -185,7 +185,7 @@ window.CAIRN_COPY.fr = {
     // La ligne au-dessus du schéma. Un grand écran montre la case sélectionnée dans la
     // fiche à côté du schéma ; un petit écran la montre dans une infobulle.
     // Le titre au-dessus du schéma.
-    heading: "LaStack, couche par couche",
+    heading: "LaStack, couche par couche, composant par composant",
     hint: "Sélectionnez une case pour voir son rôle.",
     // La fiche à côté du schéma : les faits sous la description de la case sélectionnée.
     // Les noms de couches et de composants dans ces faits sont des liens vers leurs cases.
@@ -200,7 +200,7 @@ window.CAIRN_COPY.fr = {
       allLayers: "Toutes les couches",
       // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :
       // le schéma prend toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
-      title: "Fiche composant",
+      title: "Fiche explicative",
       // Le nom du × en haut à droite de la fiche, pour les lecteurs d’écran et au survol.
       close: "Fermer la fiche",
     },
