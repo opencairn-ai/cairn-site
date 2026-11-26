@@ -396,6 +396,8 @@ window.CAIRN_COPY.en = {
       useCase: "Use case",
       // The first choice of the menu: it removes the filter.
       all: "All",
+      // The name of a filter before its value, on the filter pill: "Hardware: All".
+      name: "{name}:",
       // The search field: its name for screen readers, and the text it shows while empty.
       model: "Model",
       modelPlaceholder: "Model name",
@@ -411,6 +413,12 @@ window.CAIRN_COPY.en = {
       tools: "Tool calling",
       reasoning: "Reasoning",
       useCase: "Use case",
+    },
+    // Short titles for the head of the table, so each fits on one line. The full
+    // names above stay for screen readers, the hover text and the card.
+    columnsShort: {
+      server: "Server",
+      tools: "Tools",
     },
     // The facts of the selected recipe, in the sheet. {count} is a number of tokens.
     facts: {

@@ -146,9 +146,11 @@
     // A press on the menu must not take the focus from the button: the menu closes when the button loses it.
     list.addEventListener("pointerdown", (event) => event.preventDefault());
 
-    // At rest the button shows the name of the filter. With a choice, it shows the choice.
+    // A pill with the name of the filter and its value: "Hardware: All", then the
+    // choice ("Hardware: CPU"). The pill shape tells a filter from the card button.
     const button = el("button", "recipe-select", [
-      el("span", "recipe-select__value", [chosen ? chosen.label : label]),
+      el("span", "recipe-select__name", [text("filters.name", { name: label })]),
+      el("span", "recipe-select__value", [chosen ? chosen.label : text("filters.all")]),
       icon("m6 9 6 6 6-6", "recipe-select__caret"),
     ]);
     button.type = "button";
@@ -158,7 +160,7 @@
     button.setAttribute("aria-haspopup", "listbox");
     button.setAttribute("aria-controls", list.id);
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-label", chosen ? `${label}: ${chosen.label}` : label);
+    button.setAttribute("aria-label", `${label}: ${chosen ? chosen.label : text("filters.all")}`);
 
     const optionNodes = () => [...list.querySelectorAll('[role="option"]')];
     const isOpen = () => !list.hidden;
@@ -277,23 +279,29 @@
   function renderColumns() {
     const columns = document.getElementById("recipe-columns");
     if (!columns) return;
-    const heading = (label, tip, className) => {
-      const cell = el("th", className, [label]);
+    // A column title. The table shows the short title when there is one
+    // (columnsShort); the full name (columns) stays for screen readers, for the
+    // hover text, for the pop-up and for the facts of the card.
+    const heading = (key, tip, className) => {
+      const label = text(`columns.${key}`);
+      const shown = shortTitle(key);
+      const cell = el("th", className, [shown]);
       cell.scope = "col";
+      if (shown !== label) { cell.setAttribute("aria-label", label); cell.title = label; }
       if (tip) {
-        const name = el("span", "recipe-tip", [label]);
+        const name = el("span", "recipe-tip", [shown]);
         setTip(name, text("tips.kinds.fact"), label, tip);
         cell.replaceChildren(name);
       }
       return cell;
     };
     columns.replaceChildren(el("tr", null, [
-      heading(text("columns.model")),
-      heading(text("columns.hardware")),
-      heading(text("columns.server")),
-      heading(text("columns.context"), text("tips.tags.context"), "recipe-col-context"),
-      heading(text("columns.tools"), text("tips.tags.tools"), "recipe-col-mark"),
-      heading(text("columns.reasoning"), text("tips.tags.reasoning"), "recipe-col-mark"),
+      heading("model"),
+      heading("hardware"),
+      heading("server"),
+      heading("context", text("tips.tags.context"), "recipe-col-context"),
+      heading("tools", text("tips.tags.tools"), "recipe-col-mark"),
+      heading("reasoning", text("tips.tags.reasoning"), "recipe-col-mark"),
       useCaseHeading(),
     ]));
   }
@@ -302,9 +310,17 @@
   // with the sources of the benchmark data that the use cases read, and their
   // links. It is a popover: a click or a tap opens it, Escape or a click outside
   // closes it, and the keyboard reaches its links after the button.
+  // The short title of a column, or its full name when it has none.
+  function shortTitle(key) {
+    return app.t(`recipes.columnsShort.${key}`, { optional: true }) || text(`columns.${key}`);
+  }
+
   function useCaseHeading() {
-    const cell = el("th", null, [text("columns.useCase")]);
+    const label = text("columns.useCase");
+    const shown = shortTitle("useCase");
+    const cell = el("th", null, [shown]);
     cell.scope = "col";
+    if (shown !== label) { cell.setAttribute("aria-label", label); cell.title = label; }
     const sources = (data.benchmarks && data.benchmarks.sources) || [];
     if (!sources.length || !USE_CASES.length || !HTMLElement.prototype.togglePopover) return cell;
 

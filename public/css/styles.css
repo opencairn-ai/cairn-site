@@ -2947,16 +2947,18 @@ h1 {
   font-size: 0.875rem;
 }
 
-.recipe-dropdown { position: relative; display: flex; flex: 0 1 14em; min-width: 0; }
+/* Each pill takes the width of its name and value. */
+.recipe-dropdown { position: relative; display: flex; flex: 0 1 auto; min-width: 0; max-width: 100%; }
 .recipe-search { display: flex; flex: 1 1 14em; max-width: 22em; min-width: 0; }
 
-/* Each filter is a field: a box of the stack schema (its fill and 1px line), 34px
-   high and with the 6px corners of the buttons. */
+/* Each filter is a pill: the fill and 1px line of a box of the stack schema, 34px
+   high, with fully round ends, so it never reads as a button (buttons have 6px
+   corners). */
 .recipe-select,
 .recipe-input {
-  padding: 8px 12px;
+  padding: 8px 14px;
   border: 1px solid var(--color-schema-line);
-  border-radius: 6px;
+  border-radius: 999px;
   background: var(--color-component);
   color: var(--color-text);
   font: inherit;
@@ -2968,13 +2970,15 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4em;
+  gap: 0.3em;
   width: 100%;
   min-width: 0;
   text-align: left;
   cursor: pointer;
 }
-.recipe-select__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The name of the filter in the caption grey, then its value in the text ink. */
+.recipe-select__name { flex: none; color: var(--color-text-muted); font-weight: 400; }
+.recipe-select__value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
 
 .recipe-input { flex: 1; min-width: 0; }
@@ -3055,21 +3059,29 @@ h1 {
 
 .recipe-table { width: 100%; border-collapse: collapse; }
 
-/* The column titles: in the ink of the titles, on the ground of the panel, with a
-   strong rule under them. They stay at the top while the rows scroll. */
+/* The column titles: small capitals in the caption grey, 12px and spaced, as the
+   label of the filter menus, so they read apart from the data. On the ground of
+   the panel, with a strong rule under them. They stay at the top while the rows
+   scroll. */
 .recipe-table th {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 0.75em 0.6em 0.6em;
+  padding: 12px 0.6rem 10px;
   background: var(--color-layer);
   box-shadow: inset 0 -1px 0 var(--color-header-rule);
-  color: var(--color-title);
-  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
   font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
   text-align: left;
+  text-transform: uppercase;
   vertical-align: bottom;
 }
+
+/* Dark: the band of the column titles in Deep purple, the ground of the page. */
+:root[data-theme="dark"] .recipe-table th { background: #291435; }
 
 .recipe-table td {
   padding: 0.6em;
@@ -3079,7 +3091,7 @@ h1 {
 }
 
 .recipe-table th:first-child,
-.recipe-table td:first-child { padding-left: 0.8em; }
+.recipe-table td:first-child { padding-left: 0.8rem; }
 
 .recipe-row { cursor: pointer; }
 .recipe-row:hover td { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }

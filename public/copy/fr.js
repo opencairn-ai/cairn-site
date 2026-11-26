@@ -398,6 +398,8 @@ window.CAIRN_COPY.fr = {
       useCase: "Cas d’utilisation",
       // Le premier choix du menu : il retire le filtre.
       all: "Tous",
+      // Le nom d’un filtre avant sa valeur, sur la pastille du filtre : « Matériel : Tous ».
+      name: "{name}\u00a0:",
       // Le champ de recherche : son nom pour les lecteurs d’écran, et le texte qu’il affiche quand il est vide.
       model: "Modèle",
       modelPlaceholder: "Nom du modèle",
@@ -413,6 +415,14 @@ window.CAIRN_COPY.fr = {
       tools: "Appel d’outils",
       reasoning: "Raisonnement",
       useCase: "Cas d’utilisation",
+    },
+    // Les titres courts de l’en-tête du tableau, pour que chacun tienne sur une
+    // ligne. Les noms complets ci-dessus restent pour les lecteurs d’écran, le texte
+    // au survol et la fiche.
+    columnsShort: {
+      server: "Serveur",
+      tools: "Outils",
+      useCase: "Usage",
     },
     // Les faits de la recette sélectionnée, dans la fiche. {count} est un nombre de jetons.
     facts: {
