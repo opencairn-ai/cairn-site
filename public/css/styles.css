@@ -3519,11 +3519,12 @@ h1 {
   cursor: pointer;
 }
 .sheet-toggle:hover { background: var(--color-button-hover); }
-/* Dark: the hover fill of the outlined and borderless buttons is Pale purple, so
-   the label and icon turn Deep purple (10:1), with a Mid purple border. The
-   primary, footer and error buttons keep their own hover. */
-:root[data-theme="dark"] .btn:not(.btn--primary):not(.footer-btn):not(.is-error):hover,
+/* Dark: the hover fill of the primary, outlined and borderless buttons is Pale
+   purple, so the label and icon turn Deep purple (10:1), with a Mid purple border.
+   The footer and error buttons keep their own hover. */
+:root[data-theme="dark"] .btn:not(.footer-btn):not(.is-error):hover,
 :root[data-theme="dark"] .sheet-toggle:hover { border-color: #734c90; color: #291435; }
+:root[data-theme="dark"] .btn--primary:hover { background: var(--color-button-hover); opacity: 1; }
 :root[data-theme="dark"] .what__links .btn:hover img { filter: none; }
 /* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
    after the one above, which would otherwise show the button again. */
