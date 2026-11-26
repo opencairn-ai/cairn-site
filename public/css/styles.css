@@ -2905,49 +2905,63 @@ h1 {
 
 /* The intro uses the page templates (.intro, .page-lead), then the section bar. */
 
-/* The table with its filters on the left, the sheet of the selected recipe on the right. */
+/* The filters, then the table, on the left; the card of the selected recipe on
+   the right, on the row of the table, so its rule lines up with the top of the
+   table. 12px between the filters and the table. */
 .recipe-body {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-  gap: 2rem;
+  grid-template-rows: auto auto;
+  gap: 12px 2rem;
   padding-bottom: 0.4rem;
   font-size: 1rem;
   line-height: 1.25;
 }
 
-.recipe-finder,
 .recipe-list {
   display: flex;
   flex-direction: column;
-  gap: 0.9em;
   min-width: 0;
 }
 
-.recipe-list { gap: 0.5em; }
+/* The wrapper of the filters and the table lets them sit in the grid of the page
+   on their own rows. */
+.recipe-finder { display: contents; }
 
-/* --- Filters: two menus and the search field, each a field on a 1px line --- */
+/* The table panel: the ground and corners of a layer of the stack schema, with
+   the 1px line of its boxes. It clips the rows to its corners. */
+.recipe-list {
+  overflow: hidden;
+  border: 1px solid var(--color-schema-line);
+  border-radius: var(--radius-md);
+  background: var(--color-layer);
+}
 
-/* 14px at a 16px root: the size of the design system's field and menu item. */
+/* --- Filters: two menus and the search field, above the table panel --- */
+
+/* 14px: the size of the design system's field and menu item. */
 .recipe-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6em 1.6em;
+  gap: 8px 12px;
   font-size: 0.875rem;
 }
 
 .recipe-dropdown { position: relative; display: flex; flex: 0 1 14em; min-width: 0; }
 .recipe-search { display: flex; flex: 1 1 14em; max-width: 22em; min-width: 0; }
 
+/* Each filter is a field: a box of the stack schema (its fill and 1px line), 34px
+   high and with the 6px corners of the buttons. */
 .recipe-select,
 .recipe-input {
-  padding: 0.5em 0.3em;
-  border: 0;
-  border-bottom: 1px solid var(--color-header-rule);
-  border-radius: 0;
-  background: transparent;
+  padding: 8px 12px;
+  border: 1px solid var(--color-schema-line);
+  border-radius: 6px;
+  background: var(--color-component);
   color: var(--color-text);
   font: inherit;
   font-weight: 500;
+  line-height: 16px;
 }
 
 .recipe-select {
@@ -2974,10 +2988,9 @@ h1 {
   outline: none;
 }
 
-/* A menu with a choice: the band of the selected recipe, and a 2px line. */
+/* A menu with a choice: the band of the selected recipe, and a line in the ink. */
 .recipe-select[data-chosen="true"] {
-  padding-bottom: calc(0.5em - 1px);
-  border-bottom-width: 2px;
+  border-color: var(--color-title);
   background: var(--recipe-band);
   font-weight: 600;
 }
@@ -3036,20 +3049,22 @@ h1 {
   overflow: auto;
   overscroll-behavior: contain;
   background:
-    linear-gradient(transparent, var(--color-bg) 70%) bottom / 100% 2.5rem no-repeat local,
+    linear-gradient(transparent, var(--color-layer) 70%) bottom / 100% 2.5rem no-repeat local,
     linear-gradient(transparent, var(--recipe-shade)) bottom / 100% 1rem no-repeat scroll;
 }
 
 .recipe-table { width: 100%; border-collapse: collapse; }
 
+/* The column titles: in the ink of the titles, on the ground of the panel, with a
+   strong rule under them. They stay at the top while the rows scroll. */
 .recipe-table th {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 0.2em 0.6em 0.6em;
-  background: var(--color-bg);
+  padding: 0.75em 0.6em 0.6em;
+  background: var(--color-layer);
   box-shadow: inset 0 -1px 0 var(--color-header-rule);
-  color: var(--color-text-muted);
+  color: var(--color-title);
   font-size: 0.875rem;
   font-weight: 600;
   text-align: left;
@@ -3221,7 +3236,9 @@ h1 {
 
 /* Wide screens: the sheet stays in view while the page scrolls. */
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) {
-  .recipe-sheet { position: sticky; top: 1rem; align-self: start; }
+  .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
+  .recipe-filters,
+  .recipe-list { grid-column: 1; }
 }
 
 /* Wide screens below 1400px: the table gets more of the width, and long model
@@ -3238,12 +3255,12 @@ h1 {
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 46em) {
   body[data-page="recipes"] .page { height: 100vh; height: 100dvh; min-height: 0; }
   body[data-page="recipes"] main { flex: 1; min-height: 0; }
-  .recipe-body { flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+  .recipe-body { flex: 1; grid-template-rows: auto minmax(0, 1fr); min-height: 0; }
   .recipe-finder,
   .recipe-list { min-height: 0; }
   .recipe-list { flex: 1; }
   .recipe-scroll { flex: 1; min-height: 0; max-height: none; }
-  .recipe-sheet { position: relative; align-self: stretch; min-height: 0; }
+  .recipe-sheet { position: relative; top: auto; align-self: stretch; min-height: 0; }
   .recipe-files { flex: 1; }
   .recipe-files .recipe-code { flex: 1 1 auto; min-height: 5rem; }
   .recipe-code--file pre { min-height: 0; max-height: none; }
@@ -3251,8 +3268,8 @@ h1 {
 
 /* Narrow screens: the sheet goes under the table. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .recipe-body { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
-  .recipe-sheet { scroll-margin-top: 0.5rem; }
+  .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-sheet { margin-top: calc(1.6rem - 12px); scroll-margin-top: 0.5rem; }
 }
 
 /* Phones: the search on its own line. The table scrolls sideways, and the model
@@ -3260,7 +3277,7 @@ h1 {
 @media (max-width: 640px) {
   .recipe-search { flex-basis: 100%; max-width: none; }
   .recipe-table th:first-child,
-  .recipe-table td:first-child { position: sticky; left: 0; background: var(--color-bg); }
+  .recipe-table td:first-child { position: sticky; left: 0; background: var(--color-layer); }
   .recipe-table th:first-child { z-index: 2; }
   .recipe-row.is-selected td:first-child { background: var(--recipe-band); }
 }
