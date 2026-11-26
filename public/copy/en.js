@@ -197,6 +197,8 @@ window.CAIRN_COPY.en = {
       // The button above the sheet, with an arrow. The sheet is hidden at first: the
       // schema takes the full width. A click on a box opens the sheet; Escape closes it.
       title: "Component card",
+      // The name of the × in the top right corner of the sheet, for screen readers and on hover.
+      close: "Close the card",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "Applies to all layers",

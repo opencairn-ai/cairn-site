@@ -3547,6 +3547,30 @@ h1 {
    and the facts as label | value rows. Names in the facts are links to their boxes. */
 .stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 1rem; }
 .stack-sheet__kind { color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
+/* The × that closes the sheet: the ghost icon button of the phone pop-up, in the
+   top right corner, on the line of the kind. The kind and name keep clear of it.
+   The sheet is sticky, so the button sits in its corner. */
+.stack-sheet__close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-title);
+  cursor: pointer;
+}
+.stack-sheet__close svg { width: 20px; height: 20px; }
+/* A light wash of the ink: Deep purple on Cream, white on Deep purple. */
+.stack-sheet__close:hover { background: rgb(41 20 53 / 0.06); }
+:root[data-theme="dark"] .stack-sheet__close:hover { background: rgb(255 255 255 / 0.1); }
+.stack-sheet__kind,
+.stack-sheet__name { padding-right: 2.5rem; }
 .stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
 /* The type and ink of the goal lead at the top of the page (16px, regular). */
 .stack-sheet__text { margin-top: 0.7rem; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }

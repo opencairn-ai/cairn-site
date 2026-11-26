@@ -198,6 +198,8 @@ window.CAIRN_COPY.fr = {
       // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :
       // le schéma prend toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
       title: "Fiche composant",
+      // Le nom du × en haut à droite de la fiche, pour les lecteurs d’écran et au survol.
+      close: "Fermer la fiche",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "S’applique à toutes les couches",

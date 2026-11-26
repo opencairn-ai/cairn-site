@@ -3,8 +3,8 @@
  *
  * A wide screen shows the sheet; a narrow screen keeps the pop-ups of the schema
  * (js/app.js). On a wide screen the sheet is hidden at first; a click, or Enter
- * and Space, selects a box and opens the sheet. The same again on the open box,
- * or Escape, closes it. The sheet shows its kind, its name and its description,
+ * and Space, selects a box and opens the sheet. The × of the sheet, the button
+ * above it, or Escape, closes it. The sheet shows its kind, its name and its description,
  * then its facts: the layer of a component
  * and the other components of that layer, or the components of a layer. The
  * names in the facts are links to their boxes. The address names the selected
@@ -46,6 +46,21 @@
     return button;
   }
 
+  // The × in the top right corner of the sheet: it closes the sheet and gives the
+  // focus back to the selected box. The cross is the one of the phone pop-up.
+  function closeButton() {
+    const button = el("button", "stack-sheet__close");
+    button.type = "button";
+    button.setAttribute("aria-label", t("diagram.sheet.close"));
+    button.title = t("diagram.sheet.close");
+    button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg>';
+    button.addEventListener("click", () => {
+      setShown(false);
+      if (selected) selected.focus({ preventScroll: true });
+    });
+    return button;
+  }
+
   function render(node, step) {
     const entry = entries.get(node);
     const facts = [];
@@ -70,6 +85,7 @@
     }
 
     sheet.replaceChildren(...[
+      closeButton(),
       el("p", "stack-sheet__kind", [t(`diagram.kinds.${entry.kind}`)]),
       el("h2", "stack-sheet__name", [entry.name]),
       el("p", "stack-sheet__text", [entry.tooltip]),
@@ -115,9 +131,9 @@
   const targetOf = (event) => (event.target instanceof Element ? event.target.closest("[data-copy]") : null);
   const wide = () => app.sheetQuery.matches;
 
-  // A second click (or Enter and Space) on the open box closes its details.
+  // A click (or Enter and Space) on a box always selects it and opens its details,
+  // even on the box already open: the × of the sheet and Escape close them.
   function open(node) {
-    if (node === selected && shown()) return setShown(false);
     select(node);
     setShown(true);
   }
