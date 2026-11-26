@@ -2896,7 +2896,7 @@ h1 {
 :root[data-theme="dark"] .recipe-body {
   --recipe-band: #614972;            /* The selected row and a chosen filter: the line of the panel */
   --recipe-rule: rgb(245 232 255 / 0.16);
-  --recipe-bar: #dcbaf6;             /* Pale purple */
+  --recipe-bar: #fd70f5;             /* The context bars: Pink */
   --recipe-track: rgb(245 232 255 / 0.12);
   --recipe-shade: rgb(0 0 0 / 0.35);
   --recipe-menu-line: #734c90;       /* Secondary light purple */
@@ -3070,7 +3070,7 @@ h1 {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 12px 0.6rem 10px;
+  padding: 8px 0.6rem;
   background: var(--recipe-panel, var(--color-layer));
   box-shadow: inset 0 -1px 0 var(--color-header-rule);
   color: var(--color-text-muted);
@@ -3080,7 +3080,7 @@ h1 {
   letter-spacing: 0.06em;
   text-align: left;
   text-transform: uppercase;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 
 /* Dark: the band of the column titles in Deep purple, the ground of the page. */
@@ -3122,6 +3122,9 @@ h1 {
 .recipe-pick__publisher { display: block; margin-top: 0.15em; color: var(--color-text-muted); font-size: 0.875rem; }
 
 .recipe-cell-nowrap { white-space: nowrap; }
+/* The values after the model (hardware, server, context, use case): 14px, so the
+   model name, at 16px, leads the row and the columns take less room. */
+.recipe-table td:not(.recipe-cell-model) { font-size: 0.875rem; }
 .recipe-table .recipe-col-mark,
 .recipe-table .recipe-cell-mark { text-align: center; }
 .recipe-cell-uses { color: var(--color-body); }
@@ -3138,55 +3141,29 @@ h1 {
 .recipe-mark { display: inline-block; width: 0.6em; height: 0.6em; border: 1.5px solid var(--color-text-muted); border-radius: 50%; vertical-align: middle; }
 .recipe-mark.is-on { border-color: var(--color-text); background: var(--color-text); }
 
-/* A column heading or a use case with a pop-up: a dotted underline. */
-.recipe-tip {
-  cursor: help;
-  text-decoration: underline dotted;
-  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
-  text-underline-offset: 3px;
+/* LINK SIGNS (whole site). Two signs only:
+   - a solid underline is a link: it goes somewhere or selects something;
+   - an ⓘ after a word is an explanation: it opens a pop-up, and is not a link.
+   An ↗ after a link is kept for links that leave the site (.recipe-link).
+   The ⓘ: a 12px circled i, painted in the text color. */
+.recipe-tip { cursor: help; white-space: nowrap; }
+.recipe-tip::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 11v6'/%3E%3Ccircle cx='12' cy='7.5' r='1' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 11v6'/%3E%3Ccircle cx='12' cy='7.5' r='1' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
 }
+.recipe-tip::after { margin-left: 4px; vertical-align: -1px; }
 
 .recipe-empty { padding: 1em 0.8em; color: var(--color-body); }
 
-/* The "?" button next to the "Use case" heading, and its pop-up with the
-   sources of the benchmark data. The pop-up has the colors of the pop-ups of
-   the schema; the script places it under the button. */
-.recipe-about-button {
-  display: inline-grid;
-  place-items: center;
-  width: 1.4em;
-  height: 1.4em;
-  margin-left: 0.4em;
-  padding: 0;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  background: none;
-  color: var(--color-text-muted);
-  font: 600 0.75rem/1 var(--font-sans);
-  vertical-align: 0.1em;
-  cursor: pointer;
-}
-.recipe-about-button:hover,
-.recipe-about-button[aria-expanded="true"] { color: var(--color-text); }
-
-.recipe-about {
-  position: fixed;
-  inset: auto;
-  max-width: min(22rem, calc(100vw - 32px));
-  margin: 0;
-  padding: 0.7rem 0.9rem 0.8rem;
-  border: 0;
-  border-radius: var(--radius-ui-sm);
-  background: var(--color-tip-bg);
-  box-shadow: 0 8px 24px var(--color-tip-shadow);
-  color: var(--color-tip-text);
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.4;
-  text-align: left;
-  white-space: normal;
-}
-.recipe-about .recipe-link { color: inherit; font-size: inherit; }
+/* Under the use cases in the card: where they come from, with links to the
+   sources of the benchmark data. 12px, in the caption grey. */
+.card__note { display: block; margin-top: 4px; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 400; line-height: 1.4; }
+.card__note .recipe-link { font-size: inherit; }
 
 /* --- The sheet: the name and the facts, then the files --- */
 
@@ -3259,6 +3236,9 @@ h1 {
   .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
   .recipe-filters,
   .recipe-list { grid-column: 1; }
+  /* No sideways scroll on a wide screen: long model names break at their
+     hyphens, so the seven columns fit the panel. */
+  .recipe-pick__model { white-space: normal; }
 }
 
 /* Wide screens below 1400px: the table gets more of the width, and long model
@@ -3385,17 +3365,16 @@ h1 {
 .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); font-weight: 400; }
 
 /* The layer of an item: a quiet link to its box on the stack page, with the
-   dotted line of the words that have more to tell (as on the recipes page). */
+   solid underline of every link (see LINK SIGNS). */
 .roadmap-tag {
   margin-top: 0.2rem;
   color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 500;
-  text-decoration: underline dotted;
-  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  text-decoration: underline;
   text-underline-offset: 3px;
 }
-.roadmap-tag:hover { color: var(--color-link); text-decoration-style: solid; }
+.roadmap-tag:hover { color: var(--color-link); }
 
 /* Narrow screens: four columns do not fit. Each workstream is a group: its name,
    then its three cells one under the other, each with the name of its column.

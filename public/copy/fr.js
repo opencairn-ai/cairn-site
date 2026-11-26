@@ -445,11 +445,9 @@ window.CAIRN_COPY.fr = {
       chat: "Conversation",
       coding: "Programmation",
       documents: "Documents",
-      // L’infobulle du bouton « ? » à côté de l’en-tête « Cas d’utilisation » :
-      // « … de Hugging Face et Artificial Analysis. » Les liens suivent ce texte.
+      // Sous les cas d’utilisation, dans la fiche : « … de Hugging Face et
+      // Artificial Analysis. » Les liens suivent ce texte.
       credit: "Les cas d’utilisation s’appuient sur des données d’évaluation de",
-      // Le nom du bouton « ? », pour les lecteurs d’écran et comme info-bulle.
-      about: "À propos des cas d’utilisation",
       creditAnd: "et",
     },
     // L’infobulle d’un en-tête de colonne ou d’un cas d’utilisation : son type, son nom, puis sa description.

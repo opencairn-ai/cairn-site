@@ -321,42 +321,15 @@
   function useCaseHeading() {
     const label = text("columns.useCase");
     const shown = shortTitle("useCase");
-    const cell = el("th", null, [shown]);
+    // The title carries the ⓘ: its pop-up explains each use case, one per line
+    // ("Conversation: …"). The words in the rows have no ⓘ of their own.
+    const name = el("span", "recipe-tip", [shown]);
+    setTip(name, text("tips.kinds.useCase"), label, USE_CASES
+      .map((useCase) => `${text("filters.name", { name: useCase.label })} ${text(`tips.useCases.${useCase.id}`)}`)
+      .join("\n"));
+    const cell = el("th", null, [name]);
     cell.scope = "col";
     if (shown !== label) { cell.setAttribute("aria-label", label); cell.title = label; }
-    const sources = (data.benchmarks && data.benchmarks.sources) || [];
-    if (!sources.length || !USE_CASES.length || !HTMLElement.prototype.togglePopover) return cell;
-
-    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
-    const about = el("div", "recipe-about", [
-      el("p", "tip__kind", [text("columns.useCase")]),
-      el("p", null, [text("useCases.credit"), ...links, "."]),
-    ]);
-    about.id = "recipe-about";
-    about.popover = "auto";
-
-    const button = el("button", "recipe-about-button", ["?"]);
-    button.type = "button";
-    button.setAttribute("popovertarget", about.id);
-    button.setAttribute("aria-label", text("useCases.about"));
-    button.title = text("useCases.about");
-
-    // Under the button, and always on screen. It closes when the table or the page scrolls.
-    about.addEventListener("toggle", (event) => {
-      button.setAttribute("aria-expanded", String(event.newState === "open"));
-      if (event.newState !== "open") return;
-      const box = button.getBoundingClientRect();
-      const margin = 8;
-      const { width } = about.getBoundingClientRect();
-      about.style.top = `${Math.round(box.bottom + margin)}px`;
-      about.style.left = `${Math.round(Math.max(margin, Math.min(box.left + box.width / 2 - width / 2, document.documentElement.clientWidth - width - margin)))}px`;
-    });
-    const close = () => { if (about.matches(":popover-open")) about.hidePopover(); };
-    results.closest(".recipe-scroll")?.addEventListener("scroll", close, { passive: true });
-    window.addEventListener("scroll", close, { passive: true });
-    window.addEventListener("resize", close);
-
-    cell.append(button, about);
     return cell;
   }
 
@@ -367,11 +340,8 @@
     const pick = el("button", "recipe-pick", [el("span", "recipe-pick__model", [r.model]), el("span", "recipe-pick__publisher", [r.publisher])]);
     pick.type = "button";
     pick.setAttribute("aria-pressed", String(selected));
-    const useCases = (r.useCases || []).flatMap((id, i) => {
-      const name = el("span", "recipe-tip", [text(`useCases.${id}`)]);
-      setTip(name, text("tips.kinds.useCase"), text(`useCases.${id}`), text(`tips.useCases.${id}`));
-      return i ? [", ", name] : [name];
-    });
+    // The use cases in plain words: the ⓘ of the column title explains them.
+    const useCases = (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ");
     const row = el("tr", `recipe-row${selected ? " is-selected" : ""}`, [
       el("td", "recipe-cell-model", [pick]),
       el("td", "recipe-cell-nowrap", [r.hardwareLabel]),
@@ -379,7 +349,7 @@
       el("td", null, [contextBar(r.facts.context)]),
       el("td", "recipe-cell-mark", [mark(r.facts.tools)]),
       el("td", "recipe-cell-mark", [mark(r.facts.reasoning)]),
-      el("td", "recipe-cell-uses", useCases),
+      el("td", "recipe-cell-uses", [useCases]),
     ]);
     row.addEventListener("click", (event) => {
       state.selected = r.id;
@@ -433,6 +403,8 @@
       kind.textContent = node.dataset.tipKind;
       name.textContent = node.dataset.tipName;
       description.textContent = node.dataset.tipText;
+      // A text of several lines (the use cases) keeps its lines.
+      description.style.whiteSpace = "pre-line";
 
       // Above the tag when there is room, otherwise below; always on screen.
       const box = node.getBoundingClientRect();
@@ -495,7 +467,7 @@
       ...fact(text("columns.hardware"), r.hardwareLabel),
       ...fact(text("columns.server"), r.serverLabel),
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
-      ...fact(text("columns.useCase"), (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", "), true),
+      ...fact(text("columns.useCase"), useCasesFact(r), true),
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
       ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
       ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
@@ -522,6 +494,17 @@
         codeBlock(file.text, "recipe-code--file", file.name),
       ]),
     ].filter(Boolean));
+  }
+
+  // The use cases of a recipe in the card, then where they come from: the sources
+  // of the benchmark data, with their links (they used to sit in a pop-up on the
+  // column title).
+  function useCasesFact(r) {
+    const uses = (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ");
+    const sources = (data.benchmarks && data.benchmarks.sources) || [];
+    if (!sources.length) return uses;
+    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
+    return el("span", null, [uses, el("span", "card__note", [text("useCases.credit"), ...links, "."])]);
   }
 
   // The steps to install the recipe. Shown only when the stack repository is public.

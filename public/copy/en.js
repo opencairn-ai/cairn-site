@@ -440,11 +440,9 @@ window.CAIRN_COPY.en = {
       chat: "Chat",
       coding: "Coding",
       documents: "Documents",
-      // The pop-up of the "?" button next to the "Use case" heading:
-      // "… from Hugging Face and Artificial Analysis." The links go after this text.
+      // Under the use cases, in the card: "… from Hugging Face and Artificial
+      // Analysis." The links go after this text.
       credit: "The use cases use benchmark data from",
-      // The name of the "?" button, for screen readers and as its tooltip.
-      about: "About the use cases",
       creditAnd: "and",
     },
     // The pop-up of a column heading or a use case: its kind, its name, then its description.
