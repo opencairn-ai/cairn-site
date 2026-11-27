@@ -36,12 +36,13 @@ and dark. Use the token, never the color.
 | `--mark-yes` | The check of a yes (light: Moss #5C7065; dark: River #63BCC1) |
 | `--mark-no` | The cross of a no (light: Stone #A08F79; dark: the caption grey) |
 | `--field-bg` | A filter pill |
-| `--select-band` | A chosen filter pill |
+| `--select-band` | A filter pill with a choice (light: Beige #D0C2B1; dark: #614972) |
 | `--row-hover-bg`, `--row-hover-ink` | The row or menu item under the pointer (dark: Pale purple 30%, white words) |
 | `--row-selected-bg`, `--row-selected-ink` | The selected row or chosen menu item (dark: Pale purple, Deep purple words) |
 | `--row-rule` | The line between two rows |
 | `--scroll-shade` | The shade at the bottom of a panel that scrolls |
 | `--menu-line` | The border of an open menu |
+| `--menu-selected-bg` | The chosen item of a menu (light: Marshmallow #F5E8FF; dark: Pale purple); a ticked box is filled with the item's ink |
 | `--code-bg` | The code block |
 
 ## 1. Page intro
