@@ -115,7 +115,9 @@ capitals in the caption grey on a band; values after the first column are 14px.
 Rows: hover and selection from the tokens; every row ends with a › arrow (a click
 opens the item in the card). The panel ends at its last row and scrolls inside
 past 70% of the window. The first column fits its content; the others share the
-rest.
+rest. At 900px and less the table becomes a simple list: no column titles, each
+row shows its first column with a short line under it (Model Recipes: "hardware ·
+server") and the arrow, and the other facts are in the card under the list.
 
 ```html
 <section class="data-panel">

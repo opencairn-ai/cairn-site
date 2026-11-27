@@ -392,6 +392,7 @@
       button.focus();
     });
     header.querySelector(".codename").after(button);
+    header.classList.add("has-menu");
   }
 
   // Marks the current tab and prepares the links between pages (the tabs and the logo).
