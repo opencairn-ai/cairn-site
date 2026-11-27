@@ -3054,6 +3054,19 @@ h1 {
 :root[data-theme="dark"] .recipe-menu__item.is-active { background: rgb(220 186 246 / 0.3); color: #ffffff; }
 :root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] { background: #dcbaf6; color: #291435; }
 :root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] .recipe-menu__check { color: #291435; }
+/* A menu with several choices (use case): a 16px box before each choice, with a
+   1.5px line, ticked with a check in the ink of the item. The ticked items keep
+   the selection color, as the chosen item of a one-choice menu. */
+.recipe-menu__box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+}
+.recipe-menu__tick { width: 12px; height: 12px; stroke-width: 3; }
 
 /* --- The table --- */
 
@@ -3193,6 +3206,8 @@ h1 {
 .recipe-context__bar { outline: 1px solid #734c90; }
 .recipe-context__bar i { position: absolute; inset: 0 auto 0 0; background: var(--recipe-bar); }
 .recipe-context__value { font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* "Default" has no bar: it starts at the left edge of the column, where the
+   bars start. */
 
 /* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
 /* Yes: a check, in River in dark (the color of the YAML keys) and in the ink of
@@ -3242,22 +3257,27 @@ h1 {
   gap: 0.2em 1.2em;
   margin-bottom: 0.4rem;
 }
+/* "Recipe files": the style and size of the "Recipe" label at the top of the card. */
 .recipe-files__name { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
+:root[data-theme="dark"] .recipe-files__name { color: #dcbaf6; }
 
 /* The file names: monospace tabs, the current one with the Magenta line of the tabs. */
-.recipe-tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--color-header-rule); }
+/* The files of the recipe: classic tabs. One line under all the tabs (the line of
+   the table panel), the names in the body font, 20px apart, the first one on the
+   left edge; the open file in the title ink with a 2px Pink line. */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0 20px; margin-top: 8px; border-bottom: 1px solid var(--recipe-panel-line, var(--color-schema-line)); }
 .recipe-tab {
   margin-bottom: -1px;
-  padding: 0.5em 0.8em;
+  padding: 8px 0;
   border: 0;
   border-bottom: 2px solid transparent;
   background: none;
   color: var(--color-text-muted);
-  font: 500 0.875rem var(--font-mono);
+  font: 500 0.875rem var(--font-sans);
   cursor: pointer;
 }
-.recipe-tab:hover { color: var(--color-text); }
-.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); }
+.recipe-tab:hover { color: var(--color-title); }
+.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-title); }
 
 /* A file, or a command: the dark panel, with the Copy button in the corner. YAML
    keys in River and comments in neutral grey, the colors of technical text on dark. */
@@ -3669,12 +3689,13 @@ h1 {
 .card__facts dt { margin: 0; color: var(--color-text-muted); }
 .card__facts dd { margin: 0; color: var(--color-text); font-weight: 500; }
 .card__facts code { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; overflow-wrap: anywhere; }
-/* Two columns (Recipes): the facts in pairs, a rule above each row but the first.
-   A wide fact takes the full width. */
-/* The same spacing as one column: 8px above a rule and 12px under it. */
-.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 1.2em; }
-.card__facts--two > .card__fact { margin-top: 0; padding-top: 12px; border-top: 1px solid var(--color-schema-line); }
-.card__facts--two > .card__fact:nth-child(-n + 2) { padding-top: 0.5em; border-top: 0; }
+/* Two columns (Recipes): the facts in pairs. A wide fact takes the full width. */
+.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 1.2em; }
+/* No rule between the facts: 16px of space between the rows reads lighter. One
+   rule only, after the first four facts (publisher, model, hardware, server),
+   which say what the recipe is; the facts under it say what it can do. */
+.card__facts--two > .card__fact { margin-top: 0; padding-top: 0; border-top: 0; }
+.card__facts--two > .card__fact:nth-child(5) { padding-top: 16px; border-top: 1px solid var(--color-schema-line); }
 .card__facts--two > .card__fact.is-wide { grid-column: 1 / -1; }
 /* Names in the facts that are links to their boxes (stack page). */
 .card__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }

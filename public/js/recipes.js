@@ -51,7 +51,8 @@
   const state = {
     selected: fromAddress() || data.defaultId,
     hardware: "",
-    useCase: "",
+    // The use cases ticked in the menu: several at once; none means all.
+    useCases: [],
     query: "",
     file: "model-server-config.yaml",
   };
@@ -67,6 +68,10 @@
   // The use cases that one recipe or more has, in the order of the data.
   // The generator gives them to each recipe (tools/use-cases.mjs).
   const USE_CASES = unique(RECIPES.flatMap((r) => r.useCases || [])).map((id) => ({ id, label: text(`useCases.${id}`) }));
+
+  // The menu to open again after a click in a menu with several choices: the
+  // menus are drawn again, and that one stays open on the same choice.
+  let reopen = null;
 
   // The button above the sheet, as on the stack page: its label stays the same and
   // its arrow turns. The sheet is open at first. Closed, the table takes the full
@@ -114,25 +119,30 @@
     const search = SHOW_MODEL_SEARCH && (filters.querySelector(".recipe-search") || searchField());
     filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
-      USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
+      USE_CASES.length && menu("useCase", USE_CASES, state.useCases, (ids) => { state.useCases = ids; }, { multiple: true }),
       search,
     ].filter(Boolean));
   }
 
-  // A menu with one choice: the design system's dropdown menu. For screen readers
-  // and the keyboard it is a select-only combobox: the button keeps the focus, and
-  // the arrow keys move the active choice.
-  function menu(name, options, current, set) {
+  // A filter menu: the design system's dropdown menu. For screen readers and the
+  // keyboard it is a select-only combobox: the button keeps the focus, and the
+  // arrow keys move the active choice. With `multiple`, each choice has a box to
+  // tick, several can be ticked, and the menu stays open; "All" clears them.
+  function menu(name, options, current, set, { multiple = false } = {}) {
     const label = text(`filters.${name}`);
     const items = [{ id: "", label: text("filters.all") }, ...options];
-    const chosen = options.find((option) => option.id === current);
-    let active = Math.max(0, items.findIndex((item) => item.id === current));
+    const ticked = multiple ? current : (current ? [current] : []);
+    const chosen = options.filter((option) => ticked.includes(option.id));
+    const isSelected = (item) => (item.id ? ticked.includes(item.id) : !ticked.length);
+    let active = reopen && reopen.name === name ? reopen.active : Math.max(0, items.findIndex(isSelected));
 
-    const list = el("ul", "recipe-menu", [
+    const list = el("ul", `recipe-menu${multiple ? " recipe-menu--multiple" : ""}`, [
       el("li", "recipe-menu__label", [label]),
       ...items.map((item, index) => {
-        const selected = item.id === current;
-        const option = el("li", "recipe-menu__item", [item.label, selected && icon("M5 12.5 10 17.5 19.5 7", "recipe-menu__check")]);
+        const selected = isSelected(item);
+        // Several choices: a box before each use case (ticked or empty); "All" has none.
+        const box = multiple && item.id && el("span", `recipe-menu__box${selected ? " is-ticked" : ""}`, [selected && icon("M5 12.5 10 17.5 19.5 7", "recipe-menu__tick")]);
+        const option = el("li", "recipe-menu__item", [box, item.label, selected && !multiple && icon("M5 12.5 10 17.5 19.5 7", "recipe-menu__check")]);
         option.id = `recipe-filter-${name}-${index}`;
         option.setAttribute("role", "option");
         option.setAttribute("aria-selected", String(selected));
@@ -145,6 +155,7 @@
     list.hidden = true;
     list.setAttribute("role", "listbox");
     list.setAttribute("aria-label", label);
+    if (multiple) list.setAttribute("aria-multiselectable", "true");
     list.firstChild.setAttribute("role", "presentation");
     // A press on the menu must not take the focus from the button: the menu closes when the button loses it.
     list.addEventListener("pointerdown", (event) => event.preventDefault());
@@ -153,17 +164,19 @@
     // choice ("Hardware: CPU"). The pill shape tells a filter from the card button.
     const button = el("button", "recipe-select", [
       el("span", "recipe-select__name", [text("filters.name", { name: label })]),
-      el("span", "recipe-select__value", [chosen ? chosen.label : text("filters.all")]),
+      // Several ticked: the first one, then how many more, so the pill keeps its
+      // size: "Chat (+2)". The full list stays in the name for screen readers.
+      el("span", "recipe-select__value", [chosen.length ? `${chosen[0].label}${chosen.length > 1 ? ` (+${chosen.length - 1})` : ""}` : text("filters.all")]),
       icon("m6 9 6 6 6-6", "recipe-select__caret"),
     ]);
     button.type = "button";
     button.id = `recipe-filter-${name}`;
-    button.dataset.chosen = String(Boolean(chosen));
+    button.dataset.chosen = String(chosen.length > 0);
     button.setAttribute("role", "combobox");
     button.setAttribute("aria-haspopup", "listbox");
     button.setAttribute("aria-controls", list.id);
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-label", `${label}: ${chosen ? chosen.label : text("filters.all")}`);
+    button.setAttribute("aria-label", `${label}: ${chosen.length ? chosen.map((option) => option.label).join(", ") : text("filters.all")}`);
 
     const optionNodes = () => [...list.querySelectorAll('[role="option"]')];
     const isOpen = () => !list.hidden;
@@ -188,14 +201,21 @@
     }
 
     function choose(index) {
-      set(items[index].id);
+      const id = items[index].id;
+      if (!multiple) set(id);
+      else set(!id ? [] : ticked.includes(id) ? ticked.filter((t) => t !== id) : [...ticked, id]);
+      // Several choices: the menu stays open on the same choice after the redraw.
+      reopen = multiple ? { name, active: index } : null;
       renderFilters();
       renderResults();
       // The menus are new elements: give the focus back to this one.
       document.getElementById(`recipe-filter-${name}`).focus();
+      if (reopen) document.getElementById(`recipe-filter-${name}`).dispatchEvent(new CustomEvent("recipe-reopen"));
+      reopen = null;
     }
 
     button.addEventListener("click", () => (isOpen() ? close() : open()));
+    button.addEventListener("recipe-reopen", open);
     button.addEventListener("blur", close);
     button.addEventListener("keydown", (event) => {
       const { key } = event;
@@ -238,7 +258,8 @@
   function renderResults() {
     const query = state.query.toLowerCase();
     const matches = (r) =>
-      (!state.useCase || (r.useCases || []).includes(state.useCase)) &&
+      // A recipe shows when it fits at least one of the ticked use cases.
+      (!state.useCases.length || (r.useCases || []).some((id) => state.useCases.includes(id))) &&
       (!query || `${r.publisher}/${r.model}`.toLowerCase().includes(query));
 
     // With a hardware type selected: its recipes, then the generic recipes of its vendor.
@@ -374,13 +395,15 @@
     const width = tokens ? Math.max(6, ((Math.log2(tokens) - low) / (Math.log2(longest) - low)) * 100) : 0;
     const fill = el("i");
     fill.style.width = `${width}%`;
-    return el("span", "recipe-context", [
-      el("span", "recipe-context__bar", [fill]),
+    // No length in the recipe (the model server's default): no bar, since there is
+    // nothing to draw; the word starts at the left edge of the column.
+    return el("span", `recipe-context${tokens ? "" : " is-default"}`, [
+      tokens && el("span", "recipe-context__bar", [fill]),
       el("span", "recipe-context__value", [tokens ? `${Math.round(tokens / 1024)}K` : text("columns.contextDefault")]),
     ]);
   }
 
-  // Tool calling and reasoning: a filled dot for yes, an empty dot for no.
+  // Tool calling and reasoning: a check for yes, a cross for no.
   // Yes or no in the table: a check or a cross (16px SVG), with the word for
   // screen readers.
   function mark(on) {
