@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=217">
+<link rel="stylesheet" href="css/styles.css?v=218">
 </head>
 <body data-page="recipes">
 <div class="page">
@@ -78,23 +78,26 @@
       <p class="page-lead" data-text="recipes.limit"></p>
     </section>
 
-    <!-- The section bar (shared with the stack page): the heading and the hint on
-         the left, the button of the card on the right. The card is open at first. -->
+    <!-- The section bar (shared with the stack page): the heading and the hint. -->
     <div class="section-bar">
       <div class="section-bar__text">
         <h2 class="section-heading" data-text="recipes.heading"></h2>
         <p class="hint recipe-hint" data-text="recipes.hint"></p>
       </div>
-      <button type="button" class="sheet-toggle" id="recipe-sheet-toggle" aria-controls="recipe-sheet" aria-expanded="true">
-        <span class="sheet-toggle__label" data-text="recipes.sheet.title"></span>
-        <span class="sheet-toggle__chevron" aria-hidden="true"></span>
-      </button>
     </div>
 
     <div class="recipe-body">
-      <!-- The filters: one row. Then the table of the recipes, which scrolls inside its box. -->
-      <div class="recipe-finder">
+      <!-- The toolbar, across the page: the filters on the left, the button of the
+           card on the right, on the same line. The card is open at first. -->
+      <div class="recipe-toolbar">
         <div class="recipe-filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
+        <button type="button" class="sheet-toggle" id="recipe-sheet-toggle" aria-controls="recipe-sheet" aria-expanded="true">
+          <span class="sheet-toggle__label" data-text="recipes.sheet.title"></span>
+          <span class="sheet-toggle__chevron" aria-hidden="true"></span>
+        </button>
+      </div>
+      <!-- The table of the recipes, which scrolls inside its box. -->
+      <div class="recipe-finder">
         <section class="recipe-panel recipe-list" aria-labelledby="recipe-list-name">
           <!-- The name of the list is for screen readers only. -->
           <h2 class="sr-only" id="recipe-list-name" data-text="recipes.listLabel"></h2>

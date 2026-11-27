@@ -2943,6 +2943,9 @@ h1 {
 /* --- Filters: two menus and the search field, above the table panel --- */
 
 /* 14px: the size of the design system's field and menu item. */
+/* The toolbar spans the page: the filters on the left, the card button on the
+   right, centered on the same line, so the button lines up with the filters. */
+.recipe-toolbar { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 12px; }
 .recipe-filters {
   display: flex;
   flex-wrap: wrap;
@@ -3335,7 +3338,6 @@ h1 {
 /* Wide screens: the sheet stays in view while the page scrolls. */
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) {
   .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
-  .recipe-filters,
   .recipe-list { grid-column: 1; }
   /* The page scrolls normally: the table panel ends at its last row (it does not
      stretch to the height of the card, where an empty box would read as an
@@ -3621,7 +3623,8 @@ h1 {
 /* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
    after the one above, which would otherwise show the button again. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .section-bar .sheet-toggle { display: none; }
+  .section-bar .sheet-toggle,
+  .recipe-toolbar .sheet-toggle { display: none; }
 }
 /* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
    text color, 16px as the other button icons. Replace that file to change the arrow. It points right when the card
