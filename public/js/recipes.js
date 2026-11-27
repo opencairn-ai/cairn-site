@@ -381,8 +381,13 @@
   }
 
   // Tool calling and reasoning: a filled dot for yes, an empty dot for no.
+  // Yes or no in the table: a check or a cross (16px SVG), with the word for
+  // screen readers.
   function mark(on) {
-    return el("span", `recipe-mark${on ? " is-on" : ""}`, [el("span", "sr-only", [text(on ? "facts.yes" : "facts.no")])]);
+    return el("span", `recipe-mark${on ? " is-on" : ""}`, [
+      icon(on ? "M5 12.5 10 17.5 19.5 7" : "M7 7l10 10M17 7 7 17", "recipe-mark__icon"),
+      el("span", "sr-only", [text(on ? "facts.yes" : "facts.no")]),
+    ]);
   }
 
   // --- Pop-ups ---------------------------------------------------------------

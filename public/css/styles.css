@@ -3132,14 +3132,27 @@ h1 {
 /* The context length: a bar, then the value. */
 .recipe-col-context,
 .recipe-context { min-width: 5em; }
+
+/* Column widths, automatic: the model column takes the width of its name, which
+   never breaks; the six other columns share the rest of the panel, so the spare
+   width spreads across the table instead of piling up at its right edge. */
+.recipe-table th:first-child { width: 1%; }
+.recipe-table .recipe-pick__model { white-space: nowrap; }
+/* 32px after the longest model name, so it never runs into the hardware. */
+.recipe-table th:first-child,
+.recipe-table td:first-child { padding-right: 2rem; }
 .recipe-context { display: flex; align-items: center; gap: 0.6em; }
 .recipe-context__bar { position: relative; flex: 1; height: 0.4em; background: var(--recipe-track); }
 .recipe-context__bar i { position: absolute; inset: 0 auto 0 0; background: var(--recipe-bar); }
 .recipe-context__value { width: 3.2em; font-size: 0.875rem; font-variant-numeric: tabular-nums; text-align: right; }
 
 /* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
-.recipe-mark { display: inline-block; width: 0.6em; height: 0.6em; border: 1.5px solid var(--color-text-muted); border-radius: 50%; vertical-align: middle; }
-.recipe-mark.is-on { border-color: var(--color-text); background: var(--color-text); }
+/* Yes: a check, in River in dark (the color of the YAML keys) and in the ink of
+   the row in light. No: a cross in the caption grey. 20px. */
+.recipe-mark { display: inline-flex; vertical-align: middle; color: var(--color-text-muted); }
+.recipe-mark.is-on { color: inherit; }
+:root[data-theme="dark"] .recipe-mark.is-on { color: #63bcc1; }
+.recipe-mark__icon { width: 20px; height: 20px; }
 
 /* LINK SIGNS (whole site). Two signs only:
    - a solid underline is a link: it goes somewhere or selects something;
@@ -3236,16 +3249,12 @@ h1 {
   .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
   .recipe-filters,
   .recipe-list { grid-column: 1; }
-  /* No sideways scroll on a wide screen: long model names break at their
-     hyphens, so the seven columns fit the panel. */
-  .recipe-pick__model { white-space: normal; }
+
 }
 
-/* Wide screens below 1400px: the table gets more of the width, and long model
-   names break at their hyphens, so the seven columns fit. */
+/* Wide screens below 1400px: the table gets more of the width. */
 @media (min-width: 901px) and (max-width: 87.5em) and (min-aspect-ratio: 1/1) {
   .recipe-body { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); }
-  .recipe-pick__model { white-space: normal; }
 }
 
 /* A wide screen that is tall enough: the page is the height of the window. The
