@@ -486,7 +486,8 @@
 
     // The facts of the recipe, in the shared card layout: each label above its value,
     // in two columns. A wide fact takes the full width.
-    const fact = (label, value, wide) => [el("div", wide ? "card__fact is-wide" : "card__fact", [el("dt", null, [label]), el("dd", null, [value])])];
+    // `group`: the first fact of the second group ("what it can do"), with the rule above it.
+    const fact = (label, value, wide, group) => [el("div", ["card__fact", wide && "is-wide", group && "is-group-start"].filter(Boolean).join(" "), [el("dt", null, [label]), el("dd", null, [value])])];
     const list = el("dl", "card__facts card__facts--two", [
       // Short facts in pairs; long facts (the image, the use cases) on a full row.
       // The publisher first, with the model card, since the title is the model alone.
@@ -495,7 +496,7 @@
       ...fact(text("columns.hardware"), r.hardwareLabel),
       ...fact(text("columns.server"), r.serverLabel),
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
-      ...fact(text("columns.useCase"), useCasesFact(r), true),
+      ...fact(text("columns.useCase"), useCasesFact(r), true, true),
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
       ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
       ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
@@ -528,7 +529,8 @@
   // of the benchmark data, with their links (they used to sit in a pop-up on the
   // column title).
   function useCasesFact(r) {
-    const uses = (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ");
+    // The use cases in the type of the card text ("vLLM on GB10"), then the note.
+    const uses = el("span", "card__use-cases", [(r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ")]);
     const sources = (data.benchmarks && data.benchmarks.sources) || [];
     if (!sources.length) return uses;
     const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
@@ -556,12 +558,15 @@
   // A file, or a command, in the dark panel with the Copy button. In a YAML or
   // .env file the keys and the comments have their own colors.
   function codeBlock(content, modifier, name = "") {
-    const copy = el("button", "recipe-copy", [text("sheet.copy")]);
+    // The button format of the site, with a copy icon (two sheets) before the word.
+    // Only the word changes after a click ("Copied"), so the icon stays.
+    const word = el("span", null, [text("sheet.copy")]);
+    const copy = el("button", "recipe-copy", [icon("M9 9h10v10H9zM5 15V5h10", "recipe-copy__icon"), word]);
     copy.type = "button";
     copy.addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText(content); copy.textContent = text("sheet.copied"); }
-      catch { copy.textContent = text("sheet.copyFailed"); }
-      setTimeout(() => { copy.textContent = text("sheet.copy"); }, 1600);
+      try { await navigator.clipboard.writeText(content); word.textContent = text("sheet.copied"); }
+      catch { word.textContent = text("sheet.copyFailed"); }
+      setTimeout(() => { word.textContent = text("sheet.copy"); }, 1600);
     });
     const pre = el("pre");
     if (/\.ya?ml$|^\.env$/.test(name)) pre.append(...highlight(content));

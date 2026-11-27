@@ -3237,15 +3237,18 @@ h1 {
 .recipe-empty { padding: 1em 0.8em; color: var(--color-body); }
 
 /* Under the use cases in the card: where they come from, with links to the
-   sources of the benchmark data. 12px, in the caption grey. */
-.card__note { display: block; margin-top: 4px; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 400; line-height: 1.4; }
+   sources of the benchmark data. 12px, in the title ink; the links keep theirs. */
+.card__note { display: block; margin-top: 4px; color: var(--color-title); font-size: 0.75rem; font-weight: 400; line-height: 1.4; }
+/* The use cases in the card: the type and ink of the card text ("vLLM on GB10"),
+   16px regular. */
+.card__use-cases { display: block; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
 .card__note .recipe-link { font-size: inherit; }
 
 /* --- The sheet: the name and the facts, then the files --- */
 
 .recipe-sheet { display: flex; flex-direction: column; min-width: 0; }
 /* The content of the card (after the ×): the head and its facts, then the files. */
-.recipe-sheet > .card__content { display: flex; flex: 1; flex-direction: column; gap: 1.2rem; min-height: 0; }
+.recipe-sheet > .card__content { display: flex; flex: 1; flex-direction: column; gap: 16px; min-height: 0; }
 /* The card head and its facts use the description card template (.card). */
 
 .recipe-files { display: flex; flex-direction: column; min-height: 0; }
@@ -3283,27 +3286,38 @@ h1 {
    keys in River and comments in neutral grey, the colors of technical text on dark. */
 .recipe-code { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--recipe-code-bg); color: #f5e8ff; }
 .recipe-files .recipe-code { margin-top: 1rem; }
-.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
+.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 8.5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
+/* Long lines wrap, so a file never scrolls sideways. */
+.recipe-code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .recipe-code--file pre { max-height: 26rem; }
 .recipe-code__key { color: #63bcc1; }
 .recipe-code__comment { color: #b7b3ae; }
 
+/* Copy: the button format of the site (14px medium, 16px icon, 8 x 14px padding,
+   1px line, 6px corners, 34px high), outlined in Marshmallow as the secondary
+   buttons on dark, since the code panel is dark in both themes. Hover: the Pale
+   purple fill and Mid purple line of the secondary buttons, Deep purple words. */
 .recipe-copy {
   position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
-  padding: 0.25em 0.7em;
-  border: 1px solid rgb(245 232 255 / 0.35);
-  border-radius: var(--radius-ui-sm);
-  background: inherit;
-  color: inherit;
+  top: 8px;
+  /* Clear of the scrollbar of a long file, on the right edge of the panel. */
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid #f5e8ff;
+  border-radius: 6px;
+  background: var(--recipe-code-bg);
+  color: #f5e8ff;
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 16px;
   cursor: pointer;
 }
-.recipe-copy:hover { border-color: #f5e8ff; }
+.recipe-copy__icon { flex: none; width: 16px; height: 16px; }
+.recipe-copy:hover { border-color: #734c90; background: #dcbaf6; color: #291435; }
 
 .recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
 .recipe-link:hover { color: var(--color-link-hover); }
@@ -3317,34 +3331,18 @@ h1 {
   .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
   .recipe-filters,
   .recipe-list { grid-column: 1; }
+  /* The page scrolls normally: the table panel ends at its last row (it does not
+     stretch to the height of the card, where an empty box would read as an
+     error), and the card shows its file at full height. With more recipes than
+     70% of the window holds, the rows scroll inside the panel. */
+  .recipe-list { align-self: start; }
+  .recipe-scroll { max-height: 70vh; }
 
 }
 
 /* Wide screens below 1400px: the table gets more of the width. */
 @media (min-width: 901px) and (max-width: 87.5em) and (min-aspect-ratio: 1/1) {
   .recipe-body { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); }
-}
-
-/* A wide screen that is tall enough: the page is the height of the window. The
-   table takes the height that the filters leave and scrolls; the file preview
-   takes the height that the facts leave and scrolls. The limit is in em, so a
-   larger text size or browser zoom gives a page that scrolls. */
-@media (min-width: 901px) and (min-aspect-ratio: 1/1) and (min-height: 46em) {
-  body[data-page="recipes"] .page { height: 100vh; height: 100dvh; min-height: 0; }
-  body[data-page="recipes"] main { flex: 1; min-height: 0; }
-  .recipe-body { flex: 1; grid-template-rows: auto minmax(0, 1fr); min-height: 0; }
-  .recipe-finder,
-  .recipe-list { min-height: 0; }
-  /* The table panel ends at its last row: with a few recipes it does not stretch
-     down to the bottom of the card, where an empty box would read as an error.
-     When there are more recipes than the height holds, the panel reaches the
-     bottom of the window (max-height) and its rows scroll inside it. */
-  .recipe-list { align-self: start; max-height: 100%; }
-  .recipe-scroll { flex: 1; min-height: 0; max-height: none; }
-  .recipe-sheet { position: relative; top: auto; align-self: stretch; min-height: 0; }
-  .recipe-files { flex: 1; }
-  .recipe-files .recipe-code { flex: 1 1 auto; min-height: 5rem; }
-  .recipe-code--file pre { min-height: 0; max-height: none; }
 }
 
 /* Narrow screens: the sheet goes under the table. */
@@ -3683,19 +3681,20 @@ h1 {
 :root[data-theme="dark"] .card__kind { color: #dcbaf6; }
 /* The facts: each label above its value, one fact under the other, with a rule
    between two facts and none under the description. */
-.card__facts { display: grid; grid-template-columns: minmax(0, 1fr); margin: 1.1rem 0 0; font-size: 0.875rem; }
+.card__facts { display: grid; grid-template-columns: minmax(0, 1fr); margin: 16px 0 0; font-size: 0.875rem; }
 .card__fact { padding: 0.5em 0 0.5em; }
 .card__fact + .card__fact { margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--color-schema-line); }
 .card__facts dt { margin: 0; color: var(--color-text-muted); }
 .card__facts dd { margin: 0; color: var(--color-text); font-weight: 500; }
 .card__facts code { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; overflow-wrap: anywhere; }
 /* Two columns (Recipes): the facts in pairs. A wide fact takes the full width. */
-.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 1.2em; }
-/* No rule between the facts: 16px of space between the rows reads lighter. One
-   rule only, after the first four facts (publisher, model, hardware, server),
-   which say what the recipe is; the facts under it say what it can do. */
+.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 1.2em; }
+/* No rule between the facts: 12px of space between the rows reads lighter. One
+   rule only, between the facts that say what the recipe is (publisher, model,
+   hardware, server, server image) and the facts that say what it can do (use
+   case, context, tools, reasoning): above the fact marked .is-group-start. */
 .card__facts--two > .card__fact { margin-top: 0; padding-top: 0; border-top: 0; }
-.card__facts--two > .card__fact:nth-child(5) { padding-top: 16px; border-top: 1px solid var(--color-schema-line); }
+.card__facts--two > .card__fact.is-group-start { padding-top: 12px; border-top: 1px solid var(--color-schema-line); }
 .card__facts--two > .card__fact.is-wide { grid-column: 1 / -1; }
 /* Names in the facts that are links to their boxes (stack page). */
 .card__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
