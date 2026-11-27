@@ -33,8 +33,8 @@
     }
   }
 
-  // The chosen column: the band moves behind it, its items are larger, its
-  // Contribute button shows. A click on its head (a button, for the keyboard) or
+  // The chosen column: the band moves behind it, its title turns Pink with the
+  // cursor, its two buttons show. Nothing changes size. A click on its head (a button, for the keyboard) or
   // on one of its cells chooses it; a click on a link in a cell only follows it.
   const picks = [...table.querySelectorAll(".roadmap__pick")];
   function choose(when) {

@@ -3451,16 +3451,8 @@ h1 {
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-selected) 70%, transparent);
 }
-/* The band follows the chosen column (js/roadmap.js sets data-active), and the
-   chosen column takes the width of "Now" (1.6fr); the two others share the rest
-   (1.025fr each, the same total as before). */
-.roadmap[data-active] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.025fr) minmax(0, 1.025fr); }
-.roadmap[data-active="now"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.025fr) minmax(0, 1.025fr); }
-.roadmap[data-active="next"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.6fr) minmax(0, 1.025fr); }
-.roadmap[data-active="later"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.025fr) minmax(0, 1.6fr); }
-@media (prefers-reduced-motion: no-preference) {
-  .roadmap { transition: grid-template-columns 0.25s ease; }
-}
+/* The band follows the chosen column (js/roadmap.js sets data-active). Nothing
+   changes size: the widths and the type stay, so the page does not move. */
 .roadmap[data-active="next"] .roadmap__band { grid-column: 3; }
 .roadmap[data-active="later"] .roadmap__band { grid-column: 4; }
 
@@ -3555,8 +3547,7 @@ h1 {
 
 /* Choosing a column (wide screens). The head of a column is a button with no
    look of its own; the cells of the other columns show the hand. The chosen
-   column sets its item titles at 18px and ends with two secondary buttons that
-   share its width: Contribute on GitHub, and an email for feedback. */
+   column ends with two secondary buttons that share its width: Contribute on GitHub, and an email for feedback. */
 .roadmap__pick {
   display: flex;
   flex-direction: column;
@@ -3571,7 +3562,6 @@ h1 {
 }
 .roadmap__pick:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; border-radius: 2px; }
 .roadmap__cell:not(.is-active) { cursor: pointer; }
-.roadmap__cell.is-active .roadmap-item__title { font-size: 1.125rem; }
 .roadmap__action { display: flex; gap: 8px; padding: 1rem 0 1.1rem; }
 .roadmap__contribute { flex: 1 1 0; justify-content: center; min-width: 0; visibility: hidden; }
 .roadmap__contribute svg { width: 16px; height: 16px; }
@@ -3589,7 +3579,6 @@ h1 {
   .roadmap__row--head,
   .roadmap__row--actions { display: none; }
   .roadmap__cell:not(.is-active) { cursor: auto; }
-  .roadmap__cell.is-active .roadmap-item__title { font-size: inherit; }
   .roadmap__name { padding: 0 0 0.6rem; border-bottom: 1px solid var(--color-header-rule); }
   .roadmap__name-text { font-size: 1.25rem; }
   .roadmap__note { max-width: none; }
