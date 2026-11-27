@@ -1559,8 +1559,11 @@ h1 {
   .hello__lead--mark::after { animation: cursor-blink 1.06s steps(1) infinite; }
 }
 
+/* The secondary button: the button format, outlined in the title ink.
+   "Explore LaStack" on Hello World, the buttons under a column of the Roadmap. */
 .what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
 .what__links .btn,
+.roadmap__contribute,
 .what__pebble {
   gap: 8px;
   padding: 8px 14px;
@@ -1569,7 +1572,8 @@ h1 {
   font-weight: 500;
   line-height: 16px;
 }
-.what__links .btn { border-width: 1px; border-color: var(--color-title); }
+.what__links .btn,
+.roadmap__contribute { border-width: 1px; border-color: var(--color-title); }
 .what__pebble {
   display: inline-flex;
   align-items: center;
@@ -3429,7 +3433,7 @@ h1 {
   /* The names of the workstreams, then the three times. The nearer the time,
      the wider its column. */
   grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.15fr) minmax(0, 0.9fr);
-  grid-template-rows: min-content repeat(4, auto);
+  grid-template-rows: min-content repeat(5, auto);
   column-gap: 1.6rem;
   margin-bottom: 0;
   font-size: 1rem;
@@ -3447,8 +3451,18 @@ h1 {
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-selected) 70%, transparent);
 }
-/* The band's own line closes the column: no row line on top of it at the bottom. */
-.roadmap__row:last-child > [data-when="now"] { border-bottom: 0; }
+/* The band follows the chosen column (js/roadmap.js sets data-active), and the
+   chosen column takes the width of "Now" (1.6fr); the two others share the rest
+   (1.025fr each, the same total as before). */
+.roadmap[data-active] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.025fr) minmax(0, 1.025fr); }
+.roadmap[data-active="now"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.025fr) minmax(0, 1.025fr); }
+.roadmap[data-active="next"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.6fr) minmax(0, 1.025fr); }
+.roadmap[data-active="later"] { grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.025fr) minmax(0, 1.025fr) minmax(0, 1.6fr); }
+@media (prefers-reduced-motion: no-preference) {
+  .roadmap { transition: grid-template-columns 0.25s ease; }
+}
+.roadmap[data-active="next"] .roadmap__band { grid-column: 3; }
+.roadmap[data-active="later"] .roadmap__band { grid-column: 4; }
 
 .roadmap__row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
 .roadmap__row:nth-child(2) { grid-row: 1; }
@@ -3456,6 +3470,7 @@ h1 {
 .roadmap__row:nth-child(4) { grid-row: 3; }
 .roadmap__row:nth-child(5) { grid-row: 4; }
 .roadmap__row:nth-child(6) { grid-row: 5; }
+.roadmap__row:nth-child(7) { grid-row: 6; }
 
 /* The heads of the columns, over a strong rule: the time, and how sure its items are. */
 .roadmap__row--head > * { padding: 1rem 0 0.9rem; border-bottom: 1px solid var(--color-header-rule); }
@@ -3463,20 +3478,23 @@ h1 {
 /* The time in the color of the kind of a card (--card-accent: Mid purple in light,
    Pale purple in dark), its line in the caption grey, as in the card. */
 .roadmap__when { color: var(--card-accent); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
-/* Dark: "Now" in Pink, the active time. Light keeps Mid purple: Pink on Cream is
-   2.0:1, under the 3:1 of large text. */
-/* Dark: "Next" and "Later" in white. */
+/* Dark: the times in white; the chosen one (is-active, js/roadmap.js) in Pink,
+   and on phones, where nothing is chosen, "Now". Light keeps Mid purple: Pink on
+   Cream is 2.0:1, under the 3:1 of large text. */
 :root[data-theme="dark"] .roadmap__when { color: #ffffff; }
-:root[data-theme="dark"] [data-when="now"] > .roadmap__when,
+/* "Later" in the caption grey, as its items (not planned yet), until it is chosen. */
+.roadmap__column[data-when="later"]:not(.is-active) .roadmap__when,
+:root[data-theme="dark"] .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when { color: var(--color-text-muted); }
+:root[data-theme="dark"] .roadmap__column.is-active .roadmap__when,
 :root[data-theme="dark"] [data-when="now"] > .roadmap__cell-label { color: var(--color-pink); }
-/* Dark: the card of "Now" has the 2px Pink line of the boxes of Hello World. */
-:root[data-theme="dark"] .roadmap__band { border: 2px solid var(--color-pink); }
+/* Dark: the card of "Now" has a 1px Pink line, as the boxes of Hello World and LaStack. */
+:root[data-theme="dark"] .roadmap__band { border: 1px solid var(--color-pink); }
 @media (max-width: 900px) {
-  :root[data-theme="dark"] .roadmap__cell[data-when="now"] { border: 2px solid var(--color-pink); }
+  :root[data-theme="dark"] .roadmap__cell[data-when="now"] { border: 1px solid var(--color-pink); }
 }
-/* The cursor of the active line, after "Now": it blinks as the cursor of Hello
-   World (cursor-blink), unless the visitor asks for less motion. */
-[data-when="now"] > .roadmap__when::after {
+/* The cursor of the active line, after the chosen time: it blinks as the cursor
+   of Hello World (cursor-blink), unless the visitor asks for less motion. */
+.roadmap__column.is-active .roadmap__when::after {
   content: "";
   display: inline-block;
   width: 0.45em;
@@ -3486,7 +3504,7 @@ h1 {
   background: var(--color-pink);
 }
 @media (prefers-reduced-motion: no-preference) {
-  [data-when="now"] > .roadmap__when::after,
+  .roadmap__column.is-active .roadmap__when::after,
   [data-when="now"] > .roadmap__cell-label::after { animation: cursor-blink 1.06s steps(1) infinite; }
 }
 .roadmap__when-text { margin-top: 0.4rem; color: var(--color-text-muted); font-size: 0.875rem; }
@@ -3535,6 +3553,30 @@ h1 {
 :root[data-theme="dark"] .roadmap-item__text { color: #ffffff; }
 :root[data-theme="dark"] .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); }
 
+/* Choosing a column (wide screens). The head of a column is a button with no
+   look of its own; the cells of the other columns show the hand. The chosen
+   column sets its item titles at 18px and ends with two secondary buttons that
+   share its width: Contribute on GitHub, and an email for feedback. */
+.roadmap__pick {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.roadmap__pick:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; border-radius: 2px; }
+.roadmap__cell:not(.is-active) { cursor: pointer; }
+.roadmap__cell.is-active .roadmap-item__title { font-size: 1.125rem; }
+.roadmap__action { display: flex; gap: 8px; padding: 1rem 0 1.1rem; }
+.roadmap__contribute { flex: 1 1 0; justify-content: center; min-width: 0; visibility: hidden; }
+.roadmap__contribute svg { width: 16px; height: 16px; }
+.roadmap__action.is-active .roadmap__contribute { visibility: visible; }
+
 /* Narrow screens: four columns do not fit. Each workstream is a group: its name,
    then its three cells one under the other, each with the name of its column.
    The cell of "Now" has the band. */
@@ -3544,7 +3586,10 @@ h1 {
   .roadmap { gap: 2rem; }
   .roadmap__row { gap: 0.4rem; }
   .roadmap__band,
-  .roadmap__row--head { display: none; }
+  .roadmap__row--head,
+  .roadmap__row--actions { display: none; }
+  .roadmap__cell:not(.is-active) { cursor: auto; }
+  .roadmap__cell.is-active .roadmap-item__title { font-size: inherit; }
   .roadmap__name { padding: 0 0 0.6rem; border-bottom: 1px solid var(--color-header-rule); }
   .roadmap__name-text { font-size: 1.25rem; }
   .roadmap__note { max-width: none; }

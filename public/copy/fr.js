@@ -496,6 +496,8 @@ window.CAIRN_COPY.fr = {
   roadmap: {
     title: "La feuille de route de la pile",
     lead: "Ce que nous construisons maintenant, ce qui vient ensuite, et où va la pile après.",
+    // Le bouton d’e-mail sous la colonne choisie.
+    feedback: "Dites-nous ce qui manque",
     // Pour les lecteurs d’écran : le nom du tableau, puis le nom de sa première colonne.
     label: "Feuille de route de la pile, par chantier",
     workstreamsLabel: "Chantiers",

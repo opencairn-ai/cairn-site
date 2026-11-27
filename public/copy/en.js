@@ -491,6 +491,8 @@ window.CAIRN_COPY.en = {
   roadmap: {
     title: "The roadmap of the stack",
     lead: "What we build now, what comes next, and where the stack goes after that.",
+    // The email button under the chosen column.
+    feedback: "Tell us what’s missing",
     // For screen readers: the name of the table. Then the name of its first column.
     label: "Roadmap of the stack, by workstream",
     workstreamsLabel: "Workstreams",

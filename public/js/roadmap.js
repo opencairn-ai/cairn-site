@@ -33,6 +33,23 @@
     }
   }
 
+  // The chosen column: the band moves behind it, its items are larger, its
+  // Contribute button shows. A click on its head (a button, for the keyboard) or
+  // on one of its cells chooses it; a click on a link in a cell only follows it.
+  const picks = [...table.querySelectorAll(".roadmap__pick")];
+  function choose(when) {
+    table.dataset.active = when;
+    for (const node of table.querySelectorAll("[data-when]")) node.classList.toggle("is-active", node.dataset.when === when);
+    for (const pick of picks) pick.setAttribute("aria-pressed", String(pick.parentElement.dataset.when === when));
+  }
+  for (const pick of picks) pick.addEventListener("click", () => choose(pick.parentElement.dataset.when));
+  for (const cell of table.querySelectorAll(".roadmap__cell")) {
+    cell.addEventListener("click", (event) => {
+      if (!event.target.closest("a")) choose(cell.dataset.when);
+    });
+  }
+  choose("now");
+
   // An item can be a text alone (its title) or { title, text, layer }.
   function renderItem(item, when) {
     const { title, text, layer } = typeof item === "string" ? { title: item } : item;
