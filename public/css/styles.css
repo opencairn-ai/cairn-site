@@ -3102,33 +3102,29 @@ h1 {
 .recipe-table td:first-child { padding-left: 0.8rem; }
 
 .recipe-row { cursor: pointer; }
-.recipe-row:hover td { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
-.recipe-row.is-selected td { background: var(--recipe-band); }
-/* The selected row ends with a small arrow toward the card beside the table: the
-   chevron of the card buttons (assets/icons/chevron.svg), 16px, in the ink of the
-   row. The last cell keeps room for it on every row, so nothing shifts. */
-.recipe-table td:last-child { position: relative; padding-right: 2rem; }
-.recipe-row.is-selected td:last-child::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  width: 16px;
-  height: 16px;
-  background: currentColor;
-  -webkit-mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
-  mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
-  transform: translateY(-50%);
+.recipe-row:hover td { background-color: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
+.recipe-row.is-selected td { background-color: var(--recipe-band); }
+/* Every row ends with a small arrow: a click opens the recipe in the card. The
+   shape of the chevron of the card buttons (assets/icons/chevron.svg), 16px, drawn
+   as a background of the last cell, so the cell stays a plain table cell and the
+   row lines stay clean. Caption grey at rest, Deep purple on a highlighted row.
+   Keep the three colors in step with the chevron file. */
+.recipe-table td:last-child {
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23505d65' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
 }
-/* No card beside the table (closed, or a narrow screen): no arrow. */
-.recipe-sheet-hidden .recipe-row.is-selected td:last-child::after { display: none; }
-@media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .recipe-row.is-selected td:last-child::after { display: none; }
-}
+:root[data-theme="dark"] .recipe-table td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b7b3ae' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+.recipe-row:is(:hover, .is-selected) td:last-child,
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23291435' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 /* Dark: the row under the pointer and the selected row in Pale purple, so their
    words and marks turn Deep purple (10:1). */
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td { background: #dcbaf6; }
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td { background-color: #dcbaf6; }
+/* The empty part of the context bar stays visible on the Pale purple row. */
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
 :root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td,
 :root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-pick__publisher,
 :root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-mark { color: #291435; }
@@ -3295,7 +3291,11 @@ h1 {
   .recipe-body { flex: 1; grid-template-rows: auto minmax(0, 1fr); min-height: 0; }
   .recipe-finder,
   .recipe-list { min-height: 0; }
-  .recipe-list { flex: 1; }
+  /* The table panel ends at its last row: with a few recipes it does not stretch
+     down to the bottom of the card, where an empty box would read as an error.
+     When there are more recipes than the height holds, the panel reaches the
+     bottom of the window (max-height) and its rows scroll inside it. */
+  .recipe-list { align-self: start; max-height: 100%; }
   .recipe-scroll { flex: 1; min-height: 0; max-height: none; }
   .recipe-sheet { position: relative; top: auto; align-self: stretch; min-height: 0; }
   .recipe-files { flex: 1; }
@@ -3647,17 +3647,22 @@ h1 {
 .card__facts code { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; overflow-wrap: anywhere; }
 /* Two columns (Recipes): the facts in pairs, a rule above each row but the first.
    A wide fact takes the full width. */
-.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.2em; }
-.card__facts--two > .card__fact { margin-top: 0; padding-top: 0.5em; border-top: 1px solid var(--color-schema-line); }
-.card__facts--two > .card__fact:nth-child(-n + 2) { border-top: 0; }
+/* The same spacing as one column: 8px above a rule and 12px under it. */
+.card__facts--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 1.2em; }
+.card__facts--two > .card__fact { margin-top: 0; padding-top: 12px; border-top: 1px solid var(--color-schema-line); }
+.card__facts--two > .card__fact:nth-child(-n + 2) { padding-top: 0.5em; border-top: 0; }
 .card__facts--two > .card__fact.is-wide { grid-column: 1 / -1; }
 /* Names in the facts that are links to their boxes (stack page). */
 .card__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
 .card__link { padding: 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: 500; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .card__link:hover { color: var(--color-link-hover); }
-/* Dark: the links in Pink. On Cream, Pink is 2.0:1, so light keeps Mid purple. */
-:root[data-theme="dark"] .card__link { color: var(--color-pink); }
-:root[data-theme="dark"] .card__link:hover { color: var(--color-link-hover); }
+/* Dark: the links in Pink, in every card (the box links of the stack page and the
+   external links of the Recipes card). On Cream, Pink is 2.0:1, so light keeps
+   Mid purple. */
+:root[data-theme="dark"] .card__link,
+:root[data-theme="dark"] .card .recipe-link { color: var(--color-pink); }
+:root[data-theme="dark"] .card__link:hover,
+:root[data-theme="dark"] .card .recipe-link:hover { color: var(--color-link-hover); }
 /* "Part of the layer" (stack page): the branch icon before the label, and the
    layer name lined up with the label, after the icon. */
 .card__fact.is-part-of dt { display: flex; align-items: center; gap: 0.375rem; }
