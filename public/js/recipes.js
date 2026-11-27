@@ -65,9 +65,23 @@
   // The generator gives them to each recipe (tools/use-cases.mjs).
   const USE_CASES = unique(RECIPES.flatMap((r) => r.useCases || [])).map((id) => ({ id, label: text(`useCases.${id}`) }));
 
+  // The button above the sheet, as on the stack page: its label stays the same and
+  // its arrow turns. The sheet is open at first. Closed, the table takes the full
+  // width (wide screens only: a narrow screen always shows the sheet under the
+  // table, and hides the button). A click on a recipe opens the sheet again.
+  const sheetToggle = document.getElementById("recipe-sheet-toggle");
+  function setSheetShown(show) {
+    document.documentElement.classList.toggle("recipe-sheet-hidden", !show);
+    if (sheetToggle) sheetToggle.setAttribute("aria-expanded", String(show));
+  }
+  if (sheetToggle) {
+    sheetToggle.addEventListener("click", () => setSheetShown(sheetToggle.getAttribute("aria-expanded") !== "true"));
+  }
+
   window.addEventListener("hashchange", () => {
     const id = fromAddress();
-    if (id && id !== state.selected) { state.selected = id; renderResults(); }
+    // Back and Forward select a recipe as a click does: they open the sheet again.
+    if (id && id !== state.selected) { state.selected = id; setSheetShown(true); renderResults(); }
   });
 
   renderColumns();
@@ -336,6 +350,7 @@
     ]);
     row.addEventListener("click", (event) => {
       state.selected = r.id;
+      setSheetShown(true);
       renderResults();
       // The list is drawn again: the focus goes to the new button of the row, so
       // the keyboard keeps its place. The focus ring shows only when the row was

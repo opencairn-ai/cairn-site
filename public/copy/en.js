@@ -39,6 +39,8 @@ window.CAIRN_COPY.en = {
     download: "Download schema",
     downloadBusy: "Preparing schema…",
     downloadFailed: "Download failed. Try again.",
+    contact: "Drop us a pebble",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
     github: "Contribute on GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },
@@ -181,19 +183,25 @@ window.CAIRN_COPY.en = {
     label: "Architecture of the open source AI inference stack",
     // The line above the schema. A wide screen shows the selected box in the sheet
     // beside the schema; a narrow screen shows it in a pop-up.
-    hint: "Select a layer or component to see what it does.",
+    // The heading above the schema.
+    heading: "LaStack, layer by layer, component by component",
+    hint: "Select any box to see what it does.",
     // The sheet beside the schema: the facts under the description of the selected box.
     // The names of layers and components in these facts are links to their boxes.
     sheet: {
       components: "Components",
-      layer: "Layer",
-      alsoInLayer: "Also in this layer",
+      layer: "Part of the layer",
+      // One other component: singular, no count. Two or more: plural, and the script
+      // adds the count, "Other components in this layer (2)".
+      alsoInLayerOne: "Other component in this layer",
+      alsoInLayer: "Other components in this layer",
       appliesTo: "Applies to",
       allLayers: "All layers",
-      // The button above the sheet. The sheet is hidden at first: the schema takes
-      // the full width. A click on a box opens the sheet; Escape closes it.
-      hide: "Hide details",
-      show: "Show details",
+      // The button above the sheet, with an arrow. The sheet is hidden at first: the
+      // schema takes the full width. A click on a box opens the sheet; Escape closes it.
+      title: "Description card",
+      // The name of the × in the top right corner of the sheet, for screen readers and on hover.
+      close: "Close the card",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "Applies to all layers",
@@ -448,6 +456,9 @@ window.CAIRN_COPY.en = {
     sheet: {
       // The name of the sheet for screen readers.
       label: "Selected recipe",
+      // The button above the sheet, with an arrow, as on the stack page. The sheet is
+      // open at first; the button closes it and the table takes the full width.
+      title: "Configuration card",
       files: "Recipe files",
       copy: "Copy",
       copied: "Copied",

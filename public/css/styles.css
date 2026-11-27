@@ -116,10 +116,10 @@
   background: #291435;
   --color-bg: #291435;               /* Deep purple */
   --color-title: #ffffff;            /* 16.9:1 */
-  --color-header: #d0c2b1;           /* Beige, 8.1:1 or more on panels */
+  --color-header: #ffffff;           /* White, as the titles: no beige text */
   --color-body: #f2eae1;             /* Cream, 14.2:1 */
   --color-text: #f2eae1;
-  --color-text-muted: #a08f79;       /* Stone, 5.4:1 */
+  --color-text-muted: #b7b3ae;       /* Neutral grey, 8.1:1: no beige text */
   --color-layer: #321d3e;            /* Marshmallow 5% over Deep purple */
   --color-cross: #372343;            /* 8% */
   --color-control: #372343;
@@ -140,7 +140,7 @@
   --color-button: #f2eae1;
   --color-button-text: #291435;
   --color-button-outline: #a08f79;
-  --color-button-hover: #544b40;
+  --color-button-hover: #dcbaf6;     /* Pale purple, with Deep purple text on hover */
   --color-ghost-hover: #7d705f;
   --color-tip-bg: #f5e8ff;           /* Tooltip: Marshmallow, Deep purple text */
   --color-tip-text: #291435;
@@ -163,12 +163,13 @@
   --color-badge-alpha: #5c7065;      /* Moss, white text 5.3:1 */
 }
 
-/* Everything is sized in rem, and the root size starts from the text size of the
-   browser (16px by default), so browser zoom and the reader's text size setting
-   both work. It grows a little on wide screens: 16px up to about 1200px wide,
-   then up to 18px. The pages scroll. */
+/* Everything is sized in rem, and the root size is the text size of the browser
+   (16px by default), so browser zoom and the reader's text size setting both work.
+   The root is the same on every screen, so every font size is a whole, even number
+   of pixels from one scale: 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 80. The pages
+   scroll. */
 html {
-  font-size: clamp(100%, 85% + 0.2vw, 112.5%);
+  font-size: 100%;
   -webkit-text-size-adjust: 100%;
   /* The full-width tricks (the rule under the header, the footer bar, the trail clip)
      use 100vw, which includes the scrollbar: the page could be nudged sideways by 8 to
@@ -310,11 +311,6 @@ a { color: inherit; }
 .hello,
 .site-footer { position: relative; z-index: 1; }
 
-/* Phones: 15px at the default text size of the browser. */
-@media (max-width: 640px) {
-  html { font-size: 93.75%; }
-}
-
 /* The header is one row: the codename, the tabs, then the two buttons, then
    the language and theme. The current tab is Bold, with a 4px magenta line
    as wide as the tab. Narrow screens put the tabs in a second row. */
@@ -395,7 +391,7 @@ a { color: inherit; }
 
 /* The language button: a ghost button like the theme button. It shows the
    language a click switches to. */
-.lang { display: flex; font-size: 0.85rem; }
+.lang { display: flex; font-size: 0.875rem; }
 
 .lang a {
   display: inline-flex;
@@ -416,7 +412,7 @@ a { color: inherit; }
 /* The tabs, one per page, 60px after the lockup. 14.4px type, line 18px.
    Each tab is the 65px height of the bar. Side padding is the width of the
    pink line, not a gap between labels. The current tab is Bold. The others
-   stay Medium. Roadmap is Stone until it is the current page. The tabs take
+   stay Medium. Roadmap is in the caption color until it is the current page. The tabs take
    the free width, so the buttons go to the right end. */
 .site-nav {
   display: flex;
@@ -425,7 +421,7 @@ a { color: inherit; }
   margin-right: auto;
   /* 60px from the lockup to the first tab. The header's column gap supplies the rest. */
   margin-left: calc(3.75rem - 0.6rem);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.25;
 }
@@ -460,9 +456,9 @@ a { color: inherit; }
   z-index: 1;
 }
 
-/* Roadmap stays Stone, as in the header frame, while its page opens. As a page
-   to come, it takes the disabled color below instead. */
-.site-nav a[data-page="roadmap"]:not([aria-current="page"]):not([aria-disabled="true"]) { color: #a08f79; }
+/* Roadmap reads as a caption while its page opens. As a page to come, it takes
+   the disabled color below instead. */
+.site-nav a[data-page="roadmap"]:not([aria-current="page"]):not([aria-disabled="true"]) { color: var(--color-text-muted); }
 
 /* The tab of a page to come. */
 .site-nav a[aria-disabled="true"],
@@ -499,7 +495,7 @@ a { color: inherit; }
   background: transparent;
   color: var(--color-text);
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   line-height: 1;
   text-decoration: none;
@@ -526,10 +522,19 @@ a { color: inherit; }
 .btn--primary { border-color: var(--color-button); background: var(--color-button); color: var(--color-button-text); }
 .btn--primary:hover { background: var(--color-button); opacity: 0.88; }
 
-/* The two buttons of the header: 14px at a 16px root, a 1px border in the text
-   color, and the 6px corners of the design system's small radius. */
-.site-header .btn { padding: 0.6em 1em; border-width: 1px; border-radius: var(--radius-ui-sm); font-size: 0.875rem; }
-.site-header .btn:not(.btn--primary):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
+/* One button format for the whole site, in whole pixels: 14px medium text on a
+   16px line, 16px icons, 8px x 14px padding, a 1px border and 6px corners, so
+   every button is 34px high. The header buttons, "Explore LaStack" and its
+   contact link on Hello World, the card buttons of LaStack and Model Recipes, and
+   the footer buttons use it. */
+.site-header .btn { gap: 8px; padding: 8px 14px; border-width: 1px; border-radius: 6px; font-size: 14px; line-height: 16px; }
+.site-header .btn svg,
+.site-header .btn img { width: 16px; height: 16px; }
+.site-header .btn:not(.btn--primary):not(.btn--ghost):not(.is-error):not([aria-busy="true"]) { border-color: var(--color-header-rule); }
+
+/* A button with no border: the contact link of the header. The border stays,
+   transparent, so it keeps the height of the other buttons. */
+.btn--ghost { border-color: transparent; }
 
 :focus-visible {
   outline: 3px solid var(--color-focus);
@@ -546,12 +551,13 @@ main {
 /* --- Intro --------------------------------------------------------------- */
 
 /* 12px tighter than the previous 0.95rem, so the stack label sits closer to the goals. */
-.intro { margin-bottom: max(0px, calc(0.95rem - 12px)); }
+/* Space above the title, so it sits 30px under the header, as on Hello World. */
+.intro { margin-top: 12px; margin-bottom: max(0px, calc(0.95rem - 12px)); }
 
 .eyebrow {
   margin-bottom: 0.35rem;
   color: var(--color-pink);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -561,7 +567,7 @@ main {
 h1 {
   margin: 0 0 calc(0.85rem + 12px);
   color: var(--color-title);
-  font-size: 2.35rem;
+  font-size: 2.25rem;
   font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.02em;
@@ -572,11 +578,14 @@ h1 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   gap: 1.5rem;
-  font-size: 0.9rem;
+  /* The body type of the Hello World principles: 16px on 24px, regular. */
+  font-size: 1rem;
+  letter-spacing: -0.011em;
+  line-height: 1.5;
 }
 
 /* Same ink as the page title (h1), light and dark. */
-.goal__lead { color: var(--color-title); font-weight: 500; }
+.goal__lead { color: var(--color-title); font-weight: 400; }
 
 /* Words wrapped in *asterisks* in the copy files. Semibold so the pink reads the
    same as the label next to the ink text. */
@@ -595,11 +604,14 @@ h1 {
   padding-top: 0.45rem;
   border-top: 1.5px solid var(--color-header);
 }
+/* Dark: the rule stays Beige. It is a line, not text. */
+:root[data-theme="dark"] .goal__point { border-top-color: #d0c2b1; }
 
 .goal__point-title { display: block; color: var(--color-header); font-weight: 600; }
 /* Dark: the three goal titles match the page title. */
 :root[data-theme="dark"] .goal__point-title { color: var(--color-title); }
-.goal__point-text { display: block; color: var(--color-body); }
+/* The ink of the Hello World principles, which is the ink of the page title. */
+.goal__point-text { display: block; margin-top: 6px; color: var(--color-title); }
 
 /* --- Architecture diagram -----------------------------------------------
    Sized in em so the downloaded image can render it at a fixed size.       */
@@ -621,7 +633,8 @@ h1 {
   gap: 0.3rem 1.5rem;
   margin-bottom: 0.4rem;
   color: var(--color-text-muted);
-  font-size: 0.78rem;
+  /* The size of the Client side / Server side labels of the schema, in regular. */
+  font-size: 0.875rem;
 }
 
 .legend {
@@ -668,7 +681,7 @@ h1 {
   flex-direction: column;
   gap: 0.5em;
   /* A touch larger so names inside the boxes stay readable. */
-  font-size: 0.94rem;
+  font-size: 1rem;
   line-height: 1.25;
 }
 
@@ -679,7 +692,7 @@ h1 {
 .comp .label__name,
 .layer--client > .label .label__name,
 .local-api .label__name { font-weight: 400; }
-.label__detail { color: var(--color-text-muted); font-size: 0.84em; line-height: 1.2; }
+.label__detail { color: var(--color-text-muted); font-size: 0.875em; line-height: 1.2; }
 
 .layer {
   display: flex;
@@ -693,7 +706,7 @@ h1 {
   background: var(--color-layer);
 }
 
-.layer > .label .label__name { color: var(--color-header); font-size: 1.1em; }
+.layer > .label .label__name { color: var(--color-header); font-size: 1.125em; }
 /* Dark: the layer names take the color of the page title (white). */
 :root[data-theme="dark"] .layer:not(.is-out-of-scope) > .label .label__name {
   color: var(--color-title);
@@ -753,7 +766,7 @@ h1 {
   /* Pulls the line closer to the rows above and below. */
   margin: -0.2em 0;
   color: var(--color-text-muted);
-  font-size: 0.85em;
+  font-size: 0.875em;
   font-weight: 600;
 }
 
@@ -784,7 +797,7 @@ h1 {
   opacity: 0.65;
 }
 
-/* On light, the Local / Server labels read in italic stone.
+/* On light, the Local / Server labels read in italic slate, the caption color.
    The line row is tall so the API has room. Pull the words back to the stroke. */
 .boundary__label {
   position: relative;
@@ -793,7 +806,7 @@ h1 {
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
   line-height: 1.1;
-  color: #a08f79;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 /* An arrow left of each name: up to the local side, down to the server side.
@@ -808,6 +821,9 @@ h1 {
 :root:not([data-theme="dark"]) .boundary__label.is-out-of-scope .boundary__arrow { color: #5c6770; }
 .boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 6px)); }
 .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 6px)); }
+/* Light: "Server side" in a dark warm grey, by choice. It is 4.1:1 on Cream, just
+   under the 4.5:1 of WCAG AA for text of this size. */
+:root:not([data-theme="dark"]) .boundary__label[data-copy="server"]:not(.is-out-of-scope) { color: #7d705f; }
 
 /* On dark, the same labels switch to italic lavender. */
 :root[data-theme="dark"] .boundary__label {
@@ -831,6 +847,10 @@ h1 {
 
 /* At rest the 2px border matches the gray ground, so it stays invisible until hover. */
 .layer.is-out-of-scope { border-color: #e6e8ea; }
+/* Light: a 0.5px grey stroke around the "Bring-Your-Own Application" row, so it
+   holds its shape on the cream page. Drawn as a shadow, outside the 2px hover
+   border, so it never shifts the box. */
+:root:not([data-theme="dark"]) .layer--client { box-shadow: 0 0 0 0.5px #aeb8be; }
 
 :root[data-theme="dark"] .is-out-of-scope { background: #3a3840; }
 :root[data-theme="dark"] .is-out-of-scope > .label .label__name { color: #b7b3ae; }
@@ -852,8 +872,8 @@ h1 {
   align-items: center;
   gap: 0.4em;
   color: var(--color-boundary);
-  /* Boundary type is 0.85em. Undo that so this name has the size of the component names. */
-  font-size: calc(1em / 0.85);
+  /* Boundary type is 0.875em. Undo that so this name has the size of the component names. */
+  font-size: calc(1em / 0.875);
   font-weight: 600;
   /* Half the dot, so the dot stays on the bridge center. */
   transform: translate(-0.275em, -50%);
@@ -894,7 +914,7 @@ h1 {
 .api-bridge__dots {
   position: absolute;
   inset: 0;
-  /* Stone, the dark beige already used for the Local / Server labels. */
+  /* Stone, the dark beige of the diagram lines (a dot pattern, not text). */
   background-color: #a08f79;
   /* 10% smaller than the 2.56px circles, on a shorter step so they sit closer. */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4.5' viewBox='0 0 4 4.5'%3E%3Ccircle cx='2' cy='2.25' r='1.15' fill='%23000'/%3E%3C/svg%3E");
@@ -907,7 +927,7 @@ h1 {
   mask-position: center top;
 }
 
-/* The endpoint color, so the moving point matches the API Endpoint name. */
+/* The moving point: a small Pink square, travelling along the dotted line. */
 .api-bridge__pulse {
   position: absolute;
   left: 50%;
@@ -915,8 +935,8 @@ h1 {
   top: 0;
   width: 5px;
   height: 5px;
-  border-radius: 50%;
-  background: var(--color-boundary);
+  border-radius: 0;
+  background: var(--color-pink);
   transform: translateX(-50%);
   animation: api-flow 2.8s ease-in-out infinite alternate;
 }
@@ -964,11 +984,11 @@ h1 {
 }
 
 /* The group name: the same type as the Client side / Server side labels, in the
-   color of the hint line above the schema (5.7:1 on Cream, 5.4:1 on Deep purple). */
+   color of the hint line above the schema (5.7:1 on Cream, 8.1:1 on Deep purple). */
 .cross-label {
   padding: 0 0.2em;
   color: var(--color-text-muted);
-  font-size: 0.85em;
+  font-size: 0.875em;
   font-style: italic;
   font-weight: 600;
   line-height: 1.1;
@@ -1093,7 +1113,7 @@ h1 {
   background: var(--color-tip-bg);
   box-shadow: inset 0 0 0 1px var(--color-tip-border), 0 8px 24px var(--color-tip-shadow);
   color: var(--color-tip-text);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   line-height: 1.4;
   pointer-events: none;
   visibility: hidden;
@@ -1110,13 +1130,13 @@ h1 {
 .tip__kind {
   margin-bottom: 0.2rem;
   color: var(--color-pink);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.tip__name { margin-bottom: 0.25rem; font-size: 0.95rem; font-weight: 600; }
+.tip__name { margin-bottom: 0.25rem; font-size: 1rem; font-weight: 600; }
 .tip__status { margin-bottom: 0.4rem; }
 .tip__status[hidden] { display: none; }
 
@@ -1126,7 +1146,7 @@ h1 {
   padding: 0.3em 0.65em;
   border-radius: 999px;
   color: #ffffff;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
 }
@@ -1144,7 +1164,7 @@ h1 {
   padding: 1rem var(--gutter) 1.25rem;
   border-radius: 14px 14px 0 0;
   box-shadow: 0 -8px 24px var(--color-tip-shadow);
-  font-size: 0.95rem;
+  font-size: 1rem;
   opacity: 1;
   pointer-events: auto;
   transform: translateY(100%);
@@ -1303,17 +1323,17 @@ h1 {
 .footer-actions { display: flex; flex: none; align-items: flex-start; gap: 24px; }
 
 .site-footer .footer-btn {
-  height: 34.304px;
-  padding: 8.652px 14.42px;
+  height: 34px;
+  padding: 8px 14px;
   border-width: 1px;
   border-color: #291435;
-  border-radius: 6.76px;
+  border-radius: 6px;
   background: transparent;
   color: #fff;
-  font-size: 14.4px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 14.42px;
-  gap: 7.2px;
+  line-height: 16px;
+  gap: 8px;
   white-space: nowrap;
 }
 
@@ -1366,7 +1386,7 @@ h1 {
   .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
   .prefs { grid-area: prefs; margin-right: 0; padding: 0.7rem 0; }
   .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
-  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 0.65em 0.6em; font-size: 0.8rem; white-space: nowrap; }
+  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 8px; font-size: 12px; white-space: nowrap; }
 
   /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. The
      sentence takes its own line under the logos. The lockup's fixed 21px height has to go
@@ -1374,9 +1394,9 @@ h1 {
   .footer-brand { width: auto; max-width: 100%; height: auto; flex-wrap: wrap; row-gap: 10px; }
   .footer-brand .footer-brand__role { width: 100%; height: auto; line-height: 1.4; }
   /* Stacked under the lockup, the labels line up with its left edge: the buttons' border
-     is the colour of the bar, so only their 14.42px inset showed, as an indent. The row
+     is the colour of the bar, so only their 14px inset showed, as an indent. The row
      moves out by that inset; the hover fill still lands inside the bar's 20px padding. */
-  .footer-actions { width: calc(100% + 14.42px); margin-left: -14.42px; flex-wrap: wrap; }
+  .footer-actions { width: calc(100% + 14px); margin-left: -14px; flex-wrap: wrap; }
 }
 
 /* Intro on narrower screens. */
@@ -1387,7 +1407,7 @@ h1 {
 @media (max-width: 640px) {
   .goal__points { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   /* The goals stack on a phone, so the stack label needs room above it. */
-  .intro { margin-bottom: 2rem; }
+  .intro { margin-top: 14px; margin-bottom: 2rem; }
 }
 
 /* --- Hello World -----------------------------------------------------------
@@ -1459,7 +1479,7 @@ h1 {
 
 /* French "à code source ouvert": one space is set at the 80px of the first line,
    and the last two letters are pulled in by 8px and 2px at the 90px size. */
-.hello__title-mark .space-base { font-size: 0.8889em; }
+.hello__title-mark .space-base { font-size: 80px; }
 .hello__title-mark .kern-r { letter-spacing: -0.0889em; }
 .hello__title-mark .kern-t { letter-spacing: -0.0222em; }
 
@@ -1475,7 +1495,7 @@ h1 {
 .hello__lead {
   margin: 0;
   color: var(--color-title);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: -0.208px;
@@ -1501,31 +1521,35 @@ h1 {
 .what__links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
 .what__links .btn,
 .what__pebble {
-  gap: 7.2px;
-  padding: 8.652px 14.42px;
-  border-radius: 6.76px;
-  font-size: 14.4px;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 14.42px;
+  line-height: 16px;
 }
 .what__links .btn { border-width: 1px; border-color: var(--color-title); }
 .what__pebble {
   display: inline-flex;
   align-items: center;
+  border: 1px solid transparent;
   color: var(--color-title);
   text-decoration: none;
 }
-.what__links img { display: block; flex: none; }
+.what__links img { display: block; flex: none; width: 16px; height: 16px; }
 .what__pebble:hover { color: var(--color-link); }
 
 :root[data-theme="dark"] .what__links img { filter: brightness(0) invert(1); }
 
 /* The principles on the left, the picture on the right. */
-.hello__approach-title {
+/* The section headings: this one on Hello World, and the heading above the
+   schema on the stack page. */
+.hello__approach-title,
+.stack-heading {
   margin: 0 0 1.1rem;
   color: var(--color-title);
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -1600,7 +1624,7 @@ h1 {
   background: transparent;
   color: var(--approach-card-ink);
   font: inherit;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.176px;
   line-height: 24px;
@@ -1642,7 +1666,7 @@ h1 {
 }
 
 .approach__name {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.176px;
   line-height: 24px;
@@ -1750,8 +1774,8 @@ h1 {
   border-radius: 12px;
   background: #f5e8ff;
 }
-.approach__stage .pic-tools__cairn strong { font-size: 1.35rem; }
-.approach__stage .pic-tools__cairn span:last-child { color: #544b40; font-size: 1.15rem; font-weight: 400; }
+.approach__stage .pic-tools__cairn strong { font-size: 1.25rem; }
+.approach__stage .pic-tools__cairn span:last-child { color: #544b40; font-size: 1.125rem; font-weight: 400; }
 
 /* The dark graph box is the same height as the card stack: 479px, on #402c4c
    with the Muted purple outline of frame 28:11147. */
@@ -1884,7 +1908,7 @@ h1 {
 
 .carousel__name {
   color: var(--color-title);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -1919,7 +1943,7 @@ h1 {
   border-bottom: 1px solid var(--color-header-rule);
 }
 /* The heading of the section: the size of the introduction, in the title ink. */
-.carousel__title { color: var(--color-title); font-size: 1.6rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.carousel__title { color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
 .carousel__marks { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
 .carousel__item { padding: 0.85rem 0.9rem 0.9rem; border-bottom: 1px solid var(--color-schema-line); transition: background 0.2s; }
 /* The current row: a Magenta block before its name, as the cursor of a terminal,
@@ -1957,7 +1981,7 @@ h1 {
   text-align: left;
   cursor: pointer;
 }
-.carousel__mark-name { flex: 1; font-size: 1.1rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
+.carousel__mark-name { flex: 1; font-size: 1.125rem; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; }
 /* A name on two lines: its second line starts under its first letter, after the room of the block. */
 .carousel__mark-name { padding-left: 1.05em; text-indent: -1.05em; }
 .carousel__mark:hover,
@@ -2024,7 +2048,7 @@ h1 {
 
 .pic__label {
   color: var(--color-text-muted);
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2038,7 +2062,7 @@ h1 {
   border-radius: 999px;
   background: var(--color-badge-alpha);
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
@@ -2048,7 +2072,7 @@ h1 {
   justify-content: center;
   gap: 0.3rem 1.1rem;
   margin-top: 1.2rem;
-  font-size: 0.98rem;
+  font-size: 1rem;
 }
 
 .pic__legend li { display: flex; align-items: center; gap: 0.4rem; }
@@ -2082,8 +2106,8 @@ h1 {
 .approach__stage .pic.pic-tests { max-width: 807px; margin: 0 auto; }
 
 .pic-tests .pic__label {
-  color: #a08f79;
-  font-size: 15px;
+  color: var(--color-text-muted);
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 1.081px;
   line-height: 18.24px;
@@ -2283,8 +2307,8 @@ h1 {
   width: 307.88px;
   height: 19.23px;
   margin: 0;
-  color: #a08f79;
-  font-size: 15px;
+  color: var(--color-text-muted);
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 1.081px;
   line-height: 18.24px;
@@ -2410,7 +2434,6 @@ h1 {
 
 :root[data-theme="dark"] .pic-contract__joint-label { color: var(--color-pink); }
 
-:root[data-theme="dark"] .pic-contract__name { color: var(--color-text-muted); }
 
 :root[data-theme="dark"] .pic-contract .pic__legend { color: var(--color-body); }
 
@@ -2500,12 +2523,12 @@ h1 {
 }
 
 .pic-tools__cairn .pic__label { flex-basis: 100%; text-align: center; }
-.pic-tools__cairn strong { color: var(--color-title); font-size: 1.15rem; font-weight: 600; }
+.pic-tools__cairn strong { color: var(--color-title); font-size: 1.125rem; font-weight: 600; }
 
 .pic-tools__compute { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; text-align: center; }
 .pic-tools__compute .pic__box { display: flex; flex-direction: column; padding: 0.45rem 0.5rem; line-height: 1.25; }
 .pic-tools__compute b { font-weight: 500; }
-.pic-tools__compute small { color: var(--color-body); font-size: 0.8em; font-weight: 400; }
+.pic-tools__compute small { color: var(--color-body); font-size: 0.75rem; font-weight: 400; }
 .pic-tools__foot { margin-top: 0.5rem; text-align: center; }
 
 /* 4. The skeleton of the schema: the layers, their components and the links
@@ -2545,7 +2568,7 @@ h1 {
   display: block;
   margin: 0;
   color: #291435;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 500;
   line-height: 1.081;
 }
@@ -2586,7 +2609,7 @@ h1 {
   border-radius: 0.423rem;
   background: #ecedef;
   color: rgb(41 20 53 / 0.72);
-  font-size: 0.844rem;
+  font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.351;
   text-align: center;
@@ -2674,7 +2697,7 @@ h1 {
 :root[data-theme="dark"] .pic-skeleton__name {
   min-height: 17px;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 16.22px;
 }
@@ -2735,7 +2758,7 @@ h1 {
   border-radius: 6.76px;
   background: #614972;
   color: #dcbaf6;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 18.24px;
   white-space: nowrap;
@@ -2787,8 +2810,12 @@ h1 {
 
 /* Narrow and portrait screens: one column, with the sizes of a page that scrolls. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
-  .hello .hello__heading { max-width: none; font-size: 2.43rem; }
-  .hello__lead { font-size: 1.05rem; }
+  .hello .hello__heading { max-width: none; font-size: 2.25rem; }
+  /* The serif line at 40px against the 36px of the first line (90 against 80 on a
+     wide screen); the French space keeps the 36px of the first line. */
+  .hello__title-mark { font-size: 2.5rem; }
+  .hello__title-mark .space-base { font-size: 2.25rem; }
+  .hello__lead { font-size: 1rem; }
   .approach { grid-template-columns: minmax(0, 1fr); }
   /* The footer keeps its baseline alignment here. It used to be switched to flex-start
      for the stacked layout, but baseline has no effect on a wrapped line (one item per
@@ -2799,10 +2826,10 @@ h1 {
 /* Phones: smaller pictures, so each one fits the width of the slide. */
 @media (max-width: 640px) {
   .carousel__picture { padding: 1rem 0.8rem; }
-  .pic { font-size: 0.9rem; }
-  .pic__label { font-size: 0.66rem; }
+  .pic { font-size: 0.875rem; }
+  .pic__label { font-size: 0.625rem; }
   .pic__mark { width: 1.05rem; height: 1.05rem; }
-  .pic__tag { font-size: 0.7rem; }
+  .pic__tag { font-size: 0.75rem; }
   .pic-tests__head { width: 100%; max-width: none; margin-bottom: 12px; }
   .pic-tests__head .pic__label:first-child,
   .pic-tests__head .pic__label:last-child { width: auto; max-width: none; }
@@ -2817,9 +2844,9 @@ h1 {
   .pic-tests .pic__tag { font-size: 12px; line-height: 1.3; }
   .pic-tools__tools,
   .pic-tools__compute { gap: 0.4rem; }
-  .pic-tools__tools .pic__box { padding: 0.45rem 0.2rem; font-size: 0.78rem; }
+  .pic-tools__tools .pic__box { padding: 0.45rem 0.2rem; font-size: 0.75rem; }
   .pic-skeleton__name,
-  .pic-skeleton__cross span { font-size: 0.7rem; }
+  .pic-skeleton__cross span { font-size: 0.75rem; }
   .pic-skeleton__link { width: 0.8rem; }
   .pic-skeleton__link--across { width: auto; height: 4px; }
   .pic-skeleton__link--down { width: 4px; }
@@ -2830,7 +2857,7 @@ h1 {
   :root[data-theme="dark"] .pic-skeleton__core { width: 100%; height: auto; margin-top: 0; padding: 0.75rem; gap: 0.515rem; }
   :root[data-theme="dark"] .pic-skeleton__matrix { height: auto; grid-template-columns: minmax(0, 1fr) 1.545rem minmax(0, 1fr); grid-template-rows: minmax(3.896rem, auto) 1.133rem minmax(3.896rem, auto); }
   :root[data-theme="dark"] .pic-skeleton__matrix > .pic-skeleton__layer { height: auto; padding: 0.349rem 0.515rem 0.515rem; gap: 0.308rem; }
-  :root[data-theme="dark"] .pic-skeleton__name { min-height: 0; font-size: 0.7rem; line-height: 1.081; }
+  :root[data-theme="dark"] .pic-skeleton__name { min-height: 0; font-size: 0.75rem; line-height: 1.081; }
   :root[data-theme="dark"] .pic-skeleton__comp { height: 1.648rem; }
   :root[data-theme="dark"] .pic-skeleton__link { width: 0.8rem; }
   :root[data-theme="dark"] .pic-skeleton__link--across { width: auto; height: 4px; }
@@ -2838,8 +2865,8 @@ h1 {
   :root[data-theme="dark"] .pic-skeleton__layer--row { height: auto; min-height: 3.438rem; padding: 0.412rem 0.515rem; gap: 0.617rem; }
   :root[data-theme="dark"] .pic-skeleton__layer--row .pic-skeleton__name { width: 3.8rem; min-height: 0; }
   :root[data-theme="dark"] .pic-skeleton__cross { width: 100%; height: auto; margin-top: 0.412rem; }
-  :root[data-theme="dark"] .pic-skeleton__cross span { min-height: 0; padding: 0.246rem 0.206rem 0.323rem; font-size: 0.7rem; line-height: 1.351; }
-  :root[data-theme="dark"] .pic-skeleton .pic__legend { width: 100%; height: auto; margin: 0.62rem 0 0; padding-top: 0.31rem; flex-wrap: wrap; font-size: 0.98rem; line-height: 1.3625; }
+  :root[data-theme="dark"] .pic-skeleton__cross span { min-height: 0; padding: 0.246rem 0.206rem 0.323rem; font-size: 0.75rem; line-height: 1.351; }
+  :root[data-theme="dark"] .pic-skeleton .pic__legend { width: 100%; height: auto; margin: 0.62rem 0 0; padding-top: 0.31rem; flex-wrap: wrap; font-size: 1rem; line-height: 1.3625; }
   :root[data-theme="dark"] .pic-skeleton .pic__key { width: 1.133rem; height: 0.823rem; }
   :root[data-theme="dark"] .pic-skeleton .pic__key--link { width: 1.133rem; }
 }
@@ -2880,7 +2907,7 @@ h1 {
 /* The same as the stack page: the title and two lines in the title's ink. Then
    the hint above the filters. */
 .recipe-intro { margin-bottom: 0.7rem; }
-.recipe-intro__lead { color: var(--color-title); font-size: 0.9rem; font-weight: 500; }
+.recipe-intro__lead { color: var(--color-title); font-size: 0.875rem; font-weight: 500; }
 .recipe-hint { margin-bottom: 0.9rem; }
 
 /* The table with its filters on the left, the sheet of the selected recipe on the right. */
@@ -2889,7 +2916,7 @@ h1 {
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
   gap: 2rem;
   padding-bottom: 0.4rem;
-  font-size: 0.94rem;
+  font-size: 1rem;
   line-height: 1.25;
 }
 
@@ -2984,7 +3011,7 @@ h1 {
 .recipe-menu__label {
   padding: 0.4em 0.65em 0.25em;
   color: var(--color-text-muted);
-  font-size: 0.75em;
+  font-size: 0.625rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
@@ -3028,7 +3055,7 @@ h1 {
   background: var(--color-bg);
   box-shadow: inset 0 -1px 0 var(--color-header-rule);
   color: var(--color-text-muted);
-  font-size: 0.86em;
+  font-size: 0.875rem;
   font-weight: 600;
   text-align: left;
   vertical-align: bottom;
@@ -3062,7 +3089,7 @@ h1 {
 }
 .recipe-pick:focus-visible { outline-offset: 4px; }
 .recipe-pick__model { display: block; font-weight: 600; white-space: nowrap; }
-.recipe-pick__publisher { display: block; margin-top: 0.15em; color: var(--color-text-muted); font-size: 0.86em; }
+.recipe-pick__publisher { display: block; margin-top: 0.15em; color: var(--color-text-muted); font-size: 0.875rem; }
 
 .recipe-cell-nowrap { white-space: nowrap; }
 .recipe-table .recipe-col-mark,
@@ -3075,7 +3102,7 @@ h1 {
 .recipe-context { display: flex; align-items: center; gap: 0.6em; }
 .recipe-context__bar { position: relative; flex: 1; height: 0.4em; background: var(--recipe-track); }
 .recipe-context__bar i { position: absolute; inset: 0 auto 0 0; background: var(--recipe-bar); }
-.recipe-context__value { width: 3.2em; font-size: 0.86em; font-variant-numeric: tabular-nums; text-align: right; }
+.recipe-context__value { width: 3.2em; font-size: 0.875rem; font-variant-numeric: tabular-nums; text-align: right; }
 
 /* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
 .recipe-mark { display: inline-block; width: 0.6em; height: 0.6em; border: 1.5px solid var(--color-text-muted); border-radius: 50%; vertical-align: middle; }
@@ -3105,7 +3132,7 @@ h1 {
   border-radius: 50%;
   background: none;
   color: var(--color-text-muted);
-  font: 600 0.8em/1 var(--font-sans);
+  font: 600 0.75rem/1 var(--font-sans);
   vertical-align: 0.1em;
   cursor: pointer;
 }
@@ -3123,7 +3150,7 @@ h1 {
   background: var(--color-tip-bg);
   box-shadow: 0 8px 24px var(--color-tip-shadow);
   color: var(--color-tip-text);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.4;
   text-align: left;
@@ -3135,7 +3162,7 @@ h1 {
 
 .recipe-sheet { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
 
-.recipe-sheet__title { margin: 0; color: var(--color-title); font-size: 1.45em; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.recipe-sheet__title { margin: 0; color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .recipe-sheet__publisher { color: var(--color-text-muted); font-weight: 400; }
 .recipe-sheet__where { margin-top: 0.3em; color: var(--color-text); }
 
@@ -3145,14 +3172,14 @@ h1 {
   grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
   column-gap: 1em;
   margin: 0.9em 0 0;
-  font-size: 0.92em;
+  font-size: 0.875rem;
 }
 .recipe-facts dt,
 .recipe-facts dd { margin: 0; padding: 0.45em 0; border-top: 1px solid var(--recipe-rule); }
 .recipe-facts dt { color: var(--color-text-muted); }
 .recipe-facts dd { color: var(--color-text); font-weight: 500; }
 .recipe-facts dd.is-wide { grid-column: 2 / -1; }
-.recipe-facts code { font-family: var(--font-mono); font-size: 0.92em; font-weight: 400; overflow-wrap: anywhere; }
+.recipe-facts code { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; overflow-wrap: anywhere; }
 
 .recipe-files { display: flex; flex-direction: column; min-height: 0; }
 .recipe-files__top {
@@ -3163,7 +3190,7 @@ h1 {
   gap: 0.2em 1.2em;
   margin-bottom: 0.4rem;
 }
-.recipe-files__name { margin: 0; color: var(--color-text-muted); font-size: 0.86em; font-weight: 600; }
+.recipe-files__name { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
 
 /* The file names: monospace tabs, the current one with the Magenta line of the tabs. */
 .recipe-tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--color-header-rule); }
@@ -3174,20 +3201,20 @@ h1 {
   border-bottom: 2px solid transparent;
   background: none;
   color: var(--color-text-muted);
-  font: 500 0.88em var(--font-mono);
+  font: 500 0.875rem var(--font-mono);
   cursor: pointer;
 }
 .recipe-tab:hover { color: var(--color-text); }
 .recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-text); }
 
 /* A file, or a command: the dark panel, with the Copy button in the corner. YAML
-   keys in River and comments in Stone, the colors of technical text on dark. */
+   keys in River and comments in neutral grey, the colors of technical text on dark. */
 .recipe-code { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--recipe-code-bg); color: #f5e8ff; }
 .recipe-files .recipe-code { margin-top: 1rem; }
-.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 5rem 1rem 1.2rem; overflow: auto; font: 0.86em/1.7 var(--font-mono); }
+.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
 .recipe-code--file pre { max-height: 26rem; }
 .recipe-code__key { color: #63bcc1; }
-.recipe-code__comment { color: #a08f79; }
+.recipe-code__comment { color: #b7b3ae; }
 
 .recipe-copy {
   position: absolute;
@@ -3199,14 +3226,14 @@ h1 {
   background: inherit;
   color: inherit;
   font: inherit;
-  font-size: 0.8em;
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.2;
   cursor: pointer;
 }
 .recipe-copy:hover { border-color: #f5e8ff; }
 
-.recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.92em; font-weight: 500; text-underline-offset: 3px; }
+.recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
 .recipe-link:hover { color: var(--color-link-hover); }
 
 /* The steps to install a recipe (shown when the stack repository is public). */
@@ -3275,7 +3302,7 @@ h1 {
 
 .roadmap-intro { margin-bottom: 2rem; }
 .roadmap-intro h1 { margin-bottom: 0.6rem; }
-.roadmap-intro__lead { color: var(--color-title); font-size: 1.05rem; }
+.roadmap-intro__lead { color: var(--color-title); font-size: 1rem; }
 
 .roadmap {
   display: grid;
@@ -3319,14 +3346,14 @@ h1 {
   background: var(--color-pink);
 }
 .roadmap__when-text { margin-top: 0.4rem; color: var(--color-body); font-size: 0.875rem; }
-.roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600; }
+.roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
 
 /* A workstream: its name with one line about it, then its three cells, over a
    hairline. */
 .roadmap__name,
 .roadmap__cell { padding: 1.1rem 0 1.3rem; border-bottom: 1px solid var(--color-schema-line); }
 .roadmap__name { display: flex; flex-direction: column; gap: 0.3rem; padding-right: 0.6rem; }
-.roadmap__name-text { color: var(--color-title); font-size: 1.1rem; font-weight: 500; letter-spacing: -0.01em; }
+.roadmap__name-text { color: var(--color-title); font-size: 1.125rem; font-weight: 500; letter-spacing: -0.01em; }
 .roadmap__note { max-width: 20ch; color: var(--color-text-muted); font-size: 0.875rem; }
 .roadmap__cell { min-width: 0; }
 
@@ -3336,7 +3363,7 @@ h1 {
 .roadmap__items { display: flex; flex-direction: column; gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
 .roadmap-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; overflow-wrap: break-word; }
 .roadmap-item__title { color: var(--color-text); font-weight: 500; }
-.roadmap-item__text { color: var(--color-body); font-size: 0.92rem; }
+.roadmap-item__text { color: var(--color-body); font-size: 0.875rem; }
 .roadmap-item--now .roadmap-item__title { color: var(--color-title); }
 .roadmap-item--next .roadmap-item__title { font-weight: 400; }
 .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); font-weight: 400; }
@@ -3346,7 +3373,7 @@ h1 {
 .roadmap-tag {
   margin-top: 0.2rem;
   color: var(--color-text-muted);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   text-decoration: underline dotted;
   text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
@@ -3365,11 +3392,11 @@ h1 {
   .roadmap__band,
   .roadmap__row--head { display: none; }
   .roadmap__name { padding: 0 0 0.6rem; border-bottom: 1px solid var(--color-header-rule); }
-  .roadmap__name-text { font-size: 1.3rem; }
+  .roadmap__name-text { font-size: 1.25rem; }
   .roadmap__note { max-width: none; }
   .roadmap__cell { padding: 0.6rem 0 0.8rem; }
   .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; background: color-mix(in srgb, var(--color-selected) 70%, transparent); border-bottom: 0; }
-  .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.8rem; font-weight: 600; }
+  .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
   [data-when="now"] > .roadmap__cell-label::before {
     content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-right: 0.4em; vertical-align: -0.12em; background: var(--color-pink);
   }
@@ -3475,36 +3502,111 @@ h1 {
 .is-out-of-scope .comp.is-hovered:not(.is-selected),
 .layer.is-out-of-scope.is-hovered { border-color: #8b939a; }
 
-/* The hint on the left, the button of the sheet on the right, above the sheet. */
-/* Room above it, so the hint does not sit against the goals. */
-.stack-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; }
+/* The bar above the schema: the heading with the hint under it on the left, the
+   button of the sheet on the right, centered on them. 48px above it, so it reads
+   apart from the goals; 4px between the heading and the hint; 16px to the schema. */
+.stack-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 42px; }
+.stack-caption__text { min-width: 0; }
+.stack-caption .stack-heading { margin: 0 0 0.25rem; }
 .stack-caption .hint { margin-bottom: 0; }
-.arch-caption { margin-bottom: 0.6rem; }
+.arch-caption { margin-bottom: 1rem; }
+/* The button format of the site (see .site-header .btn), outlined as "Explore
+   LaStack" on Hello World: a 1px border in the title ink. */
 .sheet-toggle {
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: 0.45em;
-  padding: 0.35em 0.7em;
-  border: 1px solid var(--color-schema-line);
-  border-radius: var(--radius-ui-sm);
-  background: none;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-title);
+  border-radius: 6px;
+  background: transparent;
   color: var(--color-text);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 16px;
   cursor: pointer;
 }
-.sheet-toggle:hover { border-color: var(--color-header-rule); }
-.sheet-toggle svg { width: 1.15em; height: 1.15em; }
+.sheet-toggle:hover { background: var(--color-button-hover); }
+/* Dark: the hover fill of the primary, outlined and borderless buttons is Pale
+   purple, so the label and icon turn Deep purple (10:1), with a Mid purple border.
+   The footer and error buttons keep their own hover. */
+:root[data-theme="dark"] .btn:not(.footer-btn):not(.is-error):hover,
+:root[data-theme="dark"] .sheet-toggle:hover { border-color: #734c90; color: #291435; }
+:root[data-theme="dark"] .btn--primary:hover { background: var(--color-button-hover); opacity: 1; }
+/* Light: the primary button fills with a dark warm grey on hover, and its white
+   label and icon stay white (4.8:1). */
+:root:not([data-theme="dark"]) .btn--primary:hover { border-color: #7d705f; background: #7d705f; opacity: 1; }
+:root[data-theme="dark"] .what__links .btn:hover img { filter: none; }
+/* Narrow screens have no sheet (pop-ups instead), so no button. This rule comes
+   after the one above, which would otherwise show the button again. */
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .stack-caption .sheet-toggle { display: none; }
+}
+/* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
+   text color, 16px as the other button icons. Replace that file to change the arrow. It points right when the card
+   is closed and turns down when it is open. */
+.sheet-toggle__chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  transition: transform 0.2s ease;
+}
+.sheet-toggle[aria-expanded="true"] .sheet-toggle__chevron { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .sheet-toggle__chevron { transition: none; } }
+
+/* Recipes: the hint on the left, the same button on the right, above the sheet.
+   Closed, the table takes the full width (wide screens only; a narrow screen keeps
+   the sheet under the table and has no button). */
+.recipe-caption { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 0.9rem; }
+.recipe-caption .recipe-hint { margin-bottom: 0; }
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  .recipe-sheet-hidden .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-sheet-hidden .recipe-sheet { display: none; }
+}
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-caption .sheet-toggle { display: none; }
+}
 
 /* The sheet: a strong rule over it, then the kind, the name, the description,
    and the facts as label | value rows. Names in the facts are links to their boxes. */
-.stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 0.94rem; }
-.stack-sheet__kind { color: var(--color-text-muted); font-size: 0.86em; font-weight: 600; }
-.stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.45em; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
-.stack-sheet__text { margin-top: 0.7rem; color: var(--color-body); line-height: 1.45; }
-.stack-sheet__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.2em; margin: 1.1rem 0 0; font-size: 0.92em; }
+.stack-sheet { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 1rem; }
+.stack-sheet__kind { color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
+/* The × that closes the sheet: the ghost icon button of the phone pop-up, in the
+   top right corner, on the line of the kind. The kind and name keep clear of it.
+   The sheet is sticky, so the button sits in its corner. */
+.stack-sheet__close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-title);
+  cursor: pointer;
+}
+.stack-sheet__close svg { width: 20px; height: 20px; }
+/* A light wash of the ink: Deep purple on Cream, white on Deep purple. */
+.stack-sheet__close:hover { background: rgb(41 20 53 / 0.06); }
+:root[data-theme="dark"] .stack-sheet__close:hover { background: rgb(255 255 255 / 0.1); }
+.stack-sheet__kind,
+.stack-sheet__name { padding-right: 2.5rem; }
+.stack-sheet__name { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+/* The type and ink of the goal lead at the top of the page (16px, regular). */
+.stack-sheet__text { margin-top: 0.7rem; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
+/* Dark: the rule above the sheet and the "Component" label in Pale purple. */
+:root[data-theme="dark"] .stack-sheet { border-top-color: #dcbaf6; }
+:root[data-theme="dark"] .stack-sheet__kind { color: #dcbaf6; }
+.stack-sheet__facts { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.2em; margin: 1.1rem 0 0; font-size: 0.875rem; }
 .stack-sheet__facts dt,
 .stack-sheet__facts dd { margin: 0; padding: 0.5em 0; border-top: 1px solid var(--color-schema-line); }
 .stack-sheet__facts dt { color: var(--color-text-muted); }
@@ -3512,3 +3614,22 @@ h1 {
 .stack-sheet__links { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; }
 .stack-sheet__link { padding: 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: 500; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .stack-sheet__link:hover { color: var(--color-link-hover); }
+/* No rule between the description and the first fact. */
+.stack-sheet__facts > :nth-child(-n + 2) { border-top: 0; }
+/* Each label sits above its value, so the long labels ("Part of the layer") leave
+   the full width to the names. One rule between two facts. */
+.stack-sheet__facts { grid-template-columns: minmax(0, 1fr); }
+.stack-sheet__facts dt { padding-bottom: 0; }
+.stack-sheet__facts dd { padding-top: 0; border-top: 0; }
+/* Two parts: the layer of the component, then the other components, with more
+   room above the rule between them. */
+.stack-sheet__facts dt:not(:first-child) { margin-top: 0.5rem; padding-top: 0.75rem; }
+/* "Part of the layer": the branch icon before the label, and the layer name
+   lined up with the label, after the icon. */
+.stack-sheet__facts dt.is-part-of > span { display: flex; align-items: center; gap: 0.375rem; }
+.stack-sheet__branch { display: inline-grid; flex: none; }
+.stack-sheet__branch svg { width: 18px; height: 18px; }
+.stack-sheet__facts dd.is-part-of { padding-left: calc(18px + 0.375rem); }
+/* Dark: the links in Pink. On Cream, Pink is 2.0:1, so light keeps Mid purple. */
+:root[data-theme="dark"] .stack-sheet__link { color: var(--color-pink); }
+:root[data-theme="dark"] .stack-sheet__link:hover { color: var(--color-link-hover); }

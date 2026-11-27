@@ -41,6 +41,8 @@ window.CAIRN_COPY.fr = {
     download: "Télécharger le schéma",
     downloadBusy: "Préparation du schéma…",
     downloadFailed: "Échec du téléchargement. Réessayez.",
+    contact: "Faites-nous signe",
+    contactUrl: "mailto:bonjourhi@opencairn.ai",
     github: "Contribuez sur GitHub",
     githubUrl: "https://github.com/opencairn-ai",
   },
@@ -182,19 +184,25 @@ window.CAIRN_COPY.fr = {
     label: "Architecture de la pile d’inférence d’IA à code source ouvert",
     // La ligne au-dessus du schéma. Un grand écran montre la case sélectionnée dans la
     // fiche à côté du schéma ; un petit écran la montre dans une infobulle.
-    hint: "Sélectionnez une couche ou un composant pour découvrir son rôle.",
+    // Le titre au-dessus du schéma.
+    heading: "LaStack, couche par couche, composant par composant",
+    hint: "Sélectionnez une case pour voir son rôle.",
     // La fiche à côté du schéma : les faits sous la description de la case sélectionnée.
     // Les noms de couches et de composants dans ces faits sont des liens vers leurs cases.
     sheet: {
       components: "Composants",
-      layer: "Couche",
-      alsoInLayer: "Aussi dans cette couche",
+      layer: "Fait partie de la couche",
+      // Un seul autre composant : au singulier, sans nombre. Deux ou plus : au pluriel,
+      // et le script ajoute le nombre, « Autres composants de cette couche (2) ».
+      alsoInLayerOne: "Autre composant de cette couche",
+      alsoInLayer: "Autres composants de cette couche",
       appliesTo: "S’applique à",
       allLayers: "Toutes les couches",
-      // Le bouton au-dessus de la fiche. La fiche est masquée au départ : le schéma prend
-      // toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
-      hide: "Masquer les détails",
-      show: "Afficher les détails",
+      // Le bouton au-dessus de la fiche, avec une flèche. La fiche est masquée au départ :
+      // le schéma prend toute la largeur. Un clic sur une case ouvre la fiche ; Échap la ferme.
+      title: "Fiche explicative",
+      // Le nom du × en haut à droite de la fiche, pour les lecteurs d’écran et au survol.
+      close: "Fermer la fiche",
     },
     // The name of the group of cross-cutting layers (Security, Observability, Control Plane).
     crossLabel: "S’applique à toutes les couches",
@@ -451,6 +459,9 @@ window.CAIRN_COPY.fr = {
     sheet: {
       // Le nom de la fiche, pour les lecteurs d’écran.
       label: "Recette sélectionnée",
+      // Le bouton au-dessus de la fiche, avec une flèche, comme sur la page de la pile.
+      // La fiche est ouverte au départ ; le bouton la ferme et le tableau prend toute la largeur.
+      title: "Fiche de configuration",
       files: "Fichiers de la recette",
       copy: "Copier",
       copied: "Copié",
