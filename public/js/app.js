@@ -14,8 +14,10 @@
   const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
   const LANGUAGE_KEY = "cairn-language";
-  // The pages that have no content yet. Each link to one of them (its tab, a button)
-  // shows as disabled and does not open the page. Remove a name to open its page.
+  // The pages not released yet. Each link to one of them (its tab, a button) shows
+  // as disabled and does not open the page; the page itself is reachable by its
+  // address only (for the PM), with noindex. At release, remove the name here and
+  // the noindex line in the page, and add the page to sitemap.xml.
   const PAGES_TO_COME = ["roadmap"];
 
   const lang = pickLanguage();
@@ -469,6 +471,9 @@
     button.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       apply(next);
+      // The choice follows the visitor to the next page (read in the <head> of
+      // each page). Private modes may refuse the storage: the page still works.
+      try { sessionStorage.setItem("cairn-theme", next); } catch (error) { /* no storage */ }
     });
   }
 

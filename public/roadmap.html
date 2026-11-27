@@ -5,9 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#291435">
 <script>
-  // The site opens in dark on every page; the header button can switch it.
-  document.documentElement.dataset.theme = "dark";
+  // The site opens in dark. A theme the visitor chooses with the header button
+  // stays from page to page for the rest of the visit (sessionStorage, set by
+  // js/app.js); a new visit opens in dark again.
+  try { document.documentElement.dataset.theme = sessionStorage.getItem("cairn-theme") === "light" ? "light" : "dark"; }
+  catch (error) { document.documentElement.dataset.theme = "dark"; }
 </script>
+<!-- Before release: the page is online but its tab is disabled (PAGES_TO_COME in
+     js/app.js), so the PM opens it by its address. Search engines must not list it.
+     At release, remove this line and "roadmap" from PAGES_TO_COME, and add the page
+     to sitemap.xml. -->
+<meta name="robots" content="noindex">
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
 <title>Cairn: Roadmap</title>
@@ -203,7 +211,7 @@
 
 <script src="copy/en.js?v=114"></script>
 <script src="copy/fr.js?v=115"></script>
-<script src="js/app.js?v=89"></script>
+<script src="js/app.js?v=91"></script>
 <script src="js/roadmap.js?v=5"></script>
 </body>
 </html>

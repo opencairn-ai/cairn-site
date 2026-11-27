@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#291435">
 <script>
-  // The site opens in dark on every page; the header button can switch it.
-  document.documentElement.dataset.theme = "dark";
+  // The site opens in dark. A theme the visitor chooses with the header button
+  // stays from page to page for the rest of the visit (sessionStorage, set by
+  // js/app.js); a new visit opens in dark again.
+  try { document.documentElement.dataset.theme = sessionStorage.getItem("cairn-theme") === "light" ? "light" : "dark"; }
+  catch (error) { document.documentElement.dataset.theme = "dark"; }
 </script>
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
@@ -134,7 +137,7 @@
 
 <script src="copy/en.js?v=114"></script>
 <script src="copy/fr.js?v=115"></script>
-<script src="js/app.js?v=89"></script>
+<script src="js/app.js?v=91"></script>
 <!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
 <script src="js/recipes-data.js"></script>
 <script src="js/recipes.js?v=22"></script>
