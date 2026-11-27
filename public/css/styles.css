@@ -3536,7 +3536,25 @@ h1 {
 .roadmap__cell-label { display: none; }
 
 .roadmap__items { display: flex; flex-direction: column; gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
-.roadmap-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; overflow-wrap: break-word; }
+.roadmap-item { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; padding-left: 14px; overflow-wrap: break-word; }
+/* The bullet of an item: a small square (6px) in the ink of its title (white or
+   grey in dark), Pink in the chosen column. It hangs on the left, centered on the
+   first line of the title (16px at 1.4), so a long title wraps under its words. */
+.roadmap-item::before {
+  content: "";
+  position: absolute;
+  top: calc(0.7em - 3px);
+  left: 0;
+  width: 6px;
+  height: 6px;
+}
+.roadmap-item::before { background: var(--color-text); }
+.roadmap-item--now::before { background: var(--color-title); }
+.roadmap-item--later::before { background: var(--color-text-muted); }
+:root[data-theme="dark"] .roadmap-item::before { background: #ffffff; }
+:root[data-theme="dark"] .roadmap-item--later::before { background: var(--color-text-muted); }
+.roadmap__cell.is-active .roadmap-item::before,
+:root[data-theme="dark"] .roadmap__cell.is-active .roadmap-item::before { background: var(--color-pink); }
 .roadmap-item__title { color: var(--color-text); font-weight: 500; }
 .roadmap-item__text { color: var(--color-body); font-size: 0.875rem; }
 .roadmap-item--now .roadmap-item__title { color: var(--color-title); }
