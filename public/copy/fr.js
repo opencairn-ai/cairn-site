@@ -466,15 +466,12 @@ window.CAIRN_COPY.fr = {
     },
   },
 
-  // La page Feuille de route : un tableau. Chaque rangée est un chantier, chaque colonne un moment.
+  // La page Feuille de route : une liste en trois parties (Maintenant, Ensuite, Plus tard), une ligne par élément.
   roadmap: {
     title: "La feuille de route de la pile",
     lead: "Ce que nous construisons maintenant, ce qui vient ensuite, et où va la pile après.",
-    // Pour les lecteurs d’écran : le nom du tableau, puis le nom de sa première colonne.
-    label: "Feuille de route de la pile, par chantier",
-    workstreamsLabel: "Chantiers",
-    // Les trois moments. `text` dit à quel point les éléments sont sûrs.
-    columns: {
+    // Les trois parties de la liste. `text` dit à quel point les éléments sont sûrs.
+    times: {
       now: { name: "Maintenant", text: "En cours." },
       next: { name: "Ensuite", text: "Prévu." },
       later: { name: "Plus tard", text: "L’orientation. Pas encore prévu." },

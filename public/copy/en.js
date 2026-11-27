@@ -463,15 +463,18 @@ window.CAIRN_COPY.en = {
     },
   },
 
-  // The Roadmap page: a table. Each row is a workstream. Each column is a time.
+  // The Roadmap page: a list in three parts (Now, Next, Later), one line for each item.
   roadmap: {
     title: "The roadmap of the stack",
     lead: "What we build now, what comes next, and where the stack goes after that.",
-    // For screen readers: the name of the table. Then the name of its first column.
-    label: "Roadmap of the stack, by workstream",
-    workstreamsLabel: "Workstreams",
-    // The three times. `text` tells how sure the items are.
-    columns: {
+    // The buttons above the list: "All", then one button for each workstream. The
+    // number of items shows after each name. `filtersLabel` is for screen readers.
+    filtersLabel: "Show the items of one workstream",
+    all: "All",
+    // Shows in a part of the list when the selected workstream has no items at that time.
+    empty: "No items at this time.",
+    // The three parts of the list. `text` tells how sure the items are.
+    times: {
       now: { name: "Now", text: "In progress." },
       next: { name: "Next", text: "Planned." },
       later: { name: "Later", text: "The direction. Not planned yet." },
@@ -481,12 +484,13 @@ window.CAIRN_COPY.en = {
     // The workstreams, with the items of each time between the square brackets.
     // An item is one line:
     //   { title: "Name of the item", text: "One sentence about it.", layer: "modelAccess" },
-    // - `title` shows at each time.
-    // - `text` shows under "Now" only. Leave it out for a title alone.
-    // - `layer` shows as a tag under "Now" and "Next". A click on the tag opens that
+    // - `title` is the name of the item.
+    // - `text` shows after the title. Leave it out for a title alone.
+    // - `layer` shows as a tag at the end of the line. A click on the tag opens that
     //   layer on the Stack page. Use a key from `stack` in this file: a layer
     //   ("modelAccess") or a component ("modelAccess.modelServer"). Leave it out for no tag.
-    // An empty pair of brackets shows an empty cell.
+    // An item can also be a title alone, between quotes: "Name of the item".
+    // An empty pair of brackets means no items at that time.
     workstreams: {
       deploy: {
         name: "Deploy",
