@@ -1062,7 +1062,10 @@ h1 {
   /* The line is taller here, so keep Local and Server on the stroke. */
   .boundary__label[data-copy="local"] { transform: translateY(calc(0.5em + 11px)); }
   .boundary__label[data-copy="server"] { transform: translateY(calc(-0.5em - 11px)); }
-  .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  /* One column: the core is far taller than the 29em cap of the matrix. Safari
+     ignores min-height: min-content, so without this the cap wins and the last
+     layers spill out under the cross-cutting rows. */
+  .core { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; max-height: none; }
   /* Four French names do not fit on one line. Two columns keep every word whole. */
   .layer--registry .layer__items,
   .layer--control .layer__items {
