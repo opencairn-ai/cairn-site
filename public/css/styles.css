@@ -3441,8 +3441,14 @@ h1 {
   grid-column: 2;
   grid-row: 1 / -1;
   margin: 0 -0.8rem;
+  /* The line of the schema boxes and of the data panel (TEMPLATE TOKENS), so the
+     band reads as one card from the head to the last row. */
+  border: 1px solid var(--panel-line);
+  border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-selected) 70%, transparent);
 }
+/* The band's own line closes the column: no row line on top of it at the bottom. */
+.roadmap__row:last-child > [data-when="now"] { border-bottom: 0; }
 
 .roadmap__row { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; }
 .roadmap__row:nth-child(2) { grid-row: 1; }
@@ -3454,18 +3460,36 @@ h1 {
 /* The heads of the columns, over a strong rule: the time, and how sure its items are. */
 .roadmap__row--head > * { padding: 1rem 0 0.9rem; border-bottom: 1px solid var(--color-header-rule); }
 .roadmap__column { display: flex; flex-direction: column; }
-.roadmap__when { color: var(--color-title); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
-/* The cursor of the active line, before "Now". */
-[data-when="now"] > .roadmap__when::before {
+/* The time in the color of the kind of a card (--card-accent: Mid purple in light,
+   Pale purple in dark), its line in the caption grey, as in the card. */
+.roadmap__when { color: var(--card-accent); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
+/* Dark: "Now" in Pink, the active time. Light keeps Mid purple: Pink on Cream is
+   2.0:1, under the 3:1 of large text. */
+/* Dark: "Next" and "Later" in white. */
+:root[data-theme="dark"] .roadmap__when { color: #ffffff; }
+:root[data-theme="dark"] [data-when="now"] > .roadmap__when,
+:root[data-theme="dark"] [data-when="now"] > .roadmap__cell-label { color: var(--color-pink); }
+/* Dark: the card of "Now" has the 2px Pink line of the boxes of Hello World. */
+:root[data-theme="dark"] .roadmap__band { border: 2px solid var(--color-pink); }
+@media (max-width: 900px) {
+  :root[data-theme="dark"] .roadmap__cell[data-when="now"] { border: 2px solid var(--color-pink); }
+}
+/* The cursor of the active line, after "Now": it blinks as the cursor of Hello
+   World (cursor-blink), unless the visitor asks for less motion. */
+[data-when="now"] > .roadmap__when::after {
   content: "";
   display: inline-block;
   width: 0.45em;
   height: 0.95em;
-  margin-right: 0.4em;
+  margin-left: 0.25em;
   vertical-align: -0.12em;
   background: var(--color-pink);
 }
-.roadmap__when-text { margin-top: 0.4rem; color: var(--color-body); font-size: 0.875rem; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-when="now"] > .roadmap__when::after,
+  [data-when="now"] > .roadmap__cell-label::after { animation: cursor-blink 1.06s steps(1) infinite; }
+}
+.roadmap__when-text { margin-top: 0.4rem; color: var(--color-text-muted); font-size: 0.875rem; }
 .roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
 
 /* A workstream: its name with one line about it, then its three cells, over a
@@ -3488,17 +3512,28 @@ h1 {
 .roadmap-item--next .roadmap-item__title { font-weight: 400; }
 .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); font-weight: 400; }
 
-/* The layer of an item: a quiet link to its box on the stack page, with the
-   solid underline of every link (see LINK SIGNS). */
+/* The layer of an item: a link to its box on the stack page, with the solid
+   underline and the color of every link, as in the card (see LINK SIGNS; dark:
+   Pink, with the card links). */
 .roadmap-tag {
   margin-top: 0.2rem;
-  color: var(--color-text-muted);
+  color: var(--color-link);
   font-size: 0.75rem;
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.roadmap-tag:hover { color: var(--color-link); }
+.roadmap-tag:hover { color: var(--color-link-hover); }
+
+/* Fonts from the templates (see TEMPLATES.md): the corner title and the names of
+   the times on narrow screens are set as the column titles of a data table (12px
+   spaced capitals, caption grey); in dark the items are white, as the values of a
+   table and of a card. The look of the roadmap stays its own: no panel. */
+.roadmap__corner,
+.roadmap__cell-label { letter-spacing: 0.06em; text-transform: uppercase; }
+:root[data-theme="dark"] .roadmap-item__title,
+:root[data-theme="dark"] .roadmap-item__text { color: #ffffff; }
+:root[data-theme="dark"] .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); }
 
 /* Narrow screens: four columns do not fit. Each workstream is a group: its name,
    then its three cells one under the other, each with the name of its column.
@@ -3514,10 +3549,10 @@ h1 {
   .roadmap__name-text { font-size: 1.25rem; }
   .roadmap__note { max-width: none; }
   .roadmap__cell { padding: 0.6rem 0 0.8rem; }
-  .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; background: color-mix(in srgb, var(--color-selected) 70%, transparent); border-bottom: 0; }
+  .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; border: 1px solid var(--panel-line); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-selected) 70%, transparent); }
   .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
-  [data-when="now"] > .roadmap__cell-label::before {
-    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-right: 0.4em; vertical-align: -0.12em; background: var(--color-pink);
+  [data-when="now"] > .roadmap__cell-label::after {
+    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-left: 0.25em; vertical-align: -0.12em; background: var(--color-pink);
   }
 }
 
@@ -3749,9 +3784,11 @@ h1 {
    external links of the Recipes card). On Cream, Pink is 2.0:1, so light keeps
    Mid purple. */
 :root[data-theme="dark"] .card__link,
-:root[data-theme="dark"] .card .ext-link { color: var(--color-pink); }
+:root[data-theme="dark"] .card .ext-link,
+:root[data-theme="dark"] .roadmap-tag { color: var(--color-pink); }
 :root[data-theme="dark"] .card__link:hover,
-:root[data-theme="dark"] .card .ext-link:hover { color: var(--color-link-hover); }
+:root[data-theme="dark"] .card .ext-link:hover,
+:root[data-theme="dark"] .roadmap-tag:hover { color: var(--color-link-hover); }
 /* "Part of the layer" (stack page): the branch icon before the label, and the
    layer name lined up with the label, after the icon. */
 .card__fact.is-part-of dt { display: flex; align-items: center; gap: 0.375rem; }
