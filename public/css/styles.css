@@ -217,7 +217,8 @@ a { color: inherit; }
    dark, both are Pale purple (30% and full), so the words turn white under the
    pointer and Deep purple when chosen (the -ink tokens). */
 :root {
-  --panel-bg: var(--color-layer);          /* The data panel */
+  --panel-bg: var(--color-bg);             /* The data panel: the ground of the page */
+  --panel-head-bg: #ebdfcf;                /* Its band of column titles: between Sand and Cream */
   --panel-line: var(--color-schema-line);  /* Its 1px line, and the line under titles and tabs */
   --field-bg: var(--color-component);      /* A filter pill */
   --select-band: #f5e8ff;                  /* A chosen filter pill: Marshmallow */
@@ -227,9 +228,13 @@ a { color: inherit; }
   --scroll-shade: rgb(41 20 53 / 0.14);    /* The shade at the bottom of a scrolling panel */
   --menu-line: #d0c2b1;                    /* The border of an open menu: Beige */
   --code-bg: #291435;                      /* The code block */
+  --card-accent: #734c90;                  /* The rule over a card and its labels: Mid purple */
+  --mark-yes: #5c7065;                     /* The check of a yes: Moss, 4.5:1 on Cream */
+  --mark-no: #a08f79;                      /* The cross of a no: Stone, quieter than the check (2.9:1 on Cream) */
 }
 :root[data-theme="dark"] {
   --panel-bg: #291435;
+  --panel-head-bg: #402c4c;
   --panel-line: #614972;
   --field-bg: #291435;
   --select-band: #614972;
@@ -241,6 +246,9 @@ a { color: inherit; }
   --scroll-shade: rgb(0 0 0 / 0.35);
   --menu-line: #734c90;
   --code-bg: #1d0e26;
+  --card-accent: #dcbaf6;                  /* Pale purple */
+  --mark-yes: #63bcc1;                     /* River, the color of the YAML keys */
+  --mark-no: #b7b3ae;                      /* The caption grey */
 }
 
 /* --- Page frame ---------------------------------------------------------- */
@@ -3114,7 +3122,9 @@ h1 {
   top: 0;
   z-index: 1;
   padding: 8px 0.6rem;
-  background: var(--panel-bg);
+  /* The band of the column titles: its own token, so it stands apart from the rows
+     (light: a light Sand on the cream rows; dark: #402C4C on the Deep purple rows). */
+  background: var(--panel-head-bg);
   /* The line under the titles: the line of the panel. */
   box-shadow: inset 0 -1px 0 var(--panel-line);
   color: var(--color-text-muted);
@@ -3127,9 +3137,6 @@ h1 {
   vertical-align: middle;
 }
 
-/* Dark: the band of the column titles in the fill of a schema box, lighter than
-   the rows. */
-:root[data-theme="dark"] .data-table th { background: #402c4c; }
 /* Dark: the values of the rows in white, as the card; the publisher stays grey. */
 :root[data-theme="dark"] .data-table td,
 :root[data-theme="dark"] .data-table .recipe-cell-uses { color: #ffffff; }
@@ -3231,13 +3238,16 @@ h1 {
 /* "Default" has no bar: it starts at the left edge of the column, where the
    bars start. */
 
-/* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
-/* Yes: a check, in River in dark (the color of the YAML keys) and in the ink of
-   the row in light. No: a cross in the caption grey. 20px. */
+/* MARK: yes is a check in --mark-yes (Moss in light, River in dark), no is a
+   cross in the caption grey. 20px. */
 .mark { display: inline-flex; vertical-align: middle; color: var(--color-text-muted); }
-.mark.is-on { color: inherit; }
-:root[data-theme="dark"] .mark.is-on { color: #63bcc1; }
+.mark.is-on { color: var(--mark-yes); }
 .mark__icon { width: 20px; height: 20px; }
+/* The cross of a no takes --mark-no; the word "No" in the card keeps the caption
+   grey, so it stays readable (4.5:1 or more). */
+.mark:not(.is-on) .mark__icon { color: var(--mark-no); }
+/* On a hovered or selected row the cross takes the ink of its mark again. */
+.data-table__row:is(:hover, .is-selected) .mark .mark__icon { color: inherit; }
 /* In the card: the mark at 16px, then the word, 6px apart. */
 .card__yesno { align-items: center; gap: 6px; }
 .card__yesno .mark__icon { width: 16px; height: 16px; }
@@ -3286,8 +3296,7 @@ h1 {
   margin-bottom: 0.4rem;
 }
 /* "Recipe files": the style and size of the "Recipe" label at the top of the card. */
-.recipe-files__name { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
-:root[data-theme="dark"] .recipe-files__name { color: #dcbaf6; }
+.recipe-files__name { margin: 0; color: var(--card-accent); font-size: 0.875rem; font-weight: 600; }
 
 /* The file names: monospace tabs, the current one with the Magenta line of the tabs. */
 /* The files of the recipe: classic tabs. One line under all the tabs (the line of
@@ -3384,6 +3393,7 @@ h1 {
   .recipe-search { flex-basis: 100%; max-width: none; }
   .data-table th:first-child,
   .data-table td:first-child { position: sticky; left: 0; background: var(--panel-bg); }
+  .data-table th:first-child { background: var(--panel-head-bg); }
   .data-table th:first-child { z-index: 2; }
   .data-table__row.is-selected td:first-child { background: var(--row-selected-bg); }
 }
@@ -3674,7 +3684,7 @@ h1 {
    page and beside the table on the Recipes page. A strong rule over it, the × in
    its top right corner, then the kind, the title, the description and the facts.
    js/app.js (setUpCard) adds the × and the live region (.card__content). */
-.card { padding-top: 0.9rem; border-top: 1px solid var(--color-header-rule); font-size: 1rem; line-height: 1.35; }
+.card { padding-top: 0.9rem; border-top: 1px solid var(--card-accent); font-size: 1rem; line-height: 1.35; }
 /* The × that closes the card: the ghost icon button of the phone pop-up, on the
    line of the kind. The card is sticky or relative, so the × sits in its corner. */
 .card__close {
@@ -3697,16 +3707,15 @@ h1 {
 /* A light wash of the ink: Deep purple on Cream, white on Deep purple. */
 .card__close:hover { background: rgb(41 20 53 / 0.06); }
 :root[data-theme="dark"] .card__close:hover { background: rgb(255 255 255 / 0.1); }
-.card__kind { color: var(--color-text-muted); font-size: 0.875rem; font-weight: 600; }
+.card__kind { color: var(--card-accent); font-size: 0.875rem; font-weight: 600; }
 /* The kind and the title keep clear of the ×. */
 .card__kind,
 .card__title { padding-right: 2.5rem; }
 .card__title { margin: 0.2rem 0 0; color: var(--color-title); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 /* The type and ink of the page lead (16px, regular). */
 .card__text { margin-top: 0.7rem; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
-/* Dark: the rule above the card and its kind in Pale purple. */
-:root[data-theme="dark"] .card { border-top-color: #dcbaf6; }
-:root[data-theme="dark"] .card__kind { color: #dcbaf6; }
+/* The rule above the card, its kind and its section titles take the card accent
+   (TEMPLATE TOKENS: Mid purple in light, Pale purple in dark). */
 /* The facts: each label above its value, one fact under the other, with a rule
    between two facts and none under the description. */
 .card__facts { display: grid; grid-template-columns: minmax(0, 1fr); margin: 16px 0 0; font-size: 0.875rem; }

@@ -30,7 +30,11 @@ and dark. Use the token, never the color.
 
 | Token | Use |
 |---|---|
-| `--panel-bg`, `--panel-line` | The data panel, its 1px line, the line under titles and tabs |
+| `--panel-bg`, `--panel-line` | The data panel (the ground of the page), its 1px line, the line under titles and tabs |
+| `--panel-head-bg` | The band of column titles (light: #EBDFCF, between Sand and Cream; dark: #402C4C) |
+| `--card-accent` | The rule over a card, its kind and its section titles (light: Mid purple; dark: Pale purple) |
+| `--mark-yes` | The check of a yes (light: Moss #5C7065; dark: River #63BCC1) |
+| `--mark-no` | The cross of a no (light: Stone #A08F79; dark: the caption grey) |
 | `--field-bg` | A filter pill |
 | `--select-band` | A chosen filter pill |
 | `--row-hover-bg`, `--row-hover-ink` | The row or menu item under the pointer (dark: Pale purple 30%, white words) |
