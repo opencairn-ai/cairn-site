@@ -461,7 +461,7 @@ window.CAIRN_COPY.fr = {
       label: "Recette sélectionnée",
       // Le bouton au-dessus de la fiche, avec une flèche, comme sur la page de la pile.
       // La fiche est ouverte au départ ; le bouton la ferme et le tableau prend toute la largeur.
-      title: "Fiche de déploiement",
+      title: "Fiche de configuration",
       files: "Fichiers de la recette",
       copy: "Copier",
       copied: "Copié",

@@ -458,7 +458,7 @@ window.CAIRN_COPY.en = {
       label: "Selected recipe",
       // The button above the sheet, with an arrow, as on the stack page. The sheet is
       // open at first; the button closes it and the table takes the full width.
-      title: "Deployment card",
+      title: "Configuration card",
       files: "Recipe files",
       copy: "Copy",
       copied: "Copied",
