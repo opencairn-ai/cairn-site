@@ -33,9 +33,10 @@
     }
   }
 
-  // The chosen column: the band moves behind it, its title turns Pink with the
-  // cursor, its two buttons show. Nothing changes size. A click on its head (a button, for the keyboard) or
-  // on one of its cells chooses it; a click on a link in a cell only follows it.
+  // The chosen column (wide screens): the band moves behind it, its title turns
+  // Pink with the cursor, its two buttons show; nothing changes size. A click on
+  // its head (a button, for the keyboard) or on one of its cells chooses it; a
+  // click on a link in a cell only follows it.
   const picks = [...table.querySelectorAll(".roadmap__pick")];
   function choose(when) {
     table.dataset.active = when;
@@ -43,9 +44,11 @@
     for (const pick of picks) pick.setAttribute("aria-pressed", String(pick.parentElement.dataset.when === when));
   }
   for (const pick of picks) pick.addEventListener("click", () => choose(pick.parentElement.dataset.when));
+  // Phones stack the cells and have no column to choose: a tap there does nothing.
+  const wide = matchMedia("(min-width: 901px)");
   for (const cell of table.querySelectorAll(".roadmap__cell")) {
     cell.addEventListener("click", (event) => {
-      if (!event.target.closest("a")) choose(cell.dataset.when);
+      if (wide.matches && !event.target.closest("a")) choose(cell.dataset.when);
     });
   }
   choose("now");

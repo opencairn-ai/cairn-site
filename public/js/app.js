@@ -108,10 +108,13 @@
     const word = make("span", null, [copy]);
     const button = make("button", "copy-button", [strokeIcon("M9 9h10v10H9zM5 15V5h10", "copy-button__icon"), word]);
     button.type = "button";
+    // One timer: a second click restarts it, so "Copied" stays 1.6s after the last click.
+    let reset = null;
     button.addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(getText()); word.textContent = copied; }
       catch { word.textContent = failed; }
-      setTimeout(() => { word.textContent = copy; }, 1600);
+      clearTimeout(reset);
+      reset = setTimeout(() => { word.textContent = copy; }, 1600);
     });
     return button;
   }

@@ -91,9 +91,15 @@
     onClose: () => { setSheetShown(false); if (sheetToggle) sheetToggle.focus(); },
   });
   document.addEventListener("keydown", (event) => {
-    // A menu or a pop-up that handles Escape first keeps it.
+    // A menu that handles Escape first keeps it (it prevents the default), and so
+    // does an open pop-up (an ⓘ): that Escape only closes the pop-up.
     if (event.key !== "Escape" || event.defaultPrevented) return;
-    if (app.sheetQuery.matches && sheetShown()) setSheetShown(false);
+    if (document.querySelector("#tip.is-visible")) return;
+    if (!app.sheetQuery.matches || !sheetShown()) return;
+    // The focus was in the card: it goes back to the card button, as with the ×.
+    const focusWasInCard = sheet.contains(document.activeElement);
+    setSheetShown(false);
+    if (focusWasInCard && sheetToggle) sheetToggle.focus();
   });
 
   window.addEventListener("hashchange", () => {
@@ -254,7 +260,13 @@
   // for the keyboard and for screen readers.
   function resultRow(r) {
     const selected = r.id === state.selected;
-    const pick = el("button", "recipe-pick", [el("span", "recipe-pick__model", [r.model]), el("span", "recipe-pick__publisher", [r.publisher])]);
+    // The model, its publisher, and "hardware · server", which shows instead of the
+    // publisher on narrow screens, where the table is a list (CSS).
+    const pick = el("button", "recipe-pick", [
+      el("span", "recipe-pick__model", [r.model]),
+      el("span", "recipe-pick__publisher", [r.publisher]),
+      el("span", "recipe-pick__where", [`${r.hardwareLabel} · ${r.serverLabel}`]),
+    ]);
     pick.type = "button";
     pick.setAttribute("aria-pressed", String(selected));
     // The use cases in plain words: the ⓘ of the column title explains them.
@@ -299,9 +311,6 @@
     ]);
   }
 
-  // Tool calling and reasoning: a check for yes, a cross for no.
-  // Yes or no in the table: a check or a cross (16px SVG), with the word for
-  // screen readers.
   // Yes or no in the table: the shared mark (js/app.js), the word for screen readers.
   function mark(on) {
     return app.mark(on, { yes: text("facts.yes"), no: text("facts.no") });

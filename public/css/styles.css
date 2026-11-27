@@ -3189,6 +3189,7 @@ h1 {
    (6.6:1), as on the row under the pointer. */
 :root[data-theme="dark"] .data-table__row.is-selected td,
 :root[data-theme="dark"] .data-table__row.is-selected .recipe-pick__publisher,
+:root[data-theme="dark"] .data-table__row.is-selected .recipe-pick__where,
 :root[data-theme="dark"] .data-table__row.is-selected .mark { color: #ffffff; }
 :root[data-theme="dark"] .data-table__row.is-selected td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 /* Selected row, both themes: a 2px Pink line around it. Drawn inside the cells (inset shadows), so the
@@ -3211,6 +3212,7 @@ h1 {
    (white, 8.1:1). */
 :root[data-theme="dark"] .data-table__row:not(.is-selected):hover td,
 :root[data-theme="dark"] .data-table__row:not(.is-selected):hover .recipe-pick__publisher,
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover .recipe-pick__where,
 :root[data-theme="dark"] .data-table__row:not(.is-selected):hover .mark { color: var(--row-hover-ink); }
 :root[data-theme="dark"] .data-table__row:not(.is-selected):hover .recipe-context__bar { background: rgb(41 20 53 / 0.35); }
 :root[data-theme="dark"] .data-table__row:not(.is-selected):hover td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
@@ -3414,15 +3416,31 @@ h1 {
   .recipe-sheet { margin-top: calc(1.6rem - 12px); scroll-margin-top: 0.5rem; }
 }
 
-/* Phones: the search on its own line. The table scrolls sideways, and the model
-   column stays in view. */
+/* Phones: the search on its own line. */
 @media (max-width: 640px) {
   .recipe-search { flex-basis: 100%; max-width: none; }
-  .data-table th:first-child,
-  .data-table td:first-child { position: sticky; left: 0; background: var(--panel-bg); }
-  .data-table th:first-child { background: var(--panel-head-bg); }
-  .data-table th:first-child { z-index: 2; }
-  .data-table__row.is-selected td:first-child { background: var(--row-selected-bg); }
+}
+
+/* Narrow screens (900px and less): the table becomes a simple list, as a list
+   and its detail (Material Design 3, list-detail). Each row shows the model, then
+   "hardware · server" under it, and the arrow; the other facts are in the card
+   under the list. No column titles, no sideways scroll, and the page scrolls
+   (no scroll inside the panel). Wide screens keep the full table. */
+.recipe-pick__where { display: none; }
+@media (max-width: 900px) {
+  .data-panel__scroll { max-height: none; overflow: visible; background: none; }
+  .data-table thead { display: none; }
+  .data-table td:not(:first-child):not(:last-child) { display: none; }
+  .data-table td:first-child { width: auto; padding-right: 0.6em; }
+  /* The last cell carries the arrow (its background): it keeps only the arrow;
+     its words (the use cases) stay for screen readers. */
+  .data-table td:last-child { width: 2.5rem; padding: 0; font-size: 0; }
+  .data-table .recipe-pick__model { white-space: normal; overflow-wrap: anywhere; }
+  .recipe-pick__publisher { display: none; }
+  .recipe-pick__where { display: block; margin-top: 0.15em; color: var(--color-text-muted); font-size: 0.875rem; }
+  /* With no titles above, the first row meets the round top of the panel. */
+  .data-table tbody tr:first-child td:first-child { border-top-left-radius: calc(0.71rem - 1px); }
+  .data-table tbody tr:first-child td:last-child { border-top-right-radius: calc(0.71rem - 1px); }
 }
 
 /* --- Roadmap page ----------------------------------------------------------
@@ -3553,8 +3571,16 @@ h1 {
 .roadmap-item--later::before { background: var(--color-text-muted); }
 :root[data-theme="dark"] .roadmap-item::before { background: #ffffff; }
 :root[data-theme="dark"] .roadmap-item--later::before { background: var(--color-text-muted); }
-.roadmap__cell.is-active .roadmap-item::before,
-:root[data-theme="dark"] .roadmap__cell.is-active .roadmap-item::before { background: var(--color-pink); }
+/* Pink: the chosen column on wide screens; on phones, where nothing is chosen,
+   the cells of "Now" (they keep the card look there). */
+@media (min-width: 901px) {
+  .roadmap__cell.is-active .roadmap-item::before,
+  :root[data-theme="dark"] .roadmap__cell.is-active .roadmap-item::before { background: var(--color-pink); }
+}
+@media (max-width: 900px) {
+  .roadmap__cell[data-when="now"] .roadmap-item::before,
+  :root[data-theme="dark"] .roadmap__cell[data-when="now"] .roadmap-item::before { background: var(--color-pink); }
+}
 .roadmap-item__title { color: var(--color-text); font-weight: 500; }
 .roadmap-item__text { color: var(--color-body); font-size: 0.875rem; }
 .roadmap-item--now .roadmap-item__title { color: var(--color-title); }
@@ -3604,7 +3630,9 @@ h1 {
 /* In the chosen column the buttons take the place of the line under the last
    workstream: that line goes, and the top of the buttons sits where it was. */
 .roadmap__action { display: flex; gap: 8px; padding: 0 0 1.1rem; }
-.roadmap__row:nth-last-child(2) > .roadmap__cell.is-active { border-bottom-color: transparent; }
+@media (min-width: 901px) {
+  .roadmap__row:nth-last-child(2) > .roadmap__cell.is-active { border-bottom-color: transparent; }
+}
 .roadmap__action .roadmap__contribute { margin-top: -1px; }
 .roadmap__contribute { flex: 1 1 0; justify-content: center; min-width: 0; visibility: hidden; }
 .roadmap__contribute svg { width: 16px; height: 16px; }

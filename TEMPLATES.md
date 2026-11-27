@@ -1,8 +1,9 @@
 # Templates
 
 The shared pieces of the site. A new page builds with these instead of new styles,
-so every page keeps the same sizes, colors and behavior. LaStack (`stack.html`) and
-Model Recipes (`recipes.html`) use them; Model Recipes uses all of them.
+so every page keeps the same sizes, colors and behavior. LaStack (`stack.html`),
+Model Recipes (`recipes.html`) and the Roadmap (`roadmap.html`) use them; Model
+Recipes uses all of them.
 
 Styles are in `public/css/styles.css` (the tokens and the page templates are
 marked `TEMPLATE`; the others are found by their class names below), the shared
@@ -144,7 +145,8 @@ fact.append(app.mark(on, { yes: t("yes"), no: t("no"), word: true }));
 
 ## 7. Description card
 
-The card beside the table or the schema: a Pale purple rule, the kind, the title,
+The card beside the table or the schema: a rule in the card accent (Mid purple in
+light, Pale purple in dark), the kind, the title,
 the text, the facts (label above value), the × to close. Two columns of facts with
 `card__facts--two`; one rule between two groups of facts (`is-group-start` on the
 first fact of the second group).
