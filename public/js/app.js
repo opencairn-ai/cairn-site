@@ -224,6 +224,7 @@
 
   renderPage();
   setUpTheme();
+  setUpMenu();
   if (diagram) {
     renderDiagram();
     setUpTooltips();
@@ -361,6 +362,36 @@
         el("span", "footer-brand__role", t("footer.role"))
       );
     }
+  }
+
+  // Phones (640px and less): the header is one row, the codename and a menu
+  // button (☰). The button opens a panel under the row with the pages, the two
+  // header buttons, and the language and theme (CSS). Escape closes it and gives
+  // the focus back to the button. Wider screens never show the button.
+  function setUpMenu() {
+    const header = document.querySelector(".site-header");
+    const nav = header && header.querySelector(".site-nav");
+    if (!nav) return;
+    nav.id = nav.id || "site-nav";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "menu-toggle";
+    button.setAttribute("aria-label", t("nav.menu"));
+    button.setAttribute("aria-controls", nav.id);
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = '<svg class="menu-toggle__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="menu-toggle__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    const setOpen = (open) => {
+      header.classList.toggle("is-menu-open", open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+    button.addEventListener("click", () => setOpen(!header.classList.contains("is-menu-open")));
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !header.classList.contains("is-menu-open")) return;
+      event.preventDefault();
+      setOpen(false);
+      button.focus();
+    });
+    header.querySelector(".codename").after(button);
   }
 
   // Marks the current tab and prepares the links between pages (the tabs and the logo).

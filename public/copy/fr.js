@@ -28,6 +28,8 @@ window.CAIRN_COPY.fr = {
   // The tabs under the header, in order. Each one is a page.
   nav: {
     label: "Pages",
+    // Le bouton qui ouvre le menu sur téléphone.
+    menu: "Menu",
     hello: "Hello World",
     stack: "LaStack",
     recipes: "Recettes de modèle",

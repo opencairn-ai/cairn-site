@@ -431,6 +431,27 @@ a { color: inherit; }
 :root[data-theme="dark"] .theme-toggle__moon { display: none; }
 :root[data-theme="dark"] .theme-toggle__sun { display: block; }
 
+/* The menu button (phones only, js/app.js setUpMenu): a ghost icon button like
+   the theme button; ☰ when the menu is closed, × when it is open. */
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-ui-md);
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.menu-toggle:hover { background: var(--color-ghost-hover); }
+.menu-toggle svg { width: 24px; height: 24px; }
+.menu-toggle__close,
+.is-menu-open .menu-toggle__open { display: none; }
+.is-menu-open .menu-toggle__close { display: block; }
+
 /* The language button: a ghost button like the theme button. It shows the
    language a click switches to. */
 .lang { display: flex; font-size: 0.875rem; }
@@ -1400,34 +1421,44 @@ h1 {
 
 .noscript { padding: 1rem var(--gutter); }
 
-/* Phones: three header rows. The codename with the language and theme buttons,
-   then the buttons, then the tabs. The tabs go from edge to edge and scroll
-   sideways when they are wider than the screen. Their rule is an inset shadow on
-   the row, so the line of the current tab stays on it while the row scrolls. */
+/* Phones: one header row, the codename, the language and theme buttons, and the
+   menu button (☰). The menu opens under the row (js/app.js setUpMenu): the pages
+   one under the other (16px, the current one Bold with a 4px Pink line on its
+   left), then the two buttons side by side. It pushes the page down. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
 
   .site-header {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "codename prefs" "actions actions" "nav nav";
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "codename prefs menu" "nav nav nav" "actions actions actions";
+    /* The first row keeps its 56px whether the menu is open or not. */
+    grid-template-rows: 3.5rem;
+    min-height: 3.5rem;
   }
 
   .codename { grid-area: codename; min-width: 0; margin-right: 0; }
+  .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
+  /* Inside the gutter: a button past the edge would scroll the page sideways on focus. */
+  .menu-toggle { grid-area: menu; display: inline-flex; }
+  .site-header:not(.is-menu-open) :is(.site-nav, .header-actions) { display: none; }
+
   .site-nav {
     grid-area: nav;
-    margin: 0 calc(-1 * var(--gutter));
-    padding: 0 calc(var(--gutter) - 0.875rem);
-    overflow-x: auto;
-    scrollbar-width: none;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    margin: 0;
+    padding: 0.25rem 0 0;
+    /* The light line between two pages, also above the first one. */
+    border-top: 1px solid var(--row-rule);
+    font-size: 1rem;
   }
-  .site-nav::-webkit-scrollbar { display: none; }
-  /* Inside the scrolling row, the focus ring stays within the tab so it is not cut. */
-  .site-nav a:focus-visible { outline-offset: -3px; }
-  .codename img { max-width: 100%; max-height: 1.911875rem; height: auto; }
-  .prefs { grid-area: prefs; margin-right: 0; padding: 0.7rem 0; }
-  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 0 0 0.6rem; }
-  .header-actions .btn { flex: 1 1 auto; justify-content: center; padding: 8px; font-size: 12px; white-space: nowrap; }
+  .site-nav a { height: 3rem; padding: 0 0 0 0.9rem; border-bottom: 1px solid var(--row-rule); }
+  .site-nav a[aria-current="page"]::after { top: 0.8rem; bottom: 0.8rem; left: 0; right: auto; width: 4px; height: auto; }
+  .prefs { grid-area: prefs; margin: 0; padding: 0; }
+  .header-actions { grid-area: actions; flex-wrap: nowrap; gap: 0.5rem; padding: 46px 0 1rem; }
+  .header-actions .btn { flex: 1 1 0; justify-content: center; padding: 8px; font-size: 14px; white-space: nowrap; }
 
   /* The Figma lockup is too wide for a phone: keep its pieces, but let them wrap. The
      sentence takes its own line under the logos. The lockup's fixed 21px height has to go

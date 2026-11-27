@@ -26,6 +26,8 @@ window.CAIRN_COPY.en = {
   // The tabs under the header, in order. Each one is a page.
   nav: {
     label: "Pages",
+    // The button that opens the menu on phones.
+    menu: "Menu",
     hello: "Hello World",
     stack: "LaStack",
     recipes: "Model Recipes",
