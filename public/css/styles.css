@@ -2902,7 +2902,7 @@ h1 {
   --recipe-menu-line: #734c90;       /* Secondary light purple */
   --recipe-code-bg: #1d0e26;
   --recipe-field: #291435;           /* The filter pills: Deep purple */
-  --recipe-panel: #402c4c;           /* The table panel: the fill of a schema box */
+  --recipe-panel: #291435;           /* The table panel: the ground of the page */
   --recipe-panel-line: #614972;      /* Its 1px line */
 }
 
@@ -3064,7 +3064,7 @@ h1 {
 
 /* The column titles: small capitals in the caption grey, 12px and spaced, as the
    label of the filter menus, so they read apart from the data. On the ground of
-   the panel, with a strong rule under them. They stay at the top while the rows
+   the panel, with the line of the panel under them. They stay at the top while the rows
    scroll. */
 .recipe-table th {
   position: sticky;
@@ -3072,7 +3072,8 @@ h1 {
   z-index: 1;
   padding: 8px 0.6rem;
   background: var(--recipe-panel, var(--color-layer));
-  box-shadow: inset 0 -1px 0 var(--color-header-rule);
+  /* The line under the titles: the line of the panel. */
+  box-shadow: inset 0 -1px 0 var(--recipe-panel-line, var(--color-schema-line));
   color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 600;
@@ -3083,13 +3084,12 @@ h1 {
   vertical-align: middle;
 }
 
-/* Dark: the band of the column titles in Deep purple, the ground of the page. */
-:root[data-theme="dark"] .recipe-table th { background: #291435; }
+/* Dark: the band of the column titles in the fill of a schema box, lighter than
+   the rows. */
+:root[data-theme="dark"] .recipe-table th { background: #402c4c; }
 /* Dark: the values of the rows in white, as the card; the publisher stays grey. */
 :root[data-theme="dark"] .recipe-table td,
 :root[data-theme="dark"] .recipe-table .recipe-cell-uses { color: #ffffff; }
-/* Dark: on the selected row the publisher turns white too (the grey is 3.7:1 there). */
-:root[data-theme="dark"] .recipe-row.is-selected .recipe-pick__publisher { color: #ffffff; }
 
 .recipe-table td {
   padding: 0.6em;
@@ -3104,6 +3104,34 @@ h1 {
 .recipe-row { cursor: pointer; }
 .recipe-row:hover td { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
 .recipe-row.is-selected td { background: var(--recipe-band); }
+/* The selected row ends with a small arrow toward the card beside the table: the
+   chevron of the card buttons (assets/icons/chevron.svg), 16px, in the ink of the
+   row. The last cell keeps room for it on every row, so nothing shifts. */
+.recipe-table td:last-child { position: relative; padding-right: 2rem; }
+.recipe-row.is-selected td:last-child::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  mask: url("../assets/icons/chevron.svg") center / contain no-repeat;
+  transform: translateY(-50%);
+}
+/* No card beside the table (closed, or a narrow screen): no arrow. */
+.recipe-sheet-hidden .recipe-row.is-selected td:last-child::after { display: none; }
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .recipe-row.is-selected td:last-child::after { display: none; }
+}
+
+/* Dark: the row under the pointer and the selected row in Pale purple, so their
+   words and marks turn Deep purple (10:1). */
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td { background: #dcbaf6; }
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td,
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-pick__publisher,
+:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-mark { color: #291435; }
 
 
 /* The model name is the button of the row. */
