@@ -5,9 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#291435">
 <script>
-  // The site opens in dark on every page; the header button can switch it.
-  document.documentElement.dataset.theme = "dark";
+  // The site opens in dark. A theme the visitor chooses with the header button
+  // stays from page to page for the rest of the visit (sessionStorage, set by
+  // js/app.js); a new visit opens in dark again.
+  try { document.documentElement.dataset.theme = sessionStorage.getItem("cairn-theme") === "light" ? "light" : "dark"; }
+  catch (error) { document.documentElement.dataset.theme = "dark"; }
 </script>
+<!-- Before release: the page is online but its tab is disabled (PAGES_TO_COME in
+     js/app.js), so the PM opens it by its address. Search engines must not list it.
+     At release, remove this line and "roadmap" from PAGES_TO_COME, and add the page
+     to sitemap.xml. -->
+<meta name="robots" content="noindex">
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
 <title>Cairn: Roadmap</title>
@@ -33,7 +41,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=150">
+<link rel="stylesheet" href="css/styles.css?v=280">
 </head>
 <body data-page="roadmap">
 <div class="page">
@@ -70,36 +78,43 @@
     </div>
   </header>
 
-  <!-- Content to come. For now the page shows its name only. -->
+  <!-- The intro, then the roadmap of the stack. -->
   <main>
-    <section class="roadmap-intro">
+    <section class="intro roadmap-intro">
       <h1 data-text="roadmap.title"></h1>
-      <p class="roadmap-intro__lead" data-text="roadmap.lead"></p>
+      <p class="page-lead" data-text="roadmap.lead"></p>
     </section>
 
     <!-- The roadmap: a table. One row for each workstream, one column for each
          time (now, next, later). All the texts are under `roadmap` in the copy
          files; the script (js/roadmap.js) puts the items in the cells.
-         "Now" is in progress: the first element is a light band behind the
-         cells of that column. The name of the column inside each cell shows
-         on phones only, where the cells of a workstream stand one under the
-         other. -->
+         The first element is a light band behind the cells of the chosen
+         column ("Now" at first): a click on a column (its head, or one of its
+         cells) moves the band there and shows its two buttons; nothing
+         changes size. Narrow screens show the roadmap by time instead
+         (js/roadmap.js builds it from the same copy). -->
     <div class="roadmap" id="roadmap" role="table" data-aria-label="roadmap.label">
       <div class="roadmap__band" aria-hidden="true"></div>
 
       <div class="roadmap__row roadmap__row--head" role="row">
         <div class="roadmap__corner" role="columnheader" data-text="roadmap.workstreamsLabel"></div>
         <div class="roadmap__column" role="columnheader" data-when="now">
-          <span class="roadmap__when" data-text="roadmap.columns.now.name"></span>
-          <span class="roadmap__when-text" data-text="roadmap.columns.now.text"></span>
+          <button type="button" class="roadmap__pick" aria-pressed="true">
+            <span class="roadmap__when" data-text="roadmap.columns.now.name"></span>
+            <span class="roadmap__when-text" data-text="roadmap.columns.now.text"></span>
+          </button>
         </div>
         <div class="roadmap__column" role="columnheader" data-when="next">
-          <span class="roadmap__when" data-text="roadmap.columns.next.name"></span>
-          <span class="roadmap__when-text" data-text="roadmap.columns.next.text"></span>
+          <button type="button" class="roadmap__pick" aria-pressed="false">
+            <span class="roadmap__when" data-text="roadmap.columns.next.name"></span>
+            <span class="roadmap__when-text" data-text="roadmap.columns.next.text"></span>
+          </button>
         </div>
         <div class="roadmap__column" role="columnheader" data-when="later">
-          <span class="roadmap__when" data-text="roadmap.columns.later.name"></span>
-          <span class="roadmap__when-text" data-text="roadmap.columns.later.text"></span>
+          <button type="button" class="roadmap__pick" aria-pressed="false">
+            <span class="roadmap__when" data-text="roadmap.columns.later.name"></span>
+            <span class="roadmap__when-text" data-text="roadmap.columns.later.text"></span>
+          </button>
         </div>
       </div>
 
@@ -109,13 +124,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.deploy.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -125,13 +137,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.features.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -141,13 +150,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.improvements.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -157,13 +163,37 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.contracts.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
+        </div>
+      </div>
+
+      <!-- The chosen column ends with two buttons (wide screens): contribute on
+           GitHub, and an email to give feedback. -->
+      <div class="roadmap__row roadmap__row--actions" role="row">
+        <div class="roadmap__action" role="cell"></div>
+        <div class="roadmap__action" role="cell" data-when="now">
+          <a class="btn roadmap__contribute" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            <span data-text="header.github"></span>
+          </a>
+          <a class="btn roadmap__contribute" data-href="header.contactUrl" href="mailto:bonjourhi@opencairn.ai" data-text="roadmap.feedback"></a>
+        </div>
+        <div class="roadmap__action" role="cell" data-when="next">
+          <a class="btn roadmap__contribute" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            <span data-text="header.github"></span>
+          </a>
+          <a class="btn roadmap__contribute" data-href="header.contactUrl" href="mailto:bonjourhi@opencairn.ai" data-text="roadmap.feedback"></a>
+        </div>
+        <div class="roadmap__action" role="cell" data-when="later">
+          <a class="btn roadmap__contribute" data-href="header.githubUrl" href="https://github.com/opencairn-ai">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            <span data-text="header.github"></span>
+          </a>
+          <a class="btn roadmap__contribute" data-href="header.contactUrl" href="mailto:bonjourhi@opencairn.ai" data-text="roadmap.feedback"></a>
         </div>
       </div>
     </div>
@@ -179,9 +209,9 @@
 
 </div>
 
-<script src="copy/en.js?v=105"></script>
-<script src="copy/fr.js?v=106"></script>
-<script src="js/app.js?v=84"></script>
-<script src="js/roadmap.js"></script>
+<script src="copy/en.js?v=114"></script>
+<script src="copy/fr.js?v=116"></script>
+<script src="js/app.js?v=91"></script>
+<script src="js/roadmap.js?v=5"></script>
 </body>
 </html>

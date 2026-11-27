@@ -26,6 +26,8 @@ window.CAIRN_COPY.en = {
   // The tabs under the header, in order. Each one is a page.
   nav: {
     label: "Pages",
+    // The button that opens the menu on phones.
+    menu: "Menu",
     hello: "Hello World",
     stack: "LaStack",
     recipes: "Model Recipes",
@@ -383,6 +385,8 @@ window.CAIRN_COPY.en = {
     lead: "A recipe contains the configuration to serve one model. It uses one model server and runs on one hardware type.",
     limit: "At the moment, the recipes are for single-node setups only.",
     // The hint above the filters.
+    // The heading above the table, in the bar with the hint and the card button.
+    heading: "Find a recipe for your hardware",
     hint: "Select a recipe to see its files.",
     // The name of the list panel.
     listLabel: "Recipes",
@@ -394,6 +398,8 @@ window.CAIRN_COPY.en = {
       useCase: "Use case",
       // The first choice of the menu: it removes the filter.
       all: "All",
+      // The name of a filter before its value, on the filter pill: "Hardware: All".
+      name: "{name}:",
       // The search field: its name for screen readers, and the text it shows while empty.
       model: "Model",
       modelPlaceholder: "Model name",
@@ -410,12 +416,19 @@ window.CAIRN_COPY.en = {
       reasoning: "Reasoning",
       useCase: "Use case",
     },
+    // Short titles for the head of the table, so each fits on one line. The full
+    // names above stay for screen readers, the hover text and the card.
+    columnsShort: {
+      server: "Server",
+      tools: "Tools",
+    },
     // The facts of the selected recipe, in the sheet. {count} is a number of tokens.
     facts: {
       image: "Model server image",
       context: "{count} tokens",
       contextDefault: "Model server default",
       model: "Model",
+      publisher: "Publisher",
       yes: "Yes",
       no: "No",
     },
@@ -429,11 +442,9 @@ window.CAIRN_COPY.en = {
       chat: "Chat",
       coding: "Coding",
       documents: "Documents",
-      // The pop-up of the "?" button next to the "Use case" heading:
-      // "… from Hugging Face and Artificial Analysis." The links go after this text.
+      // Under the use cases, in the card: "… from Hugging Face and Artificial
+      // Analysis." The links go after this text.
       credit: "The use cases use benchmark data from",
-      // The name of the "?" button, for screen readers and as its tooltip.
-      about: "About the use cases",
       creditAnd: "and",
     },
     // The pop-up of a column heading or a use case: its kind, its name, then its description.
@@ -459,6 +470,10 @@ window.CAIRN_COPY.en = {
       // The button above the sheet, with an arrow, as on the stack page. The sheet is
       // open at first; the button closes it and the table takes the full width.
       title: "Deployment card",
+      // The small label above the model name in the card, as "Component" on the stack page.
+      kind: "Recipe",
+      // The name of the × in the top right corner of the card.
+      close: "Close the card",
       files: "Recipe files",
       copy: "Copy",
       copied: "Copied",
@@ -478,6 +493,8 @@ window.CAIRN_COPY.en = {
   roadmap: {
     title: "The roadmap of the stack",
     lead: "What we build now, what comes next, and where the stack goes after that.",
+    // The email button under the chosen column.
+    feedback: "Tell us what’s missing",
     // For screen readers: the name of the table. Then the name of its first column.
     label: "Roadmap of the stack, by workstream",
     workstreamsLabel: "Workstreams",

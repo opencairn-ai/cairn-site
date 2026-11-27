@@ -14,8 +14,10 @@
   const LOCALES = { en: "en", fr: "fr-CA" };
   const DEFAULT_LANGUAGE = "en";
   const LANGUAGE_KEY = "cairn-language";
-  // The pages that have no content yet. Each link to one of them (its tab, a button)
-  // shows as disabled and does not open the page. Remove a name to open its page.
+  // The pages not released yet. Each link to one of them (its tab, a button) shows
+  // as disabled and does not open the page; the page itself is reachable by its
+  // address only (for the PM), with noindex. At release, remove the name here and
+  // the noindex line in the page, and add the page to sitemap.xml.
   const PAGES_TO_COME = ["roadmap"];
 
   const lang = pickLanguage();
@@ -39,10 +41,192 @@
   const SHEET_QUERY = matchMedia("(min-width: 901px) and (min-aspect-ratio: 1/1)");
   const usesSheet = () => Boolean(document.getElementById("stack-sheet")) && SHEET_QUERY.matches;
 
-  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY };
+  // The description card of the stack and Recipes pages (class .card): the × in its
+  // top right corner, and a live region for its content. The × stays outside the
+  // live region, so a screen reader reads the new content, not the name of the ×.
+  // Each page fills the content and decides what closing does.
+  function setUpCard(card, { closeLabel, onClose }) {
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "card__close";
+    close.setAttribute("aria-label", closeLabel);
+    close.title = closeLabel;
+    close.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.758 17.243 12 12m5.243-5.243L12 12m0 0L6.758 6.757M12 12l5.243 5.243"/></svg>';
+    close.addEventListener("click", onClose);
+    const content = document.createElement("div");
+    content.className = "card__content";
+    content.setAttribute("aria-live", "polite");
+    card.replaceChildren(close, content);
+    return content;
+  }
+
+  // --- Templates (see TEMPLATES.md) -------------------------------------------
+  // Shared pieces any page can build with. Each returns an element; the page puts
+  // it in place and gives the texts in its own language.
+
+  // An element with a class and children, skipping empty children.
+  function make(tag, className, children = []) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    node.append(...children.filter(Boolean));
+    return node;
+  }
+
+  // A 24-unit line icon, painted in the text color.
+  function strokeIcon(d, className) {
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("class", className);
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.setAttribute("aria-hidden", "true");
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("d", d);
+    svg.append(path);
+    return svg;
+  }
+
+  const CHECK = "M5 12.5 10 17.5 19.5 7";
+  const CROSS = "M7 7l10 10M17 7 7 17";
+
+  // Yes or no: a check or a cross (class .mark, .is-on for yes). With `word`, the
+  // word follows the mark (the card); without, the word is for screen readers only
+  // (the table).
+  function mark(on, { yes, no, word = false }) {
+    const label = on ? yes : no;
+    return make("span", `mark${word ? " card__yesno" : ""}${on ? " is-on" : ""}`, [
+      strokeIcon(on ? CHECK : CROSS, "mark__icon"),
+      word ? label : make("span", "sr-only", [label]),
+    ]);
+  }
+
+  // The Copy button of a code block: a copy icon, then the word; after a click
+  // only the word changes ("Copied"), so the icon stays.
+  function copyButton(getText, { copy, copied, failed }) {
+    const word = make("span", null, [copy]);
+    const button = make("button", "copy-button", [strokeIcon("M9 9h10v10H9zM5 15V5h10", "copy-button__icon"), word]);
+    button.type = "button";
+    // One timer: a second click restarts it, so "Copied" stays 1.6s after the last click.
+    let reset = null;
+    button.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(getText()); word.textContent = copied; }
+      catch { word.textContent = failed; }
+      clearTimeout(reset);
+      reset = setTimeout(() => { word.textContent = copy; }, 1600);
+    });
+    return button;
+  }
+
+  // A filter: a pill that opens a menu (the design system's dropdown menu). For
+  // screen readers and the keyboard it is a select-only combobox: the pill keeps
+  // the focus and the arrow keys move the active choice. One choice, or with
+  // `multiple` a box to tick before each choice, several at once, the menu staying
+  // open; "All" clears the choice. The pill reads "Name: Value", "Name: First (+2)".
+  //   id        the id of the pill; the menu is `${id}-list`
+  //   name      the name of the filter ("Hardware"); nameText the same with its colon
+  //   all       the word for no choice ("All")
+  //   options   [{ id, label }]
+  //   value     the chosen id ("" for all), or with `multiple` the chosen ids ([])
+  //   onChange  (value) => the page saves the value and draws its filters again
+  let reopenFilter = null;
+  function filterMenu({ id, name, nameText, all, options, value, multiple = false, onChange }) {
+    const items = [{ id: "", label: all }, ...options];
+    const ticked = multiple ? value : (value ? [value] : []);
+    const chosen = options.filter((option) => ticked.includes(option.id));
+    const isSelected = (item) => (item.id ? ticked.includes(item.id) : !ticked.length);
+    let active = reopenFilter && reopenFilter.id === id ? reopenFilter.active : Math.max(0, items.findIndex(isSelected));
+
+    const list = make("ul", `filter-menu${multiple ? " filter-menu--multiple" : ""}`, [
+      make("li", "filter-menu__label", [name]),
+      ...items.map((item, index) => {
+        const selected = isSelected(item);
+        const box = multiple && item.id && make("span", `filter-menu__box${selected ? " is-ticked" : ""}`, [selected && strokeIcon(CHECK, "filter-menu__tick")]);
+        const option = make("li", "filter-menu__item", [box, item.label, selected && !multiple && strokeIcon(CHECK, "filter-menu__check")]);
+        option.id = `${id}-${index}`;
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", String(selected));
+        option.addEventListener("click", () => choose(index));
+        option.addEventListener("pointermove", () => setActive(index));
+        return option;
+      }),
+    ]);
+    list.id = `${id}-list`;
+    list.hidden = true;
+    list.setAttribute("role", "listbox");
+    list.setAttribute("aria-label", name);
+    if (multiple) list.setAttribute("aria-multiselectable", "true");
+    list.firstChild.setAttribute("role", "presentation");
+    // A press on the menu must not take the focus from the pill: the menu closes when the pill loses it.
+    list.addEventListener("pointerdown", (event) => event.preventDefault());
+
+    const shown = chosen.length ? `${chosen[0].label}${chosen.length > 1 ? ` (+${chosen.length - 1})` : ""}` : all;
+    const button = make("button", "filter-pill", [
+      make("span", "filter-pill__name", [nameText]),
+      make("span", "filter-pill__value", [shown]),
+      strokeIcon("m6 9 6 6 6-6", "filter-pill__caret"),
+    ]);
+    button.type = "button";
+    button.id = id;
+    button.dataset.chosen = String(chosen.length > 0);
+    button.setAttribute("role", "combobox");
+    button.setAttribute("aria-haspopup", "listbox");
+    button.setAttribute("aria-controls", list.id);
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", `${name}: ${chosen.length ? chosen.map((option) => option.label).join(", ") : all}`);
+
+    const optionNodes = () => [...list.querySelectorAll('[role="option"]')];
+    const isOpen = () => !list.hidden;
+    function setActive(index) {
+      active = (index + items.length) % items.length;
+      optionNodes().forEach((option, i) => option.classList.toggle("is-active", i === active));
+      button.setAttribute("aria-activedescendant", optionNodes()[active].id);
+      optionNodes()[active].scrollIntoView({ block: "nearest" });
+    }
+    function open() { list.hidden = false; button.setAttribute("aria-expanded", "true"); setActive(active); }
+    function close() { list.hidden = true; button.setAttribute("aria-expanded", "false"); button.removeAttribute("aria-activedescendant"); }
+    function choose(index) {
+      const itemId = items[index].id;
+      const next = !multiple ? itemId : !itemId ? [] : ticked.includes(itemId) ? ticked.filter((t) => t !== itemId) : [...ticked, itemId];
+      // Several choices: the menu stays open on the same choice after the page draws it again.
+      reopenFilter = multiple ? { id, active: index } : null;
+      onChange(next);
+      const again = document.getElementById(id);
+      if (again) { again.focus(); if (reopenFilter) again.dispatchEvent(new CustomEvent("filter-reopen")); }
+      reopenFilter = null;
+    }
+
+    button.addEventListener("click", () => (isOpen() ? close() : open()));
+    button.addEventListener("filter-reopen", open);
+    button.addEventListener("blur", close);
+    button.addEventListener("keydown", (event) => {
+      const { key } = event;
+      if (key === "Escape") { if (isOpen()) { event.preventDefault(); close(); } return; }
+      if (key === "Tab") return;
+      if (key === "ArrowDown" || key === "ArrowUp" || key === "Home" || key === "End") {
+        event.preventDefault();
+        if (!isOpen()) return open();
+        return setActive(key === "ArrowDown" ? active + 1 : key === "ArrowUp" ? active - 1 : key === "Home" ? 0 : items.length - 1);
+      }
+      if (key === "Enter" || key === " ") { event.preventDefault(); return isOpen() ? choose(active) : open(); }
+      // A letter goes to the next choice that starts with it.
+      if (key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        const order = items.map((_, i) => (active + 1 + i) % items.length);
+        const match = order.find((i) => items[i].label.toLowerCase().startsWith(key.toLowerCase()));
+        if (match !== undefined) { if (!isOpen()) open(); setActive(match); }
+      }
+    });
+    return make("div", "filter", [button, list]);
+  }
+
+  window.CAIRN_APP = { t, locale: LOCALES[lang], externalIcon, entries: () => entries, sheetQuery: SHEET_QUERY, setUpCard, filterMenu, mark, copyButton };
 
   renderPage();
   setUpTheme();
+  setUpMenu();
   if (diagram) {
     renderDiagram();
     setUpTooltips();
@@ -182,6 +366,37 @@
     }
   }
 
+  // Phones (640px and less): the header is one row, the codename and a menu
+  // button (☰). The button opens a panel under the row with the pages, the two
+  // header buttons, and the language and theme (CSS). Escape closes it and gives
+  // the focus back to the button. Wider screens never show the button.
+  function setUpMenu() {
+    const header = document.querySelector(".site-header");
+    const nav = header && header.querySelector(".site-nav");
+    if (!nav) return;
+    nav.id = nav.id || "site-nav";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "menu-toggle";
+    button.setAttribute("aria-label", t("nav.menu"));
+    button.setAttribute("aria-controls", nav.id);
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = '<svg class="menu-toggle__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="menu-toggle__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    const setOpen = (open) => {
+      header.classList.toggle("is-menu-open", open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+    button.addEventListener("click", () => setOpen(!header.classList.contains("is-menu-open")));
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !header.classList.contains("is-menu-open")) return;
+      event.preventDefault();
+      setOpen(false);
+      button.focus();
+    });
+    header.querySelector(".codename").after(button);
+    header.classList.add("has-menu");
+  }
+
   // Marks the current tab and prepares the links between pages (the tabs and the logo).
   function renderNav() {
     const nav = document.querySelector(".site-nav");
@@ -256,6 +471,9 @@
     button.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       apply(next);
+      // The choice follows the visitor to the next page (read in the <head> of
+      // each page). Private modes may refuse the storage: the page still works.
+      try { sessionStorage.setItem("cairn-theme", next); } catch (error) { /* no storage */ }
     });
   }
 

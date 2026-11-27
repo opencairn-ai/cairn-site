@@ -28,6 +28,8 @@ window.CAIRN_COPY.fr = {
   // The tabs under the header, in order. Each one is a page.
   nav: {
     label: "Pages",
+    // Le bouton qui ouvre le menu sur téléphone.
+    menu: "Menu",
     hello: "Hello World",
     stack: "LaStack",
     recipes: "Recettes de modèle",
@@ -385,6 +387,8 @@ window.CAIRN_COPY.fr = {
     lead: "Une recette contient la configuration pour servir un modèle. Elle utilise un serveur de modèles et s’exécute sur un type de matériel.",
     limit: "Pour l’instant, les recettes visent seulement les installations sur un seul nœud.",
     // L’indication au-dessus des filtres.
+    // Le titre au-dessus du tableau, dans la barre avec la consigne et le bouton de la fiche.
+    heading: "Trouvez une recette pour votre matériel",
     hint: "Sélectionnez une recette pour voir ses fichiers.",
     // Le nom de la liste, pour les lecteurs d’écran.
     listLabel: "Recettes",
@@ -396,6 +400,8 @@ window.CAIRN_COPY.fr = {
       useCase: "Cas d’utilisation",
       // Le premier choix du menu : il retire le filtre.
       all: "Tous",
+      // Le nom d’un filtre avant sa valeur, sur la pastille du filtre : « Matériel : Tous ».
+      name: "{name}\u00a0:",
       // Le champ de recherche : son nom pour les lecteurs d’écran, et le texte qu’il affiche quand il est vide.
       model: "Modèle",
       modelPlaceholder: "Nom du modèle",
@@ -412,6 +418,15 @@ window.CAIRN_COPY.fr = {
       reasoning: "Raisonnement",
       useCase: "Cas d’utilisation",
     },
+    // Les titres courts de l’en-tête du tableau, pour que chacun tienne sur une
+    // ligne. Les noms complets ci-dessus restent pour les lecteurs d’écran, le texte
+    // au survol et la fiche.
+    columnsShort: {
+      server: "Serveur",
+      tools: "Outils",
+      reasoning: "Raison.",
+      useCase: "Usage",
+    },
     // Les faits de la recette sélectionnée, dans la fiche. {count} est un nombre de jetons.
     facts: {
       // Sous « Serveur de modèles » dans la fiche : le nom court suffit.
@@ -419,6 +434,7 @@ window.CAIRN_COPY.fr = {
       context: "{count} jetons",
       contextDefault: "Valeur par défaut du serveur de modèles",
       model: "Modèle",
+      publisher: "Éditeur",
       yes: "Oui",
       no: "Non",
     },
@@ -432,11 +448,9 @@ window.CAIRN_COPY.fr = {
       chat: "Conversation",
       coding: "Programmation",
       documents: "Documents",
-      // L’infobulle du bouton « ? » à côté de l’en-tête « Cas d’utilisation » :
-      // « … de Hugging Face et Artificial Analysis. » Les liens suivent ce texte.
+      // Sous les cas d’utilisation, dans la fiche : « … de Hugging Face et
+      // Artificial Analysis. » Les liens suivent ce texte.
       credit: "Les cas d’utilisation s’appuient sur des données d’évaluation de",
-      // Le nom du bouton « ? », pour les lecteurs d’écran et comme info-bulle.
-      about: "À propos des cas d’utilisation",
       creditAnd: "et",
     },
     // L’infobulle d’un en-tête de colonne ou d’un cas d’utilisation : son type, son nom, puis sa description.
@@ -462,6 +476,10 @@ window.CAIRN_COPY.fr = {
       // Le bouton au-dessus de la fiche, avec une flèche, comme sur la page de la pile.
       // La fiche est ouverte au départ ; le bouton la ferme et le tableau prend toute la largeur.
       title: "Fiche de déploiement",
+      // La petite étiquette au-dessus du nom du modèle, comme « Composant » sur la page de la pile.
+      kind: "Recette",
+      // Le nom du × en haut à droite de la fiche.
+      close: "Fermer la fiche",
       files: "Fichiers de la recette",
       copy: "Copier",
       copied: "Copié",
@@ -481,6 +499,8 @@ window.CAIRN_COPY.fr = {
   roadmap: {
     title: "La feuille de route de la pile",
     lead: "Ce que nous construisons maintenant, ce qui vient ensuite, et où va la pile après.",
+    // Le bouton d’e-mail sous la colonne choisie.
+    feedback: "Dites-nous ce qui manque",
     // Pour les lecteurs d’écran : le nom du tableau, puis le nom de sa première colonne.
     label: "Feuille de route de la pile, par chantier",
     workstreamsLabel: "Chantiers",

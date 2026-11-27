@@ -20,6 +20,7 @@ public/
   assets/og-card.png                      Share card for link previews (from reference/og-card/)
   site.webmanifest, robots.txt, sitemap.xml
 reference/og-card/og-card.html            Share card source; how to regenerate it is inside
+TEMPLATES.md                              The shared templates (intro, table, filters, card…) for any new page
 .github/workflows/pages.yml               Publishes public/ to GitHub Pages on every push to main
 .github/banner.png                        Banner at the top of this README (not published)
 ```

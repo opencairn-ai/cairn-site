@@ -14,6 +14,9 @@
   // repository is public, the sheet does not tell the visitor how to install a
   // recipe and does not link to the repository. Set to true when it is public.
   const STACK_IS_PUBLIC = false;
+  // The search on the model name, after the two filter menus. Hidden for now: set
+  // to true to show it again (its code and copy stay in place).
+  const SHOW_MODEL_SEARCH = false;
 
   const app = window.CAIRN_APP;
   const data = window.CAIRN_RECIPES;
@@ -48,7 +51,8 @@
   const state = {
     selected: fromAddress() || data.defaultId,
     hardware: "",
-    useCase: "",
+    // The use cases ticked in the menu: several at once; none means all.
+    useCases: [],
     query: "",
     file: "model-server-config.yaml",
   };
@@ -77,6 +81,26 @@
   if (sheetToggle) {
     sheetToggle.addEventListener("click", () => setSheetShown(sheetToggle.getAttribute("aria-expanded") !== "true"));
   }
+  const sheetShown = () => !document.documentElement.classList.contains("recipe-sheet-hidden");
+
+  // The description card (js/app.js, setUpCard), as on the stack page. On a wide
+  // screen its × and Escape close it, and the focus goes back to the card button.
+  // A narrow screen keeps the card under the table: there the × is hidden (CSS).
+  const sheetContent = app.setUpCard(sheet, {
+    closeLabel: text("sheet.close"),
+    onClose: () => { setSheetShown(false); if (sheetToggle) sheetToggle.focus(); },
+  });
+  document.addEventListener("keydown", (event) => {
+    // A menu that handles Escape first keeps it (it prevents the default), and so
+    // does an open pop-up (an ⓘ): that Escape only closes the pop-up.
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if (document.querySelector("#tip.is-visible")) return;
+    if (!app.sheetQuery.matches || !sheetShown()) return;
+    // The focus was in the card: it goes back to the card button, as with the ×.
+    const focusWasInCard = sheet.contains(document.activeElement);
+    setSheetShown(false);
+    if (focusWasInCard && sheetToggle) sheetToggle.focus();
+  });
 
   window.addEventListener("hashchange", () => {
     const id = fromAddress();
@@ -94,116 +118,33 @@
   // on the model name. A menu takes the same space for 5 choices or for 50.
   function renderFilters() {
     // The search field stays in place while the menu is drawn again, so it keeps its text.
-    const search = filters.querySelector(".recipe-search") || searchField();
+    const search = SHOW_MODEL_SEARCH && (filters.querySelector(".recipe-search") || searchField());
     filters.replaceChildren(...[
       menu("hardware", HARDWARE, state.hardware, (id) => { state.hardware = id; }),
-      USE_CASES.length && menu("useCase", USE_CASES, state.useCase, (id) => { state.useCase = id; }),
+      USE_CASES.length && menu("useCase", USE_CASES, state.useCases, (ids) => { state.useCases = ids; }, { multiple: true }),
       search,
     ].filter(Boolean));
   }
 
-  // A menu with one choice: the design system's dropdown menu. For screen readers
-  // and the keyboard it is a select-only combobox: the button keeps the focus, and
-  // the arrow keys move the active choice.
-  function menu(name, options, current, set) {
+  // A filter of this page: the shared filter template (js/app.js, filterMenu)
+  // with the texts of this page. On a change, the filters and the table are drawn
+  // again.
+  function menu(name, options, current, set, { multiple = false } = {}) {
     const label = text(`filters.${name}`);
-    const items = [{ id: "", label: text("filters.all") }, ...options];
-    const chosen = options.find((option) => option.id === current);
-    let active = Math.max(0, items.findIndex((item) => item.id === current));
-
-    const list = el("ul", "recipe-menu", [
-      el("li", "recipe-menu__label", [label]),
-      ...items.map((item, index) => {
-        const selected = item.id === current;
-        const option = el("li", "recipe-menu__item", [item.label, selected && icon("M5 12.5 10 17.5 19.5 7", "recipe-menu__check")]);
-        option.id = `recipe-filter-${name}-${index}`;
-        option.setAttribute("role", "option");
-        option.setAttribute("aria-selected", String(selected));
-        option.addEventListener("click", () => choose(index));
-        option.addEventListener("pointermove", () => mark(index));
-        return option;
-      }),
-    ]);
-    list.id = `recipe-filter-${name}-list`;
-    list.hidden = true;
-    list.setAttribute("role", "listbox");
-    list.setAttribute("aria-label", label);
-    list.firstChild.setAttribute("role", "presentation");
-    // A press on the menu must not take the focus from the button: the menu closes when the button loses it.
-    list.addEventListener("pointerdown", (event) => event.preventDefault());
-
-    // At rest the button shows the name of the filter. With a choice, it shows the choice.
-    const button = el("button", "recipe-select", [
-      el("span", "recipe-select__value", [chosen ? chosen.label : label]),
-      icon("m6 9 6 6 6-6", "recipe-select__caret"),
-    ]);
-    button.type = "button";
-    button.id = `recipe-filter-${name}`;
-    button.dataset.chosen = String(Boolean(chosen));
-    button.setAttribute("role", "combobox");
-    button.setAttribute("aria-haspopup", "listbox");
-    button.setAttribute("aria-controls", list.id);
-    button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-label", chosen ? `${label}: ${chosen.label}` : label);
-
-    const optionNodes = () => [...list.querySelectorAll('[role="option"]')];
-    const isOpen = () => !list.hidden;
-
-    function mark(index) {
-      active = (index + items.length) % items.length;
-      optionNodes().forEach((option, i) => option.classList.toggle("is-active", i === active));
-      button.setAttribute("aria-activedescendant", optionNodes()[active].id);
-      optionNodes()[active].scrollIntoView({ block: "nearest" });
-    }
-
-    function open() {
-      list.hidden = false;
-      button.setAttribute("aria-expanded", "true");
-      mark(active);
-    }
-
-    function close() {
-      list.hidden = true;
-      button.setAttribute("aria-expanded", "false");
-      button.removeAttribute("aria-activedescendant");
-    }
-
-    function choose(index) {
-      set(items[index].id);
-      renderFilters();
-      renderResults();
-      // The menus are new elements: give the focus back to this one.
-      document.getElementById(`recipe-filter-${name}`).focus();
-    }
-
-    button.addEventListener("click", () => (isOpen() ? close() : open()));
-    button.addEventListener("blur", close);
-    button.addEventListener("keydown", (event) => {
-      const { key } = event;
-      if (key === "Escape") { if (isOpen()) { event.preventDefault(); close(); } return; }
-      if (key === "Tab") return;
-      if (key === "ArrowDown" || key === "ArrowUp" || key === "Home" || key === "End") {
-        event.preventDefault();
-        if (!isOpen()) return open();
-        return mark(key === "ArrowDown" ? active + 1 : key === "ArrowUp" ? active - 1 : key === "Home" ? 0 : items.length - 1);
-      }
-      if (key === "Enter" || key === " ") {
-        event.preventDefault();
-        return isOpen() ? choose(active) : open();
-      }
-      // A letter goes to the next choice that starts with it.
-      if (key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        const order = items.map((_, i) => (active + 1 + i) % items.length);
-        const match = order.find((i) => items[i].label.toLowerCase().startsWith(key.toLowerCase()));
-        if (match !== undefined) { if (!isOpen()) open(); mark(match); }
-      }
+    return app.filterMenu({
+      id: `recipe-filter-${name}`,
+      name: label,
+      nameText: text("filters.name", { name: label }),
+      all: text("filters.all"),
+      options,
+      value: current,
+      multiple,
+      onChange: (value) => { set(value); renderFilters(); renderResults(); },
     });
-
-    return el("div", "recipe-dropdown", [button, list]);
   }
 
   function searchField() {
-    const input = el("input", "recipe-input");
+    const input = el("input", "filter-input");
     input.type = "search";
     input.id = "recipe-filter-model";
     input.placeholder = text("filters.modelPlaceholder");
@@ -219,7 +160,8 @@
   function renderResults() {
     const query = state.query.toLowerCase();
     const matches = (r) =>
-      (!state.useCase || (r.useCases || []).includes(state.useCase)) &&
+      // A recipe shows when it fits at least one of the ticked use cases.
+      (!state.useCases.length || (r.useCases || []).some((id) => state.useCases.includes(id))) &&
       (!query || `${r.publisher}/${r.model}`.toLowerCase().includes(query));
 
     // With a hardware type selected: its recipes, then the generic recipes of its vendor.
@@ -248,8 +190,8 @@
   // The list scrolls inside its box: the selected recipe stays in view there,
   // without a move of the page.
   function revealSelected() {
-    const box = results.closest(".recipe-scroll");
-    const row = results.querySelector(".recipe-row.is-selected");
+    const box = results.closest(".data-panel__scroll");
+    const row = results.querySelector(".data-table__row.is-selected");
     if (!box || !row) return;
     const head = box.querySelector("thead").offsetHeight;
     const top = row.offsetTop - head;
@@ -263,23 +205,29 @@
   function renderColumns() {
     const columns = document.getElementById("recipe-columns");
     if (!columns) return;
-    const heading = (label, tip, className) => {
-      const cell = el("th", className, [label]);
+    // A column title. The table shows the short title when there is one
+    // (columnsShort); the full name (columns) stays for screen readers, for the
+    // hover text, for the pop-up and for the facts of the card.
+    const heading = (key, tip, className) => {
+      const label = text(`columns.${key}`);
+      const shown = shortTitle(key);
+      const cell = el("th", className, [shown]);
       cell.scope = "col";
+      if (shown !== label) { cell.setAttribute("aria-label", label); cell.title = label; }
       if (tip) {
-        const name = el("span", "recipe-tip", [label]);
+        const name = el("span", "explain", [shown]);
         setTip(name, text("tips.kinds.fact"), label, tip);
         cell.replaceChildren(name);
       }
       return cell;
     };
     columns.replaceChildren(el("tr", null, [
-      heading(text("columns.model")),
-      heading(text("columns.hardware")),
-      heading(text("columns.server")),
-      heading(text("columns.context"), text("tips.tags.context"), "recipe-col-context"),
-      heading(text("columns.tools"), text("tips.tags.tools"), "recipe-col-mark"),
-      heading(text("columns.reasoning"), text("tips.tags.reasoning"), "recipe-col-mark"),
+      heading("model"),
+      heading("hardware"),
+      heading("server"),
+      heading("context", text("tips.tags.context"), "recipe-col-context"),
+      heading("tools", text("tips.tags.tools"), "recipe-col-mark"),
+      heading("reasoning", text("tips.tags.reasoning"), "recipe-col-mark"),
       useCaseHeading(),
     ]));
   }
@@ -288,42 +236,23 @@
   // with the sources of the benchmark data that the use cases read, and their
   // links. It is a popover: a click or a tap opens it, Escape or a click outside
   // closes it, and the keyboard reaches its links after the button.
+  // The short title of a column, or its full name when it has none.
+  function shortTitle(key) {
+    return app.t(`recipes.columnsShort.${key}`, { optional: true }) || text(`columns.${key}`);
+  }
+
   function useCaseHeading() {
-    const cell = el("th", null, [text("columns.useCase")]);
+    const label = text("columns.useCase");
+    const shown = shortTitle("useCase");
+    // The title carries the ⓘ: its pop-up explains each use case, one per line
+    // ("Conversation: …"). The words in the rows have no ⓘ of their own.
+    const name = el("span", "explain", [shown]);
+    setTip(name, text("tips.kinds.useCase"), label, USE_CASES
+      .map((useCase) => `${text("filters.name", { name: useCase.label })} ${text(`tips.useCases.${useCase.id}`)}`)
+      .join("\n"));
+    const cell = el("th", null, [name]);
     cell.scope = "col";
-    const sources = (data.benchmarks && data.benchmarks.sources) || [];
-    if (!sources.length || !USE_CASES.length || !HTMLElement.prototype.togglePopover) return cell;
-
-    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
-    const about = el("div", "recipe-about", [
-      el("p", "tip__kind", [text("columns.useCase")]),
-      el("p", null, [text("useCases.credit"), ...links, "."]),
-    ]);
-    about.id = "recipe-about";
-    about.popover = "auto";
-
-    const button = el("button", "recipe-about-button", ["?"]);
-    button.type = "button";
-    button.setAttribute("popovertarget", about.id);
-    button.setAttribute("aria-label", text("useCases.about"));
-    button.title = text("useCases.about");
-
-    // Under the button, and always on screen. It closes when the table or the page scrolls.
-    about.addEventListener("toggle", (event) => {
-      button.setAttribute("aria-expanded", String(event.newState === "open"));
-      if (event.newState !== "open") return;
-      const box = button.getBoundingClientRect();
-      const margin = 8;
-      const { width } = about.getBoundingClientRect();
-      about.style.top = `${Math.round(box.bottom + margin)}px`;
-      about.style.left = `${Math.round(Math.max(margin, Math.min(box.left + box.width / 2 - width / 2, document.documentElement.clientWidth - width - margin)))}px`;
-    });
-    const close = () => { if (about.matches(":popover-open")) about.hidePopover(); };
-    results.closest(".recipe-scroll")?.addEventListener("scroll", close, { passive: true });
-    window.addEventListener("scroll", close, { passive: true });
-    window.addEventListener("resize", close);
-
-    cell.append(button, about);
+    if (shown !== label) { cell.setAttribute("aria-label", label); cell.title = label; }
     return cell;
   }
 
@@ -331,22 +260,25 @@
   // for the keyboard and for screen readers.
   function resultRow(r) {
     const selected = r.id === state.selected;
-    const pick = el("button", "recipe-pick", [el("span", "recipe-pick__model", [r.model]), el("span", "recipe-pick__publisher", [r.publisher])]);
+    // The model, its publisher, and "hardware · server", which shows instead of the
+    // publisher on narrow screens, where the table is a list (CSS).
+    const pick = el("button", "recipe-pick", [
+      el("span", "recipe-pick__model", [r.model]),
+      el("span", "recipe-pick__publisher", [r.publisher]),
+      el("span", "recipe-pick__where", [`${r.hardwareLabel} · ${r.serverLabel}`]),
+    ]);
     pick.type = "button";
     pick.setAttribute("aria-pressed", String(selected));
-    const useCases = (r.useCases || []).flatMap((id, i) => {
-      const name = el("span", "recipe-tip", [text(`useCases.${id}`)]);
-      setTip(name, text("tips.kinds.useCase"), text(`useCases.${id}`), text(`tips.useCases.${id}`));
-      return i ? [", ", name] : [name];
-    });
-    const row = el("tr", `recipe-row${selected ? " is-selected" : ""}`, [
+    // The use cases in plain words: the ⓘ of the column title explains them.
+    const useCases = (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ");
+    const row = el("tr", `data-table__row${selected ? " is-selected" : ""}`, [
       el("td", "recipe-cell-model", [pick]),
       el("td", "recipe-cell-nowrap", [r.hardwareLabel]),
       el("td", "recipe-cell-nowrap", [r.serverLabel]),
       el("td", null, [contextBar(r.facts.context)]),
       el("td", "recipe-cell-mark", [mark(r.facts.tools)]),
       el("td", "recipe-cell-mark", [mark(r.facts.reasoning)]),
-      el("td", "recipe-cell-uses", useCases),
+      el("td", "recipe-cell-uses", [useCases]),
     ]);
     row.addEventListener("click", (event) => {
       state.selected = r.id;
@@ -356,7 +288,7 @@
       // the keyboard keeps its place. The focus ring shows only when the row was
       // chosen with the keyboard (a click from a key has no pointer: detail 0).
       const fromKey = event.detail === 0;
-      results.querySelector(".recipe-row.is-selected .recipe-pick")?.focus({ preventScroll: true, focusVisible: fromKey });
+      results.querySelector(".data-table__row.is-selected .recipe-pick")?.focus({ preventScroll: true, focusVisible: fromKey });
       // When the sheet is under the list, bring it into view.
       if (matchMedia("(max-width: 900px), (max-aspect-ratio: 1/1)").matches) sheet.scrollIntoView({ behavior: "smooth", block: "start" });
     });
@@ -371,15 +303,17 @@
     const width = tokens ? Math.max(6, ((Math.log2(tokens) - low) / (Math.log2(longest) - low)) * 100) : 0;
     const fill = el("i");
     fill.style.width = `${width}%`;
-    return el("span", "recipe-context", [
-      el("span", "recipe-context__bar", [fill]),
+    // No length in the recipe (the model server's default): no bar, since there is
+    // nothing to draw; the word starts at the left edge of the column.
+    return el("span", `recipe-context${tokens ? "" : " is-default"}`, [
+      tokens && el("span", "recipe-context__bar", [fill]),
       el("span", "recipe-context__value", [tokens ? `${Math.round(tokens / 1024)}K` : text("columns.contextDefault")]),
     ]);
   }
 
-  // Tool calling and reasoning: a filled dot for yes, an empty dot for no.
+  // Yes or no in the table: the shared mark (js/app.js), the word for screen readers.
   function mark(on) {
-    return el("span", `recipe-mark${on ? " is-on" : ""}`, [el("span", "sr-only", [text(on ? "facts.yes" : "facts.no")])]);
+    return app.mark(on, { yes: text("facts.yes"), no: text("facts.no") });
   }
 
   // --- Pop-ups ---------------------------------------------------------------
@@ -400,6 +334,8 @@
       kind.textContent = node.dataset.tipKind;
       name.textContent = node.dataset.tipName;
       description.textContent = node.dataset.tipText;
+      // A text of several lines (the use cases) keeps its lines.
+      description.style.whiteSpace = "pre-line";
 
       // Above the tag when there is room, otherwise below; always on screen.
       const box = node.getBoundingClientRect();
@@ -437,39 +373,45 @@
     // The address follows the selected recipe, so a visitor can share it.
     history.replaceState(null, "", r ? `#${r.id}` : location.pathname + location.search);
     if (!r) {
-      sheet.replaceChildren(el("p", "recipe-empty", [text("noSelection")]));
+      sheetContent.replaceChildren(el("p", "recipe-empty", [text("noSelection")]));
       return;
     }
 
     const facts = r.facts;
     const file = r.files.find((f) => f.name === state.file) || r.files.find((f) => f.name === "model-server-config.yaml") || r.files[0];
-    const tabs = el("div", "recipe-tabs", r.files.map((f) => {
-      const tab = el("button", "recipe-tab", [f.name]);
+    const tabs = el("div", "tabs", r.files.map((f) => {
+      const tab = el("button", "tab", [f.name]);
       tab.type = "button";
       tab.setAttribute("aria-pressed", String(f === file));
       tab.addEventListener("click", () => { state.file = f.name; renderSheet(); });
       return tab;
     }));
 
-    // The facts of the recipe: two columns on a wide sheet. A wide fact takes the full width.
-    const fact = (label, value, wide) => [el("dt", wide ? "is-wide" : null, [label]), el("dd", wide ? "is-wide" : null, [value])];
-    const list = el("dl", "recipe-facts", [
+    // The facts of the recipe, in the shared card layout: each label above its value,
+    // in two columns. A wide fact takes the full width.
+    // `group`: the first fact of the second group ("what it can do"), with the rule above it.
+    const fact = (label, value, wide, group) => [el("div", ["card__fact", wide && "is-wide", group && "is-group-start"].filter(Boolean).join(" "), [el("dt", null, [label]), el("dd", null, [value])])];
+    const list = el("dl", "card__facts card__facts--two", [
       // Short facts in pairs; long facts (the image, the use cases) on a full row.
+      // The publisher first, with the model card, since the title is the model alone.
+      ...fact(text("facts.publisher"), r.publisher),
+      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`)),
       ...fact(text("columns.hardware"), r.hardwareLabel),
       ...fact(text("columns.server"), r.serverLabel),
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
-      ...fact(text("columns.useCase"), (r.useCases || []).map((id) => text(`useCases.${id}`)).join(", "), true),
+      ...fact(text("columns.useCase"), useCasesFact(r), true, true),
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
-      ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
-      ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
-      ...fact(text("facts.model"), link(text("sheet.modelCard"), `https://huggingface.co/${r.publisher}/${r.model}`)),
+      ...fact(text("columns.tools"), yesNo(facts.tools)),
+      ...fact(text("columns.reasoning"), yesNo(facts.reasoning)),
     ]);
 
-    sheet.replaceChildren(...[
-      // The model with its publisher, then the server and the hardware, then the facts.
+    sheetContent.replaceChildren(...[
+      // The card head, as on the stack page: the kind, the model, the server and the
+      // hardware in one sentence, then the facts.
       el("div", "recipe-sheet__head", [
-        el("h2", "recipe-sheet__title", [el("span", "recipe-sheet__publisher", [`${r.publisher}/`]), r.model]),
-        el("p", "recipe-sheet__where", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
+        el("p", "card__kind", [text("sheet.kind")]),
+        el("h2", "card__title", [r.model]),
+        el("p", "card__text", [text("where", { server: r.serverLabel, hardware: r.hardwareLabel })]),
         list,
       ]),
 
@@ -481,9 +423,27 @@
           STACK_IS_PUBLIC && link(text("sheet.github"), `${data.repo}/tree/${data.branch}/recipes/${r.id}`),
         ]),
         tabs,
-        codeBlock(file.text, "recipe-code--file", file.name),
+        codeBlock(file.text, "code-block--file", file.name),
       ]),
     ].filter(Boolean));
+  }
+
+  // Yes or no in the card: the check or cross of the table, then the word, both
+  // in the color of the mark (no: caption grey; yes: the color of the check).
+  function yesNo(on) {
+    return app.mark(on, { yes: text("facts.yes"), no: text("facts.no"), word: true });
+  }
+
+  // The use cases of a recipe in the card, then where they come from: the sources
+  // of the benchmark data, with their links (they used to sit in a pop-up on the
+  // column title).
+  function useCasesFact(r) {
+    // The use cases in the type of the card text ("vLLM on GB10"), then the note.
+    const uses = el("span", "card__use-cases", [(r.useCases || []).map((id) => text(`useCases.${id}`)).join(", ")]);
+    const sources = (data.benchmarks && data.benchmarks.sources) || [];
+    if (!sources.length) return uses;
+    const links = sources.flatMap((source, i) => [i ? ` ${text("useCases.creditAnd")} ` : " ", link(source.name, source.url)]);
+    return el("span", null, [uses, el("span", "card__note", [text("useCases.credit"), ...links, "."])]);
   }
 
   // The steps to install the recipe. Shown only when the stack repository is public.
@@ -507,17 +467,12 @@
   // A file, or a command, in the dark panel with the Copy button. In a YAML or
   // .env file the keys and the comments have their own colors.
   function codeBlock(content, modifier, name = "") {
-    const copy = el("button", "recipe-copy", [text("sheet.copy")]);
-    copy.type = "button";
-    copy.addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText(content); copy.textContent = text("sheet.copied"); }
-      catch { copy.textContent = text("sheet.copyFailed"); }
-      setTimeout(() => { copy.textContent = text("sheet.copy"); }, 1600);
-    });
+    // The shared Copy button (js/app.js, copyButton).
+    const copy = app.copyButton(() => content, { copy: text("sheet.copy"), copied: text("sheet.copied"), failed: text("sheet.copyFailed") });
     const pre = el("pre");
     if (/\.ya?ml$|^\.env$/.test(name)) pre.append(...highlight(content));
     else pre.textContent = content;
-    return el("div", `recipe-code ${modifier || ""}`.trim(), [pre, copy]);
+    return el("div", `code-block ${modifier || ""}`.trim(), [pre, copy]);
   }
 
   // The lines of a YAML or .env file, with the keys and the comments in spans.
@@ -526,16 +481,16 @@
       const parts = [];
       const key = line.match(/^(\s*-?\s*[\w.@-]+)(\s*[:=])/);
       let rest = line;
-      if (key) { parts.push(el("span", "recipe-code__key", [key[1]]), key[2]); rest = line.slice(key[0].length); }
+      if (key) { parts.push(el("span", "code-block__key", [key[1]]), key[2]); rest = line.slice(key[0].length); }
       const hash = rest.search(/(^|\s)#/);
-      if (hash >= 0) parts.push(rest.slice(0, hash), el("span", "recipe-code__comment", [rest.slice(hash)]));
+      if (hash >= 0) parts.push(rest.slice(0, hash), el("span", "code-block__comment", [rest.slice(hash)]));
       else parts.push(rest);
       return i ? ["\n", ...parts] : parts;
     });
   }
 
   function link(label, href) {
-    const a = el("a", "recipe-link", [label, app.externalIcon()]);
+    const a = el("a", "ext-link", [label, app.externalIcon()]);
     a.href = href;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
@@ -543,24 +498,6 @@
   }
 
   // --- Helpers -------------------------------------------------------------
-
-  // A small line icon: the caret of a menu, the check of the selected choice.
-  function icon(path, className) {
-    const ns = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(ns, "svg");
-    svg.setAttribute("class", className);
-    svg.setAttribute("viewBox", "0 0 24 24");
-    svg.setAttribute("fill", "none");
-    svg.setAttribute("stroke", "currentColor");
-    svg.setAttribute("stroke-width", "2");
-    svg.setAttribute("stroke-linecap", "round");
-    svg.setAttribute("stroke-linejoin", "round");
-    svg.setAttribute("aria-hidden", "true");
-    const line = document.createElementNS(ns, "path");
-    line.setAttribute("d", path);
-    svg.append(line);
-    return svg;
-  }
 
   function unique(values) { return [...new Set(values)]; }
 

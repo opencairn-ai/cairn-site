@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#291435">
 <script>
-  // The site opens in dark on every page; the header button can switch it.
-  document.documentElement.dataset.theme = "dark";
+  // The site opens in dark. A theme the visitor chooses with the header button
+  // stays from page to page for the rest of the visit (sessionStorage, set by
+  // js/app.js); a new visit opens in dark again.
+  try { document.documentElement.dataset.theme = sessionStorage.getItem("cairn-theme") === "light" ? "light" : "dark"; }
+  catch (error) { document.documentElement.dataset.theme = "dark"; }
 </script>
 <!-- Title and description are replaced at load time from copy/en.js or copy/fr.js;
      the English values here serve link previews and crawlers that do not run scripts. -->
@@ -33,7 +36,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=150">
+<link rel="stylesheet" href="css/styles.css?v=280">
 </head>
 <body data-page="stack">
 <div class="page">
@@ -75,18 +78,18 @@
     <section class="intro">
       <h1 data-text="diagram.title"></h1>
       <div class="goal">
-        <p class="goal__lead" data-text="intro.goal"></p>
+        <p class="goal__lead page-lead" data-text="intro.goal"></p>
         <ul class="goal__points" id="goal-points"></ul>
       </div>
     </section>
 
     <figure class="arch-figure">
       <figcaption class="arch-caption">
-        <!-- The bar above the schema: the heading and the hint on the left, and on
-             wide screens the button that hides or shows the sheet on the right. -->
-        <div class="stack-caption">
-          <div class="stack-caption__text">
-            <h2 class="stack-heading" data-text="diagram.heading"></h2>
+        <!-- The section bar (shared with Model Recipes): the heading and the hint on
+             the left, and on wide screens the button of the card on the right. -->
+        <div class="section-bar">
+          <div class="section-bar__text">
+            <h2 class="section-heading" data-text="diagram.heading"></h2>
             <p class="hint stack-hint" data-text="diagram.hint"></p>
           </div>
           <button type="button" class="sheet-toggle" id="sheet-toggle" aria-controls="stack-sheet" aria-expanded="true">
@@ -196,8 +199,9 @@
         </div>
 
       </div>
-      <!-- The script puts the × and a live region for the content in the sheet. -->
-      <aside class="stack-sheet" id="stack-sheet"></aside>
+      <!-- The description card (shared with Model Recipes). The script puts the ×
+           and a live region for the content in it. -->
+      <aside class="stack-sheet card" id="stack-sheet"></aside>
       </div>
     </figure>
   </main>
@@ -224,10 +228,10 @@
 
 <noscript><p class="noscript">This page needs JavaScript to display the architecture. · Cette page nécessite JavaScript pour afficher l’architecture.</p></noscript>
 
-<script src="copy/en.js?v=105"></script>
-<script src="copy/fr.js?v=106"></script>
-<script src="js/app.js?v=84"></script>
-<script src="js/stack.js?v=10"></script>
+<script src="copy/en.js?v=114"></script>
+<script src="copy/fr.js?v=116"></script>
+<script src="js/app.js?v=91"></script>
+<script src="js/stack.js?v=11"></script>
 
 </body>
 </html>
