@@ -242,7 +242,7 @@ a { color: inherit; }
   --row-rule: rgb(245 232 255 / 0.16);
   --row-hover-bg: rgb(220 186 246 / 0.3);  /* Pale purple 30%: white words 8.1:1 */
   --row-hover-ink: #ffffff;
-  --row-selected-bg: #dcbaf6;              /* Pale purple: Deep purple words 10:1 */
+  --row-selected-bg: #734c90;              /* Mid purple: white words 6.6:1 */
   --row-selected-ink: #291435;
   --scroll-shade: rgb(0 0 0 / 0.35);
   --menu-line: #734c90;
@@ -3123,7 +3123,9 @@ h1 {
     linear-gradient(transparent, var(--scroll-shade)) bottom / 100% 1rem no-repeat scroll;
 }
 
-.data-table { width: 100%; border-collapse: collapse; }
+/* Separate borders with no spacing: the rows look the same, and the cells can
+   round their corners, which the last row needs (see below). */
+.data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
 
 /* The column titles: small capitals in the caption grey, 12px and spaced, as the
    label of the filter menus, so they read apart from the data. On the ground of
@@ -3183,13 +3185,26 @@ h1 {
 .data-table__row:is(:hover, .is-selected) td:last-child,
 :root[data-theme="dark"] .data-table__row:is(:hover, .is-selected) td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23291435' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
-/* Dark, selected row: Pale purple, so its words and marks take the selected ink
-   (Deep purple, 10:1). */
+/* Dark, selected row: Mid purple, so its words, marks and arrow are white
+   (6.6:1), as on the row under the pointer. */
 :root[data-theme="dark"] .data-table__row.is-selected td,
 :root[data-theme="dark"] .data-table__row.is-selected .recipe-pick__publisher,
-:root[data-theme="dark"] .data-table__row.is-selected .mark { color: var(--row-selected-ink); }
-/* The empty part of the context bar stays visible on the Pale purple row. */
-:root[data-theme="dark"] .data-table__row.is-selected .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
+:root[data-theme="dark"] .data-table__row.is-selected .mark { color: #ffffff; }
+:root[data-theme="dark"] .data-table__row.is-selected td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+/* Selected row, both themes: a 2px Pink line around it. Drawn inside the cells (inset shadows), so the
+   row keeps its size and the table does not move. */
+.data-table__row.is-selected td { box-shadow: inset 0 2px var(--color-pink), inset 0 -2px var(--color-pink); }
+.data-table__row.is-selected td:first-child { box-shadow: inset 0 2px var(--color-pink), inset 0 -2px var(--color-pink), inset 2px 0 var(--color-pink); }
+.data-table__row.is-selected td:last-child { box-shadow: inset 0 2px var(--color-pink), inset 0 -2px var(--color-pink), inset -2px 0 var(--color-pink); }
+/* The last row sits on the line of the panel: no row line under it, and its
+   outer bottom corners follow the round corners of the panel (its radius less
+   its 1px line; 0.71rem is --radius-md at the 16px of the panel), so the fill
+   and the Pink line of a selected last row are not cut. */
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.data-table tbody tr:last-child td:first-child { border-bottom-left-radius: calc(0.71rem - 1px); }
+.data-table tbody tr:last-child td:last-child { border-bottom-right-radius: calc(0.71rem - 1px); }
+/* The empty part of the context bar stays visible on the Mid purple row. */
+:root[data-theme="dark"] .data-table__row.is-selected .recipe-context__bar { background: rgb(41 20 53 / 0.35); }
 
 /* Dark, row under the pointer: Pale purple at 30% over the page (#5F466F), the
    strongest contrast for white: its words, marks and arrow take the hover ink
@@ -3562,7 +3577,11 @@ h1 {
 }
 .roadmap__pick:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; border-radius: 2px; }
 .roadmap__cell:not(.is-active) { cursor: pointer; }
-.roadmap__action { display: flex; gap: 8px; padding: 1rem 0 1.1rem; }
+/* In the chosen column the buttons take the place of the line under the last
+   workstream: that line goes, and the top of the buttons sits where it was. */
+.roadmap__action { display: flex; gap: 8px; padding: 0 0 1.1rem; }
+.roadmap__row:nth-last-child(2) > .roadmap__cell.is-active { border-bottom-color: transparent; }
+.roadmap__action .roadmap__contribute { margin-top: -1px; }
 .roadmap__contribute { flex: 1 1 0; justify-content: center; min-width: 0; visibility: hidden; }
 .roadmap__contribute svg { width: 16px; height: 16px; }
 .roadmap__action.is-active .roadmap__contribute { visibility: visible; }

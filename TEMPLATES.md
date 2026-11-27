@@ -38,7 +38,7 @@ and dark. Use the token, never the color.
 | `--field-bg` | A filter pill |
 | `--select-band` | A filter pill with a choice (light: Beige #D0C2B1; dark: #614972) |
 | `--row-hover-bg`, `--row-hover-ink` | The row or menu item under the pointer (dark: Pale purple 30%, white words) |
-| `--row-selected-bg`, `--row-selected-ink` | The selected row or chosen menu item (dark: Pale purple, Deep purple words) |
+| `--row-selected-bg`, `--row-selected-ink` | The selected row, with a 2px Pink line around it (dark: Mid purple #734C90, white words) |
 | `--row-rule` | The line between two rows |
 | `--scroll-shade` | The shade at the bottom of a panel that scrolls |
 | `--menu-line` | The border of an open menu |
