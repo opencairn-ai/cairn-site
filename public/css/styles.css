@@ -3445,9 +3445,9 @@ h1 {
 
 .roadmap {
   display: grid;
-  /* The names of the workstreams, then the three times. The nearer the time,
-     the wider its column. */
-  grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.15fr) minmax(0, 0.9fr);
+  /* The names of the workstreams, then the three times: "Now" the widest, "Next"
+     and "Later" the same width (1.025fr each, the same total as before). */
+  grid-template-columns: minmax(min-content, 12rem) minmax(0, 1.6fr) minmax(0, 1.025fr) minmax(0, 1.025fr);
   grid-template-rows: min-content repeat(5, auto);
   column-gap: 1.6rem;
   margin-bottom: 0;
@@ -3485,15 +3485,21 @@ h1 {
 /* The time in the color of the kind of a card (--card-accent: Mid purple in light,
    Pale purple in dark), its line in the caption grey, as in the card. */
 .roadmap__when { color: var(--card-accent); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
-/* Dark: the times in white; the chosen one (is-active, js/roadmap.js) in Pink,
-   and on phones, where nothing is chosen, "Now". Light keeps Mid purple: Pink on
-   Cream is 2.0:1, under the 3:1 of large text. */
+/* Dark: the times in white. The chosen one (is-active, js/roadmap.js) in Pink in
+   both themes; on phones, where nothing is chosen, the label of "Now" in Pink
+   (dark). Light: Pink on Cream is 2.0:1, under the 3:1 of large text, a choice
+   of the design (2026-11-27). */
 :root[data-theme="dark"] .roadmap__when { color: #ffffff; }
 /* "Later" in the caption grey, as its items (not planned yet), until it is chosen. */
 .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when,
 :root[data-theme="dark"] .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when { color: var(--color-text-muted); }
+.roadmap__column.is-active .roadmap__when,
 :root[data-theme="dark"] .roadmap__column.is-active .roadmap__when,
 :root[data-theme="dark"] [data-when="now"] > .roadmap__cell-label { color: var(--color-pink); }
+/* Light: the card of the chosen column on Sand #E3D3BC at 70% with a 1px Pink
+   line. Pink title about 1.7:1 on it (a choice of the design, 2026-11-27, to
+   review). */
+:root:not([data-theme="dark"]) .roadmap__band { border-color: var(--color-pink); background: rgb(227 211 188 / 0.7); }
 /* Dark: the card of "Now" has a 1px Pink line, as the boxes of Hello World and LaStack. */
 :root[data-theme="dark"] .roadmap__band { border: 1px solid var(--color-pink); }
 @media (max-width: 900px) {
@@ -3506,7 +3512,7 @@ h1 {
   display: inline-block;
   width: 0.45em;
   height: 0.95em;
-  margin-left: 0.25em;
+  margin-left: 0;
   vertical-align: -0.12em;
   background: var(--color-pink);
 }
@@ -3605,7 +3611,7 @@ h1 {
   .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; border: 1px solid var(--panel-line); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-selected) 70%, transparent); }
   .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
   [data-when="now"] > .roadmap__cell-label::after {
-    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-left: 0.25em; vertical-align: -0.12em; background: var(--color-pink);
+    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-left: 0; vertical-align: -0.12em; background: var(--color-pink);
   }
 }
 
