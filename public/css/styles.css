@@ -3045,6 +3045,15 @@ h1 {
 .recipe-menu__item.is-active { background: var(--color-ghost-hover); }
 /* The selected choice has a Magenta check. */
 .recipe-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
+/* The same hover and selection as the rows of the table. Light: the band of the
+   table, at 55% under the pointer and full for the chosen item. Dark: Pale purple
+   at 30% under the pointer (white words), and full Pale purple for the chosen
+   item (Deep purple words and check). */
+.recipe-menu__item.is-active { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
+.recipe-menu__item[aria-selected="true"] { background: var(--recipe-band); }
+:root[data-theme="dark"] .recipe-menu__item.is-active { background: rgb(220 186 246 / 0.3); color: #ffffff; }
+:root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] { background: #dcbaf6; color: #291435; }
+:root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] .recipe-menu__check { color: #291435; }
 
 /* --- The table --- */
 
@@ -3120,14 +3129,22 @@ h1 {
 .recipe-row:is(:hover, .is-selected) td:last-child,
 :root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23291435' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
-/* Dark: the row under the pointer and the selected row in Pale purple, so their
-   words and marks turn Deep purple (10:1). */
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td { background-color: #dcbaf6; }
+/* Dark, selected row: Pale purple, so its words and marks turn Deep purple (10:1). */
+:root[data-theme="dark"] .recipe-row.is-selected td { background-color: #dcbaf6; }
+:root[data-theme="dark"] .recipe-row.is-selected td,
+:root[data-theme="dark"] .recipe-row.is-selected .recipe-pick__publisher,
+:root[data-theme="dark"] .recipe-row.is-selected .recipe-mark { color: #291435; }
 /* The empty part of the context bar stays visible on the Pale purple row. */
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td,
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-pick__publisher,
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) .recipe-mark { color: #291435; }
+:root[data-theme="dark"] .recipe-row.is-selected .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
+
+/* Dark, row under the pointer: Pale purple at 30% over the page (#5F466F), the
+   strongest contrast for white: its words, marks and arrow turn white (8.1:1). */
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td { background-color: rgb(220 186 246 / 0.3); }
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td,
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-pick__publisher,
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-mark { color: #ffffff; }
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-context__bar { background: rgb(41 20 53 / 0.35); }
+:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 
 /* The model name is the button of the row. */
@@ -3165,10 +3182,17 @@ h1 {
 /* 32px after the longest model name, so it never runs into the hardware. */
 .recipe-table th:first-child,
 .recipe-table td:first-child { padding-right: 2rem; }
-.recipe-context { display: flex; align-items: center; gap: 0.6em; }
-.recipe-context__bar { position: relative; flex: 1; height: 0.4em; background: var(--recipe-track); }
+/* The bar and its value read as one item: a short bar of fixed length, then the
+   value right after it (6px), left-aligned, not pushed to the right edge. */
+.recipe-context { display: flex; align-items: center; gap: 6px; }
+.recipe-context__bar { position: relative; flex: none; width: 28px; height: 0.4em; background: var(--recipe-track); }
+/* A hairline around the bar, so its length reads even when it is empty
+   ("Default"). A browser draws no line under 1px on a standard screen, so it is
+   1px. An outline does not change the size of the bar. */
+/* The outline in Mid purple, in both themes. */
+.recipe-context__bar { outline: 1px solid #734c90; }
 .recipe-context__bar i { position: absolute; inset: 0 auto 0 0; background: var(--recipe-bar); }
-.recipe-context__value { width: 3.2em; font-size: 0.875rem; font-variant-numeric: tabular-nums; text-align: right; }
+.recipe-context__value { font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
 /* Yes: a check, in River in dark (the color of the YAML keys) and in the ink of
