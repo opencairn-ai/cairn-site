@@ -424,6 +424,7 @@ window.CAIRN_COPY.fr = {
     columnsShort: {
       server: "Serveur",
       tools: "Outils",
+      reasoning: "Raison.",
       useCase: "Usage",
     },
     // Les faits de la recette sélectionnée, dans la fiche. {count} est un nombre de jetons.

@@ -2995,6 +2995,9 @@ h1 {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  /* The table measures the panel, not the window: it turns into a list when
+     the panel is too narrow for its columns (see below). */
+  container: data-panel / inline-size;
 }
 
 /* The wrapper of the filters and the table lets them sit in the grid of the page
@@ -3457,13 +3460,15 @@ h1 {
   .recipe-search { flex-basis: 100%; max-width: none; }
 }
 
-/* Narrow screens (900px and less): the table becomes a simple list, as a list
-   and its detail (Material Design 3, list-detail). Each row shows the model, then
-   "hardware · server" under it, and the arrow; the other facts are in the card
-   under the list. No column titles, no sideways scroll, and the page scrolls
-   (no scroll inside the panel). Wide screens keep the full table. */
+/* A panel too narrow for the seven columns (840px: the table needs 834px in
+   French, 807px in English) turns the table into a simple list, as a list and its
+   detail (Material Design 3, list-detail): on phones, and on wide screens up to
+   about 1,450px, where the card beside takes the room. Each row shows the model,
+   then "hardware · server" under it, and the arrow; the other facts are in the
+   card. No column titles, never a sideways scroll, and no scroll inside the panel
+   (the page scrolls). A wider panel keeps the full table. */
 .recipe-pick__where { display: none; }
-@media (max-width: 900px) {
+@container data-panel (max-width: 840px) {
   .data-panel__scroll { max-height: none; overflow: visible; background: none; }
   .data-table thead { display: none; }
   .data-table td:not(:first-child):not(:last-child) { display: none; }
