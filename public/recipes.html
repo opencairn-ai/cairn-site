@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=218">
+<link rel="stylesheet" href="css/styles.css?v=219">
 </head>
 <body data-page="recipes">
 <div class="page">
@@ -89,8 +89,8 @@
     <div class="recipe-body">
       <!-- The toolbar, across the page: the filters on the left, the button of the
            card on the right, on the same line. The card is open at first. -->
-      <div class="recipe-toolbar">
-        <div class="recipe-filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
+      <div class="toolbar">
+        <div class="filters" id="recipe-filters" role="group" data-aria-label="recipes.filters.label"></div>
         <button type="button" class="sheet-toggle" id="recipe-sheet-toggle" aria-controls="recipe-sheet" aria-expanded="true">
           <span class="sheet-toggle__label" data-text="recipes.sheet.title"></span>
           <span class="sheet-toggle__chevron" aria-hidden="true"></span>
@@ -98,11 +98,11 @@
       </div>
       <!-- The table of the recipes, which scrolls inside its box. -->
       <div class="recipe-finder">
-        <section class="recipe-panel recipe-list" aria-labelledby="recipe-list-name">
+        <section class="data-panel" aria-labelledby="recipe-list-name">
           <!-- The name of the list is for screen readers only. -->
           <h2 class="sr-only" id="recipe-list-name" data-text="recipes.listLabel"></h2>
-          <div class="recipe-scroll">
-            <table class="recipe-table">
+          <div class="data-panel__scroll">
+            <table class="data-table">
               <thead id="recipe-columns"></thead>
               <tbody id="recipe-results"></tbody>
             </table>
@@ -134,9 +134,9 @@
 
 <script src="copy/en.js?v=109"></script>
 <script src="copy/fr.js?v=110"></script>
-<script src="js/app.js?v=85"></script>
+<script src="js/app.js?v=86"></script>
 <!-- The recipes, generated from the stack repository by tools/gen-recipes.mjs. -->
 <script src="js/recipes-data.js"></script>
-<script src="js/recipes.js?v=19"></script>
+<script src="js/recipes.js?v=20"></script>
 </body>
 </html>

@@ -211,6 +211,38 @@ a { color: inherit; }
   border: 0;
 }
 
+/* TEMPLATE TOKENS: the colors of the shared templates (data table, filter pills
+   and menus, tabs, code block). One place for every page; see TEMPLATES.md.
+   Rows and menu items: a soft fill under the pointer, a full fill when chosen. In
+   dark, both are Pale purple (30% and full), so the words turn white under the
+   pointer and Deep purple when chosen (the -ink tokens). */
+:root {
+  --panel-bg: var(--color-layer);          /* The data panel */
+  --panel-line: var(--color-schema-line);  /* Its 1px line, and the line under titles and tabs */
+  --field-bg: var(--color-component);      /* A filter pill */
+  --select-band: #f5e8ff;                  /* A chosen filter pill: Marshmallow */
+  --row-rule: rgb(41 20 53 / 0.14);        /* The line between two rows */
+  --row-hover-bg: color-mix(in srgb, #f5e8ff 55%, transparent);
+  --row-selected-bg: #f5e8ff;
+  --scroll-shade: rgb(41 20 53 / 0.14);    /* The shade at the bottom of a scrolling panel */
+  --menu-line: #d0c2b1;                    /* The border of an open menu: Beige */
+  --code-bg: #291435;                      /* The code block */
+}
+:root[data-theme="dark"] {
+  --panel-bg: #291435;
+  --panel-line: #614972;
+  --field-bg: #291435;
+  --select-band: #614972;
+  --row-rule: rgb(245 232 255 / 0.16);
+  --row-hover-bg: rgb(220 186 246 / 0.3);  /* Pale purple 30%: white words 8.1:1 */
+  --row-hover-ink: #ffffff;
+  --row-selected-bg: #dcbaf6;              /* Pale purple: Deep purple words 10:1 */
+  --row-selected-ink: #291435;
+  --scroll-shade: rgb(0 0 0 / 0.35);
+  --menu-line: #734c90;
+  --code-bg: #1d0e26;
+}
+
 /* --- Page frame ---------------------------------------------------------- */
 
 .page {
@@ -2883,27 +2915,15 @@ h1 {
    the table and the file preview scroll inside it, and the page does not. A
    shorter window, a larger text size or browser zoom gives a page that scrolls. */
 
+/* The context bars are the only colors of this page alone; the colors of the
+   templates (table, filters, menus, code) are the TEMPLATE TOKENS at the root. */
 .recipe-body {
-  --recipe-band: #f5e8ff;            /* Marshmallow */
-  --recipe-rule: rgb(41 20 53 / 0.14);
   --recipe-bar: #291435;             /* Deep purple */
   --recipe-track: rgb(41 20 53 / 0.1);
-  --recipe-shade: rgb(41 20 53 / 0.14);
-  --recipe-menu-line: #d0c2b1;       /* The border of an open menu: Beige, as in the design system */
-  --recipe-code-bg: #291435;
 }
-
 :root[data-theme="dark"] .recipe-body {
-  --recipe-band: #614972;            /* The selected row and a chosen filter: the line of the panel */
-  --recipe-rule: rgb(245 232 255 / 0.16);
   --recipe-bar: #fd70f5;             /* The context bars: Pink */
   --recipe-track: rgb(245 232 255 / 0.12);
-  --recipe-shade: rgb(0 0 0 / 0.35);
-  --recipe-menu-line: #734c90;       /* Secondary light purple */
-  --recipe-code-bg: #1d0e26;
-  --recipe-field: #291435;           /* The filter pills: Deep purple */
-  --recipe-panel: #291435;           /* The table panel: the ground of the page */
-  --recipe-panel-line: #614972;      /* Its 1px line */
 }
 
 /* The intro uses the page templates (.intro, .page-lead), then the section bar. */
@@ -2921,7 +2941,7 @@ h1 {
   line-height: 1.25;
 }
 
-.recipe-list {
+.data-panel {
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -2933,11 +2953,11 @@ h1 {
 
 /* The table panel: the ground and corners of a layer of the stack schema, with
    the 1px line of its boxes. It clips the rows to its corners. */
-.recipe-list {
+.data-panel {
   overflow: hidden;
-  border: 1px solid var(--recipe-panel-line, var(--color-schema-line));
+  border: 1px solid var(--panel-line);
   border-radius: var(--radius-md);
-  background: var(--recipe-panel, var(--color-layer));
+  background: var(--panel-bg);
 }
 
 /* --- Filters: two menus and the search field, above the table panel --- */
@@ -2945,8 +2965,8 @@ h1 {
 /* 14px: the size of the design system's field and menu item. */
 /* The toolbar spans the page: the filters on the left, the card button on the
    right, centered on the same line, so the button lines up with the filters. */
-.recipe-toolbar { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 12px; }
-.recipe-filters {
+.toolbar { display: flex; grid-column: 1 / -1; align-items: center; justify-content: space-between; gap: 12px; }
+.filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
@@ -2954,25 +2974,25 @@ h1 {
 }
 
 /* Each pill takes the width of its name and value. */
-.recipe-dropdown { position: relative; display: flex; flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.filter { position: relative; display: flex; flex: 0 1 auto; min-width: 0; max-width: 100%; }
 .recipe-search { display: flex; flex: 1 1 14em; max-width: 22em; min-width: 0; }
 
 /* Each filter is a pill: the fill and 1px line of a box of the stack schema, 34px
    high, with fully round ends, so it never reads as a button (buttons have 6px
    corners). */
-.recipe-select,
-.recipe-input {
+.filter-pill,
+.filter-input {
   padding: 8px 14px;
   border: 1px solid var(--color-schema-line);
   border-radius: 999px;
-  background: var(--recipe-field, var(--color-component));
+  background: var(--field-bg);
   color: var(--color-text);
   font: inherit;
   font-weight: 500;
   line-height: 16px;
 }
 
-.recipe-select {
+.filter-pill {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2983,31 +3003,31 @@ h1 {
   cursor: pointer;
 }
 /* The name of the filter in the caption grey, then its value in the text ink. */
-.recipe-select__name { flex: none; color: var(--color-text-muted); font-weight: 400; }
-.recipe-select__value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.recipe-select__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
+.filter-pill__name { flex: none; color: var(--color-text-muted); font-weight: 400; }
+.filter-pill__value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.filter-pill__caret { flex: none; width: 1.1em; height: 1.1em; opacity: 0.85; }
 
-.recipe-input { flex: 1; min-width: 0; }
-.recipe-input::placeholder { color: var(--color-text-muted); opacity: 1; }
+.filter-input { flex: 1; min-width: 0; }
+.filter-input::placeholder { color: var(--color-text-muted); opacity: 1; }
 
-.recipe-select:hover,
-.recipe-select:focus-visible,
-.recipe-select[aria-expanded="true"],
-.recipe-input:focus-visible {
-  background: color-mix(in srgb, var(--recipe-band) 55%, transparent);
+.filter-pill:hover,
+.filter-pill:focus-visible,
+.filter-pill[aria-expanded="true"],
+.filter-input:focus-visible {
+  background: color-mix(in srgb, var(--select-band) 55%, transparent);
   outline: none;
 }
 
 /* A menu with a choice: the band of the selected recipe, and a line in the ink. */
-.recipe-select[data-chosen="true"] {
+.filter-pill[data-chosen="true"] {
   border-color: var(--color-title);
-  background: var(--recipe-band);
+  background: var(--select-band);
   font-weight: 600;
 }
 
 /* The open menu: the design system's dropdown menu. It lies over the table, and
    scrolls when it has more choices than the screen can show. */
-.recipe-menu {
+.filter-menu {
   position: absolute;
   top: calc(100% + 0.3em);
   left: 0;
@@ -3017,16 +3037,16 @@ h1 {
   margin: 0;
   padding: 0.375rem;
   overflow: auto;
-  border: 1px solid var(--recipe-menu-line);
+  border: 1px solid var(--menu-line);
   border-radius: var(--radius-md);
   background: var(--color-component);
   box-shadow: 0 14px 18px var(--color-tip-shadow);
   color: var(--color-text);
   list-style: none;
 }
-.recipe-menu[hidden] { display: none; }
+.filter-menu[hidden] { display: none; }
 
-.recipe-menu__label {
+.filter-menu__label {
   padding: 0.4em 0.65em 0.25em;
   color: var(--color-text-muted);
   font-size: 0.625rem;
@@ -3034,7 +3054,7 @@ h1 {
   text-transform: uppercase;
 }
 
-.recipe-menu__item {
+.filter-menu__item {
   display: flex;
   align-items: center;
   gap: 0.65em;
@@ -3045,22 +3065,20 @@ h1 {
   cursor: pointer;
 }
 /* The choice under the pointer or the arrow keys. */
-.recipe-menu__item.is-active { background: var(--color-ghost-hover); }
+.filter-menu__item.is-active { background: var(--color-ghost-hover); }
 /* The selected choice has a Magenta check. */
-.recipe-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
+.filter-menu__check { flex: none; width: 1.15em; height: 1.15em; margin-left: auto; color: var(--color-pink); }
 /* The same hover and selection as the rows of the table. Light: the band of the
    table, at 55% under the pointer and full for the chosen item. Dark: Pale purple
    at 30% under the pointer (white words), and full Pale purple for the chosen
    item (Deep purple words and check). */
-.recipe-menu__item.is-active { background: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
-.recipe-menu__item[aria-selected="true"] { background: var(--recipe-band); }
-:root[data-theme="dark"] .recipe-menu__item.is-active { background: rgb(220 186 246 / 0.3); color: #ffffff; }
-:root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] { background: #dcbaf6; color: #291435; }
-:root[data-theme="dark"] .recipe-menu__item[aria-selected="true"] .recipe-menu__check { color: #291435; }
+.filter-menu__item.is-active { background: var(--row-hover-bg); color: var(--row-hover-ink, var(--color-text)); }
+.filter-menu__item[aria-selected="true"] { background: var(--row-selected-bg); color: var(--row-selected-ink, var(--color-text)); }
+.filter-menu__item[aria-selected="true"] .filter-menu__check { color: var(--row-selected-ink, var(--color-pink)); }
 /* A menu with several choices (use case): a 16px box before each choice, with a
    1.5px line, ticked with a check in the ink of the item. The ticked items keep
    the selection color, as the chosen item of a one-choice menu. */
-.recipe-menu__box {
+.filter-menu__box {
   display: grid;
   flex: none;
   place-items: center;
@@ -3069,36 +3087,36 @@ h1 {
   border: 1.5px solid currentColor;
   border-radius: 4px;
 }
-.recipe-menu__tick { width: 12px; height: 12px; stroke-width: 3; }
+.filter-menu__tick { width: 12px; height: 12px; stroke-width: 3; }
 
 /* --- The table --- */
 
 /* The table scrolls inside its box. The headings stay at the top, and a shade
    at the bottom edge shows that more recipes are below: a cover that moves with
    the rows hides the shade at the end of the list. */
-.recipe-scroll {
+.data-panel__scroll {
   max-height: min(24rem, 36dvh);
   overflow: auto;
   overscroll-behavior: contain;
   background:
-    linear-gradient(transparent, var(--recipe-panel, var(--color-layer)) 70%) bottom / 100% 2.5rem no-repeat local,
-    linear-gradient(transparent, var(--recipe-shade)) bottom / 100% 1rem no-repeat scroll;
+    linear-gradient(transparent, var(--panel-bg) 70%) bottom / 100% 2.5rem no-repeat local,
+    linear-gradient(transparent, var(--scroll-shade)) bottom / 100% 1rem no-repeat scroll;
 }
 
-.recipe-table { width: 100%; border-collapse: collapse; }
+.data-table { width: 100%; border-collapse: collapse; }
 
 /* The column titles: small capitals in the caption grey, 12px and spaced, as the
    label of the filter menus, so they read apart from the data. On the ground of
    the panel, with the line of the panel under them. They stay at the top while the rows
    scroll. */
-.recipe-table th {
+.data-table th {
   position: sticky;
   top: 0;
   z-index: 1;
   padding: 8px 0.6rem;
-  background: var(--recipe-panel, var(--color-layer));
+  background: var(--panel-bg);
   /* The line under the titles: the line of the panel. */
-  box-shadow: inset 0 -1px 0 var(--recipe-panel-line, var(--color-schema-line));
+  box-shadow: inset 0 -1px 0 var(--panel-line);
   color: var(--color-text-muted);
   font-size: 0.75rem;
   font-weight: 600;
@@ -3111,56 +3129,57 @@ h1 {
 
 /* Dark: the band of the column titles in the fill of a schema box, lighter than
    the rows. */
-:root[data-theme="dark"] .recipe-table th { background: #402c4c; }
+:root[data-theme="dark"] .data-table th { background: #402c4c; }
 /* Dark: the values of the rows in white, as the card; the publisher stays grey. */
-:root[data-theme="dark"] .recipe-table td,
-:root[data-theme="dark"] .recipe-table .recipe-cell-uses { color: #ffffff; }
+:root[data-theme="dark"] .data-table td,
+:root[data-theme="dark"] .data-table .recipe-cell-uses { color: #ffffff; }
 
-.recipe-table td {
+.data-table td {
   padding: 0.6em;
-  border-bottom: 1px solid var(--recipe-rule);
+  border-bottom: 1px solid var(--row-rule);
   color: var(--color-text);
   vertical-align: middle;
 }
 
-.recipe-table th:first-child,
-.recipe-table td:first-child { padding-left: 0.8rem; }
+.data-table th:first-child,
+.data-table td:first-child { padding-left: 0.8rem; }
 
-.recipe-row { cursor: pointer; }
-.recipe-row:hover td { background-color: color-mix(in srgb, var(--recipe-band) 55%, transparent); }
-.recipe-row.is-selected td { background-color: var(--recipe-band); }
+.data-table__row { cursor: pointer; }
+/* The row under the pointer and the selected row: the TEMPLATE TOKENS. */
+.data-table__row:hover td { background-color: var(--row-hover-bg); }
+.data-table__row.is-selected td { background-color: var(--row-selected-bg); }
 /* Every row ends with a small arrow: a click opens the recipe in the card. The
    shape of the chevron of the card buttons (assets/icons/chevron.svg), 16px, drawn
    as a background of the last cell, so the cell stays a plain table cell and the
    row lines stay clean. Caption grey at rest, Deep purple on a highlighted row.
    Keep the three colors in step with the chevron file. */
-.recipe-table td:last-child {
+.data-table td:last-child {
   padding-right: 2rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23505d65' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px 16px;
 }
-:root[data-theme="dark"] .recipe-table td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b7b3ae' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
-.recipe-row:is(:hover, .is-selected) td:last-child,
-:root[data-theme="dark"] .recipe-row:is(:hover, .is-selected) td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23291435' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+:root[data-theme="dark"] .data-table td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b7b3ae' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+.data-table__row:is(:hover, .is-selected) td:last-child,
+:root[data-theme="dark"] .data-table__row:is(:hover, .is-selected) td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23291435' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
-/* Dark, selected row: Pale purple, so its words and marks turn Deep purple (10:1). */
-:root[data-theme="dark"] .recipe-row.is-selected td { background-color: #dcbaf6; }
-:root[data-theme="dark"] .recipe-row.is-selected td,
-:root[data-theme="dark"] .recipe-row.is-selected .recipe-pick__publisher,
-:root[data-theme="dark"] .recipe-row.is-selected .recipe-mark { color: #291435; }
+/* Dark, selected row: Pale purple, so its words and marks take the selected ink
+   (Deep purple, 10:1). */
+:root[data-theme="dark"] .data-table__row.is-selected td,
+:root[data-theme="dark"] .data-table__row.is-selected .recipe-pick__publisher,
+:root[data-theme="dark"] .data-table__row.is-selected .mark { color: var(--row-selected-ink); }
 /* The empty part of the context bar stays visible on the Pale purple row. */
-:root[data-theme="dark"] .recipe-row.is-selected .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
+:root[data-theme="dark"] .data-table__row.is-selected .recipe-context__bar { background: rgb(41 20 53 / 0.18); }
 
 /* Dark, row under the pointer: Pale purple at 30% over the page (#5F466F), the
-   strongest contrast for white: its words, marks and arrow turn white (8.1:1). */
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td { background-color: rgb(220 186 246 / 0.3); }
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td,
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-pick__publisher,
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-mark { color: #ffffff; }
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover .recipe-context__bar { background: rgb(41 20 53 / 0.35); }
-:root[data-theme="dark"] .recipe-row:not(.is-selected):hover td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
+   strongest contrast for white: its words, marks and arrow take the hover ink
+   (white, 8.1:1). */
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover td,
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover .recipe-pick__publisher,
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover .mark { color: var(--row-hover-ink); }
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover .recipe-context__bar { background: rgb(41 20 53 / 0.35); }
+:root[data-theme="dark"] .data-table__row:not(.is-selected):hover td:last-child { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E"); }
 
 
 /* The model name is the button of the row. */
@@ -3181,9 +3200,9 @@ h1 {
 .recipe-cell-nowrap { white-space: nowrap; }
 /* The values after the model (hardware, server, context, use case): 14px, so the
    model name, at 16px, leads the row and the columns take less room. */
-.recipe-table td:not(.recipe-cell-model) { font-size: 0.875rem; }
-.recipe-table .recipe-col-mark,
-.recipe-table .recipe-cell-mark { text-align: center; }
+.data-table td:not(.recipe-cell-model) { font-size: 0.875rem; }
+.data-table .recipe-col-mark,
+.data-table .recipe-cell-mark { text-align: center; }
 .recipe-cell-uses { color: var(--color-body); }
 
 /* The context length: a bar, then the value. */
@@ -3193,11 +3212,11 @@ h1 {
 /* Column widths, automatic: the model column takes the width of its name, which
    never breaks; the six other columns share the rest of the panel, so the spare
    width spreads across the table instead of piling up at its right edge. */
-.recipe-table th:first-child { width: 1%; }
-.recipe-table .recipe-pick__model { white-space: nowrap; }
+.data-table th:first-child { width: 1%; }
+.data-table .recipe-pick__model { white-space: nowrap; }
 /* 32px after the longest model name, so it never runs into the hardware. */
-.recipe-table th:first-child,
-.recipe-table td:first-child { padding-right: 2rem; }
+.data-table th:first-child,
+.data-table td:first-child { padding-right: 2rem; }
 /* The bar and its value read as one item: a short bar of fixed length, then the
    value right after it (6px), left-aligned, not pushed to the right edge. */
 .recipe-context { display: flex; align-items: center; gap: 6px; }
@@ -3215,21 +3234,21 @@ h1 {
 /* Tool calling and reasoning: a filled dot for yes, an empty dot for no. */
 /* Yes: a check, in River in dark (the color of the YAML keys) and in the ink of
    the row in light. No: a cross in the caption grey. 20px. */
-.recipe-mark { display: inline-flex; vertical-align: middle; color: var(--color-text-muted); }
-.recipe-mark.is-on { color: inherit; }
-:root[data-theme="dark"] .recipe-mark.is-on { color: #63bcc1; }
-.recipe-mark__icon { width: 20px; height: 20px; }
+.mark { display: inline-flex; vertical-align: middle; color: var(--color-text-muted); }
+.mark.is-on { color: inherit; }
+:root[data-theme="dark"] .mark.is-on { color: #63bcc1; }
+.mark__icon { width: 20px; height: 20px; }
 /* In the card: the mark at 16px, then the word, 6px apart. */
 .card__yesno { align-items: center; gap: 6px; }
-.card__yesno .recipe-mark__icon { width: 16px; height: 16px; }
+.card__yesno .mark__icon { width: 16px; height: 16px; }
 
 /* LINK SIGNS (whole site). Two signs only:
    - a solid underline is a link: it goes somewhere or selects something;
    - an ⓘ after a word is an explanation: it opens a pop-up, and is not a link.
-   An ↗ after a link is kept for links that leave the site (.recipe-link).
+   An ↗ after a link is kept for links that leave the site (.ext-link).
    The ⓘ: a 12px circled i, painted in the text color. */
-.recipe-tip { cursor: help; white-space: nowrap; }
-.recipe-tip::after {
+.explain { cursor: help; white-space: nowrap; }
+.explain::after {
   content: "";
   display: inline-block;
   width: 12px;
@@ -3238,7 +3257,7 @@ h1 {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 11v6'/%3E%3Ccircle cx='12' cy='7.5' r='1' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 11v6'/%3E%3Ccircle cx='12' cy='7.5' r='1' fill='%23000'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.recipe-tip::after { margin-left: 4px; vertical-align: -1px; }
+.explain::after { margin-left: 4px; vertical-align: -1px; }
 
 .recipe-empty { padding: 1em 0.8em; color: var(--color-body); }
 
@@ -3248,7 +3267,7 @@ h1 {
 /* The use cases in the card: the type and ink of the card text ("vLLM on GB10"),
    16px regular. */
 .card__use-cases { display: block; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
-.card__note .recipe-link { font-size: inherit; font-weight: inherit; }
+.card__note .ext-link { font-size: inherit; font-weight: inherit; }
 
 /* --- The sheet: the name and the facts, then the files --- */
 
@@ -3274,8 +3293,8 @@ h1 {
 /* The files of the recipe: classic tabs. One line under all the tabs (the line of
    the table panel), the names in the body font, 20px apart, the first one on the
    left edge; the open file in the title ink with a 2px Pink line. */
-.recipe-tabs { display: flex; flex-wrap: wrap; gap: 0 20px; margin-top: 8px; border-bottom: 1px solid var(--recipe-panel-line, var(--color-schema-line)); }
-.recipe-tab {
+.tabs { display: flex; flex-wrap: wrap; gap: 0 20px; margin-top: 8px; border-bottom: 1px solid var(--panel-line); }
+.tab {
   margin-bottom: -1px;
   padding: 8px 0;
   border: 0;
@@ -3285,28 +3304,28 @@ h1 {
   font: 500 0.875rem var(--font-sans);
   cursor: pointer;
 }
-.recipe-tab:hover { color: var(--color-title); }
-.recipe-tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-title); }
+.tab:hover { color: var(--color-title); }
+.tab[aria-pressed="true"] { border-bottom-color: var(--color-pink); color: var(--color-title); }
 
 /* A file, or a command: the dark panel, with the Copy button in the corner. YAML
    keys in River and comments in neutral grey, the colors of technical text on dark. */
-.recipe-code { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--recipe-code-bg); color: #f5e8ff; }
-.recipe-files .recipe-code { margin-top: 1rem; }
-.recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 8.5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
+.code-block { position: relative; display: flex; border-radius: var(--radius-ui-md); background: var(--code-bg); color: #f5e8ff; }
+.recipe-files .code-block { margin-top: 1rem; }
+.code-block pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 8.5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
 /* Long lines wrap, so a file never scrolls sideways. */
-.recipe-code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-block pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 /* The file panel of the card has one height (416px) for every recipe and every
    file, so the card keeps its size: a short file leaves the panel's dark ground
    under it, a long one scrolls inside. */
-.recipe-code--file pre { height: 26rem; max-height: 26rem; }
-.recipe-code__key { color: #63bcc1; }
-.recipe-code__comment { color: #b7b3ae; }
+.code-block--file pre { height: 26rem; max-height: 26rem; }
+.code-block__key { color: #63bcc1; }
+.code-block__comment { color: #b7b3ae; }
 
 /* Copy: the button format of the site (14px medium, 16px icon, 8 x 14px padding,
    1px line, 6px corners, 34px high), outlined in Marshmallow as the secondary
    buttons on dark, since the code panel is dark in both themes. Hover: the Pale
    purple fill and Mid purple line of the secondary buttons, Deep purple words. */
-.recipe-copy {
+.copy-button {
   position: absolute;
   top: 8px;
   /* Clear of the scrollbar of a long file, on the right edge of the panel. */
@@ -3317,7 +3336,7 @@ h1 {
   padding: 8px 14px;
   border: 1px solid #f5e8ff;
   border-radius: 6px;
-  background: var(--recipe-code-bg);
+  background: var(--code-bg);
   color: #f5e8ff;
   font: inherit;
   font-size: 14px;
@@ -3325,26 +3344,26 @@ h1 {
   line-height: 16px;
   cursor: pointer;
 }
-.recipe-copy__icon { flex: none; width: 16px; height: 16px; }
-.recipe-copy:hover { border-color: #734c90; background: #dcbaf6; color: #291435; }
+.copy-button__icon { flex: none; width: 16px; height: 16px; }
+.copy-button:hover { border-color: #734c90; background: #dcbaf6; color: #291435; }
 
-.recipe-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
-.recipe-link:hover { color: var(--color-link-hover); }
+.ext-link { flex: none; white-space: nowrap; color: var(--color-link); font-size: 0.875rem; font-weight: 500; text-underline-offset: 3px; }
+.ext-link:hover { color: var(--color-link-hover); }
 
 /* The steps to install a recipe (shown when the stack repository is public). */
 .recipe-use { display: flex; flex-direction: column; gap: 0.6em; margin: 0.4rem 0 0; padding-left: 1.3em; color: var(--color-body); }
-.recipe-use .recipe-code { margin-top: 0.35em; }
+.recipe-use .code-block { margin-top: 0.35em; }
 
 /* Wide screens: the sheet stays in view while the page scrolls. */
 @media (min-width: 901px) and (min-aspect-ratio: 1/1) {
   .recipe-sheet { position: sticky; top: 1rem; grid-column: 2; grid-row: 2; align-self: start; }
-  .recipe-list { grid-column: 1; }
+  .data-panel { grid-column: 1; }
   /* The page scrolls normally: the table panel ends at its last row (it does not
      stretch to the height of the card, where an empty box would read as an
      error), and the card shows its file at full height. With more recipes than
      70% of the window holds, the rows scroll inside the panel. */
-  .recipe-list { align-self: start; }
-  .recipe-scroll { max-height: 70vh; }
+  .data-panel { align-self: start; }
+  .data-panel__scroll { max-height: 70vh; }
 
 }
 
@@ -3363,10 +3382,10 @@ h1 {
    column stays in view. */
 @media (max-width: 640px) {
   .recipe-search { flex-basis: 100%; max-width: none; }
-  .recipe-table th:first-child,
-  .recipe-table td:first-child { position: sticky; left: 0; background: var(--recipe-panel, var(--color-layer)); }
-  .recipe-table th:first-child { z-index: 2; }
-  .recipe-row.is-selected td:first-child { background: var(--recipe-band); }
+  .data-table th:first-child,
+  .data-table td:first-child { position: sticky; left: 0; background: var(--panel-bg); }
+  .data-table th:first-child { z-index: 2; }
+  .data-table__row.is-selected td:first-child { background: var(--row-selected-bg); }
 }
 
 /* --- Roadmap page ----------------------------------------------------------
@@ -3624,7 +3643,7 @@ h1 {
    after the one above, which would otherwise show the button again. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
   .section-bar .sheet-toggle,
-  .recipe-toolbar .sheet-toggle { display: none; }
+  .toolbar .sheet-toggle { display: none; }
 }
 /* The arrow after the label: the shape of assets/icons/chevron.svg, painted in the
    text color, 16px as the other button icons. Replace that file to change the arrow. It points right when the card
@@ -3713,9 +3732,9 @@ h1 {
    external links of the Recipes card). On Cream, Pink is 2.0:1, so light keeps
    Mid purple. */
 :root[data-theme="dark"] .card__link,
-:root[data-theme="dark"] .card .recipe-link { color: var(--color-pink); }
+:root[data-theme="dark"] .card .ext-link { color: var(--color-pink); }
 :root[data-theme="dark"] .card__link:hover,
-:root[data-theme="dark"] .card .recipe-link:hover { color: var(--color-link-hover); }
+:root[data-theme="dark"] .card .ext-link:hover { color: var(--color-link-hover); }
 /* "Part of the layer" (stack page): the branch icon before the label, and the
    layer name lined up with the label, after the icon. */
 .card__fact.is-part-of dt { display: flex; align-items: center; gap: 0.375rem; }
