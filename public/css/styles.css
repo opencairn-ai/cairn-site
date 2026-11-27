@@ -3510,22 +3510,23 @@ h1 {
 :root[data-theme="dark"] .roadmap__when { color: #ffffff; }
 /* "Later" in the caption grey, as its items (not planned yet), until it is chosen. */
 .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when,
-:root[data-theme="dark"] .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when { color: var(--color-text-muted); }
+:root[data-theme="dark"] .roadmap__column[data-when="later"]:not(.is-active) .roadmap__when,
+.roadmap-phone__time--later .roadmap__when,
+:root[data-theme="dark"] .roadmap-phone__time--later .roadmap__when { color: var(--color-text-muted); }
 .roadmap__column.is-active .roadmap__when,
 :root[data-theme="dark"] .roadmap__column.is-active .roadmap__when,
-:root[data-theme="dark"] [data-when="now"] > .roadmap__cell-label { color: var(--color-pink); }
+.roadmap-phone__time--now .roadmap__when,
+:root[data-theme="dark"] .roadmap-phone__time--now .roadmap__when { color: var(--color-pink); }
 /* Light: the card of the chosen column on Sand #E3D3BC at 70% with a 1px Pink
    line. Pink title about 1.7:1 on it (a choice of the design, 2026-11-27, to
    review). */
 :root:not([data-theme="dark"]) .roadmap__band { border-color: var(--color-pink); background: rgb(227 211 188 / 0.7); }
 /* Dark: the card of "Now" has a 1px Pink line, as the boxes of Hello World and LaStack. */
 :root[data-theme="dark"] .roadmap__band { border: 1px solid var(--color-pink); }
-@media (max-width: 900px) {
-  :root[data-theme="dark"] .roadmap__cell[data-when="now"] { border: 1px solid var(--color-pink); }
-}
 /* The cursor of the active line, after the chosen time: it blinks as the cursor
    of Hello World (cursor-blink), unless the visitor asks for less motion. */
-.roadmap__column.is-active .roadmap__when::after {
+.roadmap__column.is-active .roadmap__when::after,
+.roadmap-phone__time--now .roadmap__when::after {
   content: "";
   display: inline-block;
   width: 0.45em;
@@ -3536,7 +3537,7 @@ h1 {
 }
 @media (prefers-reduced-motion: no-preference) {
   .roadmap__column.is-active .roadmap__when::after,
-  [data-when="now"] > .roadmap__cell-label::after { animation: cursor-blink 1.06s steps(1) infinite; }
+  .roadmap-phone__time--now .roadmap__when::after { animation: cursor-blink 1.06s steps(1) infinite; }
 }
 .roadmap__when-text { margin-top: 0.4rem; color: var(--color-text-muted); font-size: 0.875rem; }
 .roadmap__corner { align-self: end; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
@@ -3549,9 +3550,6 @@ h1 {
 .roadmap__name-text { color: var(--color-title); font-size: 1.125rem; font-weight: 500; letter-spacing: -0.01em; }
 .roadmap__note { max-width: 20ch; color: var(--color-text-muted); font-size: 0.875rem; }
 .roadmap__cell { min-width: 0; }
-
-/* Narrow screens only: see below. */
-.roadmap__cell-label { display: none; }
 
 .roadmap__items { display: flex; flex-direction: column; gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
 .roadmap-item { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; padding-left: 14px; overflow-wrap: break-word; }
@@ -3571,16 +3569,11 @@ h1 {
 .roadmap-item--later::before { background: var(--color-text-muted); }
 :root[data-theme="dark"] .roadmap-item::before { background: #ffffff; }
 :root[data-theme="dark"] .roadmap-item--later::before { background: var(--color-text-muted); }
-/* Pink: the chosen column on wide screens; on phones, where nothing is chosen,
-   the cells of "Now" (they keep the card look there). */
-@media (min-width: 901px) {
-  .roadmap__cell.is-active .roadmap-item::before,
-  :root[data-theme="dark"] .roadmap__cell.is-active .roadmap-item::before { background: var(--color-pink); }
-}
-@media (max-width: 900px) {
-  .roadmap__cell[data-when="now"] .roadmap-item::before,
-  :root[data-theme="dark"] .roadmap__cell[data-when="now"] .roadmap-item::before { background: var(--color-pink); }
-}
+/* Pink: the chosen column of the table, and "Now" on narrow screens. */
+.roadmap__cell.is-active .roadmap-item::before,
+:root[data-theme="dark"] .roadmap__cell.is-active .roadmap-item::before,
+.roadmap-phone__time--now .roadmap-item::before,
+:root[data-theme="dark"] .roadmap-phone__time--now .roadmap-item::before { background: var(--color-pink); }
 .roadmap-item__title { color: var(--color-text); font-weight: 500; }
 .roadmap-item__text { color: var(--color-body); font-size: 0.875rem; }
 .roadmap-item--now .roadmap-item__title { color: var(--color-title); }
@@ -3600,12 +3593,11 @@ h1 {
 }
 .roadmap-tag:hover { color: var(--color-link-hover); }
 
-/* Fonts from the templates (see TEMPLATES.md): the corner title and the names of
-   the times on narrow screens are set as the column titles of a data table (12px
-   spaced capitals, caption grey); in dark the items are white, as the values of a
+/* Fonts from the templates (see TEMPLATES.md): the corner title, and the names
+   of the workstreams on narrow screens, are set as the column titles of a data
+   table (12px spaced capitals, caption grey); in dark the items are white, as the values of a
    table and of a card. The look of the roadmap stays its own: no panel. */
-.roadmap__corner,
-.roadmap__cell-label { letter-spacing: 0.06em; text-transform: uppercase; }
+.roadmap__corner { letter-spacing: 0.06em; text-transform: uppercase; }
 :root[data-theme="dark"] .roadmap-item__title,
 :root[data-theme="dark"] .roadmap-item__text { color: #ffffff; }
 :root[data-theme="dark"] .roadmap-item--later .roadmap-item__title { color: var(--color-text-muted); }
@@ -3638,27 +3630,30 @@ h1 {
 .roadmap__contribute svg { width: 16px; height: 16px; }
 .roadmap__action.is-active .roadmap__contribute { visibility: visible; }
 
-/* Narrow screens: four columns do not fit. Each workstream is a group: its name,
-   then its three cells one under the other, each with the name of its column.
-   The cell of "Now" has the band. */
+/* Narrow screens (900px and less): four columns do not fit. The table hides,
+   and js/roadmap.js shows the roadmap by time: "Now" in its card (the card of
+   the chosen column: Pink line; dark: the selected band; light: Sand at 70%),
+   its items grouped by workstream, then the two buttons; then "Next"; then
+   "Later" in grey. It keeps the 16px gutter of the page. */
+.roadmap-phone { display: none; }
 @media (max-width: 900px) {
-  .roadmap,
-  .roadmap__row { display: flex; flex-direction: column; }
-  .roadmap { gap: 2rem; }
-  .roadmap__row { gap: 0.4rem; }
-  .roadmap__band,
-  .roadmap__row--head,
-  .roadmap__row--actions { display: none; }
-  .roadmap__cell:not(.is-active) { cursor: auto; }
-  .roadmap__name { padding: 0 0 0.6rem; border-bottom: 1px solid var(--color-header-rule); }
-  .roadmap__name-text { font-size: 1.25rem; }
-  .roadmap__note { max-width: none; }
-  .roadmap__cell { padding: 0.6rem 0 0.8rem; }
-  .roadmap__cell[data-when="now"] { margin: 0 -0.8rem; padding: 0.6rem 0.8rem 0.8rem; border: 1px solid var(--panel-line); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-selected) 70%, transparent); }
-  .roadmap__cell-label { display: block; margin-bottom: 0.45rem; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; }
-  [data-when="now"] > .roadmap__cell-label::after {
-    content: ""; display: inline-block; width: 0.45em; height: 0.95em; margin-left: 0; vertical-align: -0.12em; background: var(--color-pink);
+  .roadmap { display: none; }
+  .roadmap-intro + .roadmap + .roadmap-phone { margin-top: 42px; }
+  .roadmap-phone { display: flex; flex-direction: column; gap: 2.5rem; }
+  .roadmap-phone__time { display: flex; flex-direction: column; }
+  .roadmap-phone__time--now {
+    padding: 1rem 0.8rem 1.1rem;
+    border: 1px solid var(--color-pink);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-selected) 70%, transparent);
   }
+  :root:not([data-theme="dark"]) .roadmap-phone__time--now { background: rgb(227 211 188 / 0.7); }
+  .roadmap-phone .roadmap__when { margin: 0; }
+  .roadmap-phone .roadmap__when-text { margin: 0.4rem 0 0; }
+  /* The workstream over its items: the spaced capitals of the column titles. */
+  .roadmap-phone__workstream { margin: 1.4rem 0 0.6rem; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .roadmap-phone__actions { display: flex; flex-direction: column; gap: 8px; margin-top: 1.6rem; }
+  .roadmap-phone__actions .roadmap__contribute { flex: none; width: 100%; margin: 0; visibility: visible; }
 }
 
 /* --- Downloaded image ----------------------------------------------------

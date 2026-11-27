@@ -44,14 +44,42 @@
     for (const pick of picks) pick.setAttribute("aria-pressed", String(pick.parentElement.dataset.when === when));
   }
   for (const pick of picks) pick.addEventListener("click", () => choose(pick.parentElement.dataset.when));
-  // Phones stack the cells and have no column to choose: a tap there does nothing.
-  const wide = matchMedia("(min-width: 901px)");
   for (const cell of table.querySelectorAll(".roadmap__cell")) {
     cell.addEventListener("click", (event) => {
-      if (wide.matches && !event.target.closest("a")) choose(cell.dataset.when);
+      if (!event.target.closest("a")) choose(cell.dataset.when);
     });
   }
   choose("now");
+
+  // Narrow screens (900px and less) show the roadmap by time instead of the table
+  // (CSS shows one or the other): "Now" in its card with its items grouped by
+  // workstream and the two buttons, then "Next", then "Later". It reads as the
+  // columns of the table, one under the other (Now, Next, Later).
+  const workstreams = [...table.querySelectorAll("[data-workstream]")].map((row) => row.dataset.workstream);
+  const nowButtons = [...table.querySelectorAll('.roadmap__action[data-when="now"] > a')];
+  const phone = el("div", "roadmap-phone");
+  for (const when of ["now", "next", "later"]) {
+    const section = el("section", `roadmap-phone__time roadmap-phone__time--${when}`);
+    const title = el("h2", "roadmap__when", app.t(`roadmap.columns.${when}.name`));
+    title.id = `roadmap-phone-${when}`;
+    section.setAttribute("aria-labelledby", title.id);
+    section.append(title, el("p", "roadmap__when-text", app.t(`roadmap.columns.${when}.text`)));
+    for (const workstream of workstreams) {
+      const items = app.t(`roadmap.workstreams.${workstream}.${when}`, { optional: true });
+      // A workstream with nothing at this time is left out.
+      if (!Array.isArray(items) || !items.length) continue;
+      const list = el("ul", "roadmap__items");
+      for (const item of items) list.append(renderItem(item, when));
+      section.append(el("p", "roadmap-phone__workstream", app.t(`roadmap.workstreams.${workstream}.name`)), list);
+    }
+    if (when === "now" && nowButtons.length) {
+      const actions = el("div", "roadmap-phone__actions");
+      actions.append(...nowButtons.map((button) => button.cloneNode(true)));
+      section.append(actions);
+    }
+    phone.append(section);
+  }
+  table.after(phone);
 
   // An item can be a text alone (its title) or { title, text, layer }.
   function renderItem(item, when) {

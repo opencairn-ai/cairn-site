@@ -33,7 +33,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/SpaceGrotesk-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=271">
+<link rel="stylesheet" href="css/styles.css?v=272">
 </head>
 <body data-page="roadmap">
 <div class="page">
@@ -83,9 +83,8 @@
          The first element is a light band behind the cells of the chosen
          column ("Now" at first): a click on a column (its head, or one of its
          cells) moves the band there and shows its two buttons; nothing
-         changes size. The name of the column inside each cell shows
-         on phones only, where the cells of a workstream stand one under the
-         other. -->
+         changes size. Narrow screens show the roadmap by time instead
+         (js/roadmap.js builds it from the same copy). -->
     <div class="roadmap" id="roadmap" role="table" data-aria-label="roadmap.label">
       <div class="roadmap__band" aria-hidden="true"></div>
 
@@ -117,13 +116,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.deploy.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -133,13 +129,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.features.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -149,13 +142,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.improvements.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -165,13 +155,10 @@
           <span class="roadmap__note" data-text="roadmap.workstreams.contracts.text"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="now">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.now.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="next">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.next.name"></span>
         </div>
         <div class="roadmap__cell" role="cell" data-when="later">
-          <span class="roadmap__cell-label" data-text="roadmap.columns.later.name"></span>
         </div>
       </div>
 
@@ -217,6 +204,6 @@
 <script src="copy/en.js?v=113"></script>
 <script src="copy/fr.js?v=114"></script>
 <script src="js/app.js?v=87"></script>
-<script src="js/roadmap.js?v=4"></script>
+<script src="js/roadmap.js?v=5"></script>
 </body>
 </html>
