@@ -498,8 +498,8 @@
       ...(r.image ? fact(text("facts.image"), el("code", null, [r.image]), true) : []),
       ...fact(text("columns.useCase"), useCasesFact(r), true, true),
       ...fact(text("columns.context"), facts.context ? text("facts.context", { count: facts.context.toLocaleString(app.locale) }) : text("facts.contextDefault")),
-      ...fact(text("columns.tools"), text(facts.tools ? "facts.yes" : "facts.no")),
-      ...fact(text("columns.reasoning"), text(facts.reasoning ? "facts.yes" : "facts.no")),
+      ...fact(text("columns.tools"), yesNo(facts.tools)),
+      ...fact(text("columns.reasoning"), yesNo(facts.reasoning)),
     ]);
 
     sheetContent.replaceChildren(...[
@@ -523,6 +523,15 @@
         codeBlock(file.text, "recipe-code--file", file.name),
       ]),
     ].filter(Boolean));
+  }
+
+  // Yes or no in the card: the check or cross of the table, then the word, both
+  // in the color of the mark (no: caption grey; yes: the color of the check).
+  function yesNo(on) {
+    return el("span", `recipe-mark card__yesno${on ? " is-on" : ""}`, [
+      icon(on ? "M5 12.5 10 17.5 19.5 7" : "M7 7l10 10M17 7 7 17", "recipe-mark__icon"),
+      text(on ? "facts.yes" : "facts.no"),
+    ]);
   }
 
   // The use cases of a recipe in the card, then where they come from: the sources

@@ -3216,6 +3216,9 @@ h1 {
 .recipe-mark.is-on { color: inherit; }
 :root[data-theme="dark"] .recipe-mark.is-on { color: #63bcc1; }
 .recipe-mark__icon { width: 20px; height: 20px; }
+/* In the card: the mark at 16px, then the word, 6px apart. */
+.card__yesno { align-items: center; gap: 6px; }
+.card__yesno .recipe-mark__icon { width: 16px; height: 16px; }
 
 /* LINK SIGNS (whole site). Two signs only:
    - a solid underline is a link: it goes somewhere or selects something;
@@ -3237,12 +3240,12 @@ h1 {
 .recipe-empty { padding: 1em 0.8em; color: var(--color-body); }
 
 /* Under the use cases in the card: where they come from, with links to the
-   sources of the benchmark data. 12px, in the title ink; the links keep theirs. */
+   sources of the benchmark data. 12px regular, links too, in the title ink; links keep their color. */
 .card__note { display: block; margin-top: 4px; color: var(--color-title); font-size: 0.75rem; font-weight: 400; line-height: 1.4; }
 /* The use cases in the card: the type and ink of the card text ("vLLM on GB10"),
    16px regular. */
 .card__use-cases { display: block; color: var(--color-title); font-size: 1rem; font-weight: 400; letter-spacing: -0.011em; line-height: 1.5; }
-.card__note .recipe-link { font-size: inherit; }
+.card__note .recipe-link { font-size: inherit; font-weight: inherit; }
 
 /* --- The sheet: the name and the facts, then the files --- */
 
@@ -3289,7 +3292,10 @@ h1 {
 .recipe-code pre { flex: 1; min-width: 0; margin: 0; padding: 1rem 8.5rem 1rem 1.2rem; overflow: auto; font: 0.875rem/1.7 var(--font-mono); }
 /* Long lines wrap, so a file never scrolls sideways. */
 .recipe-code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
-.recipe-code--file pre { max-height: 26rem; }
+/* The file panel of the card has one height (416px) for every recipe and every
+   file, so the card keeps its size: a short file leaves the panel's dark ground
+   under it, a long one scrolls inside. */
+.recipe-code--file pre { height: 26rem; max-height: 26rem; }
 .recipe-code__key { color: #63bcc1; }
 .recipe-code__comment { color: #b7b3ae; }
 
